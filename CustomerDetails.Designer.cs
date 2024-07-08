@@ -56,17 +56,18 @@
 			deliveryHouseNumberLabel = new Label();
 			deliveryAddressLabel = new Label();
 			billingAsDeliveryCheckBox = new CheckBox();
-			dataGridView1 = new DataGridView();
+			deliveryAddressDataView = new DataGridView();
 			deliverDeliveryChargeTextBox = new TextBox();
 			deliveryDeliveryChargeLabel = new Label();
 			acceptAddressButton = new Button();
 			cancelAddressButton = new Button();
-			((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+			deleteDeliveryAddressButton = new Button();
+			updateDeliveryAddressButton = new Button();
+			((System.ComponentModel.ISupportInitialize)deliveryAddressDataView).BeginInit();
 			SuspendLayout();
 			// 
 			// CustomerNameLabel
 			// 
-			CustomerNameLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			CustomerNameLabel.BackColor = Color.Transparent;
 			CustomerNameLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			CustomerNameLabel.ForeColor = Color.Black;
@@ -79,7 +80,6 @@
 			// 
 			// phoneNumberLabel
 			// 
-			phoneNumberLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			phoneNumberLabel.BackColor = Color.Transparent;
 			phoneNumberLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			phoneNumberLabel.ForeColor = Color.Black;
@@ -108,7 +108,6 @@
 			// 
 			// billingAddressLabel
 			// 
-			billingAddressLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			billingAddressLabel.BackColor = Color.Transparent;
 			billingAddressLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingAddressLabel.ForeColor = Color.Black;
@@ -129,7 +128,6 @@
 			// 
 			// billingHouseNumberLabel
 			// 
-			billingHouseNumberLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			billingHouseNumberLabel.BackColor = Color.Transparent;
 			billingHouseNumberLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingHouseNumberLabel.ForeColor = Color.Black;
@@ -162,7 +160,6 @@
 			// 
 			// billingStreetNameLabel
 			// 
-			billingStreetNameLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			billingStreetNameLabel.BackColor = Color.Transparent;
 			billingStreetNameLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingStreetNameLabel.ForeColor = Color.Black;
@@ -183,7 +180,6 @@
 			// 
 			// billingVillageLabel
 			// 
-			billingVillageLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			billingVillageLabel.BackColor = Color.Transparent;
 			billingVillageLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingVillageLabel.ForeColor = Color.Black;
@@ -204,7 +200,6 @@
 			// 
 			// billingCityLabel
 			// 
-			billingCityLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			billingCityLabel.BackColor = Color.Transparent;
 			billingCityLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingCityLabel.ForeColor = Color.Black;
@@ -225,7 +220,6 @@
 			// 
 			// billingPostcodeLabel
 			// 
-			billingPostcodeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			billingPostcodeLabel.BackColor = Color.Transparent;
 			billingPostcodeLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingPostcodeLabel.ForeColor = Color.Black;
@@ -238,6 +232,7 @@
 			// 
 			// deliveryPostcodeTextBox
 			// 
+			deliveryPostcodeTextBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryPostcodeTextBox.Font = new Font("Segoe UI", 14F);
 			deliveryPostcodeTextBox.Location = new Point(1358, 950);
 			deliveryPostcodeTextBox.Name = "deliveryPostcodeTextBox";
@@ -246,7 +241,7 @@
 			// 
 			// deliveryPostcodeLabel
 			// 
-			deliveryPostcodeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			deliveryPostcodeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryPostcodeLabel.BackColor = Color.Transparent;
 			deliveryPostcodeLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryPostcodeLabel.ForeColor = Color.Black;
@@ -259,6 +254,7 @@
 			// 
 			// deliveryCityTextBox
 			// 
+			deliveryCityTextBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryCityTextBox.Font = new Font("Segoe UI", 14F);
 			deliveryCityTextBox.Location = new Point(1358, 890);
 			deliveryCityTextBox.Name = "deliveryCityTextBox";
@@ -267,7 +263,7 @@
 			// 
 			// deliveryCityLabel
 			// 
-			deliveryCityLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			deliveryCityLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryCityLabel.BackColor = Color.Transparent;
 			deliveryCityLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryCityLabel.ForeColor = Color.Black;
@@ -280,6 +276,7 @@
 			// 
 			// deliveryVillageTextBox
 			// 
+			deliveryVillageTextBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryVillageTextBox.Font = new Font("Segoe UI", 14F);
 			deliveryVillageTextBox.Location = new Point(1358, 830);
 			deliveryVillageTextBox.Name = "deliveryVillageTextBox";
@@ -288,7 +285,7 @@
 			// 
 			// deliveryVillageLabel
 			// 
-			deliveryVillageLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			deliveryVillageLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryVillageLabel.BackColor = Color.Transparent;
 			deliveryVillageLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryVillageLabel.ForeColor = Color.Black;
@@ -301,6 +298,7 @@
 			// 
 			// deliveryStreetNameTextBox
 			// 
+			deliveryStreetNameTextBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryStreetNameTextBox.Font = new Font("Segoe UI", 14F);
 			deliveryStreetNameTextBox.Location = new Point(1358, 770);
 			deliveryStreetNameTextBox.Name = "deliveryStreetNameTextBox";
@@ -309,7 +307,7 @@
 			// 
 			// deliveryStreetNameLabel
 			// 
-			deliveryStreetNameLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			deliveryStreetNameLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryStreetNameLabel.BackColor = Color.Transparent;
 			deliveryStreetNameLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryStreetNameLabel.ForeColor = Color.Black;
@@ -322,6 +320,7 @@
 			// 
 			// deliveryHouseNumberTextBox
 			// 
+			deliveryHouseNumberTextBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryHouseNumberTextBox.Font = new Font("Segoe UI", 14F);
 			deliveryHouseNumberTextBox.Location = new Point(1358, 710);
 			deliveryHouseNumberTextBox.Name = "deliveryHouseNumberTextBox";
@@ -330,7 +329,7 @@
 			// 
 			// deliveryHouseNumberLabel
 			// 
-			deliveryHouseNumberLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			deliveryHouseNumberLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryHouseNumberLabel.BackColor = Color.Transparent;
 			deliveryHouseNumberLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryHouseNumberLabel.ForeColor = Color.Black;
@@ -343,7 +342,7 @@
 			// 
 			// deliveryAddressLabel
 			// 
-			deliveryAddressLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			deliveryAddressLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryAddressLabel.BackColor = Color.Transparent;
 			deliveryAddressLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryAddressLabel.ForeColor = Color.Black;
@@ -366,18 +365,20 @@
 			billingAsDeliveryCheckBox.Text = "Use Billing Address as Delivery Address?";
 			billingAsDeliveryCheckBox.UseVisualStyleBackColor = false;
 			// 
-			// dataGridView1
+			// deliveryAddressDataView
 			// 
-			dataGridView1.BackgroundColor = Color.White;
-			dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridView1.Location = new Point(1000, 12);
-			dataGridView1.Name = "dataGridView1";
-			dataGridView1.RowHeadersWidth = 82;
-			dataGridView1.Size = new Size(908, 590);
-			dataGridView1.TabIndex = 35;
+			deliveryAddressDataView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			deliveryAddressDataView.BackgroundColor = Color.White;
+			deliveryAddressDataView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			deliveryAddressDataView.Location = new Point(1000, 12);
+			deliveryAddressDataView.Name = "deliveryAddressDataView";
+			deliveryAddressDataView.RowHeadersWidth = 82;
+			deliveryAddressDataView.Size = new Size(908, 590);
+			deliveryAddressDataView.TabIndex = 35;
 			// 
 			// deliverDeliveryChargeTextBox
 			// 
+			deliverDeliveryChargeTextBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliverDeliveryChargeTextBox.Font = new Font("Segoe UI", 14F);
 			deliverDeliveryChargeTextBox.Location = new Point(1358, 1010);
 			deliverDeliveryChargeTextBox.Name = "deliverDeliveryChargeTextBox";
@@ -386,7 +387,7 @@
 			// 
 			// deliveryDeliveryChargeLabel
 			// 
-			deliveryDeliveryChargeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			deliveryDeliveryChargeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deliveryDeliveryChargeLabel.BackColor = Color.Transparent;
 			deliveryDeliveryChargeLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryDeliveryChargeLabel.ForeColor = Color.Black;
@@ -425,17 +426,45 @@
 			cancelAddressButton.UseVisualStyleBackColor = false;
 			cancelAddressButton.Click += cancelAddressButton_Click;
 			// 
+			// deleteDeliveryAddressButton
+			// 
+			deleteDeliveryAddressButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			deleteDeliveryAddressButton.BackColor = SystemColors.Control;
+			deleteDeliveryAddressButton.FlatStyle = FlatStyle.Flat;
+			deleteDeliveryAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteDeliveryAddressButton.Location = new Point(1708, 610);
+			deleteDeliveryAddressButton.Name = "deleteDeliveryAddressButton";
+			deleteDeliveryAddressButton.Size = new Size(200, 80);
+			deleteDeliveryAddressButton.TabIndex = 40;
+			deleteDeliveryAddressButton.Text = "Delete";
+			deleteDeliveryAddressButton.UseVisualStyleBackColor = false;
+			// 
+			// updateDeliveryAddressButton
+			// 
+			updateDeliveryAddressButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			updateDeliveryAddressButton.BackColor = SystemColors.Control;
+			updateDeliveryAddressButton.FlatStyle = FlatStyle.Flat;
+			updateDeliveryAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			updateDeliveryAddressButton.Location = new Point(1502, 610);
+			updateDeliveryAddressButton.Name = "updateDeliveryAddressButton";
+			updateDeliveryAddressButton.Size = new Size(200, 80);
+			updateDeliveryAddressButton.TabIndex = 41;
+			updateDeliveryAddressButton.Text = "Update";
+			updateDeliveryAddressButton.UseVisualStyleBackColor = false;
+			// 
 			// CustomerDetails
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(updateDeliveryAddressButton);
+			Controls.Add(deleteDeliveryAddressButton);
 			Controls.Add(cancelAddressButton);
 			Controls.Add(acceptAddressButton);
 			Controls.Add(deliverDeliveryChargeTextBox);
 			Controls.Add(deliveryDeliveryChargeLabel);
-			Controls.Add(dataGridView1);
+			Controls.Add(deliveryAddressDataView);
 			Controls.Add(billingAsDeliveryCheckBox);
 			Controls.Add(deliveryPostcodeTextBox);
 			Controls.Add(deliveryPostcodeLabel);
@@ -467,7 +496,7 @@
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "CustomerDetails";
 			Text = "Customer Details";
-			((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+			((System.ComponentModel.ISupportInitialize)deliveryAddressDataView).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -503,10 +532,12 @@
 		private Label deliveryHouseNumberLabel;
 		private Label deliveryAddressLabel;
 		private CheckBox billingAsDeliveryCheckBox;
-		private DataGridView dataGridView1;
+		private DataGridView deliveryAddressDataView;
 		private TextBox deliverDeliveryChargeTextBox;
 		private Label deliveryDeliveryChargeLabel;
 		private Button acceptAddressButton;
 		private Button cancelAddressButton;
+		private Button deleteDeliveryAddressButton;
+		private Button updateDeliveryAddressButton;
 	}
 }
