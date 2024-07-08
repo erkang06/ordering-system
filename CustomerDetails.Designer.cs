@@ -464,6 +464,7 @@
 			collectionButton.TabIndex = 43;
 			collectionButton.Text = "Collection";
 			collectionButton.UseVisualStyleBackColor = false;
+			collectionButton.Click += collectionButton_Click;
 			// 
 			// deliveryButton
 			// 
@@ -475,6 +476,7 @@
 			deliveryButton.TabIndex = 42;
 			deliveryButton.Text = "Delivery";
 			deliveryButton.UseVisualStyleBackColor = false;
+			deliveryButton.Click += deliveryButton_Click;
 			// 
 			// CustomerDetails
 			// 

@@ -26,5 +26,17 @@ namespace ordering_system
 		{
 			this.Close();
 		}
+
+		private void deliveryButton_Click(object sender, EventArgs e)
+		{
+			deliveryButton.BackColor = Color.Yellow;
+			collectionButton.BackColor = Color.Transparent;
+		}
+
+		private void collectionButton_Click(object sender, EventArgs e)
+		{
+			collectionButton.BackColor = Color.Yellow;
+			deliveryButton.BackColor = Color.Transparent;
+		}
 	}
 }
