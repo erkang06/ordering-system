@@ -21,5 +21,20 @@ namespace ordering_system
 		{
 			this.Close();
 		}
+
+		private void acceptButton_Click(object sender, EventArgs e)
+		{
+			if (passwordTextBox.Text == "password")
+			{
+				ManagerFunctions obj = new ManagerFunctions();
+				obj.Show();
+				obj.TopMost = true;
+				this.Close();
+			}
+			else
+			{
+				MessageBox.Show("Password Incorrect", "Manager Functions");
+			}
+		}
 	}
 }

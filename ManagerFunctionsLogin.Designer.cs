@@ -30,7 +30,7 @@
 		{
 			passwordLabel = new Label();
 			loginLabel = new Label();
-			billingHouseNumberTextBox = new TextBox();
+			passwordTextBox = new TextBox();
 			acceptButton = new Button();
 			cancelButton = new Button();
 			SuspendLayout();
@@ -59,16 +59,18 @@
 			loginLabel.TabIndex = 14;
 			loginLabel.Text = "Manager Functions";
 			// 
-			// billingHouseNumberTextBox
+			// passwordTextBox
 			// 
-			billingHouseNumberTextBox.Font = new Font("Segoe UI", 14F);
-			billingHouseNumberTextBox.Location = new Point(250, 200);
-			billingHouseNumberTextBox.Name = "billingHouseNumberTextBox";
-			billingHouseNumberTextBox.Size = new Size(300, 57);
-			billingHouseNumberTextBox.TabIndex = 15;
+			passwordTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			passwordTextBox.Font = new Font("Segoe UI", 14F);
+			passwordTextBox.Location = new Point(250, 200);
+			passwordTextBox.Name = "passwordTextBox";
+			passwordTextBox.Size = new Size(300, 57);
+			passwordTextBox.TabIndex = 15;
 			// 
 			// acceptButton
 			// 
+			acceptButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			acceptButton.BackColor = Color.Gold;
 			acceptButton.FlatStyle = FlatStyle.Flat;
 			acceptButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
@@ -78,9 +80,11 @@
 			acceptButton.TabIndex = 39;
 			acceptButton.Text = "Accept";
 			acceptButton.UseVisualStyleBackColor = false;
+			acceptButton.Click += acceptButton_Click;
 			// 
 			// cancelButton
 			// 
+			cancelButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			cancelButton.Image = Properties.Resources.redCancelOrder;
 			cancelButton.Location = new Point(460, 12);
 			cancelButton.Name = "cancelButton";
@@ -97,7 +101,7 @@
 			ClientSize = new Size(562, 512);
 			Controls.Add(cancelButton);
 			Controls.Add(acceptButton);
-			Controls.Add(billingHouseNumberTextBox);
+			Controls.Add(passwordTextBox);
 			Controls.Add(loginLabel);
 			Controls.Add(passwordLabel);
 			FormBorderStyle = FormBorderStyle.None;
@@ -111,7 +115,7 @@
 
 		private Label passwordLabel;
 		private Label loginLabel;
-		private TextBox billingHouseNumberTextBox;
+		private TextBox passwordTextBox;
 		private Button acceptButton;
 		private Button cancelButton;
 	}

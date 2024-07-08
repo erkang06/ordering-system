@@ -16,5 +16,15 @@ namespace ordering_system
 		{
 			InitializeComponent();
 		}
+
+		private void cancelButton_Click(object sender, EventArgs e)
+		{
+			this.Close();
+		}
+
+		private void acceptButton_Click(object sender, EventArgs e)
+		{
+			Application.Exit();
+		}
 	}
 }
