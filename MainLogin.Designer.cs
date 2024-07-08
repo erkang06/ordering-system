@@ -67,6 +67,7 @@
 			passwordTextBox.Name = "passwordTextBox";
 			passwordTextBox.Size = new Size(300, 57);
 			passwordTextBox.TabIndex = 15;
+			passwordTextBox.KeyPress += passwordTextBox_KeyPress;
 			// 
 			// acceptButton
 			// 

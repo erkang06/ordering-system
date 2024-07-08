@@ -34,6 +34,15 @@ namespace ordering_system
 			else
 			{
 				MessageBox.Show("Password Incorrect", "Manager Functions");
+				passwordTextBox.Focus();
+			}
+		}
+
+		private void passwordTextBox_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == (char)Keys.Return)
+			{
+				acceptButton_Click((object)sender, e);
 			}
 		}
 	}

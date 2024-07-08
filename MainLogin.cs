@@ -19,7 +19,7 @@ namespace ordering_system
 
 		private void cancelButton_Click(object sender, EventArgs e)
 		{
-			this.Close();
+			Application.Exit();
 		}
 
 		private void acceptButton_Click(object sender, EventArgs e)
@@ -34,6 +34,15 @@ namespace ordering_system
 			else
 			{
 				MessageBox.Show("Password Incorrect", "Ordering system");
+				passwordTextBox.Focus();
+			}
+		}
+
+		private void passwordTextBox_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == (char)Keys.Return)
+			{
+				acceptButton_Click((object)sender, e);
 			}
 		}
 	}

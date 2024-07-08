@@ -36,6 +36,7 @@
 			counterButton = new Button();
 			deliveryButton = new Button();
 			managerFunctionsPanel = new Panel();
+			button1 = new Button();
 			itemEditFunctionsPanel = new Panel();
 			timeEditButton = new Button();
 			smallPriceButton = new Button();
@@ -56,7 +57,6 @@
 			itemsPanel = new Panel();
 			categoriesPanel = new Panel();
 			paymentPanel = new Panel();
-			button1 = new Button();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -121,6 +121,7 @@
 			collectionButton.TabIndex = 2;
 			collectionButton.Text = "Collection";
 			collectionButton.UseVisualStyleBackColor = false;
+			collectionButton.Click += collectionButton_Click;
 			// 
 			// counterButton
 			// 
@@ -132,6 +133,7 @@
 			counterButton.TabIndex = 1;
 			counterButton.Text = "Counter";
 			counterButton.UseVisualStyleBackColor = false;
+			counterButton.Click += counterButton_Click;
 			// 
 			// deliveryButton
 			// 
@@ -143,6 +145,7 @@
 			deliveryButton.TabIndex = 0;
 			deliveryButton.Text = "Delivery";
 			deliveryButton.UseVisualStyleBackColor = false;
+			deliveryButton.Click += deliveryButton_Click;
 			// 
 			// managerFunctionsPanel
 			// 
@@ -154,6 +157,18 @@
 			managerFunctionsPanel.Name = "managerFunctionsPanel";
 			managerFunctionsPanel.Size = new Size(180, 1080);
 			managerFunctionsPanel.TabIndex = 2;
+			// 
+			// button1
+			// 
+			button1.BackColor = Color.Transparent;
+			button1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			button1.Location = new Point(0, 980);
+			button1.Name = "button1";
+			button1.Size = new Size(180, 100);
+			button1.TabIndex = 3;
+			button1.Text = "Manager Functions";
+			button1.UseVisualStyleBackColor = false;
+			button1.Click += button1_Click;
 			// 
 			// itemEditFunctionsPanel
 			// 
@@ -369,18 +384,6 @@
 			paymentPanel.Size = new Size(720, 260);
 			paymentPanel.TabIndex = 4;
 			paymentPanel.Visible = false;
-			// 
-			// button1
-			// 
-			button1.BackColor = Color.Transparent;
-			button1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			button1.Location = new Point(0, 980);
-			button1.Name = "button1";
-			button1.Size = new Size(180, 100);
-			button1.TabIndex = 3;
-			button1.Text = "Manager Functions";
-			button1.UseVisualStyleBackColor = false;
-			button1.Click += button1_Click;
 			// 
 			// MainMenu
 			// 

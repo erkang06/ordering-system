@@ -63,6 +63,8 @@
 			cancelAddressButton = new Button();
 			deleteDeliveryAddressButton = new Button();
 			updateDeliveryAddressButton = new Button();
+			collectionButton = new Button();
+			deliveryButton = new Button();
 			((System.ComponentModel.ISupportInitialize)deliveryAddressDataView).BeginInit();
 			SuspendLayout();
 			// 
@@ -452,12 +454,36 @@
 			updateDeliveryAddressButton.Text = "Update";
 			updateDeliveryAddressButton.UseVisualStyleBackColor = false;
 			// 
+			// collectionButton
+			// 
+			collectionButton.BackColor = Color.Transparent;
+			collectionButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			collectionButton.Location = new Point(218, 656);
+			collectionButton.Name = "collectionButton";
+			collectionButton.Size = new Size(200, 80);
+			collectionButton.TabIndex = 43;
+			collectionButton.Text = "Collection";
+			collectionButton.UseVisualStyleBackColor = false;
+			// 
+			// deliveryButton
+			// 
+			deliveryButton.BackColor = Color.Transparent;
+			deliveryButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			deliveryButton.Location = new Point(12, 656);
+			deliveryButton.Name = "deliveryButton";
+			deliveryButton.Size = new Size(200, 80);
+			deliveryButton.TabIndex = 42;
+			deliveryButton.Text = "Delivery";
+			deliveryButton.UseVisualStyleBackColor = false;
+			// 
 			// CustomerDetails
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(collectionButton);
+			Controls.Add(deliveryButton);
 			Controls.Add(updateDeliveryAddressButton);
 			Controls.Add(deleteDeliveryAddressButton);
 			Controls.Add(cancelAddressButton);
@@ -539,5 +565,7 @@
 		private Button cancelAddressButton;
 		private Button deleteDeliveryAddressButton;
 		private Button updateDeliveryAddressButton;
+		private Button collectionButton;
+		private Button deliveryButton;
 	}
 }
