@@ -59,6 +59,8 @@
 			dataGridView1 = new DataGridView();
 			deliverDeliveryChargeTextBox = new TextBox();
 			deliveryDeliveryChargeLabel = new Label();
+			acceptAddressButton = new Button();
+			cancelAddressButton = new Button();
 			((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
 			SuspendLayout();
 			// 
@@ -110,7 +112,7 @@
 			billingAddressLabel.BackColor = Color.Transparent;
 			billingAddressLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingAddressLabel.ForeColor = Color.Black;
-			billingAddressLabel.Location = new Point(12, 610);
+			billingAddressLabel.Location = new Point(12, 195);
 			billingAddressLabel.Margin = new Padding(3, 5, 3, 5);
 			billingAddressLabel.Name = "billingAddressLabel";
 			billingAddressLabel.Size = new Size(500, 80);
@@ -120,7 +122,7 @@
 			// billingHouseNumberTextBox
 			// 
 			billingHouseNumberTextBox.Font = new Font("Segoe UI", 14F);
-			billingHouseNumberTextBox.Location = new Point(370, 710);
+			billingHouseNumberTextBox.Location = new Point(370, 295);
 			billingHouseNumberTextBox.Name = "billingHouseNumberTextBox";
 			billingHouseNumberTextBox.Size = new Size(550, 57);
 			billingHouseNumberTextBox.TabIndex = 13;
@@ -131,7 +133,7 @@
 			billingHouseNumberLabel.BackColor = Color.Transparent;
 			billingHouseNumberLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingHouseNumberLabel.ForeColor = Color.Black;
-			billingHouseNumberLabel.Location = new Point(12, 710);
+			billingHouseNumberLabel.Location = new Point(12, 295);
 			billingHouseNumberLabel.Margin = new Padding(3, 5, 3, 5);
 			billingHouseNumberLabel.Name = "billingHouseNumberLabel";
 			billingHouseNumberLabel.Size = new Size(350, 50);
@@ -153,7 +155,7 @@
 			// billingStreetNameTextBox
 			// 
 			billingStreetNameTextBox.Font = new Font("Segoe UI", 14F);
-			billingStreetNameTextBox.Location = new Point(370, 770);
+			billingStreetNameTextBox.Location = new Point(370, 355);
 			billingStreetNameTextBox.Name = "billingStreetNameTextBox";
 			billingStreetNameTextBox.Size = new Size(550, 57);
 			billingStreetNameTextBox.TabIndex = 16;
@@ -164,7 +166,7 @@
 			billingStreetNameLabel.BackColor = Color.Transparent;
 			billingStreetNameLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingStreetNameLabel.ForeColor = Color.Black;
-			billingStreetNameLabel.Location = new Point(12, 770);
+			billingStreetNameLabel.Location = new Point(12, 355);
 			billingStreetNameLabel.Margin = new Padding(3, 5, 3, 5);
 			billingStreetNameLabel.Name = "billingStreetNameLabel";
 			billingStreetNameLabel.Size = new Size(350, 50);
@@ -174,7 +176,7 @@
 			// billingVillageTextBox
 			// 
 			billingVillageTextBox.Font = new Font("Segoe UI", 14F);
-			billingVillageTextBox.Location = new Point(370, 830);
+			billingVillageTextBox.Location = new Point(370, 415);
 			billingVillageTextBox.Name = "billingVillageTextBox";
 			billingVillageTextBox.Size = new Size(550, 57);
 			billingVillageTextBox.TabIndex = 18;
@@ -185,7 +187,7 @@
 			billingVillageLabel.BackColor = Color.Transparent;
 			billingVillageLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingVillageLabel.ForeColor = Color.Black;
-			billingVillageLabel.Location = new Point(12, 830);
+			billingVillageLabel.Location = new Point(12, 415);
 			billingVillageLabel.Margin = new Padding(3, 5, 3, 5);
 			billingVillageLabel.Name = "billingVillageLabel";
 			billingVillageLabel.Size = new Size(350, 50);
@@ -195,7 +197,7 @@
 			// billingCityTextBox
 			// 
 			billingCityTextBox.Font = new Font("Segoe UI", 14F);
-			billingCityTextBox.Location = new Point(370, 890);
+			billingCityTextBox.Location = new Point(370, 475);
 			billingCityTextBox.Name = "billingCityTextBox";
 			billingCityTextBox.Size = new Size(550, 57);
 			billingCityTextBox.TabIndex = 20;
@@ -206,7 +208,7 @@
 			billingCityLabel.BackColor = Color.Transparent;
 			billingCityLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingCityLabel.ForeColor = Color.Black;
-			billingCityLabel.Location = new Point(12, 890);
+			billingCityLabel.Location = new Point(12, 475);
 			billingCityLabel.Margin = new Padding(3, 5, 3, 5);
 			billingCityLabel.Name = "billingCityLabel";
 			billingCityLabel.Size = new Size(350, 50);
@@ -216,7 +218,7 @@
 			// billingPostcodeTextBox
 			// 
 			billingPostcodeTextBox.Font = new Font("Segoe UI", 14F);
-			billingPostcodeTextBox.Location = new Point(370, 950);
+			billingPostcodeTextBox.Location = new Point(370, 535);
 			billingPostcodeTextBox.Name = "billingPostcodeTextBox";
 			billingPostcodeTextBox.Size = new Size(550, 57);
 			billingPostcodeTextBox.TabIndex = 22;
@@ -227,7 +229,7 @@
 			billingPostcodeLabel.BackColor = Color.Transparent;
 			billingPostcodeLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			billingPostcodeLabel.ForeColor = Color.Black;
-			billingPostcodeLabel.Location = new Point(12, 950);
+			billingPostcodeLabel.Location = new Point(12, 535);
 			billingPostcodeLabel.Margin = new Padding(3, 5, 3, 5);
 			billingPostcodeLabel.Name = "billingPostcodeLabel";
 			billingPostcodeLabel.Size = new Size(350, 50);
@@ -357,7 +359,7 @@
 			billingAsDeliveryCheckBox.AutoSize = true;
 			billingAsDeliveryCheckBox.BackColor = Color.Gainsboro;
 			billingAsDeliveryCheckBox.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-			billingAsDeliveryCheckBox.Location = new Point(12, 1010);
+			billingAsDeliveryCheckBox.Location = new Point(12, 595);
 			billingAsDeliveryCheckBox.Name = "billingAsDeliveryCheckBox";
 			billingAsDeliveryCheckBox.Size = new Size(778, 55);
 			billingAsDeliveryCheckBox.TabIndex = 34;
@@ -395,12 +397,42 @@
 			deliveryDeliveryChargeLabel.TabIndex = 36;
 			deliveryDeliveryChargeLabel.Text = "Delivery Charge:";
 			// 
+			// acceptAddressButton
+			// 
+			acceptAddressButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			acceptAddressButton.BackColor = Color.Teal;
+			acceptAddressButton.FlatStyle = FlatStyle.Flat;
+			acceptAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			acceptAddressButton.Location = new Point(12, 967);
+			acceptAddressButton.Name = "acceptAddressButton";
+			acceptAddressButton.Size = new Size(200, 100);
+			acceptAddressButton.TabIndex = 38;
+			acceptAddressButton.Text = "Accept";
+			acceptAddressButton.UseVisualStyleBackColor = false;
+			acceptAddressButton.Click += acceptAddressButton_Click;
+			// 
+			// cancelAddressButton
+			// 
+			cancelAddressButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			cancelAddressButton.BackColor = SystemColors.Control;
+			cancelAddressButton.FlatStyle = FlatStyle.Flat;
+			cancelAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			cancelAddressButton.Location = new Point(218, 968);
+			cancelAddressButton.Name = "cancelAddressButton";
+			cancelAddressButton.Size = new Size(200, 100);
+			cancelAddressButton.TabIndex = 39;
+			cancelAddressButton.Text = "Cancel";
+			cancelAddressButton.UseVisualStyleBackColor = false;
+			cancelAddressButton.Click += cancelAddressButton_Click;
+			// 
 			// CustomerDetails
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(cancelAddressButton);
+			Controls.Add(acceptAddressButton);
 			Controls.Add(deliverDeliveryChargeTextBox);
 			Controls.Add(deliveryDeliveryChargeLabel);
 			Controls.Add(dataGridView1);
@@ -474,5 +506,7 @@
 		private DataGridView dataGridView1;
 		private TextBox deliverDeliveryChargeTextBox;
 		private Label deliveryDeliveryChargeLabel;
+		private Button acceptAddressButton;
+		private Button cancelAddressButton;
 	}
 }

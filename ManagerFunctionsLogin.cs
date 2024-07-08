@@ -10,19 +10,14 @@ using System.Windows.Forms;
 
 namespace ordering_system
 {
-	public partial class CustomerDetails : Form
+	public partial class ManagerFunctionsLogin : Form
 	{
-		public CustomerDetails()
+		public ManagerFunctionsLogin()
 		{
 			InitializeComponent();
 		}
 
-		private void acceptAddressButton_Click(object sender, EventArgs e)
-		{
-			this.Close();
-		}
-
-		private void cancelAddressButton_Click(object sender, EventArgs e)
+		private void cancelButton_Click(object sender, EventArgs e)
 		{
 			this.Close();
 		}

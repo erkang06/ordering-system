@@ -46,6 +46,7 @@
 			priceEditButton = new Button();
 			memoButton = new Button();
 			runningOrderPanel = new Panel();
+			totalPriceLabel = new Label();
 			deliveryChargePriceLabel = new Label();
 			subtotalPriceLabel = new Label();
 			deliveryChargeTextLabel = new Label();
@@ -55,9 +56,10 @@
 			itemsPanel = new Panel();
 			categoriesPanel = new Panel();
 			paymentPanel = new Panel();
-			totalPriceLabel = new Label();
+			button1 = new Button();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
+			managerFunctionsPanel.SuspendLayout();
 			itemEditFunctionsPanel.SuspendLayout();
 			runningOrderPanel.SuspendLayout();
 			SuspendLayout();
@@ -83,6 +85,7 @@
 			customerDetailsLabel.Size = new Size(1004, 45);
 			customerDetailsLabel.TabIndex = 1;
 			customerDetailsLabel.Text = "phone number and address here";
+			customerDetailsLabel.Click += customerDetailsLabel_Click;
 			// 
 			// orderNumberLabel
 			// 
@@ -145,6 +148,7 @@
 			// 
 			managerFunctionsPanel.Anchor = AnchorStyles.Right;
 			managerFunctionsPanel.BackColor = Color.Gold;
+			managerFunctionsPanel.Controls.Add(button1);
 			managerFunctionsPanel.Location = new Point(1740, 0);
 			managerFunctionsPanel.Margin = new Padding(0);
 			managerFunctionsPanel.Name = "managerFunctionsPanel";
@@ -255,6 +259,19 @@
 			runningOrderPanel.Size = new Size(720, 660);
 			runningOrderPanel.TabIndex = 2;
 			// 
+			// totalPriceLabel
+			// 
+			totalPriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			totalPriceLabel.BackColor = Color.White;
+			totalPriceLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			totalPriceLabel.ForeColor = Color.DodgerBlue;
+			totalPriceLabel.Location = new Point(440, 580);
+			totalPriceLabel.Name = "totalPriceLabel";
+			totalPriceLabel.RightToLeft = RightToLeft.No;
+			totalPriceLabel.Size = new Size(280, 80);
+			totalPriceLabel.TabIndex = 4;
+			totalPriceLabel.Text = "£0000.00";
+			// 
 			// deliveryChargePriceLabel
 			// 
 			deliveryChargePriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -353,18 +370,17 @@
 			paymentPanel.TabIndex = 4;
 			paymentPanel.Visible = false;
 			// 
-			// totalPriceLabel
+			// button1
 			// 
-			totalPriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			totalPriceLabel.BackColor = Color.White;
-			totalPriceLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			totalPriceLabel.ForeColor = Color.DodgerBlue;
-			totalPriceLabel.Location = new Point(440, 580);
-			totalPriceLabel.Name = "totalPriceLabel";
-			totalPriceLabel.RightToLeft = RightToLeft.No;
-			totalPriceLabel.Size = new Size(280, 80);
-			totalPriceLabel.TabIndex = 4;
-			totalPriceLabel.Text = "£0000.00";
+			button1.BackColor = Color.Transparent;
+			button1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			button1.Location = new Point(0, 980);
+			button1.Name = "button1";
+			button1.Size = new Size(180, 100);
+			button1.TabIndex = 3;
+			button1.Text = "Manager Functions";
+			button1.UseVisualStyleBackColor = false;
+			button1.Click += button1_Click;
 			// 
 			// MainMenu
 			// 
@@ -384,9 +400,10 @@
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "MainMenu";
 			StartPosition = FormStartPosition.CenterScreen;
-			Text = "Form1";
+			Text = "Main Menu";
 			customerDetailsPanel.ResumeLayout(false);
 			orderTypePanel.ResumeLayout(false);
+			managerFunctionsPanel.ResumeLayout(false);
 			itemEditFunctionsPanel.ResumeLayout(false);
 			runningOrderPanel.ResumeLayout(false);
 			ResumeLayout(false);
@@ -423,5 +440,6 @@
 		private Button timeEditButton;
 		private Panel paymentPanel;
 		private Label totalPriceLabel;
+		private Button button1;
 	}
 }

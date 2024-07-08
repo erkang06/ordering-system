@@ -19,5 +19,5 @@ namespace ordering_system
 		string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\"C:\\Users\\benny\\Documents\\CS\\NEA\\ordering system\\ordering system.accdb\";Persist Security Info=True";
 	}
 
-	public List<Address> getAddressesForCustomer()
+	//public List<Address> getAddressesForCustomer()
 }
