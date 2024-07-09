@@ -14,13 +14,6 @@ namespace ordering_system
 			obj.TopMost = true;
 		}
 
-		private void button1_Click(object sender, EventArgs e)
-		{
-			ManagerFunctionsLogin obj = new ManagerFunctionsLogin();
-			obj.Show();
-			obj.TopMost = true;
-		}
-
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
 			deliveryButton.BackColor = Color.Yellow;
@@ -77,6 +70,13 @@ namespace ordering_system
 		private void timer_Tick(object sender, EventArgs e)
 		{
 			timeLabel.Text = DateTime.Now.ToString("dd/mm/yy HH:mm:ss");
+		}
+
+		private void managerFunctionsButton_Click(object sender, EventArgs e)
+		{
+			ManagerFunctionsLogin obj = new ManagerFunctionsLogin();
+			obj.Show();
+			obj.TopMost = true;
 		}
 	}
 }

@@ -40,9 +40,8 @@
 			timeLabel = new Label();
 			viewOrdersButton = new Button();
 			acceptOrderButton = new Button();
-			button1 = new Button();
+			managerFunctionsButton = new Button();
 			itemEditFunctionsPanel = new Panel();
-			timeEditButton = new Button();
 			smallPriceButton = new Button();
 			largePriceButton = new Button();
 			cancelOrderButton = new Button();
@@ -51,6 +50,7 @@
 			priceEditButton = new Button();
 			memoButton = new Button();
 			runningOrderPanel = new Panel();
+			estimatedTimeLabel = new Label();
 			totalPriceLabel = new Label();
 			deliveryChargePriceLabel = new Label();
 			subtotalPriceLabel = new Label();
@@ -160,7 +160,7 @@
 			managerFunctionsPanel.Controls.Add(timeLabel);
 			managerFunctionsPanel.Controls.Add(viewOrdersButton);
 			managerFunctionsPanel.Controls.Add(acceptOrderButton);
-			managerFunctionsPanel.Controls.Add(button1);
+			managerFunctionsPanel.Controls.Add(managerFunctionsButton);
 			managerFunctionsPanel.Location = new Point(1740, 0);
 			managerFunctionsPanel.Margin = new Padding(0);
 			managerFunctionsPanel.Name = "managerFunctionsPanel";
@@ -201,22 +201,21 @@
 			acceptOrderButton.UseVisualStyleBackColor = false;
 			acceptOrderButton.Click += acceptOrderButton_Click;
 			// 
-			// button1
+			// managerFunctionsButton
 			// 
-			button1.BackColor = Color.Transparent;
-			button1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			button1.Location = new Point(0, 980);
-			button1.Name = "button1";
-			button1.Size = new Size(180, 100);
-			button1.TabIndex = 3;
-			button1.Text = "Manager Functions";
-			button1.UseVisualStyleBackColor = false;
-			button1.Click += button1_Click;
+			managerFunctionsButton.BackColor = Color.Transparent;
+			managerFunctionsButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			managerFunctionsButton.Location = new Point(0, 980);
+			managerFunctionsButton.Name = "managerFunctionsButton";
+			managerFunctionsButton.Size = new Size(180, 100);
+			managerFunctionsButton.TabIndex = 3;
+			managerFunctionsButton.Text = "Manager Functions";
+			managerFunctionsButton.UseVisualStyleBackColor = false;
+			managerFunctionsButton.Click += managerFunctionsButton_Click;
 			// 
 			// itemEditFunctionsPanel
 			// 
 			itemEditFunctionsPanel.BackColor = Color.White;
-			itemEditFunctionsPanel.Controls.Add(timeEditButton);
 			itemEditFunctionsPanel.Controls.Add(smallPriceButton);
 			itemEditFunctionsPanel.Controls.Add(largePriceButton);
 			itemEditFunctionsPanel.Controls.Add(cancelOrderButton);
@@ -227,69 +226,60 @@
 			itemEditFunctionsPanel.Location = new Point(0, 80);
 			itemEditFunctionsPanel.Margin = new Padding(0);
 			itemEditFunctionsPanel.Name = "itemEditFunctionsPanel";
-			itemEditFunctionsPanel.Size = new Size(720, 80);
+			itemEditFunctionsPanel.Size = new Size(700, 80);
 			itemEditFunctionsPanel.TabIndex = 2;
-			// 
-			// timeEditButton
-			// 
-			timeEditButton.Image = Properties.Resources.timeEdit;
-			timeEditButton.Location = new Point(540, 0);
-			timeEditButton.Name = "timeEditButton";
-			timeEditButton.Size = new Size(90, 80);
-			timeEditButton.TabIndex = 7;
-			timeEditButton.UseVisualStyleBackColor = true;
 			// 
 			// smallPriceButton
 			// 
 			smallPriceButton.Image = Properties.Resources.smallPrice;
-			smallPriceButton.Location = new Point(360, 0);
+			smallPriceButton.Location = new Point(400, 0);
 			smallPriceButton.Name = "smallPriceButton";
-			smallPriceButton.Size = new Size(90, 80);
+			smallPriceButton.Size = new Size(100, 80);
 			smallPriceButton.TabIndex = 6;
 			smallPriceButton.UseVisualStyleBackColor = true;
 			// 
 			// largePriceButton
 			// 
 			largePriceButton.Image = Properties.Resources.largePrice;
-			largePriceButton.Location = new Point(450, 0);
+			largePriceButton.Location = new Point(500, 0);
 			largePriceButton.Name = "largePriceButton";
-			largePriceButton.Size = new Size(90, 80);
+			largePriceButton.Size = new Size(100, 80);
 			largePriceButton.TabIndex = 5;
 			largePriceButton.UseVisualStyleBackColor = true;
 			// 
 			// cancelOrderButton
 			// 
 			cancelOrderButton.Image = Properties.Resources.redCancelOrder;
-			cancelOrderButton.Location = new Point(630, 0);
+			cancelOrderButton.Location = new Point(600, 0);
 			cancelOrderButton.Name = "cancelOrderButton";
-			cancelOrderButton.Size = new Size(90, 80);
+			cancelOrderButton.Size = new Size(100, 80);
 			cancelOrderButton.TabIndex = 4;
 			cancelOrderButton.UseVisualStyleBackColor = true;
 			// 
 			// increaseQuantityButton
 			// 
 			increaseQuantityButton.Image = Properties.Resources.increaseQuantity;
-			increaseQuantityButton.Location = new Point(270, 0);
+			increaseQuantityButton.Location = new Point(300, 0);
 			increaseQuantityButton.Name = "increaseQuantityButton";
-			increaseQuantityButton.Size = new Size(90, 80);
+			increaseQuantityButton.Size = new Size(100, 80);
 			increaseQuantityButton.TabIndex = 3;
 			increaseQuantityButton.UseVisualStyleBackColor = true;
 			// 
 			// decreaseQuantityButton
 			// 
 			decreaseQuantityButton.Image = Properties.Resources.decreaseQuantity;
-			decreaseQuantityButton.Location = new Point(180, 0);
+			decreaseQuantityButton.Location = new Point(200, 0);
 			decreaseQuantityButton.Name = "decreaseQuantityButton";
-			decreaseQuantityButton.Size = new Size(90, 80);
+			decreaseQuantityButton.Size = new Size(100, 80);
 			decreaseQuantityButton.TabIndex = 2;
 			decreaseQuantityButton.UseVisualStyleBackColor = true;
 			// 
 			// priceEditButton
 			// 
 			priceEditButton.Image = Properties.Resources.priceEdit;
-			priceEditButton.Location = new Point(90, 0);
+			priceEditButton.Location = new Point(100, 0);
 			priceEditButton.Name = "priceEditButton";
-			priceEditButton.Size = new Size(90, 80);
+			priceEditButton.Size = new Size(100, 80);
 			priceEditButton.TabIndex = 1;
 			priceEditButton.UseVisualStyleBackColor = true;
 			// 
@@ -298,13 +288,14 @@
 			memoButton.Image = Properties.Resources.memo;
 			memoButton.Location = new Point(0, 0);
 			memoButton.Name = "memoButton";
-			memoButton.Size = new Size(90, 80);
+			memoButton.Size = new Size(100, 80);
 			memoButton.TabIndex = 0;
 			memoButton.UseVisualStyleBackColor = true;
 			// 
 			// runningOrderPanel
 			// 
 			runningOrderPanel.BackColor = Color.Maroon;
+			runningOrderPanel.Controls.Add(estimatedTimeLabel);
 			runningOrderPanel.Controls.Add(totalPriceLabel);
 			runningOrderPanel.Controls.Add(deliveryChargePriceLabel);
 			runningOrderPanel.Controls.Add(subtotalPriceLabel);
@@ -314,8 +305,22 @@
 			runningOrderPanel.Location = new Point(0, 160);
 			runningOrderPanel.Margin = new Padding(0);
 			runningOrderPanel.Name = "runningOrderPanel";
-			runningOrderPanel.Size = new Size(720, 660);
+			runningOrderPanel.Size = new Size(700, 660);
 			runningOrderPanel.TabIndex = 2;
+			// 
+			// estimatedTimeLabel
+			// 
+			estimatedTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			estimatedTimeLabel.BackColor = Color.White;
+			estimatedTimeLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			estimatedTimeLabel.ForeColor = Color.Black;
+			estimatedTimeLabel.Location = new Point(285, 580);
+			estimatedTimeLabel.Name = "estimatedTimeLabel";
+			estimatedTimeLabel.RightToLeft = RightToLeft.Yes;
+			estimatedTimeLabel.Size = new Size(140, 80);
+			estimatedTimeLabel.TabIndex = 6;
+			estimatedTimeLabel.Text = "00:00";
+			estimatedTimeLabel.TextAlign = ContentAlignment.MiddleCenter;
 			// 
 			// totalPriceLabel
 			// 
@@ -323,12 +328,13 @@
 			totalPriceLabel.BackColor = Color.White;
 			totalPriceLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			totalPriceLabel.ForeColor = Color.DodgerBlue;
-			totalPriceLabel.Location = new Point(440, 580);
+			totalPriceLabel.Location = new Point(431, 580);
 			totalPriceLabel.Name = "totalPriceLabel";
 			totalPriceLabel.RightToLeft = RightToLeft.No;
-			totalPriceLabel.Size = new Size(280, 80);
+			totalPriceLabel.Size = new Size(269, 80);
 			totalPriceLabel.TabIndex = 4;
 			totalPriceLabel.Text = "£0000.00";
+			totalPriceLabel.TextAlign = ContentAlignment.MiddleCenter;
 			// 
 			// deliveryChargePriceLabel
 			// 
@@ -383,7 +389,7 @@
 			// runningOrderScrollBar
 			// 
 			runningOrderScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			runningOrderScrollBar.Location = new Point(690, 0);
+			runningOrderScrollBar.Location = new Point(670, 0);
 			runningOrderScrollBar.Name = "runningOrderScrollBar";
 			runningOrderScrollBar.Size = new Size(30, 580);
 			runningOrderScrollBar.TabIndex = 0;
@@ -395,26 +401,26 @@
 			commonItemsPanel.Location = new Point(0, 820);
 			commonItemsPanel.Margin = new Padding(0);
 			commonItemsPanel.Name = "commonItemsPanel";
-			commonItemsPanel.Size = new Size(720, 260);
+			commonItemsPanel.Size = new Size(700, 260);
 			commonItemsPanel.TabIndex = 3;
 			// 
 			// itemsPanel
 			// 
 			itemsPanel.BackColor = Color.DodgerBlue;
-			itemsPanel.Location = new Point(720, 80);
+			itemsPanel.Location = new Point(700, 80);
 			itemsPanel.Margin = new Padding(0);
 			itemsPanel.Name = "itemsPanel";
-			itemsPanel.Size = new Size(1020, 700);
+			itemsPanel.Size = new Size(1040, 700);
 			itemsPanel.TabIndex = 4;
 			// 
 			// categoriesPanel
 			// 
 			categoriesPanel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			categoriesPanel.BackColor = Color.LightCyan;
-			categoriesPanel.Location = new Point(720, 780);
+			categoriesPanel.Location = new Point(700, 780);
 			categoriesPanel.Margin = new Padding(0);
 			categoriesPanel.Name = "categoriesPanel";
-			categoriesPanel.Size = new Size(1020, 300);
+			categoriesPanel.Size = new Size(1040, 300);
 			categoriesPanel.TabIndex = 6;
 			// 
 			// paymentPanel
@@ -424,17 +430,17 @@
 			paymentPanel.Location = new Point(0, 820);
 			paymentPanel.Margin = new Padding(0);
 			paymentPanel.Name = "paymentPanel";
-			paymentPanel.Size = new Size(720, 260);
+			paymentPanel.Size = new Size(700, 260);
 			paymentPanel.TabIndex = 4;
 			paymentPanel.Visible = false;
 			// 
 			// viewOrdersPanel
 			// 
 			viewOrdersPanel.BackColor = Color.HotPink;
-			viewOrdersPanel.Location = new Point(720, 80);
+			viewOrdersPanel.Location = new Point(700, 80);
 			viewOrdersPanel.Margin = new Padding(0);
 			viewOrdersPanel.Name = "viewOrdersPanel";
-			viewOrdersPanel.Size = new Size(1020, 1000);
+			viewOrdersPanel.Size = new Size(1040, 1000);
 			viewOrdersPanel.TabIndex = 1;
 			viewOrdersPanel.Visible = false;
 			// 
@@ -488,7 +494,6 @@
 		private Label deliveryChargeTextLabel;
 		private Label deliveryChargePriceLabel;
 		private Label subtotalPriceLabel;
-		private Label label1;
 		private Button deliveryButton;
 		private Button collectionButton;
 		private Button counterButton;
@@ -502,11 +507,12 @@
 		private Button timeEditButton;
 		private Panel paymentPanel;
 		private Label totalPriceLabel;
-		private Button button1;
+		private Button managerFunctionsButton;
 		private Button viewOrdersButton;
 		private Button acceptOrderButton;
 		private Panel viewOrdersPanel;
 		private Label timeLabel;
 		private System.Windows.Forms.Timer timer;
+		private Label estimatedTimeLabel;
 	}
 }
