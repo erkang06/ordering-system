@@ -35,14 +35,15 @@
 			updateSetMealsButton = new Button();
 			updateCustomersButton = new Button();
 			orderSummaryButton = new Button();
-			settingsButton = new Button();
+			changeLoginButton = new Button();
+			changeManagerPasswordButton = new Button();
 			SuspendLayout();
 			// 
 			// cancelButton
 			// 
 			cancelButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			cancelButton.Image = Properties.Resources.redCancelOrder;
-			cancelButton.Location = new Point(1818, 12);
+			cancelButton.Location = new Point(522, 12);
 			cancelButton.Name = "cancelButton";
 			cancelButton.Size = new Size(90, 80);
 			cancelButton.TabIndex = 41;
@@ -51,24 +52,23 @@
 			// 
 			// managerFunctionsLabel
 			// 
-			managerFunctionsLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			managerFunctionsLabel.BackColor = Color.Transparent;
 			managerFunctionsLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			managerFunctionsLabel.ForeColor = Color.Black;
 			managerFunctionsLabel.Location = new Point(12, 12);
 			managerFunctionsLabel.Margin = new Padding(3, 5, 3, 5);
 			managerFunctionsLabel.Name = "managerFunctionsLabel";
-			managerFunctionsLabel.Size = new Size(550, 80);
+			managerFunctionsLabel.Size = new Size(520, 80);
 			managerFunctionsLabel.TabIndex = 42;
 			managerFunctionsLabel.Text = "Manager Functions";
 			// 
 			// exitProgramButton
 			// 
-			exitProgramButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			exitProgramButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			exitProgramButton.BackColor = Color.Gold;
 			exitProgramButton.FlatStyle = FlatStyle.Flat;
 			exitProgramButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			exitProgramButton.Location = new Point(1608, 968);
+			exitProgramButton.Location = new Point(312, 968);
 			exitProgramButton.Name = "exitProgramButton";
 			exitProgramButton.Size = new Size(300, 100);
 			exitProgramButton.TabIndex = 43;
@@ -78,76 +78,84 @@
 			// 
 			// updateItemsButton
 			// 
-			updateItemsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			updateItemsButton.BackColor = SystemColors.Control;
 			updateItemsButton.FlatStyle = FlatStyle.Flat;
 			updateItemsButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
 			updateItemsButton.Location = new Point(12, 150);
 			updateItemsButton.Name = "updateItemsButton";
-			updateItemsButton.Size = new Size(450, 80);
+			updateItemsButton.Size = new Size(600, 80);
 			updateItemsButton.TabIndex = 44;
 			updateItemsButton.Text = "Update Items";
 			updateItemsButton.UseVisualStyleBackColor = false;
 			// 
 			// updateSetMealsButton
 			// 
-			updateSetMealsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			updateSetMealsButton.BackColor = SystemColors.Control;
 			updateSetMealsButton.FlatStyle = FlatStyle.Flat;
 			updateSetMealsButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
 			updateSetMealsButton.Location = new Point(12, 236);
 			updateSetMealsButton.Name = "updateSetMealsButton";
-			updateSetMealsButton.Size = new Size(450, 80);
+			updateSetMealsButton.Size = new Size(600, 80);
 			updateSetMealsButton.TabIndex = 45;
 			updateSetMealsButton.Text = "Update Set Meals";
 			updateSetMealsButton.UseVisualStyleBackColor = false;
 			// 
 			// updateCustomersButton
 			// 
-			updateCustomersButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			updateCustomersButton.BackColor = SystemColors.Control;
 			updateCustomersButton.FlatStyle = FlatStyle.Flat;
 			updateCustomersButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
 			updateCustomersButton.Location = new Point(12, 322);
 			updateCustomersButton.Name = "updateCustomersButton";
-			updateCustomersButton.Size = new Size(450, 80);
+			updateCustomersButton.Size = new Size(600, 80);
 			updateCustomersButton.TabIndex = 46;
 			updateCustomersButton.Text = "Update Customers";
 			updateCustomersButton.UseVisualStyleBackColor = false;
 			// 
 			// orderSummaryButton
 			// 
-			orderSummaryButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			orderSummaryButton.BackColor = SystemColors.Control;
 			orderSummaryButton.FlatStyle = FlatStyle.Flat;
 			orderSummaryButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
 			orderSummaryButton.Location = new Point(12, 408);
 			orderSummaryButton.Name = "orderSummaryButton";
-			orderSummaryButton.Size = new Size(450, 80);
+			orderSummaryButton.Size = new Size(600, 80);
 			orderSummaryButton.TabIndex = 47;
 			orderSummaryButton.Text = "Order Summary";
 			orderSummaryButton.UseVisualStyleBackColor = false;
 			// 
-			// settingsButton
+			// changeLoginButton
 			// 
-			settingsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			settingsButton.BackColor = SystemColors.Control;
-			settingsButton.FlatStyle = FlatStyle.Flat;
-			settingsButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			settingsButton.Location = new Point(12, 494);
-			settingsButton.Name = "settingsButton";
-			settingsButton.Size = new Size(450, 80);
-			settingsButton.TabIndex = 48;
-			settingsButton.Text = "Settings";
-			settingsButton.UseVisualStyleBackColor = false;
+			changeLoginButton.BackColor = SystemColors.Control;
+			changeLoginButton.FlatStyle = FlatStyle.Flat;
+			changeLoginButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			changeLoginButton.Location = new Point(12, 494);
+			changeLoginButton.Name = "changeLoginButton";
+			changeLoginButton.Size = new Size(600, 80);
+			changeLoginButton.TabIndex = 48;
+			changeLoginButton.Text = "Change Login Password";
+			changeLoginButton.UseVisualStyleBackColor = false;
+			// 
+			// changeManagerPasswordButton
+			// 
+			changeManagerPasswordButton.BackColor = SystemColors.Control;
+			changeManagerPasswordButton.FlatStyle = FlatStyle.Flat;
+			changeManagerPasswordButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			changeManagerPasswordButton.Location = new Point(12, 580);
+			changeManagerPasswordButton.Name = "changeManagerPasswordButton";
+			changeManagerPasswordButton.Size = new Size(600, 80);
+			changeManagerPasswordButton.TabIndex = 49;
+			changeManagerPasswordButton.Text = "Change Manager Password";
+			changeManagerPasswordButton.UseVisualStyleBackColor = false;
 			// 
 			// ManagerFunctions
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
-			ClientSize = new Size(1920, 1080);
-			Controls.Add(settingsButton);
+			ClientSize = new Size(624, 1080);
+			Controls.Add(changeManagerPasswordButton);
+			Controls.Add(changeLoginButton);
 			Controls.Add(orderSummaryButton);
 			Controls.Add(updateCustomersButton);
 			Controls.Add(updateSetMealsButton);
@@ -170,6 +178,7 @@
 		private Button updateSetMealsButton;
 		private Button updateCustomersButton;
 		private Button orderSummaryButton;
-		private Button settingsButton;
+		private Button changeLoginButton;
+		private Button changeManagerPasswordButton;
 	}
 }
