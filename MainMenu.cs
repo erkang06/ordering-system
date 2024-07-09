@@ -73,5 +73,10 @@ namespace ordering_system
 				viewOrdersPanel.Visible = false;
 			}
 		}
+
+		private void timer_Tick(object sender, EventArgs e)
+		{
+			timeLabel.Text = DateTime.Now.ToString("dd/mm/yy HH:mm:ss");
+		}
 	}
 }

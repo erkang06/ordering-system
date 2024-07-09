@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			components = new System.ComponentModel.Container();
 			customerDetailsPanel = new Panel();
 			customerDetailsLabel = new Label();
 			orderNumberLabel = new Label();
@@ -36,6 +37,7 @@
 			counterButton = new Button();
 			deliveryButton = new Button();
 			managerFunctionsPanel = new Panel();
+			timeLabel = new Label();
 			viewOrdersButton = new Button();
 			acceptOrderButton = new Button();
 			button1 = new Button();
@@ -60,6 +62,7 @@
 			categoriesPanel = new Panel();
 			paymentPanel = new Panel();
 			viewOrdersPanel = new Panel();
+			timer = new System.Windows.Forms.Timer(components);
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -154,6 +157,7 @@
 			// 
 			managerFunctionsPanel.Anchor = AnchorStyles.Right;
 			managerFunctionsPanel.BackColor = Color.Gold;
+			managerFunctionsPanel.Controls.Add(timeLabel);
 			managerFunctionsPanel.Controls.Add(viewOrdersButton);
 			managerFunctionsPanel.Controls.Add(acceptOrderButton);
 			managerFunctionsPanel.Controls.Add(button1);
@@ -163,11 +167,21 @@
 			managerFunctionsPanel.Size = new Size(180, 1080);
 			managerFunctionsPanel.TabIndex = 2;
 			// 
+			// timeLabel
+			// 
+			timeLabel.Font = new Font("Segoe UI", 12F);
+			timeLabel.Location = new Point(0, 890);
+			timeLabel.Name = "timeLabel";
+			timeLabel.Size = new Size(180, 90);
+			timeLabel.TabIndex = 6;
+			timeLabel.Text = "00/00/00 00:00:00";
+			timeLabel.TextAlign = ContentAlignment.MiddleCenter;
+			// 
 			// viewOrdersButton
 			// 
 			viewOrdersButton.BackColor = Color.Transparent;
 			viewOrdersButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			viewOrdersButton.Location = new Point(0, 106);
+			viewOrdersButton.Location = new Point(0, 100);
 			viewOrdersButton.Name = "viewOrdersButton";
 			viewOrdersButton.Size = new Size(180, 100);
 			viewOrdersButton.TabIndex = 5;
@@ -255,7 +269,7 @@
 			// increaseQuantityButton
 			// 
 			increaseQuantityButton.Image = Properties.Resources.increaseQuantity;
-			increaseQuantityButton.Location = new Point(180, 0);
+			increaseQuantityButton.Location = new Point(270, 0);
 			increaseQuantityButton.Name = "increaseQuantityButton";
 			increaseQuantityButton.Size = new Size(90, 80);
 			increaseQuantityButton.TabIndex = 3;
@@ -264,7 +278,7 @@
 			// decreaseQuantityButton
 			// 
 			decreaseQuantityButton.Image = Properties.Resources.decreaseQuantity;
-			decreaseQuantityButton.Location = new Point(270, 0);
+			decreaseQuantityButton.Location = new Point(180, 0);
 			decreaseQuantityButton.Name = "decreaseQuantityButton";
 			decreaseQuantityButton.Size = new Size(90, 80);
 			decreaseQuantityButton.TabIndex = 2;
@@ -424,6 +438,11 @@
 			viewOrdersPanel.TabIndex = 1;
 			viewOrdersPanel.Visible = false;
 			// 
+			// timer
+			// 
+			timer.Enabled = true;
+			timer.Tick += timer_Tick;
+			// 
 			// MainMenu
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
@@ -487,5 +506,7 @@
 		private Button viewOrdersButton;
 		private Button acceptOrderButton;
 		private Panel viewOrdersPanel;
+		private Label timeLabel;
+		private System.Windows.Forms.Timer timer;
 	}
 }
