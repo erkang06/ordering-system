@@ -22,7 +22,7 @@ namespace ordering_system
 			this.Close();
 		}
 
-		private void acceptButton_Click(object sender, EventArgs e)
+		private void exitProgramButton_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
 		}

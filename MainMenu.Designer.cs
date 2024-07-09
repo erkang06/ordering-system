@@ -36,6 +36,8 @@
 			counterButton = new Button();
 			deliveryButton = new Button();
 			managerFunctionsPanel = new Panel();
+			viewOrdersButton = new Button();
+			acceptOrderButton = new Button();
 			button1 = new Button();
 			itemEditFunctionsPanel = new Panel();
 			timeEditButton = new Button();
@@ -57,6 +59,7 @@
 			itemsPanel = new Panel();
 			categoriesPanel = new Panel();
 			paymentPanel = new Panel();
+			viewOrdersPanel = new Panel();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -151,12 +154,38 @@
 			// 
 			managerFunctionsPanel.Anchor = AnchorStyles.Right;
 			managerFunctionsPanel.BackColor = Color.Gold;
+			managerFunctionsPanel.Controls.Add(viewOrdersButton);
+			managerFunctionsPanel.Controls.Add(acceptOrderButton);
 			managerFunctionsPanel.Controls.Add(button1);
 			managerFunctionsPanel.Location = new Point(1740, 0);
 			managerFunctionsPanel.Margin = new Padding(0);
 			managerFunctionsPanel.Name = "managerFunctionsPanel";
 			managerFunctionsPanel.Size = new Size(180, 1080);
 			managerFunctionsPanel.TabIndex = 2;
+			// 
+			// viewOrdersButton
+			// 
+			viewOrdersButton.BackColor = Color.Transparent;
+			viewOrdersButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			viewOrdersButton.Location = new Point(0, 106);
+			viewOrdersButton.Name = "viewOrdersButton";
+			viewOrdersButton.Size = new Size(180, 100);
+			viewOrdersButton.TabIndex = 5;
+			viewOrdersButton.Text = "View Orders";
+			viewOrdersButton.UseVisualStyleBackColor = false;
+			viewOrdersButton.Click += viewOrdersButton_Click;
+			// 
+			// acceptOrderButton
+			// 
+			acceptOrderButton.BackColor = Color.Transparent;
+			acceptOrderButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			acceptOrderButton.Location = new Point(0, 0);
+			acceptOrderButton.Name = "acceptOrderButton";
+			acceptOrderButton.Size = new Size(180, 100);
+			acceptOrderButton.TabIndex = 4;
+			acceptOrderButton.Text = "Accept Order";
+			acceptOrderButton.UseVisualStyleBackColor = false;
+			acceptOrderButton.Click += acceptOrderButton_Click;
 			// 
 			// button1
 			// 
@@ -385,14 +414,22 @@
 			paymentPanel.TabIndex = 4;
 			paymentPanel.Visible = false;
 			// 
+			// viewOrdersPanel
+			// 
+			viewOrdersPanel.BackColor = Color.HotPink;
+			viewOrdersPanel.Location = new Point(720, 80);
+			viewOrdersPanel.Margin = new Padding(0);
+			viewOrdersPanel.Name = "viewOrdersPanel";
+			viewOrdersPanel.Size = new Size(1020, 1000);
+			viewOrdersPanel.TabIndex = 1;
+			viewOrdersPanel.Visible = false;
+			// 
 			// MainMenu
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.White;
 			ClientSize = new Size(1920, 1080);
-			Controls.Add(paymentPanel);
-			Controls.Add(commonItemsPanel);
 			Controls.Add(categoriesPanel);
 			Controls.Add(itemsPanel);
 			Controls.Add(runningOrderPanel);
@@ -400,6 +437,9 @@
 			Controls.Add(managerFunctionsPanel);
 			Controls.Add(orderTypePanel);
 			Controls.Add(customerDetailsPanel);
+			Controls.Add(viewOrdersPanel);
+			Controls.Add(commonItemsPanel);
+			Controls.Add(paymentPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "MainMenu";
 			StartPosition = FormStartPosition.CenterScreen;
@@ -444,5 +484,8 @@
 		private Panel paymentPanel;
 		private Label totalPriceLabel;
 		private Button button1;
+		private Button viewOrdersButton;
+		private Button acceptOrderButton;
+		private Panel viewOrdersPanel;
 	}
 }

@@ -38,8 +38,40 @@ namespace ordering_system
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
 			collectionButton.BackColor = Color.Yellow;
-			counterButton.BackColor= Color.Transparent;
-			deliveryButton.BackColor= Color.Transparent;
+			counterButton.BackColor = Color.Transparent;
+			deliveryButton.BackColor = Color.Transparent;
+		}
+
+		private void acceptOrderButton_Click(object sender, EventArgs e)
+		{
+			if (acceptOrderButton.Text == "Accept Order" && viewOrdersButton.Text == "View Orders") // cant open both panels at once lmao
+			{
+				acceptOrderButton.Text = "Accept Payment";
+				paymentPanel.BringToFront();
+				paymentPanel.Visible = true;
+			}
+			else if (acceptOrderButton.Text == "Accept Payment")
+			{
+				acceptOrderButton.Text = "Accept Order";
+				paymentPanel.SendToBack();
+				paymentPanel.Visible = false;
+			}
+		}
+
+		private void viewOrdersButton_Click(object sender, EventArgs e)
+		{
+			if (viewOrdersButton.Text == "View Orders" && acceptOrderButton.Text == "Accept Order")
+			{
+				viewOrdersButton.Text = "Cancel";
+				viewOrdersPanel.BringToFront();
+				viewOrdersPanel.Visible = true;
+			}
+			else if (viewOrdersButton.Text == "Cancel")
+			{
+				viewOrdersButton.Text = "View Orders";
+				viewOrdersPanel.SendToBack();
+				viewOrdersPanel.Visible = false;
+			}
 		}
 	}
 }
