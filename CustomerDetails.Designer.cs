@@ -65,6 +65,8 @@
 			updateDeliveryAddressButton = new Button();
 			collectionButton = new Button();
 			deliveryButton = new Button();
+			updateCustomerButton = new Button();
+			deleteCustomerButton = new Button();
 			((System.ComponentModel.ISupportInitialize)deliveryAddressDataView).BeginInit();
 			SuspendLayout();
 			// 
@@ -478,12 +480,40 @@
 			deliveryButton.UseVisualStyleBackColor = false;
 			deliveryButton.Click += deliveryButton_Click;
 			// 
+			// updateCustomerButton
+			// 
+			updateCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			updateCustomerButton.BackColor = SystemColors.Control;
+			updateCustomerButton.FlatStyle = FlatStyle.Flat;
+			updateCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			updateCustomerButton.Location = new Point(514, 132);
+			updateCustomerButton.Name = "updateCustomerButton";
+			updateCustomerButton.Size = new Size(200, 80);
+			updateCustomerButton.TabIndex = 44;
+			updateCustomerButton.Text = "Update";
+			updateCustomerButton.UseVisualStyleBackColor = false;
+			// 
+			// deleteCustomerButton
+			// 
+			deleteCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			deleteCustomerButton.BackColor = SystemColors.Control;
+			deleteCustomerButton.FlatStyle = FlatStyle.Flat;
+			deleteCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteCustomerButton.Location = new Point(720, 132);
+			deleteCustomerButton.Name = "deleteCustomerButton";
+			deleteCustomerButton.Size = new Size(200, 80);
+			deleteCustomerButton.TabIndex = 45;
+			deleteCustomerButton.Text = "Delete";
+			deleteCustomerButton.UseVisualStyleBackColor = false;
+			// 
 			// CustomerDetails
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(deleteCustomerButton);
+			Controls.Add(updateCustomerButton);
 			Controls.Add(collectionButton);
 			Controls.Add(deliveryButton);
 			Controls.Add(updateDeliveryAddressButton);
@@ -569,5 +599,7 @@
 		private Button updateDeliveryAddressButton;
 		private Button collectionButton;
 		private Button deliveryButton;
+		private Button updateCustomerButton;
+		private Button deleteCustomerButton;
 	}
 }
