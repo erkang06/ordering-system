@@ -50,7 +50,7 @@
 			priceEditButton = new Button();
 			memoButton = new Button();
 			runningOrderPanel = new Panel();
-			estimatedTimeLabel = new Label();
+			estimatedTimePicker = new DateTimePicker();
 			totalPriceLabel = new Label();
 			deliveryChargePriceLabel = new Label();
 			subtotalPriceLabel = new Label();
@@ -63,6 +63,7 @@
 			paymentPanel = new Panel();
 			viewOrdersPanel = new Panel();
 			timer = new System.Windows.Forms.Timer(components);
+			estimatedTimeLabel = new Label();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -296,6 +297,7 @@
 			// 
 			runningOrderPanel.BackColor = Color.Maroon;
 			runningOrderPanel.Controls.Add(estimatedTimeLabel);
+			runningOrderPanel.Controls.Add(estimatedTimePicker);
 			runningOrderPanel.Controls.Add(totalPriceLabel);
 			runningOrderPanel.Controls.Add(deliveryChargePriceLabel);
 			runningOrderPanel.Controls.Add(subtotalPriceLabel);
@@ -308,19 +310,18 @@
 			runningOrderPanel.Size = new Size(700, 660);
 			runningOrderPanel.TabIndex = 2;
 			// 
-			// estimatedTimeLabel
+			// estimatedTimePicker
 			// 
-			estimatedTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			estimatedTimeLabel.BackColor = Color.White;
-			estimatedTimeLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			estimatedTimeLabel.ForeColor = Color.Black;
-			estimatedTimeLabel.Location = new Point(285, 580);
-			estimatedTimeLabel.Name = "estimatedTimeLabel";
-			estimatedTimeLabel.RightToLeft = RightToLeft.Yes;
-			estimatedTimeLabel.Size = new Size(140, 80);
-			estimatedTimeLabel.TabIndex = 6;
-			estimatedTimeLabel.Text = "00:00";
-			estimatedTimeLabel.TextAlign = ContentAlignment.MiddleCenter;
+			estimatedTimePicker.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			estimatedTimePicker.CalendarFont = new Font("Segoe UI", 14F);
+			estimatedTimePicker.CustomFormat = "HH:mm";
+			estimatedTimePicker.Font = new Font("Segoe UI", 9F);
+			estimatedTimePicker.Format = DateTimePickerFormat.Custom;
+			estimatedTimePicker.Location = new Point(285, 621);
+			estimatedTimePicker.Name = "estimatedTimePicker";
+			estimatedTimePicker.ShowUpDown = true;
+			estimatedTimePicker.Size = new Size(140, 39);
+			estimatedTimePicker.TabIndex = 7;
 			// 
 			// totalPriceLabel
 			// 
@@ -450,6 +451,18 @@
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
 			// 
+			// estimatedTimeLabel
+			// 
+			estimatedTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			estimatedTimeLabel.BackColor = Color.Transparent;
+			estimatedTimeLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			estimatedTimeLabel.ForeColor = Color.White;
+			estimatedTimeLabel.Location = new Point(285, 575);
+			estimatedTimeLabel.Name = "estimatedTimeLabel";
+			estimatedTimeLabel.Size = new Size(140, 40);
+			estimatedTimeLabel.TabIndex = 8;
+			estimatedTimeLabel.Text = "Est. Time:";
+			// 
 			// MainMenu
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
@@ -514,6 +527,7 @@
 		private Panel viewOrdersPanel;
 		private Label timeLabel;
 		private System.Windows.Forms.Timer timer;
+		private DateTimePicker estimatedTimePicker;
 		private Label estimatedTimeLabel;
 	}
 }
