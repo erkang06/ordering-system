@@ -2,7 +2,8 @@ namespace ordering_system
 {
 	public partial class MainMenu : Form
 	{
-		public static string orderType = string.Empty;
+		public static Order currentOrder = new Order();
+		public static List<OrderItem> currentOrderItems = new List<OrderItem>();
 		public MainMenu()
 		{
 			InitializeComponent();
@@ -10,14 +11,14 @@ namespace ordering_system
 
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
-			if (orderType == string.Empty || orderType == "Counter") // if there hasnt been an address set
+			if (currentOrder.orderType == string.Empty || currentOrder.orderType == "Counter") // if there hasnt been an address set
 			{
-				orderType = "Delivery";
+				currentOrder.orderType = "Delivery";
 				customerDetails_Click(sender, e);
 			}
 			else
 			{
-				orderType = "Delivery";
+				currentOrder.orderType = "Delivery";
 			}
 			deliveryButton.BackColor = Color.Yellow; // select delivery, unselect rest
 			counterButton.BackColor = Color.Transparent;
@@ -26,7 +27,8 @@ namespace ordering_system
 
 		private void counterButton_Click(object sender, EventArgs e)
 		{
-			orderType = "Counter";
+			currentOrder.orderType = "Counter";
+			customerDetailsLabel.Text = string.Empty;
 			counterButton.BackColor = Color.Yellow; // select counter, unselect rest
 			deliveryButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
@@ -34,14 +36,14 @@ namespace ordering_system
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
-			if (orderType == string.Empty || orderType == "Counter") // if there hasnt been a name set
+			if (currentOrder.orderType == string.Empty || currentOrder.orderType == "Counter") // if there hasnt been a name set
 			{
-				orderType = "Collection";
+				currentOrder.orderType = "Collection";
 				customerDetails_Click(sender, e);
 			}
 			else
 			{
-				orderType = "Collection";
+				currentOrder.orderType = "Collection";
 			}
 			collectionButton.BackColor = Color.Yellow; // select collection, unselect rest
 			counterButton.BackColor = Color.Transparent;
@@ -58,7 +60,7 @@ namespace ordering_system
 			}
 			else if (acceptOrderButton.Text == "Accept Payment") // order accepted
 			{
-				orderType = string.Empty; // unselect all order type buttons
+				currentOrder.orderType = string.Empty; // unselect all order type buttons
 				collectionButton.BackColor = Color.Transparent;
 				counterButton.BackColor = Color.Transparent;
 				deliveryButton.BackColor = Color.Transparent;
@@ -106,6 +108,7 @@ namespace ordering_system
 
 		private void customerDetailsChanged(object sender, CustomerDetailsUpdateEventArgs e) // when stuff gets updated in the customer details panel
 		{
+			currentOrder.orderType = e.orderType; // just in case theyre different yk
 			if (e.orderType == "Delivery")
 			{
 				deliveryButton_Click(sender, e);
@@ -116,6 +119,15 @@ namespace ordering_system
 				collectionButton_Click(sender, e);
 				customerDetailsLabel.Text = $"{e.phoneNumber} {e.customerName}";
 			}
+		}
+
+		private void cancelOrderButton_Click(object sender, EventArgs e)
+		{
+			currentOrder = new Order();
+			currentOrderItems.Clear();
+			deliveryButton.BackColor = Color.Transparent;
+			counterButton.BackColor = Color.Transparent;
+			collectionButton.BackColor = Color.Transparent;
 		}
 	}
 }

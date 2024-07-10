@@ -22,12 +22,12 @@ namespace ordering_system
 
 		private void acceptAddressButton_Click(object sender, EventArgs e)
 		{
-			if (MainMenu.orderType == "Delivery")
+			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
 				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Delivery", houseNumber:deliveryHouseNumberTextBox.Text, streetName:deliveryStreetNameTextBox.Text, postcode:deliveryPostcodeTextBox.Text);
 				CustomerDetailsUpdate(this, args);
 			}
-			else if (MainMenu.orderType == "Collection")
+			else if (collectionButton.BackColor == Color.Yellow) // if its a collection by the end
 			{
 				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Collection", customerName:customerNameTextBox.Text);
 				CustomerDetailsUpdate(this, args);
@@ -42,25 +42,23 @@ namespace ordering_system
 
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
-			MainMenu.orderType = "Delivery";
 			deliveryButton.BackColor = Color.Yellow;
 			collectionButton.BackColor = Color.Transparent;
 		}
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
-			MainMenu.orderType = "Collection";
 			collectionButton.BackColor = Color.Yellow;
 			deliveryButton.BackColor = Color.Transparent;
 		}
 
 		private void CustomerDetails_Load(object sender, EventArgs e) // presets whether order type is delivery or collection if form not opened by cust deets panel
 		{
-			if (MainMenu.orderType == "Delivery")
+			if (MainMenu.currentOrder.orderType == "Delivery")
 			{
 				deliveryButton_Click(sender, e);
 			}
-			else if (MainMenu.orderType == "Collection")
+			else if (MainMenu.currentOrder.orderType == "Collection")
 			{
 				collectionButton_Click(sender, e);
 			}

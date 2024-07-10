@@ -17,6 +17,25 @@ namespace ordering_system
 		}
 	}
 
+	public struct Order
+	{
+		public string orderType;
+		public int customerID;
+		public string addressID;
+		public DateOnly orderDate;
+		public TimeOnly orderTime;
+		public TimeOnly estimatedTime;
+	}
+
+	public struct OrderItem
+	{
+		public string itemID;
+		public int quantity;
+		public string size;
+		public string memo;
+		public decimal discount;
+	}
+
 	public class CustomerDetailsUpdateEventArgs : EventArgs
 	{
 		private string _phoneNumber;

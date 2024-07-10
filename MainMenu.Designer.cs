@@ -257,6 +257,7 @@
 			cancelOrderButton.Size = new Size(100, 80);
 			cancelOrderButton.TabIndex = 4;
 			cancelOrderButton.UseVisualStyleBackColor = true;
+			cancelOrderButton.Click += cancelOrderButton_Click;
 			// 
 			// increaseQuantityButton
 			// 
