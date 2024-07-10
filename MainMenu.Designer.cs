@@ -447,6 +447,7 @@
 			// timer
 			// 
 			timer.Enabled = true;
+			timer.Interval = 200;
 			timer.Tick += timer_Tick;
 			// 
 			// MainMenu
