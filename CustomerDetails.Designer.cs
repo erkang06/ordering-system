@@ -554,6 +554,7 @@
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "CustomerDetails";
 			Text = "Customer Details";
+			Load += CustomerDetails_Load;
 			((System.ComponentModel.ISupportInitialize)deliveryAddressDataView).EndInit();
 			ResumeLayout(false);
 			PerformLayout();

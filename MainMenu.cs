@@ -2,7 +2,7 @@ namespace ordering_system
 {
 	public partial class MainMenu : Form
 	{
-		string orderType = string.Empty;
+		public static string orderType = string.Empty;
 		public MainMenu()
 		{
 			InitializeComponent();
@@ -10,15 +10,16 @@ namespace ordering_system
 
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
-			if (orderType == string.Empty || orderType == "Counter")
+			if (orderType == string.Empty || orderType == "Counter") // if there hasnt been an address set
 			{
+				orderType = "Delivery";
 				customerDetails_Click(sender, e);
 			}
 			else
 			{
 				orderType = "Delivery";
 			}
-			deliveryButton.BackColor = Color.Yellow;
+			deliveryButton.BackColor = Color.Yellow; // select delivery, unselect rest
 			counterButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
 		}
@@ -26,22 +27,23 @@ namespace ordering_system
 		private void counterButton_Click(object sender, EventArgs e)
 		{
 			orderType = "Counter";
-			counterButton.BackColor = Color.Yellow;
+			counterButton.BackColor = Color.Yellow; // select counter, unselect rest
 			deliveryButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
 		}
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
-			if (orderType == string.Empty || orderType == "Counter")
+			if (orderType == string.Empty || orderType == "Counter") // if there hasnt been a name set
 			{
+				orderType = "Collection";
 				customerDetails_Click(sender, e);
 			}
 			else
 			{
 				orderType = "Collection";
 			}
-			collectionButton.BackColor = Color.Yellow;
+			collectionButton.BackColor = Color.Yellow; // select collection, unselect rest
 			counterButton.BackColor = Color.Transparent;
 			deliveryButton.BackColor = Color.Transparent;
 		}
@@ -54,8 +56,12 @@ namespace ordering_system
 				paymentPanel.BringToFront();
 				paymentPanel.Visible = true;
 			}
-			else if (acceptOrderButton.Text == "Accept Payment")
+			else if (acceptOrderButton.Text == "Accept Payment") // order accepted
 			{
+				orderType = string.Empty; // unselect all order type buttons
+				collectionButton.BackColor = Color.Transparent;
+				counterButton.BackColor = Color.Transparent;
+				deliveryButton.BackColor = Color.Transparent;
 				acceptOrderButton.Text = "Accept Order";
 				paymentPanel.SendToBack();
 				paymentPanel.Visible = false;
@@ -64,13 +70,13 @@ namespace ordering_system
 
 		private void viewOrdersButton_Click(object sender, EventArgs e)
 		{
-			if (viewOrdersButton.Text == "View Orders" && acceptOrderButton.Text == "Accept Order")
+			if (viewOrdersButton.Text == "View Orders" && acceptOrderButton.Text == "Accept Order") // cant open both panels at once lmao
 			{
 				viewOrdersButton.Text = "Cancel";
 				viewOrdersPanel.BringToFront();
 				viewOrdersPanel.Visible = true;
 			}
-			else if (viewOrdersButton.Text == "Cancel")
+			else if (viewOrdersButton.Text == "Cancel") // exit view orders mode
 			{
 				viewOrdersButton.Text = "View Orders";
 				viewOrdersPanel.SendToBack();
@@ -78,7 +84,7 @@ namespace ordering_system
 			}
 		}
 
-		private void timer_Tick(object sender, EventArgs e)
+		private void timer_Tick(object sender, EventArgs e) // the little time bit in the bottom right
 		{
 			timeLabel.Text = DateTime.Now.ToString("dd/mm/yy HH:mm:ss");
 		}
@@ -93,8 +99,23 @@ namespace ordering_system
 		private void customerDetails_Click(object sender, EventArgs e)
 		{
 			CustomerDetails obj = new CustomerDetails();
+			obj.CustomerDetailsUpdate += new CustomerDetails.CustomerDetailsUpdateHandler(customerDetailsChanged); // basos update main form when anything in the customer details panel gets updated
 			obj.Show();
 			obj.TopMost = true;
+		}
+
+		private void customerDetailsChanged(object sender, CustomerDetailsUpdateEventArgs e) // when stuff gets updated in the customer details panel
+		{
+			if (e.orderType == "Delivery")
+			{
+				deliveryButton_Click(sender, e);
+				customerDetailsLabel.Text = $"{e.phoneNumber} {e.houseNumber} {e.streetName} {e.postcode}";
+			}
+			else if (e.orderType == "Collection")
+			{
+				collectionButton_Click(sender, e);
+				customerDetailsLabel.Text = $"{e.phoneNumber} {e.customerName}";
+			}
 		}
 	}
 }
