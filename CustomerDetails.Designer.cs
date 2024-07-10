@@ -67,6 +67,7 @@
 			deliveryButton = new Button();
 			updateCustomerButton = new Button();
 			deleteCustomerButton = new Button();
+			findCustomerButton = new Button();
 			((System.ComponentModel.ISupportInitialize)deliveryAddressDataView).BeginInit();
 			SuspendLayout();
 			// 
@@ -485,10 +486,10 @@
 			updateCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			updateCustomerButton.BackColor = SystemColors.Control;
 			updateCustomerButton.FlatStyle = FlatStyle.Flat;
-			updateCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			updateCustomerButton.Location = new Point(514, 132);
+			updateCustomerButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			updateCustomerButton.Location = new Point(634, 135);
 			updateCustomerButton.Name = "updateCustomerButton";
-			updateCustomerButton.Size = new Size(200, 80);
+			updateCustomerButton.Size = new Size(140, 60);
 			updateCustomerButton.TabIndex = 44;
 			updateCustomerButton.Text = "Update";
 			updateCustomerButton.UseVisualStyleBackColor = false;
@@ -498,13 +499,27 @@
 			deleteCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deleteCustomerButton.BackColor = SystemColors.Control;
 			deleteCustomerButton.FlatStyle = FlatStyle.Flat;
-			deleteCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			deleteCustomerButton.Location = new Point(720, 132);
+			deleteCustomerButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			deleteCustomerButton.Location = new Point(780, 135);
 			deleteCustomerButton.Name = "deleteCustomerButton";
-			deleteCustomerButton.Size = new Size(200, 80);
+			deleteCustomerButton.Size = new Size(140, 60);
 			deleteCustomerButton.TabIndex = 45;
 			deleteCustomerButton.Text = "Delete";
 			deleteCustomerButton.UseVisualStyleBackColor = false;
+			// 
+			// findCustomerButton
+			// 
+			findCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			findCustomerButton.BackColor = SystemColors.Control;
+			findCustomerButton.FlatStyle = FlatStyle.Flat;
+			findCustomerButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			findCustomerButton.Location = new Point(370, 135);
+			findCustomerButton.Name = "findCustomerButton";
+			findCustomerButton.Size = new Size(258, 60);
+			findCustomerButton.TabIndex = 46;
+			findCustomerButton.Text = "Find Customer";
+			findCustomerButton.UseVisualStyleBackColor = false;
+			findCustomerButton.Click += findCustomerButton_Click;
 			// 
 			// CustomerDetails
 			// 
@@ -512,6 +527,7 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(findCustomerButton);
 			Controls.Add(deleteCustomerButton);
 			Controls.Add(updateCustomerButton);
 			Controls.Add(collectionButton);
@@ -602,5 +618,6 @@
 		private Button deliveryButton;
 		private Button updateCustomerButton;
 		private Button deleteCustomerButton;
+		private Button findCustomerButton;
 	}
 }

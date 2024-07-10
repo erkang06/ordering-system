@@ -1,9 +1,12 @@
+using System.Data.SqlClient;
+
 namespace ordering_system
 {
 	public partial class MainMenu : Form
 	{
 		public static Order currentOrder = new Order();
 		public static List<OrderItem> currentOrderItems = new List<OrderItem>();
+		public static SqlConnection con = new SqlConnection(@"Data Source=""C:\Users\benny\Documents\CS\NEA\ordering system\ordering system.accdb""");
 		public MainMenu()
 		{
 			InitializeComponent();
@@ -52,22 +55,26 @@ namespace ordering_system
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
 		{
-			if (acceptOrderButton.Text == "Accept Order" && viewOrdersButton.Text == "View Orders") // cant open both panels at once lmao
+			if (currentOrder.orderType != "Delivery")
 			{
-				acceptOrderButton.Text = "Accept Payment";
-				paymentPanel.BringToFront();
-				paymentPanel.Visible = true;
+				if (acceptOrderButton.Text == "Accept Order" && viewOrdersButton.Text == "View Orders") // cant open both panels at once lmao
+				{
+					acceptOrderButton.Text = "Accept Payment";
+					paymentPanel.BringToFront();
+					paymentPanel.Visible = true;
+				}
+				else if (acceptOrderButton.Text == "Accept Payment") // order accepted
+				{
+					currentOrder.orderType = string.Empty; // unselect all order type buttons
+					collectionButton.BackColor = Color.Transparent;
+					counterButton.BackColor = Color.Transparent;
+					deliveryButton.BackColor = Color.Transparent;
+					acceptOrderButton.Text = "Accept Order";
+					paymentPanel.SendToBack();
+					paymentPanel.Visible = false;
+				}
 			}
-			else if (acceptOrderButton.Text == "Accept Payment") // order accepted
-			{
-				currentOrder.orderType = string.Empty; // unselect all order type buttons
-				collectionButton.BackColor = Color.Transparent;
-				counterButton.BackColor = Color.Transparent;
-				deliveryButton.BackColor = Color.Transparent;
-				acceptOrderButton.Text = "Accept Order";
-				paymentPanel.SendToBack();
-				paymentPanel.Visible = false;
-			}
+			orderNumberLabel.Text = (Convert.ToInt32(orderNumberLabel.Text) + 1).ToString(); // increment order number
 		}
 
 		private void viewOrdersButton_Click(object sender, EventArgs e)

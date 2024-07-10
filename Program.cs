@@ -1,3 +1,5 @@
+using System.Data.SqlClient;
+
 namespace ordering_system
 {
 	internal static class Program
@@ -16,7 +18,7 @@ namespace ordering_system
 			Application.Run();
 		}
 	}
-
+	
 	public struct Order
 	{
 		public string orderType;

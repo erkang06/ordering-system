@@ -92,7 +92,6 @@
 			customerDetailsLabel.Name = "customerDetailsLabel";
 			customerDetailsLabel.Size = new Size(1004, 45);
 			customerDetailsLabel.TabIndex = 1;
-			customerDetailsLabel.Text = "phone number and address here";
 			customerDetailsLabel.Click += customerDetails_Click;
 			// 
 			// orderNumberLabel
@@ -104,7 +103,7 @@
 			orderNumberLabel.Name = "orderNumberLabel";
 			orderNumberLabel.Size = new Size(84, 45);
 			orderNumberLabel.TabIndex = 0;
-			orderNumberLabel.Text = "100";
+			orderNumberLabel.Text = "1";
 			// 
 			// orderTypePanel
 			// 

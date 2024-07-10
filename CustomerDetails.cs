@@ -7,14 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace ordering_system
 {
 	public partial class CustomerDetails : Form
 	{
-		public delegate void CustomerDetailsUpdateHandler(object sender, CustomerDetailsUpdateEventArgs e);
+		public delegate void CustomerDetailsUpdateHandler(object sender, CustomerDetailsUpdateEventArgs e); // kinda how data links between here and the main form
 
 		public event CustomerDetailsUpdateHandler CustomerDetailsUpdate;
+
+		
 		public CustomerDetails()
 		{
 			InitializeComponent();
@@ -24,12 +27,12 @@ namespace ordering_system
 		{
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
-				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Delivery", houseNumber:deliveryHouseNumberTextBox.Text, streetName:deliveryStreetNameTextBox.Text, postcode:deliveryPostcodeTextBox.Text);
+				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Delivery", houseNumber: deliveryHouseNumberTextBox.Text, streetName: deliveryStreetNameTextBox.Text, postcode: deliveryPostcodeTextBox.Text);
 				CustomerDetailsUpdate(this, args);
 			}
 			else if (collectionButton.BackColor == Color.Yellow) // if its a collection by the end
 			{
-				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Collection", customerName:customerNameTextBox.Text);
+				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Collection", customerName: customerNameTextBox.Text);
 				CustomerDetailsUpdate(this, args);
 			}
 			this.Close();
@@ -61,6 +64,23 @@ namespace ordering_system
 			else if (MainMenu.currentOrder.orderType == "Collection")
 			{
 				collectionButton_Click(sender, e);
+			}
+		}
+
+		private void findCustomerButton_Click(object sender, EventArgs e) // wtf help xoxo
+		{
+			try
+			{
+				MainMenu.con.Open();
+				SqlDataAdapter sda = new SqlDataAdapter(@$"SELECT * FROM Customer WHERE phoneNumber = @PN", MainMenu.con);
+				SqlCommandBuilder scb = new SqlCommandBuilder(sda);
+				DataSet ds = new DataSet();
+				sda.Fill(ds);
+				MainMenu.con.Close();
+			}
+			catch (Exception ex)
+			{
+
 			}
 		}
 	}
