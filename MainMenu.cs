@@ -2,20 +2,22 @@ namespace ordering_system
 {
 	public partial class MainMenu : Form
 	{
+		string orderType = string.Empty;
 		public MainMenu()
 		{
 			InitializeComponent();
 		}
 
-		private void customerDetailsLabel_Click(object sender, EventArgs e)
-		{
-			CustomerDetails obj = new CustomerDetails();
-			obj.Show();
-			obj.TopMost = true;
-		}
-
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
+			if (orderType == string.Empty || orderType == "Counter")
+			{
+				customerDetails_Click(sender, e);
+			}
+			else
+			{
+				orderType = "Delivery";
+			}
 			deliveryButton.BackColor = Color.Yellow;
 			counterButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
@@ -23,6 +25,7 @@ namespace ordering_system
 
 		private void counterButton_Click(object sender, EventArgs e)
 		{
+			orderType = "Counter";
 			counterButton.BackColor = Color.Yellow;
 			deliveryButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
@@ -30,6 +33,14 @@ namespace ordering_system
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
+			if (orderType == string.Empty || orderType == "Counter")
+			{
+				customerDetails_Click(sender, e);
+			}
+			else
+			{
+				orderType = "Collection";
+			}
 			collectionButton.BackColor = Color.Yellow;
 			counterButton.BackColor = Color.Transparent;
 			deliveryButton.BackColor = Color.Transparent;
@@ -75,6 +86,13 @@ namespace ordering_system
 		private void managerFunctionsButton_Click(object sender, EventArgs e)
 		{
 			ManagerFunctionsLogin obj = new ManagerFunctionsLogin();
+			obj.Show();
+			obj.TopMost = true;
+		}
+
+		private void customerDetails_Click(object sender, EventArgs e)
+		{
+			CustomerDetails obj = new CustomerDetails();
 			obj.Show();
 			obj.TopMost = true;
 		}

@@ -12,6 +12,7 @@ namespace ordering_system
 {
 	public partial class CustomerDetails : Form
 	{
+		string orderType = string.Empty;
 		public CustomerDetails()
 		{
 			InitializeComponent();
@@ -19,6 +20,7 @@ namespace ordering_system
 
 		private void acceptAddressButton_Click(object sender, EventArgs e)
 		{
+
 			this.Close();
 		}
 
@@ -29,12 +31,14 @@ namespace ordering_system
 
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
+			orderType = "Delivery";
 			deliveryButton.BackColor = Color.Yellow;
 			collectionButton.BackColor = Color.Transparent;
 		}
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
+			orderType = "Collection";
 			collectionButton.BackColor = Color.Yellow;
 			deliveryButton.BackColor = Color.Transparent;
 		}

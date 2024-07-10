@@ -50,6 +50,7 @@
 			priceEditButton = new Button();
 			memoButton = new Button();
 			runningOrderPanel = new Panel();
+			estimatedTimeLabel = new Label();
 			estimatedTimePicker = new DateTimePicker();
 			totalPriceLabel = new Label();
 			deliveryChargePriceLabel = new Label();
@@ -63,7 +64,6 @@
 			paymentPanel = new Panel();
 			viewOrdersPanel = new Panel();
 			timer = new System.Windows.Forms.Timer(components);
-			estimatedTimeLabel = new Label();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -81,6 +81,7 @@
 			customerDetailsPanel.Name = "customerDetailsPanel";
 			customerDetailsPanel.Size = new Size(1110, 80);
 			customerDetailsPanel.TabIndex = 0;
+			customerDetailsPanel.Click += customerDetails_Click;
 			// 
 			// customerDetailsLabel
 			// 
@@ -92,7 +93,7 @@
 			customerDetailsLabel.Size = new Size(1004, 45);
 			customerDetailsLabel.TabIndex = 1;
 			customerDetailsLabel.Text = "phone number and address here";
-			customerDetailsLabel.Click += customerDetailsLabel_Click;
+			customerDetailsLabel.Click += customerDetails_Click;
 			// 
 			// orderNumberLabel
 			// 
@@ -310,6 +311,18 @@
 			runningOrderPanel.Size = new Size(700, 660);
 			runningOrderPanel.TabIndex = 2;
 			// 
+			// estimatedTimeLabel
+			// 
+			estimatedTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			estimatedTimeLabel.BackColor = Color.Transparent;
+			estimatedTimeLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			estimatedTimeLabel.ForeColor = Color.White;
+			estimatedTimeLabel.Location = new Point(285, 575);
+			estimatedTimeLabel.Name = "estimatedTimeLabel";
+			estimatedTimeLabel.Size = new Size(140, 40);
+			estimatedTimeLabel.TabIndex = 8;
+			estimatedTimeLabel.Text = "Est. Time:";
+			// 
 			// estimatedTimePicker
 			// 
 			estimatedTimePicker.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -450,18 +463,6 @@
 			timer.Enabled = true;
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
-			// 
-			// estimatedTimeLabel
-			// 
-			estimatedTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			estimatedTimeLabel.BackColor = Color.Transparent;
-			estimatedTimeLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			estimatedTimeLabel.ForeColor = Color.White;
-			estimatedTimeLabel.Location = new Point(285, 575);
-			estimatedTimeLabel.Name = "estimatedTimeLabel";
-			estimatedTimeLabel.Size = new Size(140, 40);
-			estimatedTimeLabel.TabIndex = 8;
-			estimatedTimeLabel.Text = "Est. Time:";
 			// 
 			// MainMenu
 			// 
