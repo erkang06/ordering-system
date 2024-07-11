@@ -17,7 +17,7 @@ namespace ordering_system
 
 		public event CustomerDetailsUpdateHandler CustomerDetailsUpdate;
 
-		
+
 		public CustomerDetails()
 		{
 			InitializeComponent();
@@ -25,8 +25,37 @@ namespace ordering_system
 
 		private void acceptAddressButton_Click(object sender, EventArgs e)
 		{
+			MainMenu.con.Open();
+			SqlCommand checkIfCustomerExists = new SqlCommand("SELECT COUNT(*) FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con); // checks number of customers in database w/ same phone number
+			checkIfCustomerExists.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+			int customerExists = (int)checkIfCustomerExists.ExecuteScalar();
+			if (customerExists == 0) // if customer doesnt alr exist in database
+			{
+				SqlCommand addCustomerToDatabase = new SqlCommand("INSERT INTO CustomerTbl(customerName, phoneNumber, houseNumber, streetName, village, city, postcode) VALUES(@CN, @PN, @HN, @SN, @VL, @CT, @PC)", MainMenu.con); // add customer details to database
+				addCustomerToDatabase.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@CT", billingCityTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
+				addCustomerToDatabase.ExecuteNonQuery();
+			}
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
+				// check if delivery address is in database by finding customer id to search through addresstbl
+				SqlCommand findcustomerID = new SqlCommand("SELECT CustomerID FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con);
+				findcustomerID.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+				int customerID = (int)findcustomerID.ExecuteScalar();
+				SqlCommand addAddressToDatabase = new SqlCommand("INSERT INTO AddressTbl(customerID, houseNumber, streetName, village, city, postcode, deliveryCharge) VALUES(@CID, @CN, @PN, @HN, @SN, @VL, @CT, @PC, @DC)", MainMenu.con); // add customer details to database
+				addAddressToDatabase.Parameters.AddWithValue("@CID", customerID);
+				addAddressToDatabase.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+				addAddressToDatabase.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
+				addAddressToDatabase.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
+				addAddressToDatabase.Parameters.AddWithValue("@CT", deliveryCityTextBox.Text);
+				addAddressToDatabase.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+				addAddressToDatabase.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
+				addAddressToDatabase.ExecuteNonQuery();
 				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Delivery", houseNumber: deliveryHouseNumberTextBox.Text, streetName: deliveryStreetNameTextBox.Text, postcode: deliveryPostcodeTextBox.Text);
 				CustomerDetailsUpdate(this, args);
 			}
@@ -76,7 +105,7 @@ namespace ordering_system
 				MessageBox.Show("slay");
 				SqlDataAdapter sda = new SqlDataAdapter(@$"SELECT * FROM Customer WHERE phoneNumber = @PN", MainMenu.con);
 				MessageBox.Show("slay");
-				sda.SelectCommand.Parameters.AddWithValue("@PN",SqlDbType.Text).Value = phoneNumberTextBox.Text;
+				sda.SelectCommand.Parameters.AddWithValue("@PN", SqlDbType.Text).Value = phoneNumberTextBox.Text;
 				MessageBox.Show("slay");
 				SqlCommandBuilder scb = new SqlCommandBuilder(sda);
 				MessageBox.Show("slay");
@@ -91,6 +120,18 @@ namespace ordering_system
 			catch (Exception ex)
 			{
 				MessageBox.Show("flopped");
+			}
+		}
+
+		private void billingAsDeliveryCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			if (billingAsDeliveryCheckBox.Checked == true)
+			{
+				deliveryHouseNumberTextBox.Text = billingHouseNumberTextBox.Text;
+				deliveryStreetNameTextBox.Text = billingStreetNameTextBox.Text;
+				deliveryVillageTextBox.Text = billingVillageTextBox.Text;
+				deliveryCityTextBox.Text = billingCityTextBox.Text;
+				deliveryPostcodeTextBox.Text = billingPostcodeTextBox.Text;
 			}
 		}
 	}

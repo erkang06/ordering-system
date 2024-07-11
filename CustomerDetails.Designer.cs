@@ -57,7 +57,7 @@
 			deliveryAddressLabel = new Label();
 			billingAsDeliveryCheckBox = new CheckBox();
 			deliveryAddressDataView = new DataGridView();
-			deliverDeliveryChargeTextBox = new TextBox();
+			deliveryDeliveryChargeTextBox = new TextBox();
 			deliveryDeliveryChargeLabel = new Label();
 			acceptAddressButton = new Button();
 			cancelAddressButton = new Button();
@@ -369,6 +369,7 @@
 			billingAsDeliveryCheckBox.TabIndex = 34;
 			billingAsDeliveryCheckBox.Text = "Use Billing Address as Delivery Address?";
 			billingAsDeliveryCheckBox.UseVisualStyleBackColor = false;
+			billingAsDeliveryCheckBox.CheckedChanged += billingAsDeliveryCheckBox_CheckedChanged;
 			// 
 			// deliveryAddressDataView
 			// 
@@ -381,14 +382,14 @@
 			deliveryAddressDataView.Size = new Size(908, 590);
 			deliveryAddressDataView.TabIndex = 35;
 			// 
-			// deliverDeliveryChargeTextBox
+			// deliveryDeliveryChargeTextBox
 			// 
-			deliverDeliveryChargeTextBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			deliverDeliveryChargeTextBox.Font = new Font("Segoe UI", 14F);
-			deliverDeliveryChargeTextBox.Location = new Point(1358, 1010);
-			deliverDeliveryChargeTextBox.Name = "deliverDeliveryChargeTextBox";
-			deliverDeliveryChargeTextBox.Size = new Size(550, 57);
-			deliverDeliveryChargeTextBox.TabIndex = 37;
+			deliveryDeliveryChargeTextBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			deliveryDeliveryChargeTextBox.Font = new Font("Segoe UI", 14F);
+			deliveryDeliveryChargeTextBox.Location = new Point(1358, 1010);
+			deliveryDeliveryChargeTextBox.Name = "deliveryDeliveryChargeTextBox";
+			deliveryDeliveryChargeTextBox.Size = new Size(550, 57);
+			deliveryDeliveryChargeTextBox.TabIndex = 37;
 			// 
 			// deliveryDeliveryChargeLabel
 			// 
@@ -486,10 +487,10 @@
 			updateCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			updateCustomerButton.BackColor = SystemColors.Control;
 			updateCustomerButton.FlatStyle = FlatStyle.Flat;
-			updateCustomerButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			updateCustomerButton.Location = new Point(634, 135);
+			updateCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			updateCustomerButton.Location = new Point(514, 656);
 			updateCustomerButton.Name = "updateCustomerButton";
-			updateCustomerButton.Size = new Size(140, 60);
+			updateCustomerButton.Size = new Size(200, 80);
 			updateCustomerButton.TabIndex = 44;
 			updateCustomerButton.Text = "Update";
 			updateCustomerButton.UseVisualStyleBackColor = false;
@@ -499,10 +500,10 @@
 			deleteCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deleteCustomerButton.BackColor = SystemColors.Control;
 			deleteCustomerButton.FlatStyle = FlatStyle.Flat;
-			deleteCustomerButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			deleteCustomerButton.Location = new Point(780, 135);
+			deleteCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteCustomerButton.Location = new Point(720, 656);
 			deleteCustomerButton.Name = "deleteCustomerButton";
-			deleteCustomerButton.Size = new Size(140, 60);
+			deleteCustomerButton.Size = new Size(200, 80);
 			deleteCustomerButton.TabIndex = 45;
 			deleteCustomerButton.Text = "Delete";
 			deleteCustomerButton.UseVisualStyleBackColor = false;
@@ -536,7 +537,7 @@
 			Controls.Add(deleteDeliveryAddressButton);
 			Controls.Add(cancelAddressButton);
 			Controls.Add(acceptAddressButton);
-			Controls.Add(deliverDeliveryChargeTextBox);
+			Controls.Add(deliveryDeliveryChargeTextBox);
 			Controls.Add(deliveryDeliveryChargeLabel);
 			Controls.Add(deliveryAddressDataView);
 			Controls.Add(billingAsDeliveryCheckBox);
@@ -608,7 +609,7 @@
 		private Label deliveryAddressLabel;
 		private CheckBox billingAsDeliveryCheckBox;
 		private DataGridView deliveryAddressDataView;
-		private TextBox deliverDeliveryChargeTextBox;
+		private TextBox deliveryDeliveryChargeTextBox;
 		private Label deliveryDeliveryChargeLabel;
 		private Button acceptAddressButton;
 		private Button cancelAddressButton;

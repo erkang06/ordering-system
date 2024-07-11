@@ -18,7 +18,7 @@ namespace ordering_system
 			Application.Run();
 		}
 	}
-	
+
 	public struct Order
 	{
 		public string orderType;
