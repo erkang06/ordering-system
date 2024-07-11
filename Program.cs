@@ -46,9 +46,9 @@ namespace ordering_system
 		private string _houseNumber;
 		private string _streetName;
 		private string _postcode;
-		private string _deliveryCharge;
+		private decimal _deliveryCharge;
 
-		public CustomerDetailsUpdateEventArgs(string phoneNumber, string orderType, string customerName = "", string houseNumber = "", string streetName = "", string postcode = "", string deliveryCharge = "")
+		public CustomerDetailsUpdateEventArgs(string phoneNumber, string orderType, string customerName = "", string houseNumber = "", string streetName = "", string postcode = "", decimal deliveryCharge = 0.00m)
 		{
 			_phoneNumber = phoneNumber;
 			_orderType = orderType;
@@ -112,7 +112,7 @@ namespace ordering_system
 				return _postcode;
 			}
 		}
-		public string deliveryCharge
+		public decimal deliveryCharge
 		{
 			get
 			{

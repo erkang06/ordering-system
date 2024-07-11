@@ -347,8 +347,8 @@
 			totalPriceLabel.RightToLeft = RightToLeft.No;
 			totalPriceLabel.Size = new Size(269, 80);
 			totalPriceLabel.TabIndex = 4;
-			totalPriceLabel.Text = "£0000.00";
-			totalPriceLabel.TextAlign = ContentAlignment.MiddleCenter;
+			totalPriceLabel.Text = "0000.00";
+			totalPriceLabel.TextAlign = ContentAlignment.MiddleRight;
 			// 
 			// deliveryChargePriceLabel
 			// 
@@ -361,7 +361,7 @@
 			deliveryChargePriceLabel.RightToLeft = RightToLeft.Yes;
 			deliveryChargePriceLabel.Size = new Size(140, 40);
 			deliveryChargePriceLabel.TabIndex = 3;
-			deliveryChargePriceLabel.Text = "£0.00";
+			deliveryChargePriceLabel.Text = "0.00";
 			// 
 			// subtotalPriceLabel
 			// 
@@ -374,7 +374,7 @@
 			subtotalPriceLabel.RightToLeft = RightToLeft.Yes;
 			subtotalPriceLabel.Size = new Size(140, 40);
 			subtotalPriceLabel.TabIndex = 2;
-			subtotalPriceLabel.Text = "£0000.00";
+			subtotalPriceLabel.Text = "0000.00";
 			// 
 			// deliveryChargeTextLabel
 			// 

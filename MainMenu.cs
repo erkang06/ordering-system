@@ -121,7 +121,8 @@ namespace ordering_system
 			{
 				deliveryButton_Click(sender, e);
 				customerDetailsLabel.Text = $"{e.phoneNumber} {e.houseNumber} {e.streetName} {e.postcode}";
-				deliveryChargePriceLabel.Text = e.deliveryCharge;
+				deliveryChargePriceLabel.Text = e.deliveryCharge.ToString("0.00"); // edit delivery charge
+				totalPriceLabel.Text = (Convert.ToDecimal(deliveryChargePriceLabel.Text) + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString("0.00");
 			}
 			else if (e.orderType == "Collection")
 			{

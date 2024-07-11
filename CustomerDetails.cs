@@ -92,7 +92,7 @@ namespace ordering_system
 				MainMenu.currentOrder.addressID = addressID; // add addressid to running order
 
 				// send delivery details back to main menu
-				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Delivery", houseNumber: deliveryHouseNumberTextBox.Text, streetName: deliveryStreetNameTextBox.Text, postcode: deliveryPostcodeTextBox.Text, deliveryCharge: deliveryDeliveryChargeTextBox.Text);
+				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Delivery", houseNumber: deliveryHouseNumberTextBox.Text, streetName: deliveryStreetNameTextBox.Text, postcode: deliveryPostcodeTextBox.Text, deliveryCharge: Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
 				CustomerDetailsUpdate(this, args);
 			}
 			else if (collectionButton.BackColor == Color.Yellow) // if its a collection by the end
