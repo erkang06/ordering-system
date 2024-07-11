@@ -62,7 +62,7 @@ namespace ordering_system
 				if (addressExists == 0) // address doesnt exist in addresstbl
 				{
 					// add customer details to database
-					SqlCommand addAddressToDatabase = new SqlCommand("INSERT INTO AddressTbl(customerID, houseNumber, streetName, village, city, postcode, deliveryCharge) VALUES(@CID, @CN, @PN, @HN, @SN, @VL, @CT, @PC, @DC)", MainMenu.con);
+					SqlCommand addAddressToDatabase = new SqlCommand("INSERT INTO AddressTbl(customerID, houseNumber, streetName, village, city, postcode, deliveryCharge) VALUES(@CID, @HN, @SN, @VL, @CT, @PC, @DC)", MainMenu.con);
 					addAddressToDatabase.Parameters.AddWithValue("@CID", customerID);
 					addAddressToDatabase.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
 					addAddressToDatabase.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);

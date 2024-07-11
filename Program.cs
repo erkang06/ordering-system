@@ -116,7 +116,7 @@ namespace ordering_system
 		{
 			get
 			{
-				return deliveryCharge;
+				return _deliveryCharge;
 			}
 		}
 	}

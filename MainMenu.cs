@@ -111,7 +111,7 @@ namespace ordering_system
 			CustomerDetails obj = new CustomerDetails();
 			obj.CustomerDetailsUpdate += new CustomerDetails.CustomerDetailsUpdateHandler(customerDetailsChanged); // basos update main form when anything in the customer details panel gets updated
 			obj.Show();
-			obj.TopMost = true;
+			//obj.TopMost = true;
 		}
 
 		private void customerDetailsChanged(object sender, CustomerDetailsUpdateEventArgs e) // when stuff gets updated in the customer details panel

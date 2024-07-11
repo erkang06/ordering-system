@@ -101,7 +101,7 @@
 			customerNameTextBox.Location = new Point(370, 12);
 			customerNameTextBox.Name = "customerNameTextBox";
 			customerNameTextBox.Size = new Size(550, 57);
-			customerNameTextBox.TabIndex = 7;
+			customerNameTextBox.TabIndex = 1;
 			// 
 			// phoneNumberTextBox
 			// 
@@ -109,7 +109,7 @@
 			phoneNumberTextBox.Location = new Point(370, 72);
 			phoneNumberTextBox.Name = "phoneNumberTextBox";
 			phoneNumberTextBox.Size = new Size(550, 57);
-			phoneNumberTextBox.TabIndex = 8;
+			phoneNumberTextBox.TabIndex = 2;
 			// 
 			// billingAddressLabel
 			// 
@@ -129,7 +129,7 @@
 			billingHouseNumberTextBox.Location = new Point(370, 295);
 			billingHouseNumberTextBox.Name = "billingHouseNumberTextBox";
 			billingHouseNumberTextBox.Size = new Size(550, 57);
-			billingHouseNumberTextBox.TabIndex = 13;
+			billingHouseNumberTextBox.TabIndex = 5;
 			// 
 			// billingHouseNumberLabel
 			// 
@@ -151,7 +151,7 @@
 			blacklistedCheckBox.Location = new Point(12, 132);
 			blacklistedCheckBox.Name = "blacklistedCheckBox";
 			blacklistedCheckBox.Size = new Size(303, 55);
-			blacklistedCheckBox.TabIndex = 14;
+			blacklistedCheckBox.TabIndex = 3;
 			blacklistedCheckBox.Text = "Is Blacklisted?";
 			blacklistedCheckBox.UseVisualStyleBackColor = false;
 			// 
@@ -161,7 +161,7 @@
 			billingStreetNameTextBox.Location = new Point(370, 355);
 			billingStreetNameTextBox.Name = "billingStreetNameTextBox";
 			billingStreetNameTextBox.Size = new Size(550, 57);
-			billingStreetNameTextBox.TabIndex = 16;
+			billingStreetNameTextBox.TabIndex = 6;
 			// 
 			// billingStreetNameLabel
 			// 
@@ -181,7 +181,7 @@
 			billingVillageTextBox.Location = new Point(370, 415);
 			billingVillageTextBox.Name = "billingVillageTextBox";
 			billingVillageTextBox.Size = new Size(550, 57);
-			billingVillageTextBox.TabIndex = 18;
+			billingVillageTextBox.TabIndex = 7;
 			// 
 			// billingVillageLabel
 			// 
@@ -201,7 +201,7 @@
 			billingCityTextBox.Location = new Point(370, 475);
 			billingCityTextBox.Name = "billingCityTextBox";
 			billingCityTextBox.Size = new Size(550, 57);
-			billingCityTextBox.TabIndex = 20;
+			billingCityTextBox.TabIndex = 8;
 			// 
 			// billingCityLabel
 			// 
@@ -221,7 +221,7 @@
 			billingPostcodeTextBox.Location = new Point(370, 535);
 			billingPostcodeTextBox.Name = "billingPostcodeTextBox";
 			billingPostcodeTextBox.Size = new Size(550, 57);
-			billingPostcodeTextBox.TabIndex = 22;
+			billingPostcodeTextBox.TabIndex = 9;
 			// 
 			// billingPostcodeLabel
 			// 
@@ -242,7 +242,7 @@
 			deliveryPostcodeTextBox.Location = new Point(1358, 950);
 			deliveryPostcodeTextBox.Name = "deliveryPostcodeTextBox";
 			deliveryPostcodeTextBox.Size = new Size(550, 57);
-			deliveryPostcodeTextBox.TabIndex = 33;
+			deliveryPostcodeTextBox.TabIndex = 19;
 			// 
 			// deliveryPostcodeLabel
 			// 
@@ -264,7 +264,7 @@
 			deliveryCityTextBox.Location = new Point(1358, 890);
 			deliveryCityTextBox.Name = "deliveryCityTextBox";
 			deliveryCityTextBox.Size = new Size(550, 57);
-			deliveryCityTextBox.TabIndex = 31;
+			deliveryCityTextBox.TabIndex = 18;
 			// 
 			// deliveryCityLabel
 			// 
@@ -286,7 +286,7 @@
 			deliveryVillageTextBox.Location = new Point(1358, 830);
 			deliveryVillageTextBox.Name = "deliveryVillageTextBox";
 			deliveryVillageTextBox.Size = new Size(550, 57);
-			deliveryVillageTextBox.TabIndex = 29;
+			deliveryVillageTextBox.TabIndex = 17;
 			// 
 			// deliveryVillageLabel
 			// 
@@ -308,7 +308,7 @@
 			deliveryStreetNameTextBox.Location = new Point(1358, 770);
 			deliveryStreetNameTextBox.Name = "deliveryStreetNameTextBox";
 			deliveryStreetNameTextBox.Size = new Size(550, 57);
-			deliveryStreetNameTextBox.TabIndex = 27;
+			deliveryStreetNameTextBox.TabIndex = 16;
 			// 
 			// deliveryStreetNameLabel
 			// 
@@ -330,7 +330,7 @@
 			deliveryHouseNumberTextBox.Location = new Point(1358, 710);
 			deliveryHouseNumberTextBox.Name = "deliveryHouseNumberTextBox";
 			deliveryHouseNumberTextBox.Size = new Size(550, 57);
-			deliveryHouseNumberTextBox.TabIndex = 25;
+			deliveryHouseNumberTextBox.TabIndex = 15;
 			// 
 			// deliveryHouseNumberLabel
 			// 
@@ -366,7 +366,7 @@
 			billingAsDeliveryCheckBox.Location = new Point(12, 595);
 			billingAsDeliveryCheckBox.Name = "billingAsDeliveryCheckBox";
 			billingAsDeliveryCheckBox.Size = new Size(778, 55);
-			billingAsDeliveryCheckBox.TabIndex = 34;
+			billingAsDeliveryCheckBox.TabIndex = 10;
 			billingAsDeliveryCheckBox.Text = "Use Billing Address as Delivery Address?";
 			billingAsDeliveryCheckBox.UseVisualStyleBackColor = false;
 			billingAsDeliveryCheckBox.CheckedChanged += billingAsDeliveryCheckBox_CheckedChanged;
@@ -389,7 +389,7 @@
 			deliveryDeliveryChargeTextBox.Location = new Point(1358, 1010);
 			deliveryDeliveryChargeTextBox.Name = "deliveryDeliveryChargeTextBox";
 			deliveryDeliveryChargeTextBox.Size = new Size(550, 57);
-			deliveryDeliveryChargeTextBox.TabIndex = 37;
+			deliveryDeliveryChargeTextBox.TabIndex = 20;
 			// 
 			// deliveryDeliveryChargeLabel
 			// 
@@ -465,7 +465,7 @@
 			collectionButton.Location = new Point(218, 656);
 			collectionButton.Name = "collectionButton";
 			collectionButton.Size = new Size(200, 80);
-			collectionButton.TabIndex = 43;
+			collectionButton.TabIndex = 12;
 			collectionButton.Text = "Collection";
 			collectionButton.UseVisualStyleBackColor = false;
 			collectionButton.Click += collectionButton_Click;
@@ -477,7 +477,7 @@
 			deliveryButton.Location = new Point(12, 656);
 			deliveryButton.Name = "deliveryButton";
 			deliveryButton.Size = new Size(200, 80);
-			deliveryButton.TabIndex = 42;
+			deliveryButton.TabIndex = 11;
 			deliveryButton.Text = "Delivery";
 			deliveryButton.UseVisualStyleBackColor = false;
 			deliveryButton.Click += deliveryButton_Click;
@@ -491,7 +491,7 @@
 			updateCustomerButton.Location = new Point(514, 656);
 			updateCustomerButton.Name = "updateCustomerButton";
 			updateCustomerButton.Size = new Size(200, 80);
-			updateCustomerButton.TabIndex = 44;
+			updateCustomerButton.TabIndex = 13;
 			updateCustomerButton.Text = "Update";
 			updateCustomerButton.UseVisualStyleBackColor = false;
 			// 
@@ -504,7 +504,7 @@
 			deleteCustomerButton.Location = new Point(720, 656);
 			deleteCustomerButton.Name = "deleteCustomerButton";
 			deleteCustomerButton.Size = new Size(200, 80);
-			deleteCustomerButton.TabIndex = 45;
+			deleteCustomerButton.TabIndex = 14;
 			deleteCustomerButton.Text = "Delete";
 			deleteCustomerButton.UseVisualStyleBackColor = false;
 			// 
@@ -517,7 +517,7 @@
 			findCustomerButton.Location = new Point(370, 135);
 			findCustomerButton.Name = "findCustomerButton";
 			findCustomerButton.Size = new Size(258, 60);
-			findCustomerButton.TabIndex = 46;
+			findCustomerButton.TabIndex = 4;
 			findCustomerButton.Text = "Find Customer";
 			findCustomerButton.UseVisualStyleBackColor = false;
 			findCustomerButton.Click += findCustomerButton_Click;
