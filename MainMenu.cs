@@ -118,7 +118,7 @@ namespace ordering_system
 			if (e.orderType == "Delivery")
 			{
 				deliveryButton_Click(sender, e);
-				customerDetailsLabel.Text = $"{e.phoneNumber} {e.houseNumber} {e.streetName} {e.postcode}";
+				customerDetailsLabel.Text = $"{e.phoneNumber} - {e.houseNumber} {e.streetName} {e.postcode}";
 				deliveryChargePriceLabel.Text = e.deliveryCharge.ToString("0.00"); // edit delivery charge
 				// add subtotal and delivery charge together
 				totalPriceLabel.Text = (Convert.ToDecimal(deliveryChargePriceLabel.Text) + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString("0.00");
@@ -126,7 +126,7 @@ namespace ordering_system
 			else if (e.orderType == "Collection")
 			{
 				collectionButton_Click(sender, e);
-				customerDetailsLabel.Text = $"{e.phoneNumber} {e.customerName}";
+				customerDetailsLabel.Text = $"{e.phoneNumber} - {e.customerName}";
 			}
 		}
 

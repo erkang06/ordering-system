@@ -18,6 +18,7 @@ namespace ordering_system
 		public event CustomerDetailsUpdateHandler CustomerDetailsUpdate;
 
 		int customerID, addressID, customerExists;
+		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the address
 		public CustomerDetails()
 		{
 			InitializeComponent();
@@ -141,7 +142,7 @@ namespace ordering_system
 			if (customerExists == 0) // if no customer exists for the number given
 			{
 				MessageBox.Show("No customer exists with the phone number given", "Ordering System");
-			} 
+			}
 			else
 			{
 				// fill in customer details and billing address
@@ -150,22 +151,22 @@ namespace ordering_system
 				getCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
 				DataSet customer = new DataSet();
 				getCustomer.Fill(customer);
-				customerNameTextBox.Text = customer.Tables[0].Rows[0]["customerName"].ToString();
+				customerNameTextBox.Text = customer.Tables[0].Rows[0]["customerName"].ToString().Trim();
 				blacklistedCheckBox.Checked = Convert.ToBoolean(customer.Tables[0].Rows[0]["isBlackListed"]);
-				billingHouseNumberTextBox.Text = customer.Tables[0].Rows[0]["houseNumber"].ToString();
-				billingStreetNameTextBox.Text = customer.Tables[0].Rows[0]["streetName"].ToString();
-				billingVillageTextBox.Text = customer.Tables[0].Rows[0]["village"].ToString();
-				billingCityTextBox.Text = customer.Tables[0].Rows[0]["city"].ToString();
-				billingPostcodeTextBox.Text = customer.Tables[0].Rows[0]["postcode"].ToString();
+				billingHouseNumberTextBox.Text = customer.Tables[0].Rows[0]["houseNumber"].ToString().Trim();
+				billingStreetNameTextBox.Text = customer.Tables[0].Rows[0]["streetName"].ToString().Trim();
+				billingVillageTextBox.Text = customer.Tables[0].Rows[0]["village"].ToString().Trim();
+				billingCityTextBox.Text = customer.Tables[0].Rows[0]["city"].ToString().Trim();
+				billingPostcodeTextBox.Text = customer.Tables[0].Rows[0]["postcode"].ToString().Trim();
 
 				// fill in address dataview
 				SqlDataAdapter getAddresses = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", MainMenu.con);
 				getAddresses.SelectCommand.Parameters.AddWithValue("@CID", customerID);
 				DataSet addresses = new DataSet();
 				getAddresses.Fill(addresses);
-				DataView addressesDataView = new DataView(addresses.Tables[0]);
-				DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "village", "city", "postCode");
-				deliveryAddressDataView.DataSource = addressesDataTable;
+				addressesDataView = new DataView(addresses.Tables[0]);
+				DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
+				deliveryAddressDataGridView.DataSource = addressesDataTable;
 
 			}
 			MainMenu.con.Close();
@@ -181,6 +182,22 @@ namespace ordering_system
 				deliveryCityTextBox.Text = billingCityTextBox.Text;
 				deliveryPostcodeTextBox.Text = billingPostcodeTextBox.Text;
 			}
+		}
+
+		private void deliveryAddressDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			// find clicked row of table in order to search through addressesdataview to find the full deets
+			int selectedRowIndex = deliveryAddressDataGridView.SelectedCells[0].RowIndex;
+			DataRowView selectedRow = addressesDataView[selectedRowIndex];
+			addressID = Convert.ToInt32(selectedRow.Row["addressID"]);
+			// update delivery address
+			deliveryHouseNumberTextBox.Text = selectedRow.Row["houseNumber"].ToString().Trim();
+			deliveryStreetNameTextBox.Text = selectedRow.Row["streetName"].ToString().Trim();
+			deliveryVillageTextBox.Text = selectedRow.Row["village"].ToString().Trim();
+			deliveryCityTextBox.Text = selectedRow.Row["city"].ToString().Trim();
+			deliveryPostcodeTextBox.Text = selectedRow.Row["postcode"].ToString().Trim();
+			deliveryDeliveryChargeTextBox.Text = Convert.ToDecimal(selectedRow.Row["deliveryCharge"]).ToString("0.00").Trim();
+			deliveryAddressDataGridView.ClearSelection(); // unselect row
 		}
 	}
 }

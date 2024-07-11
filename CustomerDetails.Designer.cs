@@ -56,7 +56,7 @@
 			deliveryHouseNumberLabel = new Label();
 			deliveryAddressLabel = new Label();
 			billingAsDeliveryCheckBox = new CheckBox();
-			deliveryAddressDataView = new DataGridView();
+			deliveryAddressDataGridView = new DataGridView();
 			deliveryDeliveryChargeTextBox = new TextBox();
 			deliveryDeliveryChargeLabel = new Label();
 			acceptAddressButton = new Button();
@@ -68,7 +68,7 @@
 			updateCustomerButton = new Button();
 			deleteCustomerButton = new Button();
 			findCustomerButton = new Button();
-			((System.ComponentModel.ISupportInitialize)deliveryAddressDataView).BeginInit();
+			((System.ComponentModel.ISupportInitialize)deliveryAddressDataGridView).BeginInit();
 			SuspendLayout();
 			// 
 			// CustomerNameLabel
@@ -371,17 +371,19 @@
 			billingAsDeliveryCheckBox.UseVisualStyleBackColor = false;
 			billingAsDeliveryCheckBox.CheckedChanged += billingAsDeliveryCheckBox_CheckedChanged;
 			// 
-			// deliveryAddressDataView
+			// deliveryAddressDataGridView
 			// 
-			deliveryAddressDataView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			deliveryAddressDataView.BackgroundColor = Color.White;
-			deliveryAddressDataView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			deliveryAddressDataView.Location = new Point(908, 12);
-			deliveryAddressDataView.Name = "deliveryAddressDataView";
-			deliveryAddressDataView.RowHeadersWidth = 10;
-			deliveryAddressDataView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			deliveryAddressDataView.Size = new Size(1000, 590);
-			deliveryAddressDataView.TabIndex = 35;
+			deliveryAddressDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			deliveryAddressDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader;
+			deliveryAddressDataGridView.BackgroundColor = Color.White;
+			deliveryAddressDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			deliveryAddressDataGridView.Location = new Point(908, 12);
+			deliveryAddressDataGridView.Name = "deliveryAddressDataGridView";
+			deliveryAddressDataGridView.RowHeadersWidth = 10;
+			deliveryAddressDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			deliveryAddressDataGridView.Size = new Size(1000, 590);
+			deliveryAddressDataGridView.TabIndex = 35;
+			deliveryAddressDataGridView.CellClick += deliveryAddressDataGridView_CellClick;
 			// 
 			// deliveryDeliveryChargeTextBox
 			// 
@@ -540,7 +542,7 @@
 			Controls.Add(acceptAddressButton);
 			Controls.Add(deliveryDeliveryChargeTextBox);
 			Controls.Add(deliveryDeliveryChargeLabel);
-			Controls.Add(deliveryAddressDataView);
+			Controls.Add(deliveryAddressDataGridView);
 			Controls.Add(billingAsDeliveryCheckBox);
 			Controls.Add(deliveryPostcodeTextBox);
 			Controls.Add(deliveryPostcodeLabel);
@@ -573,7 +575,7 @@
 			Name = "CustomerDetails";
 			Text = "Customer Details";
 			Load += CustomerDetails_Load;
-			((System.ComponentModel.ISupportInitialize)deliveryAddressDataView).EndInit();
+			((System.ComponentModel.ISupportInitialize)deliveryAddressDataGridView).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -609,7 +611,7 @@
 		private Label deliveryHouseNumberLabel;
 		private Label deliveryAddressLabel;
 		private CheckBox billingAsDeliveryCheckBox;
-		private DataGridView deliveryAddressDataView;
+		private DataGridView deliveryAddressDataGridView;
 		private TextBox deliveryDeliveryChargeTextBox;
 		private Label deliveryDeliveryChargeLabel;
 		private Button acceptAddressButton;
