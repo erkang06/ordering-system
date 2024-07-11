@@ -26,12 +26,15 @@ namespace ordering_system
 		private void acceptAddressButton_Click(object sender, EventArgs e)
 		{
 			MainMenu.con.Open();
-			SqlCommand checkIfCustomerExists = new SqlCommand("SELECT COUNT(*) FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con); // checks number of customers in database w/ same phone number
+			// checks number of customers in database w/ same phone number
+			SqlCommand checkIfCustomerExists = new SqlCommand("SELECT COUNT(*) FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con);
 			checkIfCustomerExists.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
 			int customerExists = (int)checkIfCustomerExists.ExecuteScalar();
+
 			if (customerExists == 0) // if customer doesnt alr exist in database
 			{
-				SqlCommand addCustomerToDatabase = new SqlCommand("INSERT INTO CustomerTbl(customerName, phoneNumber, houseNumber, streetName, village, city, postcode) VALUES(@CN, @PN, @HN, @SN, @VL, @CT, @PC)", MainMenu.con); // add customer details to database
+				// add customer details to database
+				SqlCommand addCustomerToDatabase = new SqlCommand("INSERT INTO CustomerTbl(customerName, phoneNumber, houseNumber, streetName, village, city, postcode) VALUES(@CN, @PN, @HN, @SN, @VL, @CT, @PC)", MainMenu.con);
 				addCustomerToDatabase.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
 				addCustomerToDatabase.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
 				addCustomerToDatabase.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
@@ -41,26 +44,50 @@ namespace ordering_system
 				addCustomerToDatabase.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
 				addCustomerToDatabase.ExecuteNonQuery();
 			}
+			// find customerid
+			SqlCommand findcustomerID = new SqlCommand("SELECT CustomerID FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con);
+			findcustomerID.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+			int customerID = (int)findcustomerID.ExecuteScalar();
+			MainMenu.currentOrder.customerID = customerID; // add customerid to running order
+
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
-				// check if delivery address is in database by finding customer id to search through addresstbl
-				SqlCommand findcustomerID = new SqlCommand("SELECT CustomerID FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con);
-				findcustomerID.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
-				int customerID = (int)findcustomerID.ExecuteScalar();
-				SqlCommand addAddressToDatabase = new SqlCommand("INSERT INTO AddressTbl(customerID, houseNumber, streetName, village, city, postcode, deliveryCharge) VALUES(@CID, @CN, @PN, @HN, @SN, @VL, @CT, @PC, @DC)", MainMenu.con); // add customer details to database
-				addAddressToDatabase.Parameters.AddWithValue("@CID", customerID);
-				addAddressToDatabase.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
-				addAddressToDatabase.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
-				addAddressToDatabase.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
-				addAddressToDatabase.Parameters.AddWithValue("@CT", deliveryCityTextBox.Text);
-				addAddressToDatabase.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
-				addAddressToDatabase.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
-				addAddressToDatabase.ExecuteNonQuery();
-				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Delivery", houseNumber: deliveryHouseNumberTextBox.Text, streetName: deliveryStreetNameTextBox.Text, postcode: deliveryPostcodeTextBox.Text);
+				// see if address exists for customerid w/ same house # and postcode
+				SqlCommand checkIfAddressExists = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE CustomerID = @CID AND houseNumber = @HN AND postcode = @PC", MainMenu.con);
+				checkIfAddressExists.Parameters.AddWithValue("@CID", customerID);
+				checkIfAddressExists.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+				checkIfAddressExists.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+				int addressExists = (int)checkIfAddressExists.ExecuteScalar();
+
+				if (addressExists == 0) // address doesnt exist in addresstbl
+				{
+					// add customer details to database
+					SqlCommand addAddressToDatabase = new SqlCommand("INSERT INTO AddressTbl(customerID, houseNumber, streetName, village, city, postcode, deliveryCharge) VALUES(@CID, @CN, @PN, @HN, @SN, @VL, @CT, @PC, @DC)", MainMenu.con);
+					addAddressToDatabase.Parameters.AddWithValue("@CID", customerID);
+					addAddressToDatabase.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+					addAddressToDatabase.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
+					addAddressToDatabase.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
+					addAddressToDatabase.Parameters.AddWithValue("@CT", deliveryCityTextBox.Text);
+					addAddressToDatabase.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+					addAddressToDatabase.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
+					addAddressToDatabase.ExecuteNonQuery();
+				}
+
+				// find addressid
+				SqlCommand findAddressID = new SqlCommand("SELECT AddressID FROM AddressTbl WHERE CustomerID = @CID AND houseNumber = @HN AND postcode = @PC", MainMenu.con);
+				findAddressID.Parameters.AddWithValue("@CID", customerID);
+				findAddressID.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+				findAddressID.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+				int addressID = (int)findAddressID.ExecuteScalar();
+				MainMenu.currentOrder.addressID = addressID; // add addressid to running order
+
+				// send delivery details back to main menu
+				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Delivery", houseNumber: deliveryHouseNumberTextBox.Text, streetName: deliveryStreetNameTextBox.Text, postcode: deliveryPostcodeTextBox.Text, deliveryCharge: deliveryDeliveryChargeTextBox.Text);
 				CustomerDetailsUpdate(this, args);
 			}
 			else if (collectionButton.BackColor == Color.Yellow) // if its a collection by the end
 			{
+				// send collection details back to main menu
 				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Collection", customerName: customerNameTextBox.Text);
 				CustomerDetailsUpdate(this, args);
 			}

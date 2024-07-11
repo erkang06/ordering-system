@@ -121,6 +121,7 @@ namespace ordering_system
 			{
 				deliveryButton_Click(sender, e);
 				customerDetailsLabel.Text = $"{e.phoneNumber} {e.houseNumber} {e.streetName} {e.postcode}";
+				deliveryChargePriceLabel.Text = e.deliveryCharge;
 			}
 			else if (e.orderType == "Collection")
 			{

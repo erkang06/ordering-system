@@ -23,7 +23,7 @@ namespace ordering_system
 	{
 		public string orderType;
 		public int customerID;
-		public string addressID;
+		public int addressID;
 		public DateOnly orderDate;
 		public TimeOnly orderTime;
 		public TimeOnly estimatedTime;
@@ -46,8 +46,9 @@ namespace ordering_system
 		private string _houseNumber;
 		private string _streetName;
 		private string _postcode;
+		private string _deliveryCharge;
 
-		public CustomerDetailsUpdateEventArgs(string phoneNumber, string orderType, string customerName = "", string houseNumber = "", string streetName = "", string postcode = "")
+		public CustomerDetailsUpdateEventArgs(string phoneNumber, string orderType, string customerName = "", string houseNumber = "", string streetName = "", string postcode = "", string deliveryCharge = "")
 		{
 			_phoneNumber = phoneNumber;
 			_orderType = orderType;
@@ -56,6 +57,7 @@ namespace ordering_system
 				_houseNumber = houseNumber;
 				_streetName = streetName;
 				_postcode = postcode;
+				_deliveryCharge = deliveryCharge;
 			}
 			else if (orderType == "Collection")
 			{
@@ -108,6 +110,13 @@ namespace ordering_system
 			get
 			{
 				return _postcode;
+			}
+		}
+		public string deliveryCharge
+		{
+			get
+			{
+				return deliveryCharge;
 			}
 		}
 	}
