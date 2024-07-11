@@ -15,7 +15,7 @@ namespace ordering_system
 
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
-			if (currentOrder.orderType == string.Empty || currentOrder.orderType == "Counter") // if there hasnt been an address set
+			if (currentOrder.orderType == null || currentOrder.orderType == "Counter") // if there hasnt been an address set
 			{
 				currentOrder.orderType = "Delivery";
 				customerDetails_Click(sender, e);
@@ -40,7 +40,7 @@ namespace ordering_system
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
-			if (currentOrder.orderType == string.Empty || currentOrder.orderType == "Counter") // if there hasnt been a name set
+			if (currentOrder.orderType == null || currentOrder.orderType == "Counter") // if there hasnt been a name set
 			{
 				currentOrder.orderType = "Collection";
 				customerDetails_Click(sender, e);

@@ -17,20 +17,39 @@ namespace ordering_system
 
 		public event CustomerDetailsUpdateHandler CustomerDetailsUpdate;
 
-
+		int customerID, addressID, customerExists;
 		public CustomerDetails()
 		{
 			InitializeComponent();
 		}
 
+		private void findCustomerID()
+		{
+			SqlCommand findcustomerID = new SqlCommand("SELECT CustomerID FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con);
+			findcustomerID.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+			customerID = (int)findcustomerID.ExecuteScalar();
+		}
+
+		private void findAddressID()
+		{
+			SqlCommand findAddressID = new SqlCommand("SELECT AddressID FROM AddressTbl WHERE CustomerID = @CID AND houseNumber = @HN AND postcode = @PC", MainMenu.con);
+			findAddressID.Parameters.AddWithValue("@CID", customerID);
+			findAddressID.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+			findAddressID.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+			addressID = (int)findAddressID.ExecuteScalar();
+		}
+
+		private void checkIfCustomerExists() // checks if customer exists in database w/ same phone number
+		{
+			SqlCommand checkIfCustomerExists = new SqlCommand("SELECT COUNT(*) FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con);
+			checkIfCustomerExists.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+			customerExists = (int)checkIfCustomerExists.ExecuteScalar();
+		}
+
 		private void acceptAddressButton_Click(object sender, EventArgs e)
 		{
 			MainMenu.con.Open();
-			// checks number of customers in database w/ same phone number
-			SqlCommand checkIfCustomerExists = new SqlCommand("SELECT COUNT(*) FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con);
-			checkIfCustomerExists.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
-			int customerExists = (int)checkIfCustomerExists.ExecuteScalar();
-
+			checkIfCustomerExists();
 			if (customerExists == 0) // if customer doesnt alr exist in database
 			{
 				// add customer details to database
@@ -44,10 +63,7 @@ namespace ordering_system
 				addCustomerToDatabase.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
 				addCustomerToDatabase.ExecuteNonQuery();
 			}
-			// find customerid
-			SqlCommand findcustomerID = new SqlCommand("SELECT CustomerID FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con);
-			findcustomerID.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
-			int customerID = (int)findcustomerID.ExecuteScalar();
+			findCustomerID();
 			MainMenu.currentOrder.customerID = customerID; // add customerid to running order
 
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
@@ -72,13 +88,7 @@ namespace ordering_system
 					addAddressToDatabase.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
 					addAddressToDatabase.ExecuteNonQuery();
 				}
-
-				// find addressid
-				SqlCommand findAddressID = new SqlCommand("SELECT AddressID FROM AddressTbl WHERE CustomerID = @CID AND houseNumber = @HN AND postcode = @PC", MainMenu.con);
-				findAddressID.Parameters.AddWithValue("@CID", customerID);
-				findAddressID.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
-				findAddressID.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
-				int addressID = (int)findAddressID.ExecuteScalar();
+				findAddressID();
 				MainMenu.currentOrder.addressID = addressID; // add addressid to running order
 
 				// send delivery details back to main menu
@@ -91,12 +101,13 @@ namespace ordering_system
 				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Collection", customerName: customerNameTextBox.Text);
 				CustomerDetailsUpdate(this, args);
 			}
-			this.Close();
+			MainMenu.con.Close();
+			Close();
 		}
 
 		private void cancelAddressButton_Click(object sender, EventArgs e)
 		{
-			this.Close();
+			Close();
 		}
 
 		private void deliveryButton_Click(object sender, EventArgs e)
@@ -125,29 +136,39 @@ namespace ordering_system
 
 		private void findCustomerButton_Click(object sender, EventArgs e) // wtf help xoxo
 		{
-			try
+			MainMenu.con.Open();
+			checkIfCustomerExists();
+			if (customerExists == 0) // if no customer exists for the number given
 			{
-				MessageBox.Show("slay");
-				MainMenu.con.Open();
-				MessageBox.Show("slay");
-				SqlDataAdapter sda = new SqlDataAdapter(@$"SELECT * FROM Customer WHERE phoneNumber = @PN", MainMenu.con);
-				MessageBox.Show("slay");
-				sda.SelectCommand.Parameters.AddWithValue("@PN", SqlDbType.Text).Value = phoneNumberTextBox.Text;
-				MessageBox.Show("slay");
-				SqlCommandBuilder scb = new SqlCommandBuilder(sda);
-				MessageBox.Show("slay");
-				DataSet ds = new DataSet();
-				MessageBox.Show("slay");
-				sda.Fill(ds);
-				MessageBox.Show("slay");
-				deliveryAddressDataView.DataSource = ds.Tables[0];
-				MessageBox.Show("slay");
-				MainMenu.con.Close();
-			}
-			catch (Exception ex)
+				MessageBox.Show("No customer exists with the phone number given", "Ordering System");
+			} 
+			else
 			{
-				MessageBox.Show("flopped");
+				// fill in customer details and billing address
+				findCustomerID();
+				SqlDataAdapter getCustomer = new SqlDataAdapter("SELECT * FROM CustomerTbl WHERE customerID = @CID", MainMenu.con);
+				getCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
+				DataSet customer = new DataSet();
+				getCustomer.Fill(customer);
+				customerNameTextBox.Text = customer.Tables[0].Rows[0]["customerName"].ToString();
+				blacklistedCheckBox.Checked = Convert.ToBoolean(customer.Tables[0].Rows[0]["isBlackListed"]);
+				billingHouseNumberTextBox.Text = customer.Tables[0].Rows[0]["houseNumber"].ToString();
+				billingStreetNameTextBox.Text = customer.Tables[0].Rows[0]["streetName"].ToString();
+				billingVillageTextBox.Text = customer.Tables[0].Rows[0]["village"].ToString();
+				billingCityTextBox.Text = customer.Tables[0].Rows[0]["city"].ToString();
+				billingPostcodeTextBox.Text = customer.Tables[0].Rows[0]["postcode"].ToString();
+
+				// fill in address dataview
+				SqlDataAdapter getAddresses = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", MainMenu.con);
+				getAddresses.SelectCommand.Parameters.AddWithValue("@CID", customerID);
+				DataSet addresses = new DataSet();
+				getAddresses.Fill(addresses);
+				DataView addressesDataView = new DataView(addresses.Tables[0]);
+				DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "village", "city", "postCode");
+				deliveryAddressDataView.DataSource = addressesDataTable;
+
 			}
+			MainMenu.con.Close();
 		}
 
 		private void billingAsDeliveryCheckBox_CheckedChanged(object sender, EventArgs e)
