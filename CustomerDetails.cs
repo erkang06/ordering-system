@@ -71,16 +71,26 @@ namespace ordering_system
 		{
 			try
 			{
+				MessageBox.Show("slay");
 				MainMenu.con.Open();
+				MessageBox.Show("slay");
 				SqlDataAdapter sda = new SqlDataAdapter(@$"SELECT * FROM Customer WHERE phoneNumber = @PN", MainMenu.con);
+				MessageBox.Show("slay");
+				sda.SelectCommand.Parameters.AddWithValue("@PN",SqlDbType.Text).Value = phoneNumberTextBox.Text;
+				MessageBox.Show("slay");
 				SqlCommandBuilder scb = new SqlCommandBuilder(sda);
+				MessageBox.Show("slay");
 				DataSet ds = new DataSet();
+				MessageBox.Show("slay");
 				sda.Fill(ds);
+				MessageBox.Show("slay");
+				deliveryAddressDataView.DataSource = ds.Tables[0];
+				MessageBox.Show("slay");
 				MainMenu.con.Close();
 			}
 			catch (Exception ex)
 			{
-
+				MessageBox.Show("flopped");
 			}
 		}
 	}

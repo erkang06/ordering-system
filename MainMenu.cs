@@ -1,4 +1,5 @@
 using System.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ordering_system
 {
@@ -6,7 +7,7 @@ namespace ordering_system
 	{
 		public static Order currentOrder = new Order();
 		public static List<OrderItem> currentOrderItems = new List<OrderItem>();
-		public static SqlConnection con = new SqlConnection(@"Data Source=""C:\Users\benny\Documents\CS\NEA\ordering system\ordering system.accdb""");
+		public static SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
 		public MainMenu()
 		{
 			InitializeComponent();
