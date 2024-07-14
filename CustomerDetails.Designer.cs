@@ -62,10 +62,8 @@
 			acceptAddressButton = new Button();
 			cancelAddressButton = new Button();
 			deleteDeliveryAddressButton = new Button();
-			updateDeliveryAddressButton = new Button();
 			collectionButton = new Button();
 			deliveryButton = new Button();
-			updateCustomerButton = new Button();
 			deleteCustomerButton = new Button();
 			findCustomerButton = new Button();
 			((System.ComponentModel.ISupportInitialize)deliveryAddressDataGridView).BeginInit();
@@ -100,7 +98,7 @@
 			customerNameTextBox.Font = new Font("Segoe UI", 14F);
 			customerNameTextBox.Location = new Point(370, 12);
 			customerNameTextBox.Name = "customerNameTextBox";
-			customerNameTextBox.Size = new Size(500, 57);
+			customerNameTextBox.Size = new Size(550, 57);
 			customerNameTextBox.TabIndex = 1;
 			// 
 			// phoneNumberTextBox
@@ -108,7 +106,7 @@
 			phoneNumberTextBox.Font = new Font("Segoe UI", 14F);
 			phoneNumberTextBox.Location = new Point(370, 72);
 			phoneNumberTextBox.Name = "phoneNumberTextBox";
-			phoneNumberTextBox.Size = new Size(500, 57);
+			phoneNumberTextBox.Size = new Size(550, 57);
 			phoneNumberTextBox.TabIndex = 2;
 			// 
 			// billingAddressLabel
@@ -128,7 +126,7 @@
 			billingHouseNumberTextBox.Font = new Font("Segoe UI", 14F);
 			billingHouseNumberTextBox.Location = new Point(370, 295);
 			billingHouseNumberTextBox.Name = "billingHouseNumberTextBox";
-			billingHouseNumberTextBox.Size = new Size(500, 57);
+			billingHouseNumberTextBox.Size = new Size(550, 57);
 			billingHouseNumberTextBox.TabIndex = 5;
 			// 
 			// billingHouseNumberLabel
@@ -160,7 +158,7 @@
 			billingStreetNameTextBox.Font = new Font("Segoe UI", 14F);
 			billingStreetNameTextBox.Location = new Point(370, 355);
 			billingStreetNameTextBox.Name = "billingStreetNameTextBox";
-			billingStreetNameTextBox.Size = new Size(500, 57);
+			billingStreetNameTextBox.Size = new Size(550, 57);
 			billingStreetNameTextBox.TabIndex = 6;
 			// 
 			// billingStreetNameLabel
@@ -180,7 +178,7 @@
 			billingVillageTextBox.Font = new Font("Segoe UI", 14F);
 			billingVillageTextBox.Location = new Point(370, 415);
 			billingVillageTextBox.Name = "billingVillageTextBox";
-			billingVillageTextBox.Size = new Size(500, 57);
+			billingVillageTextBox.Size = new Size(550, 57);
 			billingVillageTextBox.TabIndex = 7;
 			// 
 			// billingVillageLabel
@@ -200,7 +198,7 @@
 			billingCityTextBox.Font = new Font("Segoe UI", 14F);
 			billingCityTextBox.Location = new Point(370, 475);
 			billingCityTextBox.Name = "billingCityTextBox";
-			billingCityTextBox.Size = new Size(500, 57);
+			billingCityTextBox.Size = new Size(550, 57);
 			billingCityTextBox.TabIndex = 8;
 			// 
 			// billingCityLabel
@@ -220,7 +218,7 @@
 			billingPostcodeTextBox.Font = new Font("Segoe UI", 14F);
 			billingPostcodeTextBox.Location = new Point(370, 535);
 			billingPostcodeTextBox.Name = "billingPostcodeTextBox";
-			billingPostcodeTextBox.Size = new Size(500, 57);
+			billingPostcodeTextBox.Size = new Size(550, 57);
 			billingPostcodeTextBox.TabIndex = 9;
 			// 
 			// billingPostcodeLabel
@@ -377,11 +375,11 @@
 			deliveryAddressDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader;
 			deliveryAddressDataGridView.BackgroundColor = Color.White;
 			deliveryAddressDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			deliveryAddressDataGridView.Location = new Point(908, 12);
+			deliveryAddressDataGridView.Location = new Point(1000, 12);
 			deliveryAddressDataGridView.Name = "deliveryAddressDataGridView";
 			deliveryAddressDataGridView.RowHeadersWidth = 10;
 			deliveryAddressDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			deliveryAddressDataGridView.Size = new Size(1000, 590);
+			deliveryAddressDataGridView.Size = new Size(908, 590);
 			deliveryAddressDataGridView.TabIndex = 35;
 			deliveryAddressDataGridView.CellClick += deliveryAddressDataGridView_CellClick;
 			// 
@@ -441,25 +439,13 @@
 			deleteDeliveryAddressButton.BackColor = SystemColors.Control;
 			deleteDeliveryAddressButton.FlatStyle = FlatStyle.Flat;
 			deleteDeliveryAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			deleteDeliveryAddressButton.Location = new Point(1708, 610);
+			deleteDeliveryAddressButton.Location = new Point(1508, 610);
 			deleteDeliveryAddressButton.Name = "deleteDeliveryAddressButton";
-			deleteDeliveryAddressButton.Size = new Size(200, 80);
+			deleteDeliveryAddressButton.Size = new Size(400, 80);
 			deleteDeliveryAddressButton.TabIndex = 22;
-			deleteDeliveryAddressButton.Text = "Delete";
+			deleteDeliveryAddressButton.Text = "Delete Address";
 			deleteDeliveryAddressButton.UseVisualStyleBackColor = false;
-			// 
-			// updateDeliveryAddressButton
-			// 
-			updateDeliveryAddressButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			updateDeliveryAddressButton.BackColor = SystemColors.Control;
-			updateDeliveryAddressButton.FlatStyle = FlatStyle.Flat;
-			updateDeliveryAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			updateDeliveryAddressButton.Location = new Point(1502, 610);
-			updateDeliveryAddressButton.Name = "updateDeliveryAddressButton";
-			updateDeliveryAddressButton.Size = new Size(200, 80);
-			updateDeliveryAddressButton.TabIndex = 21;
-			updateDeliveryAddressButton.Text = "Update";
-			updateDeliveryAddressButton.UseVisualStyleBackColor = false;
+			deleteDeliveryAddressButton.Click += deleteDeliveryAddressButton_Click;
 			// 
 			// collectionButton
 			// 
@@ -485,31 +471,19 @@
 			deliveryButton.UseVisualStyleBackColor = false;
 			deliveryButton.Click += deliveryButton_Click;
 			// 
-			// updateCustomerButton
-			// 
-			updateCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			updateCustomerButton.BackColor = SystemColors.Control;
-			updateCustomerButton.FlatStyle = FlatStyle.Flat;
-			updateCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			updateCustomerButton.Location = new Point(464, 660);
-			updateCustomerButton.Name = "updateCustomerButton";
-			updateCustomerButton.Size = new Size(200, 80);
-			updateCustomerButton.TabIndex = 13;
-			updateCustomerButton.Text = "Update";
-			updateCustomerButton.UseVisualStyleBackColor = false;
-			// 
 			// deleteCustomerButton
 			// 
 			deleteCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			deleteCustomerButton.BackColor = SystemColors.Control;
 			deleteCustomerButton.FlatStyle = FlatStyle.Flat;
 			deleteCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			deleteCustomerButton.Location = new Point(670, 660);
+			deleteCustomerButton.Location = new Point(520, 660);
 			deleteCustomerButton.Name = "deleteCustomerButton";
-			deleteCustomerButton.Size = new Size(200, 80);
+			deleteCustomerButton.Size = new Size(400, 80);
 			deleteCustomerButton.TabIndex = 14;
-			deleteCustomerButton.Text = "Delete";
+			deleteCustomerButton.Text = "Delete Customer";
 			deleteCustomerButton.UseVisualStyleBackColor = false;
+			deleteCustomerButton.Click += deleteCustomerButton_Click;
 			// 
 			// findCustomerButton
 			// 
@@ -533,10 +507,8 @@
 			ClientSize = new Size(1920, 1080);
 			Controls.Add(findCustomerButton);
 			Controls.Add(deleteCustomerButton);
-			Controls.Add(updateCustomerButton);
 			Controls.Add(collectionButton);
 			Controls.Add(deliveryButton);
-			Controls.Add(updateDeliveryAddressButton);
 			Controls.Add(deleteDeliveryAddressButton);
 			Controls.Add(cancelAddressButton);
 			Controls.Add(acceptAddressButton);
@@ -617,10 +589,8 @@
 		private Button acceptAddressButton;
 		private Button cancelAddressButton;
 		private Button deleteDeliveryAddressButton;
-		private Button updateDeliveryAddressButton;
 		private Button collectionButton;
 		private Button deliveryButton;
-		private Button updateCustomerButton;
 		private Button deleteCustomerButton;
 		private Button findCustomerButton;
 	}

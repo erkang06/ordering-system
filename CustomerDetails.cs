@@ -17,21 +17,21 @@ namespace ordering_system
 
 		public event CustomerDetailsUpdateHandler CustomerDetailsUpdate;
 
-		int customerID, addressID, customerExists;
+		int customerID, addressID, customerExists, addressExists;
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the address
 		public CustomerDetails()
 		{
 			InitializeComponent();
 		}
 
-		private void findCustomerID()
+		private void findCustomerID() // find customerid from phonenumber
 		{
 			SqlCommand findcustomerID = new SqlCommand("SELECT CustomerID FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con);
 			findcustomerID.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
 			customerID = (int)findcustomerID.ExecuteScalar();
 		}
 
-		private void findAddressID()
+		private void findAddressID() // find addressid from customer# house# postcode
 		{
 			SqlCommand findAddressID = new SqlCommand("SELECT AddressID FROM AddressTbl WHERE CustomerID = @CID AND houseNumber = @HN AND postcode = @PC", MainMenu.con);
 			findAddressID.Parameters.AddWithValue("@CID", customerID);
@@ -40,11 +40,20 @@ namespace ordering_system
 			addressID = (int)findAddressID.ExecuteScalar();
 		}
 
-		private void checkIfCustomerExists() // checks if customer exists in database w/ same phone number
+		private void checkIfCustomerExists() // checks if customer exists in database w/ same phone number - output = # of customers w/ phone number
 		{
 			SqlCommand checkIfCustomerExists = new SqlCommand("SELECT COUNT(*) FROM CustomerTbl WHERE phoneNumber = @PN", MainMenu.con);
 			checkIfCustomerExists.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
 			customerExists = (int)checkIfCustomerExists.ExecuteScalar();
+		}
+
+		private void checkIfAddressExists() // see if address exists for customerid w/ same house # and postcode
+		{
+			SqlCommand checkIfAddressExists = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE CustomerID = @CID AND houseNumber = @HN AND postcode = @PC", MainMenu.con);
+			checkIfAddressExists.Parameters.AddWithValue("@CID", customerID);
+			checkIfAddressExists.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+			checkIfAddressExists.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+			int addressExists = (int)checkIfAddressExists.ExecuteScalar();
 		}
 
 		private void acceptAddressButton_Click(object sender, EventArgs e)
@@ -63,18 +72,28 @@ namespace ordering_system
 				addCustomerToDatabase.Parameters.AddWithValue("@CT", billingCityTextBox.Text);
 				addCustomerToDatabase.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
 				addCustomerToDatabase.ExecuteNonQuery();
+				findCustomerID();
 			}
-			findCustomerID();
+			else // update just in case details have changed
+			{
+				findCustomerID();
+				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, phoneNumber = @PN, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", MainMenu.con);
+				updateCustomerDetails.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@CT", billingCityTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@CID", customerID);
+				updateCustomerDetails.ExecuteNonQuery();
+			}
+
 			MainMenu.currentOrder.customerID = customerID; // add customerid to running order
 
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
-				// see if address exists for customerid w/ same house # and postcode
-				SqlCommand checkIfAddressExists = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE CustomerID = @CID AND houseNumber = @HN AND postcode = @PC", MainMenu.con);
-				checkIfAddressExists.Parameters.AddWithValue("@CID", customerID);
-				checkIfAddressExists.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
-				checkIfAddressExists.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
-				int addressExists = (int)checkIfAddressExists.ExecuteScalar();
+				checkIfAddressExists();
 
 				if (addressExists == 0) // address doesnt exist in addresstbl
 				{
@@ -88,6 +107,19 @@ namespace ordering_system
 					addAddressToDatabase.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
 					addAddressToDatabase.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
 					addAddressToDatabase.ExecuteNonQuery();
+				}
+				else // update just in case details have changed
+				{
+					findAddressID();
+					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET houseNumber = @HN, streetName = @SN, village = @VL, @city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", MainMenu.con);
+					updateDeliveryAddress.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+					updateDeliveryAddress.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
+					updateDeliveryAddress.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
+					updateDeliveryAddress.Parameters.AddWithValue("@CT", deliveryCityTextBox.Text);
+					updateDeliveryAddress.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+					updateDeliveryAddress.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
+					updateDeliveryAddress.Parameters.AddWithValue("@AID", addressID);
+					updateDeliveryAddress.ExecuteNonQuery();
 				}
 				findAddressID();
 				MainMenu.currentOrder.addressID = addressID; // add addressid to running order
@@ -198,6 +230,46 @@ namespace ordering_system
 			deliveryPostcodeTextBox.Text = selectedRow.Row["postcode"].ToString().Trim();
 			deliveryDeliveryChargeTextBox.Text = Convert.ToDecimal(selectedRow.Row["deliveryCharge"]).ToString("0.00").Trim();
 			deliveryAddressDataGridView.ClearSelection(); // unselect row
+		}
+
+		private void deleteCustomerButton_Click(object sender, EventArgs e)
+		{
+			checkIfCustomerExists();
+			if (customerExists == 0) // phone# not found
+			{
+				MessageBox.Show("Customer with phone number not found in database", "Customer Details");
+			}
+			else // phone# found
+			{
+				findCustomerID();
+				MainMenu.con.Open();
+				SqlCommand deleteCustomer = new SqlCommand("DELETE FROM CustomerTbl WHERE customerID = @CID", MainMenu.con);
+				deleteCustomer.Parameters.AddWithValue("@CID", customerID);
+				deleteCustomer.ExecuteNonQuery();
+				MainMenu.con.Close();
+				MessageBox.Show("Customer deleted", "Customer Details");
+			}
+
+		}
+
+		private void deleteDeliveryAddressButton_Click(object sender, EventArgs e)
+		{
+			checkIfAddressExists();
+			if (addressExists == 0)
+			{
+				MessageBox.Show("Address with house number and postcode not found in database", "Customer Details");
+			}
+			else
+			{
+				findAddressID();
+				MainMenu.con.Open();
+				SqlCommand deleteAddress = new SqlCommand("DELETE FROM AddressTbl WHERE addressID = @AID");
+				deleteAddress.Parameters.AddWithValue("@AID", addressID);
+				deleteAddress.ExecuteNonQuery();
+				MainMenu.con.Close();
+
+				MessageBox.Show("Address deleted", "Customer Details");
+			}
 		}
 	}
 }
