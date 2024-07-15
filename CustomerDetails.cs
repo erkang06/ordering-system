@@ -77,9 +77,8 @@ namespace ordering_system
 			else // update just in case details have changed
 			{
 				findCustomerID();
-				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, phoneNumber = @PN, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", MainMenu.con);
+				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", MainMenu.con);
 				updateCustomerDetails.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
-				updateCustomerDetails.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
 				updateCustomerDetails.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
 				updateCustomerDetails.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
 				updateCustomerDetails.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
@@ -107,11 +106,13 @@ namespace ordering_system
 					addAddressToDatabase.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
 					addAddressToDatabase.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
 					addAddressToDatabase.ExecuteNonQuery();
+					findAddressID();
 				}
 				else // update just in case details have changed
 				{
 					findAddressID();
-					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET houseNumber = @HN, streetName = @SN, village = @VL, @city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", MainMenu.con);
+					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET customerID = @CID, houseNumber = @HN, streetName = @SN, village = @VL, @city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", MainMenu.con);
+					updateDeliveryAddress.Parameters.AddWithValue("@CID", customerID);
 					updateDeliveryAddress.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
 					updateDeliveryAddress.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
 					updateDeliveryAddress.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
@@ -121,7 +122,6 @@ namespace ordering_system
 					updateDeliveryAddress.Parameters.AddWithValue("@AID", addressID);
 					updateDeliveryAddress.ExecuteNonQuery();
 				}
-				findAddressID();
 				MainMenu.currentOrder.addressID = addressID; // add addressid to running order
 
 				// send delivery details back to main menu

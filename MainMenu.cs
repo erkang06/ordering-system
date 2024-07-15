@@ -15,40 +15,40 @@ namespace ordering_system
 
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
+			deliveryChargePriceLabel.Enabled = true;
+			deliveryButton.BackColor = Color.Yellow; // select delivery, unselect rest
+			counterButton.BackColor = Color.Transparent;
+			collectionButton.BackColor = Color.Transparent;
 			if (currentOrder.orderType != "Delivery") // if there hasnt been an address set
 			{
 				currentOrder.orderType = "Delivery";
 				customerDetails_Click(sender, e);
-				deliveryChargePriceLabel.Enabled = true;
-				deliveryButton.BackColor = Color.Yellow; // select delivery, unselect rest
-				counterButton.BackColor = Color.Transparent;
-				collectionButton.BackColor = Color.Transparent;
 			}
 		}
 
 		private void counterButton_Click(object sender, EventArgs e)
 		{
+			deliveryChargePriceLabel.Enabled = false; // disables delivery charge
+			counterButton.BackColor = Color.Yellow; // select counter, unselect rest
+			deliveryButton.BackColor = Color.Transparent;
+			collectionButton.BackColor = Color.Transparent;
 			if (currentOrder.orderType != "Counter") // if isnt already a counter
 			{
 				currentOrder.orderType = "Counter";
 				customerDetailsLabel.Text = string.Empty;
-				deliveryChargePriceLabel.Enabled = false; // disables delivery charge
-				counterButton.BackColor = Color.Yellow; // select counter, unselect rest
-				deliveryButton.BackColor = Color.Transparent;
-				collectionButton.BackColor = Color.Transparent;
 			}
 		}
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
+			deliveryChargePriceLabel.Enabled = false; // disables delivery charge
+			collectionButton.BackColor = Color.Yellow; // select collection, unselect rest
+			counterButton.BackColor = Color.Transparent;
+			deliveryButton.BackColor = Color.Transparent;
 			if (currentOrder.orderType != "Collection") // if there hasnt been a name set
 			{
 				currentOrder.orderType = "Collection";
 				customerDetails_Click(sender, e);
-				deliveryChargePriceLabel.Enabled = false; // disables delivery charge
-				collectionButton.BackColor = Color.Yellow; // select collection, unselect rest
-				counterButton.BackColor = Color.Transparent;
-				deliveryButton.BackColor = Color.Transparent;
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace ordering_system
 
 		private void customerDetailsChanged(object sender, CustomerDetailsUpdateEventArgs e) // when stuff gets updated in the customer details panel
 		{
-			currentOrder.orderType = e.orderType; // just in case theyre different yk
+			currentOrder.orderType = e.orderType;
 			if (e.orderType == "Delivery")
 			{
 				deliveryButton_Click(sender, e);
