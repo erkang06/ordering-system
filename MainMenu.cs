@@ -1,5 +1,14 @@
 using System.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ordering_system
 {
@@ -28,6 +37,8 @@ namespace ordering_system
 
 		private void counterButton_Click(object sender, EventArgs e)
 		{
+			deliveryChargePriceLabel.Text = "0.00";
+			totalPriceLabel.Text = subtotalPriceLabel.Text;
 			deliveryChargePriceLabel.Enabled = false; // disables delivery charge
 			counterButton.BackColor = Color.Yellow; // select counter, unselect rest
 			deliveryButton.BackColor = Color.Transparent;
@@ -41,11 +52,22 @@ namespace ordering_system
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
+			deliveryChargePriceLabel.Text = "0.00";
+			totalPriceLabel.Text = subtotalPriceLabel.Text;
 			deliveryChargePriceLabel.Enabled = false; // disables delivery charge
 			collectionButton.BackColor = Color.Yellow; // select collection, unselect rest
 			counterButton.BackColor = Color.Transparent;
 			deliveryButton.BackColor = Color.Transparent;
-			if (currentOrder.orderType != "Collection") // if there hasnt been a name set
+			if (currentOrder.orderType == "Delivery") // take customer details from delivery and put them into collection
+			{
+				con.Open();
+				DataSet customer = CustomerDetails.getCustomer(currentOrder.customerID);
+				customerDetailsLabel.Text = $"{customer.Tables[0].Rows[0]["phoneNumber"].ToString().Trim()} - {customer.Tables[0].Rows[0]["customerName"].ToString().Trim()}";
+				currentOrder.orderType = "Collection";
+				currentOrder.addressID = 0;
+				con.Close();
+			}
+			else if (currentOrder.orderType != "Collection") // if there hasnt been a name set
 			{
 				currentOrder.orderType = "Collection";
 				customerDetails_Click(sender, e);

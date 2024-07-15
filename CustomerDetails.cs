@@ -56,6 +56,15 @@ namespace ordering_system
 			int addressExists = (int)checkIfAddressExists.ExecuteScalar();
 		}
 
+		public static DataSet getCustomer(int customerID) // get customer details from customerid
+		{
+			SqlDataAdapter getCustomer = new SqlDataAdapter("SELECT * FROM CustomerTbl WHERE customerID = @CID", MainMenu.con);
+			getCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
+			DataSet customer = new DataSet();
+			getCustomer.Fill(customer);
+			return customer;
+		}
+
 		private void acceptAddressButton_Click(object sender, EventArgs e)
 		{
 			MainMenu.con.Open();
@@ -179,10 +188,7 @@ namespace ordering_system
 			{
 				// fill in customer details and billing address
 				findCustomerID();
-				SqlDataAdapter getCustomer = new SqlDataAdapter("SELECT * FROM CustomerTbl WHERE customerID = @CID", MainMenu.con);
-				getCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
-				DataSet customer = new DataSet();
-				getCustomer.Fill(customer);
+				DataSet customer = getCustomer(customerID);
 				customerNameTextBox.Text = customer.Tables[0].Rows[0]["customerName"].ToString().Trim();
 				blacklistedCheckBox.Checked = Convert.ToBoolean(customer.Tables[0].Rows[0]["isBlackListed"]);
 				billingHouseNumberTextBox.Text = customer.Tables[0].Rows[0]["houseNumber"].ToString().Trim();
