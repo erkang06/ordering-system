@@ -18,6 +18,7 @@ namespace ordering_system
 		public event CustomerDetailsUpdateHandler CustomerDetailsUpdate;
 
 		int customerID, addressID, customerExists, addressExists;
+		string orderType;
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the address
 		public CustomerDetails()
 		{
@@ -131,18 +132,16 @@ namespace ordering_system
 					updateDeliveryAddress.Parameters.AddWithValue("@AID", addressID);
 					updateDeliveryAddress.ExecuteNonQuery();
 				}
-				MainMenu.currentOrder.addressID = addressID; // add addressid to running order
-
+				orderType = "Delivery";
 				// send delivery details back to main menu
-				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Delivery", houseNumber: deliveryHouseNumberTextBox.Text, streetName: deliveryStreetNameTextBox.Text, postcode: deliveryPostcodeTextBox.Text, deliveryCharge: Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
-				CustomerDetailsUpdate(this, args);
 			}
 			else if (collectionButton.BackColor == Color.Yellow) // if its a collection by the end
 			{
-				// send collection details back to main menu
-				CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(phoneNumberTextBox.Text, "Collection", customerName: customerNameTextBox.Text);
-				CustomerDetailsUpdate(this, args);
+				orderType = "Collection";
 			}
+
+			CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(customerID, orderType, addressID);
+			CustomerDetailsUpdate(this, args);
 			MainMenu.con.Close();
 			Close();
 		}
@@ -156,12 +155,24 @@ namespace ordering_system
 		{
 			deliveryButton.BackColor = Color.Yellow;
 			collectionButton.BackColor = Color.Transparent;
+			deliveryHouseNumberTextBox.Enabled = true;
+			deliveryStreetNameTextBox.Enabled = true;
+			deliveryVillageTextBox.Enabled = true;
+			deliveryCityTextBox.Enabled = true;
+			deliveryPostcodeTextBox.Enabled = true;
+			deliveryDeliveryChargeTextBox.Enabled = true;
 		}
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
 			collectionButton.BackColor = Color.Yellow;
 			deliveryButton.BackColor = Color.Transparent;
+			deliveryHouseNumberTextBox.Enabled = false;
+			deliveryStreetNameTextBox.Enabled = false;
+			deliveryVillageTextBox.Enabled = false;
+			deliveryCityTextBox.Enabled = false;
+			deliveryPostcodeTextBox.Enabled = false;
+			deliveryDeliveryChargeTextBox.Enabled =	false;
 		}
 
 		private void CustomerDetails_Load(object sender, EventArgs e) // presets whether order type is delivery or collection if form not opened by cust deets panel
@@ -275,6 +286,69 @@ namespace ordering_system
 				MainMenu.con.Close();
 
 				MessageBox.Show("Address deleted", "Ordering System");
+			}
+		}
+
+		private void customerNameTextBox_Leave(object sender, EventArgs e)
+		{
+			if (customerNameTextBox.Text.Length > 50) // if name too long for database
+			{
+				MessageBox.Show("Customer name too long", "Ordering System");
+				customerNameTextBox.Focus();
+			}
+		}
+
+		private void phoneNumberTextBox_Leave(object sender, EventArgs e)
+		{
+			if (phoneNumberTextBox.Text.Length > 20) // if phone# too long for database
+			{
+				MessageBox.Show("Phone number too long", "Ordering System");
+				phoneNumberTextBox.Focus();
+			}
+		}
+
+		private void billingHouseNumberTextBox_TextChanged(object sender, EventArgs e)
+		{
+			if (billingHouseNumberTextBox.Text.Length > 30) // if house number too long for database
+			{
+				MessageBox.Show("House number too long", "Ordering System");
+				billingHouseNumberTextBox.Focus();
+			}
+		}
+
+		private void billingStreetNameTextBox_TextChanged(object sender, EventArgs e)
+		{
+			if (billingStreetNameTextBox.Text.Length > 50) // if phone# too long for database
+			{
+				MessageBox.Show("Street name too long", "Ordering System");
+				billingStreetNameTextBox.Focus();
+			}
+		}
+
+		private void billingVillageTextBox_TextChanged(object sender, EventArgs e)
+		{
+			if (billingVillageTextBox.Text.Length > 30) // if village too long for database
+			{
+				MessageBox.Show("Village too long", "Ordering System");
+				billingVillageTextBox.Focus();
+			}
+		}
+
+		private void billingCityTextBox_TextChanged(object sender, EventArgs e)
+		{
+			if (billingCityTextBox.Text.Length > 30) // if city too long for database
+			{
+				MessageBox.Show("CIty too long", "Ordering System");
+				billingCityTextBox.Focus();
+			}
+		}
+
+		private void billingPostcodeTextBox_TextChanged(object sender, EventArgs e)
+		{
+			if (billingPostcodeTextBox.Text.Length > 10) // if postcode too long for database
+			{
+				MessageBox.Show("Postcode too long", "Ordering System");
+				billingPostcodeTextBox.Focus();
 			}
 		}
 	}

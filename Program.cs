@@ -41,36 +41,22 @@ namespace ordering_system
 
 	public class CustomerDetailsUpdateEventArgs : EventArgs
 	{
-		private string _phoneNumber;
+		private int _customerID;
 		private string _orderType;
-		private string _customerName;
-		private string _houseNumber;
-		private string _streetName;
-		private string _postcode;
-		private decimal _deliveryCharge;
+		private int _addressID;
 
-		public CustomerDetailsUpdateEventArgs(string phoneNumber, string orderType, string customerName = "", string houseNumber = "", string streetName = "", string postcode = "", decimal deliveryCharge = 0.00m)
+		public CustomerDetailsUpdateEventArgs(int customerID, string orderType, int addressID = -1)
 		{
-			_phoneNumber = phoneNumber;
+			_customerID = customerID;
 			_orderType = orderType;
-			if (orderType == "Delivery")
-			{
-				_houseNumber = houseNumber;
-				_streetName = streetName;
-				_postcode = postcode;
-				_deliveryCharge = deliveryCharge;
-			}
-			else if (orderType == "Collection")
-			{
-				_customerName = customerName;
-			}
+			_addressID = addressID;
 		}
 
-		public string phoneNumber
+		public int customerID
 		{
 			get
 			{
-				return _phoneNumber;
+				return _customerID;
 			}
 		}
 
@@ -82,42 +68,11 @@ namespace ordering_system
 			}
 		}
 
-		public string customerName
+		public int addressID
 		{
 			get
 			{
-				return _customerName;
-			}
-		}
-
-		public string houseNumber
-		{
-			get
-			{
-				return _houseNumber;
-			}
-		}
-
-		public string streetName
-		{
-			get
-			{
-				return _streetName;
-			}
-		}
-
-		public string postcode
-		{
-			get
-			{
-				return _postcode;
-			}
-		}
-		public decimal deliveryCharge
-		{
-			get
-			{
-				return _deliveryCharge;
+				return _customerID;
 			}
 		}
 	}

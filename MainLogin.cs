@@ -53,12 +53,15 @@ namespace ordering_system
 		{
 			try
 			{
-				password = File.ReadAllText(@"./Passwords/LoginPassword.txt").Trim();
+				StreamReader passwordFile = new StreamReader(@"./LoginPassword.txt");
+				password = passwordFile.ReadLine().Trim();
+				passwordFile.Close();
 			}
 			catch // if file doesnt exist, set to default
 			{
-				File.WriteAllText(@"./Passwords/LoginPassword.txt", "password");
-				MessageBox.Show("Password not found so reset to 'password'", "Ordering system");
+				password = "password";
+				File.WriteAllText(@"./LoginPassword.txt", password);
+				MessageBox.Show("Password not found so has been reset to 'password'", "Ordering system");
 			}
 		}
 	}

@@ -100,6 +100,7 @@
 			customerNameTextBox.Name = "customerNameTextBox";
 			customerNameTextBox.Size = new Size(550, 57);
 			customerNameTextBox.TabIndex = 1;
+			customerNameTextBox.Leave += customerNameTextBox_Leave;
 			// 
 			// phoneNumberTextBox
 			// 
@@ -108,6 +109,7 @@
 			phoneNumberTextBox.Name = "phoneNumberTextBox";
 			phoneNumberTextBox.Size = new Size(550, 57);
 			phoneNumberTextBox.TabIndex = 2;
+			phoneNumberTextBox.Leave += phoneNumberTextBox_Leave;
 			// 
 			// billingAddressLabel
 			// 
@@ -128,6 +130,7 @@
 			billingHouseNumberTextBox.Name = "billingHouseNumberTextBox";
 			billingHouseNumberTextBox.Size = new Size(550, 57);
 			billingHouseNumberTextBox.TabIndex = 5;
+			billingHouseNumberTextBox.TextChanged += billingHouseNumberTextBox_TextChanged;
 			// 
 			// billingHouseNumberLabel
 			// 
@@ -160,6 +163,7 @@
 			billingStreetNameTextBox.Name = "billingStreetNameTextBox";
 			billingStreetNameTextBox.Size = new Size(550, 57);
 			billingStreetNameTextBox.TabIndex = 6;
+			billingStreetNameTextBox.TextChanged += billingStreetNameTextBox_TextChanged;
 			// 
 			// billingStreetNameLabel
 			// 
@@ -180,6 +184,7 @@
 			billingVillageTextBox.Name = "billingVillageTextBox";
 			billingVillageTextBox.Size = new Size(550, 57);
 			billingVillageTextBox.TabIndex = 7;
+			billingVillageTextBox.TextChanged += billingVillageTextBox_TextChanged;
 			// 
 			// billingVillageLabel
 			// 
@@ -200,6 +205,7 @@
 			billingCityTextBox.Name = "billingCityTextBox";
 			billingCityTextBox.Size = new Size(550, 57);
 			billingCityTextBox.TabIndex = 8;
+			billingCityTextBox.TextChanged += billingCityTextBox_TextChanged;
 			// 
 			// billingCityLabel
 			// 
@@ -220,6 +226,7 @@
 			billingPostcodeTextBox.Name = "billingPostcodeTextBox";
 			billingPostcodeTextBox.Size = new Size(550, 57);
 			billingPostcodeTextBox.TabIndex = 9;
+			billingPostcodeTextBox.TextChanged += billingPostcodeTextBox_TextChanged;
 			// 
 			// billingPostcodeLabel
 			// 
