@@ -156,11 +156,13 @@ namespace ordering_system
 
 		private void customerDetailsChanged(object sender, CustomerDetailsUpdateEventArgs e) // when stuff gets updated in the customer details panel
 		{
+			currentOrder.customerID = e.customerID;
 			currentOrder.orderType = e.orderType;
 			getCustomer(e.customerID);
 			string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString().Trim();
 			if (e.orderType == "Delivery")
 			{
+				currentOrder.addressID = e.addressID;
 				deliveryButton_Click(sender, e);
 				getAddress(e.addressID);
 				string houseNumber = addressDataSet.Tables[0].Rows[0]["houseNumber"].ToString().Trim();

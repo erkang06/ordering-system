@@ -100,8 +100,6 @@ namespace ordering_system
 				updateCustomerDetails.ExecuteNonQuery();
 			}
 
-			//MainMenu.currentOrder.customerID = customerID; // add customerid to running order
-
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
 				checkIfAddressExists();
@@ -163,6 +161,7 @@ namespace ordering_system
 			deliveryCityTextBox.Enabled = true;
 			deliveryPostcodeTextBox.Enabled = true;
 			deliveryDeliveryChargeTextBox.Enabled = true;
+			deliveryAddressDataGridView.Enabled = true;
 		}
 
 		private void collectionButton_Click(object sender, EventArgs e)
@@ -175,6 +174,7 @@ namespace ordering_system
 			deliveryCityTextBox.Enabled = false;
 			deliveryPostcodeTextBox.Enabled = false;
 			deliveryDeliveryChargeTextBox.Enabled =	false;
+			deliveryAddressDataGridView.Enabled = false;
 		}
 
 		private void CustomerDetails_Load(object sender, EventArgs e) // presets whether order type is delivery or collection if form not opened by cust deets panel
@@ -210,15 +210,17 @@ namespace ordering_system
 				billingCityTextBox.Text = customer.Tables[0].Rows[0]["city"].ToString().Trim();
 				billingPostcodeTextBox.Text = customer.Tables[0].Rows[0]["postcode"].ToString().Trim();
 
-				// fill in address dataview
-				SqlDataAdapter getAddresses = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", con);
-				getAddresses.SelectCommand.Parameters.AddWithValue("@CID", customerID);
-				DataSet addresses = new DataSet();
-				getAddresses.Fill(addresses);
-				addressesDataView = new DataView(addresses.Tables[0]);
-				DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
-				deliveryAddressDataGridView.DataSource = addressesDataTable;
-
+				if (deliveryButton.BackColor == Color.Yellow) // deliveries need the address data grid view filling in
+				{
+					SqlDataAdapter getAddresses = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", con);
+					getAddresses.SelectCommand.Parameters.AddWithValue("@CID", customerID);
+					DataSet addresses = new DataSet();
+					getAddresses.Fill(addresses);
+					addressesDataView = new DataView(addresses.Tables[0]);
+					// fill in address dataview
+					DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
+					deliveryAddressDataGridView.DataSource = addressesDataTable;
+				}
 			}
 			con.Close();
 		}
