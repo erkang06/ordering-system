@@ -16,10 +16,31 @@ namespace ordering_system
 	{
 		public static Order currentOrder = new Order();
 		public static List<OrderItem> currentOrderItems = new List<OrderItem>();
-		public static SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
+		// the connection string to the database
+		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
+		DataSet customerDataSet = new DataSet(); // data row for customer
+		DataSet addressDataSet = new DataSet();
 		public MainMenu()
 		{
 			InitializeComponent();
+		}
+
+		private void getCustomer(int customerID) // get customer details from customerid
+		{
+			con.Open();
+			SqlDataAdapter getCustomer = new SqlDataAdapter("SELECT * FROM CustomerTbl WHERE customerID = @CID", con);
+			getCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
+			getCustomer.Fill(customerDataSet);
+			con.Close();
+		}
+
+		private void getAddress(int addressID) // get customer details from customerid
+		{
+			con.Open();
+			SqlDataAdapter getAddress = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE addressID = @AID", con);
+			getAddress.SelectCommand.Parameters.AddWithValue("@AID", addressID);
+			getAddress.Fill(addressDataSet);
+			con.Close();
 		}
 
 		private void deliveryButton_Click(object sender, EventArgs e)
@@ -60,12 +81,11 @@ namespace ordering_system
 			deliveryButton.BackColor = Color.Transparent;
 			if (currentOrder.orderType == "Delivery") // take customer details from delivery and put them into collection
 			{
-				con.Open();
-				DataSet customer = CustomerDetails.getCustomer(currentOrder.customerID);
-				customerDetailsLabel.Text = $"{customer.Tables[0].Rows[0]["phoneNumber"].ToString().Trim()} - {customer.Tables[0].Rows[0]["customerName"].ToString().Trim()}";
+				string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString().Trim();
+				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString().Trim();
+				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
 				currentOrder.orderType = "Collection";
-				currentOrder.addressID = 0;
-				con.Close();
+				currentOrder.addressID = -1;
 			}
 			else if (currentOrder.orderType != "Collection") // if there hasnt been a name set
 			{
@@ -137,18 +157,26 @@ namespace ordering_system
 		private void customerDetailsChanged(object sender, CustomerDetailsUpdateEventArgs e) // when stuff gets updated in the customer details panel
 		{
 			currentOrder.orderType = e.orderType;
+			getCustomer(e.customerID);
+			string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString().Trim();
 			if (e.orderType == "Delivery")
 			{
 				deliveryButton_Click(sender, e);
-				customerDetailsLabel.Text = $"{e.phoneNumber} - {e.houseNumber} {e.streetName} {e.postcode}";
-				deliveryChargePriceLabel.Text = e.deliveryCharge.ToString("0.00"); // edit delivery charge
+				getAddress(e.addressID);
+				string houseNumber = addressDataSet.Tables[0].Rows[0]["houseNumber"].ToString().Trim();
+				string streetName = addressDataSet.Tables[0].Rows[0]["streetName"].ToString().Trim();
+				string postcode = addressDataSet.Tables[0].Rows[0]["postcode"].ToString().Trim();
+				decimal deliveryCharge = Convert.ToDecimal(addressDataSet.Tables[0].Rows[0]["deliveryCharge"]);
+				customerDetailsLabel.Text = $"{phoneNumber} - {houseNumber} {streetName} {postcode}";
+				deliveryChargePriceLabel.Text = deliveryCharge.ToString("0.00"); // edit delivery charge
 				// add subtotal and delivery charge together
-				totalPriceLabel.Text = (Convert.ToDecimal(deliveryChargePriceLabel.Text) + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString("0.00");
+				totalPriceLabel.Text = (deliveryCharge + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString("0.00");
 			}
 			else if (e.orderType == "Collection")
 			{
 				collectionButton_Click(sender, e);
-				customerDetailsLabel.Text = $"{e.phoneNumber} - {e.customerName}";
+				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString().Trim();
+				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
 			}
 		}
 
