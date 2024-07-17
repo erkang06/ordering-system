@@ -243,7 +243,7 @@ namespace ordering_system
 			checkIfCustomerExists();
 			if (customerExists == 0) // phone# not found
 			{
-				MessageBox.Show("Customer with phone number not found in database", "Customer Details");
+				MessageBox.Show("Customer with phone number not found in database", "Ordering System");
 			}
 			else // phone# found
 			{
@@ -253,7 +253,7 @@ namespace ordering_system
 				deleteCustomer.Parameters.AddWithValue("@CID", customerID);
 				deleteCustomer.ExecuteNonQuery();
 				MainMenu.con.Close();
-				MessageBox.Show("Customer deleted", "Customer Details");
+				MessageBox.Show("Customer deleted", "Ordering System");
 			}
 
 		}
@@ -263,7 +263,7 @@ namespace ordering_system
 			checkIfAddressExists();
 			if (addressExists == 0)
 			{
-				MessageBox.Show("Address with house number and postcode not found in database", "Customer Details");
+				MessageBox.Show("Address with house number and postcode not found in database", "Ordering System");
 			}
 			else
 			{
@@ -274,7 +274,7 @@ namespace ordering_system
 				deleteAddress.ExecuteNonQuery();
 				MainMenu.con.Close();
 
-				MessageBox.Show("Address deleted", "Customer Details");
+				MessageBox.Show("Address deleted", "Ordering System");
 			}
 		}
 	}

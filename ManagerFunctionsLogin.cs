@@ -7,11 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Extensions.Configuration;
 
 namespace ordering_system
 {
 	public partial class ManagerFunctionsLogin : Form
 	{
+		string password;
 		public ManagerFunctionsLogin()
 		{
 			InitializeComponent();
@@ -24,7 +26,7 @@ namespace ordering_system
 
 		private void acceptButton_Click(object sender, EventArgs e)
 		{
-			if (passwordTextBox.Text == "password")
+			if (passwordTextBox.Text == password)
 			{
 				ManagerFunctions obj = new ManagerFunctions();
 				obj.Show();
@@ -43,6 +45,19 @@ namespace ordering_system
 			if (e.KeyChar == (char)Keys.Return)
 			{
 				acceptButton_Click((object)sender, e);
+			}
+		}
+
+		private void ManagerFunctionsLogin_Load(object sender, EventArgs e) // get the manager password
+		{
+			try
+			{
+				password = File.ReadAllText(@"./Passwords/ManagerPassword.txt").Trim();
+			}
+			catch // if file doesnt exist, set to default
+			{
+				File.WriteAllText(@"./Passwords/ManagerPassword.txt", "password");
+				MessageBox.Show("Password not found so reset to 'password'", "Ordering system");
 			}
 		}
 	}

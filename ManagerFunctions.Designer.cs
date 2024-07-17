@@ -135,6 +135,7 @@
 			changeLoginButton.TabIndex = 48;
 			changeLoginButton.Text = "Change Login Password";
 			changeLoginButton.UseVisualStyleBackColor = false;
+			changeLoginButton.Click += changeLoginButton_Click;
 			// 
 			// changeManagerPasswordButton
 			// 
@@ -147,6 +148,7 @@
 			changeManagerPasswordButton.TabIndex = 49;
 			changeManagerPasswordButton.Text = "Change Manager Password";
 			changeManagerPasswordButton.UseVisualStyleBackColor = false;
+			changeManagerPasswordButton.Click += changeManagerPasswordButton_Click;
 			// 
 			// ManagerFunctions
 			// 
@@ -166,6 +168,7 @@
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "ManagerFunctions";
 			Text = "Manager Functions";
+			Load += ManagerFunctions_Load;
 			ResumeLayout(false);
 		}
 

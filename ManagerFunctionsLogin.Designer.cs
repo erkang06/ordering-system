@@ -108,6 +108,7 @@
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "ManagerFunctionsLogin";
 			Text = "Please enter the manager password:";
+			Load += ManagerFunctionsLogin_Load;
 			ResumeLayout(false);
 			PerformLayout();
 		}

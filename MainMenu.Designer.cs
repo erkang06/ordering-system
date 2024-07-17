@@ -57,18 +57,19 @@
 			subtotalPriceLabel = new Label();
 			deliveryChargeTextLabel = new Label();
 			subtotalTextLabel = new Label();
-			runningOrderScrollBar = new VScrollBar();
 			commonItemsPanel = new Panel();
 			itemsPanel = new Panel();
 			categoriesPanel = new Panel();
 			paymentPanel = new Panel();
 			viewOrdersPanel = new Panel();
 			timer = new System.Windows.Forms.Timer(components);
+			dataGridView1 = new DataGridView();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
 			itemEditFunctionsPanel.SuspendLayout();
 			runningOrderPanel.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
 			SuspendLayout();
 			// 
 			// customerDetailsPanel
@@ -297,6 +298,7 @@
 			// runningOrderPanel
 			// 
 			runningOrderPanel.BackColor = Color.Maroon;
+			runningOrderPanel.Controls.Add(dataGridView1);
 			runningOrderPanel.Controls.Add(estimatedTimeLabel);
 			runningOrderPanel.Controls.Add(estimatedTimePicker);
 			runningOrderPanel.Controls.Add(totalPriceLabel);
@@ -304,7 +306,6 @@
 			runningOrderPanel.Controls.Add(subtotalPriceLabel);
 			runningOrderPanel.Controls.Add(deliveryChargeTextLabel);
 			runningOrderPanel.Controls.Add(subtotalTextLabel);
-			runningOrderPanel.Controls.Add(runningOrderScrollBar);
 			runningOrderPanel.Location = new Point(0, 160);
 			runningOrderPanel.Margin = new Padding(0);
 			runningOrderPanel.Name = "runningOrderPanel";
@@ -342,10 +343,10 @@
 			totalPriceLabel.BackColor = Color.White;
 			totalPriceLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			totalPriceLabel.ForeColor = Color.DodgerBlue;
-			totalPriceLabel.Location = new Point(431, 580);
+			totalPriceLabel.Location = new Point(430, 580);
 			totalPriceLabel.Name = "totalPriceLabel";
 			totalPriceLabel.RightToLeft = RightToLeft.No;
-			totalPriceLabel.Size = new Size(269, 80);
+			totalPriceLabel.Size = new Size(270, 80);
 			totalPriceLabel.TabIndex = 4;
 			totalPriceLabel.Text = "0000.00";
 			totalPriceLabel.TextAlign = ContentAlignment.MiddleRight;
@@ -399,14 +400,6 @@
 			subtotalTextLabel.Size = new Size(130, 40);
 			subtotalTextLabel.TabIndex = 0;
 			subtotalTextLabel.Text = "Subtotal:";
-			// 
-			// runningOrderScrollBar
-			// 
-			runningOrderScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			runningOrderScrollBar.Location = new Point(670, 0);
-			runningOrderScrollBar.Name = "runningOrderScrollBar";
-			runningOrderScrollBar.Size = new Size(30, 580);
-			runningOrderScrollBar.TabIndex = 0;
 			// 
 			// commonItemsPanel
 			// 
@@ -464,6 +457,18 @@
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
 			// 
+			// dataGridView1
+			// 
+			dataGridView1.BackgroundColor = Color.Maroon;
+			dataGridView1.BorderStyle = BorderStyle.None;
+			dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			dataGridView1.Location = new Point(0, 0);
+			dataGridView1.Name = "dataGridView1";
+			dataGridView1.RowHeadersWidth = 82;
+			dataGridView1.ScrollBars = ScrollBars.Vertical;
+			dataGridView1.Size = new Size(700, 580);
+			dataGridView1.TabIndex = 9;
+			// 
 			// MainMenu
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
@@ -489,6 +494,7 @@
 			managerFunctionsPanel.ResumeLayout(false);
 			itemEditFunctionsPanel.ResumeLayout(false);
 			runningOrderPanel.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
 			ResumeLayout(false);
 		}
 
@@ -504,7 +510,6 @@
 		private Panel categoriesPanel;
 		private Label orderNumberLabel;
 		private Label customerDetailsLabel;
-		private VScrollBar runningOrderScrollBar;
 		private Label subtotalTextLabel;
 		private Label deliveryChargeTextLabel;
 		private Label deliveryChargePriceLabel;
@@ -530,5 +535,6 @@
 		private System.Windows.Forms.Timer timer;
 		private DateTimePicker estimatedTimePicker;
 		private Label estimatedTimeLabel;
+		private DataGridView dataGridView1;
 	}
 }
