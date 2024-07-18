@@ -368,10 +368,10 @@
 			deliveryChargePriceLabel.BackColor = Color.White;
 			deliveryChargePriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryChargePriceLabel.ForeColor = Color.Black;
-			deliveryChargePriceLabel.Location = new Point(139, 620);
+			deliveryChargePriceLabel.Location = new Point(150, 620);
 			deliveryChargePriceLabel.Name = "deliveryChargePriceLabel";
 			deliveryChargePriceLabel.RightToLeft = RightToLeft.Yes;
-			deliveryChargePriceLabel.Size = new Size(140, 40);
+			deliveryChargePriceLabel.Size = new Size(130, 40);
 			deliveryChargePriceLabel.TabIndex = 3;
 			deliveryChargePriceLabel.Text = "0.00";
 			// 
@@ -381,10 +381,10 @@
 			subtotalPriceLabel.BackColor = Color.White;
 			subtotalPriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			subtotalPriceLabel.ForeColor = Color.Black;
-			subtotalPriceLabel.Location = new Point(139, 580);
+			subtotalPriceLabel.Location = new Point(150, 580);
 			subtotalPriceLabel.Name = "subtotalPriceLabel";
 			subtotalPriceLabel.RightToLeft = RightToLeft.Yes;
-			subtotalPriceLabel.Size = new Size(140, 40);
+			subtotalPriceLabel.Size = new Size(130, 40);
 			subtotalPriceLabel.TabIndex = 2;
 			subtotalPriceLabel.Text = "0000.00";
 			// 
@@ -396,7 +396,7 @@
 			deliveryChargeTextLabel.ForeColor = Color.White;
 			deliveryChargeTextLabel.Location = new Point(3, 615);
 			deliveryChargeTextLabel.Name = "deliveryChargeTextLabel";
-			deliveryChargeTextLabel.Size = new Size(130, 40);
+			deliveryChargeTextLabel.Size = new Size(141, 40);
 			deliveryChargeTextLabel.TabIndex = 1;
 			deliveryChargeTextLabel.Text = "Delivery:";
 			// 
@@ -408,7 +408,7 @@
 			subtotalTextLabel.ForeColor = Color.White;
 			subtotalTextLabel.Location = new Point(3, 575);
 			subtotalTextLabel.Name = "subtotalTextLabel";
-			subtotalTextLabel.Size = new Size(130, 40);
+			subtotalTextLabel.Size = new Size(141, 40);
 			subtotalTextLabel.TabIndex = 0;
 			subtotalTextLabel.Text = "Subtotal:";
 			// 

@@ -123,6 +123,7 @@
 			orderSummaryButton.TabIndex = 47;
 			orderSummaryButton.Text = "Order Summary";
 			orderSummaryButton.UseVisualStyleBackColor = false;
+			orderSummaryButton.Click += orderSummaryButton_Click;
 			// 
 			// changeLoginButton
 			// 

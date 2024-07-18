@@ -21,7 +21,7 @@ namespace ordering_system
 
 		private void cancelButton_Click(object sender, EventArgs e)
 		{
-			this.Close();
+			Close();
 		}
 
 		private void acceptButton_Click(object sender, EventArgs e)
@@ -31,7 +31,7 @@ namespace ordering_system
 				ManagerFunctions obj = new ManagerFunctions();
 				obj.Show();
 				obj.TopMost = true;
-				this.Close();
+				Close();
 			}
 			else
 			{

@@ -24,7 +24,7 @@ namespace ordering_system
 
 		private void cancelButton_Click(object sender, EventArgs e)
 		{
-			this.Close();
+			Close();
 		}
 
 		private void exitProgramButton_Click(object sender, EventArgs e)
@@ -34,20 +34,27 @@ namespace ordering_system
 
 		private void changeLoginButton_Click(object sender, EventArgs e)
 		{
-			string loginPassword = Interaction.InputBox("Enter the new login password:", "Manager Functions", "asda");
-			File.WriteAllText(@"./Passwords/LoginPassword.txt", loginPassword);
+			string loginPassword = Interaction.InputBox("Enter the new login password:", "Manager Functions");
+			File.WriteAllText(@"./LoginPassword.txt", loginPassword);
+			MessageBox.Show("Login password has been changed successfully", "Ordering System");
 		}
 
 		private void changeManagerPasswordButton_Click(object sender, EventArgs e)
 		{
-			string managerPassword = Interaction.InputBox("Enter the new manager password:", "Manager Functions", "asda");
-			File.WriteAllText(@"./Passwords/ManagerPassword.txt", managerPassword);
+			string managerPassword = Interaction.InputBox("Enter the new manager password:", "Manager Functions");
+			File.WriteAllText(@"./ManagerPassword.txt", managerPassword);
+			MessageBox.Show("Manager password has been changed successfully", "Ordering System");
 		}
 
 		private void ManagerFunctions_Load(object sender, EventArgs e)
 		{
 			configurationBuilder = new ConfigurationBuilder();
 			configuration = configurationBuilder.AddUserSecrets<ManagerFunctions>().Build();
+		}
+
+		private void orderSummaryButton_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
