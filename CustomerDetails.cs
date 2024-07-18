@@ -18,6 +18,10 @@ namespace ordering_system
 
 		public event CustomerDetailsUpdateHandler CustomerDetailsUpdate;
 
+		public delegate void CustomerDetailsCancelHandler();
+
+		public CustomerDetailsCancelHandler CustomerDetailsCancel;
+
 		int customerID, addressID, customerExists, addressExists;
 		string orderType;
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the 
@@ -157,6 +161,7 @@ namespace ordering_system
 
 		private void cancelAddressButton_Click(object sender, EventArgs e)
 		{
+			CustomerDetailsCancel();
 			Close();
 		}
 

@@ -77,23 +77,4 @@ namespace ordering_system
 			}
 		}
 	}
-
-	// class that lets ordertype be sent from main menu to customer details
-	public class CustomerDetailsOrderTypeEventArgs : EventArgs
-	{
-		public string _orderType;
-
-		public CustomerDetailsOrderTypeEventArgs(string orderType)
-		{
-			_orderType = orderType;
-		}
-
-		public string orderType
-		{
-			get
-			{
-				return _orderType;
-			}
-		}
-	}
 }

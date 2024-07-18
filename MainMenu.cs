@@ -100,7 +100,9 @@ namespace ordering_system
 		private void customerDetailsFormCreate(string orderType = "")
 		{
 			CustomerDetails obj = new CustomerDetails(orderType);
-			obj.CustomerDetailsUpdate += new CustomerDetails.CustomerDetailsUpdateHandler(customerDetailsChanged); // basos update main form when anything in the customer details panel gets updated
+			// basos update main form when anything in the customer details panel gets updated
+			obj.CustomerDetailsUpdate += new CustomerDetails.CustomerDetailsUpdateHandler(customerDetailsChanged);
+			obj.CustomerDetailsCancel += new CustomerDetails.CustomerDetailsCancelHandler(customerDetailsCancelled);
 			obj.Show();
 			//obj.TopMost = true;
 		}
@@ -182,6 +184,25 @@ namespace ordering_system
 				collectionButton_Click(sender, e);
 				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString().Trim();
 				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
+			}
+		}
+
+		private void customerDetailsCancelled() // if you press cancel in customer details panel youve revert to prior order type
+		{
+			collectionButton.BackColor = Color.Transparent;
+			counterButton.BackColor = Color.Transparent;
+			deliveryButton.BackColor = Color.Transparent;
+			if (currentOrder.orderType == "Delivery")
+			{
+				deliveryButton.BackColor = Color.Yellow;
+			}
+			else if (currentOrder.orderType == "Counter")
+			{
+				counterButton.BackColor = Color.Yellow;
+			}
+			else if (currentOrder.orderType == "Collection")
+			{
+				collectionButton.BackColor= Color.Yellow;
 			}
 		}
 
