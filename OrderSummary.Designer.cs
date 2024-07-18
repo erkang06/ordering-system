@@ -29,15 +29,19 @@
 		private void InitializeComponent()
 		{
 			orderSummaryLabel = new Label();
-			dataGridView = new DataGridView();
-			panel1 = new Panel();
+			allOrdersDataGridView = new DataGridView();
 			deliveryChargePriceLabel = new Label();
 			subtotalPriceLabel = new Label();
 			deliveryChargeTextLabel = new Label();
 			subtotalTextLabel = new Label();
 			totalPriceLabel = new Label();
 			totalTextLabel = new Label();
-			((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+			printKitchenTicketButton = new Button();
+			printCustomerTicketButton = new Button();
+			singleOrderDataGridView = new DataGridView();
+			printOrderSummaryButton = new Button();
+			((System.ComponentModel.ISupportInitialize)allOrdersDataGridView).BeginInit();
+			((System.ComponentModel.ISupportInitialize)singleOrderDataGridView).BeginInit();
 			SuspendLayout();
 			// 
 			// orderSummaryLabel
@@ -52,24 +56,17 @@
 			orderSummaryLabel.TabIndex = 43;
 			orderSummaryLabel.Text = "Order Summary";
 			// 
-			// dataGridView
+			// allOrdersDataGridView
 			// 
-			dataGridView.BackgroundColor = Color.Gainsboro;
-			dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridView.Location = new Point(12, 102);
-			dataGridView.Name = "dataGridView";
-			dataGridView.RowHeadersWidth = 82;
-			dataGridView.ScrollBars = ScrollBars.Vertical;
-			dataGridView.Size = new Size(1702, 835);
-			dataGridView.TabIndex = 44;
-			// 
-			// panel1
-			// 
-			panel1.BackColor = Color.Wheat;
-			panel1.Location = new Point(1720, 0);
-			panel1.Name = "panel1";
-			panel1.Size = new Size(200, 1080);
-			panel1.TabIndex = 45;
+			allOrdersDataGridView.BackgroundColor = Color.Gainsboro;
+			allOrdersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			allOrdersDataGridView.Location = new Point(12, 102);
+			allOrdersDataGridView.Name = "allOrdersDataGridView";
+			allOrdersDataGridView.RowHeadersWidth = 82;
+			allOrdersDataGridView.ScrollBars = ScrollBars.Vertical;
+			allOrdersDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			allOrdersDataGridView.Size = new Size(1302, 835);
+			allOrdersDataGridView.TabIndex = 44;
 			// 
 			// deliveryChargePriceLabel
 			// 
@@ -77,12 +74,12 @@
 			deliveryChargePriceLabel.BackColor = Color.White;
 			deliveryChargePriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryChargePriceLabel.ForeColor = Color.Black;
-			deliveryChargePriceLabel.Location = new Point(158, 985);
+			deliveryChargePriceLabel.Location = new Point(176, 985);
 			deliveryChargePriceLabel.Name = "deliveryChargePriceLabel";
 			deliveryChargePriceLabel.RightToLeft = RightToLeft.Yes;
-			deliveryChargePriceLabel.Size = new Size(140, 40);
+			deliveryChargePriceLabel.Size = new Size(150, 40);
 			deliveryChargePriceLabel.TabIndex = 50;
-			deliveryChargePriceLabel.Text = "0.00";
+			deliveryChargePriceLabel.Text = "00.00";
 			// 
 			// subtotalPriceLabel
 			// 
@@ -90,10 +87,10 @@
 			subtotalPriceLabel.BackColor = Color.White;
 			subtotalPriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			subtotalPriceLabel.ForeColor = Color.Black;
-			subtotalPriceLabel.Location = new Point(158, 945);
+			subtotalPriceLabel.Location = new Point(176, 945);
 			subtotalPriceLabel.Name = "subtotalPriceLabel";
 			subtotalPriceLabel.RightToLeft = RightToLeft.Yes;
-			subtotalPriceLabel.Size = new Size(140, 40);
+			subtotalPriceLabel.Size = new Size(150, 40);
 			subtotalPriceLabel.TabIndex = 49;
 			subtotalPriceLabel.Text = "0000.00";
 			// 
@@ -105,7 +102,7 @@
 			deliveryChargeTextLabel.ForeColor = Color.DarkOliveGreen;
 			deliveryChargeTextLabel.Location = new Point(12, 980);
 			deliveryChargeTextLabel.Name = "deliveryChargeTextLabel";
-			deliveryChargeTextLabel.Size = new Size(140, 40);
+			deliveryChargeTextLabel.Size = new Size(158, 40);
 			deliveryChargeTextLabel.TabIndex = 48;
 			deliveryChargeTextLabel.Text = "Delivery:";
 			// 
@@ -117,7 +114,7 @@
 			subtotalTextLabel.ForeColor = Color.DarkOliveGreen;
 			subtotalTextLabel.Location = new Point(12, 940);
 			subtotalTextLabel.Name = "subtotalTextLabel";
-			subtotalTextLabel.Size = new Size(140, 40);
+			subtotalTextLabel.Size = new Size(158, 40);
 			subtotalTextLabel.TabIndex = 47;
 			subtotalTextLabel.Text = "Subtotal:";
 			// 
@@ -127,12 +124,12 @@
 			totalPriceLabel.BackColor = Color.White;
 			totalPriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			totalPriceLabel.ForeColor = Color.Black;
-			totalPriceLabel.Location = new Point(158, 1025);
+			totalPriceLabel.Location = new Point(176, 1025);
 			totalPriceLabel.Name = "totalPriceLabel";
 			totalPriceLabel.RightToLeft = RightToLeft.Yes;
-			totalPriceLabel.Size = new Size(140, 40);
+			totalPriceLabel.Size = new Size(150, 40);
 			totalPriceLabel.TabIndex = 52;
-			totalPriceLabel.Text = "0.00";
+			totalPriceLabel.Text = "0000.00";
 			// 
 			// totalTextLabel
 			// 
@@ -142,9 +139,61 @@
 			totalTextLabel.ForeColor = Color.DarkOliveGreen;
 			totalTextLabel.Location = new Point(12, 1020);
 			totalTextLabel.Name = "totalTextLabel";
-			totalTextLabel.Size = new Size(140, 40);
+			totalTextLabel.Size = new Size(158, 40);
 			totalTextLabel.TabIndex = 51;
 			totalTextLabel.Text = "Total:";
+			// 
+			// printKitchenTicketButton
+			// 
+			printKitchenTicketButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			printKitchenTicketButton.BackColor = SystemColors.Control;
+			printKitchenTicketButton.FlatStyle = FlatStyle.Flat;
+			printKitchenTicketButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+			printKitchenTicketButton.Location = new Point(608, 945);
+			printKitchenTicketButton.Name = "printKitchenTicketButton";
+			printKitchenTicketButton.Size = new Size(350, 123);
+			printKitchenTicketButton.TabIndex = 53;
+			printKitchenTicketButton.Text = "Print Kitchen Ticket";
+			printKitchenTicketButton.UseVisualStyleBackColor = false;
+			// 
+			// printCustomerTicketButton
+			// 
+			printCustomerTicketButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			printCustomerTicketButton.BackColor = SystemColors.Control;
+			printCustomerTicketButton.FlatStyle = FlatStyle.Flat;
+			printCustomerTicketButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+			printCustomerTicketButton.Location = new Point(964, 945);
+			printCustomerTicketButton.Name = "printCustomerTicketButton";
+			printCustomerTicketButton.Size = new Size(350, 123);
+			printCustomerTicketButton.TabIndex = 54;
+			printCustomerTicketButton.Text = "Print Customer Ticket";
+			printCustomerTicketButton.UseVisualStyleBackColor = false;
+			// 
+			// singleOrderDataGridView
+			// 
+			singleOrderDataGridView.Anchor = AnchorStyles.Right;
+			singleOrderDataGridView.BackgroundColor = Color.White;
+			singleOrderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			singleOrderDataGridView.Location = new Point(1320, 0);
+			singleOrderDataGridView.Name = "singleOrderDataGridView";
+			singleOrderDataGridView.RowHeadersWidth = 82;
+			singleOrderDataGridView.ScrollBars = ScrollBars.Vertical;
+			singleOrderDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			singleOrderDataGridView.Size = new Size(600, 1080);
+			singleOrderDataGridView.TabIndex = 55;
+			// 
+			// printOrderSummaryButton
+			// 
+			printOrderSummaryButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			printOrderSummaryButton.BackColor = SystemColors.Control;
+			printOrderSummaryButton.FlatStyle = FlatStyle.Flat;
+			printOrderSummaryButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+			printOrderSummaryButton.Location = new Point(332, 945);
+			printOrderSummaryButton.Name = "printOrderSummaryButton";
+			printOrderSummaryButton.Size = new Size(270, 123);
+			printOrderSummaryButton.TabIndex = 56;
+			printOrderSummaryButton.Text = "Print Summary";
+			printOrderSummaryButton.UseVisualStyleBackColor = false;
 			// 
 			// OrderSummary
 			// 
@@ -152,32 +201,39 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(printOrderSummaryButton);
+			Controls.Add(singleOrderDataGridView);
+			Controls.Add(printCustomerTicketButton);
+			Controls.Add(printKitchenTicketButton);
 			Controls.Add(totalPriceLabel);
 			Controls.Add(totalTextLabel);
 			Controls.Add(deliveryChargePriceLabel);
 			Controls.Add(subtotalPriceLabel);
 			Controls.Add(deliveryChargeTextLabel);
 			Controls.Add(subtotalTextLabel);
-			Controls.Add(panel1);
-			Controls.Add(dataGridView);
+			Controls.Add(allOrdersDataGridView);
 			Controls.Add(orderSummaryLabel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "OrderSummary";
 			Text = "OrderSummary";
-			((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+			((System.ComponentModel.ISupportInitialize)allOrdersDataGridView).EndInit();
+			((System.ComponentModel.ISupportInitialize)singleOrderDataGridView).EndInit();
 			ResumeLayout(false);
 		}
 
 		#endregion
 
 		private Label orderSummaryLabel;
-		private DataGridView dataGridView;
-		private Panel panel1;
+		private DataGridView allOrdersDataGridView;
 		private Label deliveryChargePriceLabel;
 		private Label subtotalPriceLabel;
 		private Label deliveryChargeTextLabel;
 		private Label subtotalTextLabel;
 		private Label totalPriceLabel;
 		private Label totalTextLabel;
+		private Button printKitchenTicketButton;
+		private Button printCustomerTicketButton;
+		private DataGridView singleOrderDataGridView;
+		private Button printOrderSummaryButton;
 	}
 }
