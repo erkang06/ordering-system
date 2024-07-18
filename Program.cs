@@ -39,6 +39,7 @@ namespace ordering_system
 		public decimal discount;
 	}
 
+	// class that lets customer details be sent from customer details to main menu
 	public class CustomerDetailsUpdateEventArgs : EventArgs
 	{
 		private int _customerID;
@@ -73,6 +74,25 @@ namespace ordering_system
 			get
 			{
 				return _customerID;
+			}
+		}
+	}
+
+	// class that lets ordertype be sent from main menu to customer details
+	public class CustomerDetailsOrderTypeEventArgs : EventArgs
+	{
+		public string _orderType;
+
+		public CustomerDetailsOrderTypeEventArgs(string orderType)
+		{
+			_orderType = orderType;
+		}
+
+		public string orderType
+		{
+			get
+			{
+				return _orderType;
 			}
 		}
 	}

@@ -14,8 +14,8 @@ namespace ordering_system
 {
 	public partial class MainMenu : Form
 	{
-		public static Order currentOrder = new Order();
-		public static List<OrderItem> currentOrderItems = new List<OrderItem>();
+		Order currentOrder = new Order();
+		List<OrderItem> currentOrderItems = new List<OrderItem>();
 		// the connection string to the database
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
 		DataSet customerDataSet = new DataSet(); // data row for customer
@@ -51,8 +51,7 @@ namespace ordering_system
 			collectionButton.BackColor = Color.Transparent;
 			if (currentOrder.orderType != "Delivery") // if there hasnt been an address set
 			{
-				currentOrder.orderType = "Delivery";
-				customerDetails_Click(sender, e);
+				customerDetailsFormCreate("Delivery");
 			}
 		}
 
@@ -89,9 +88,21 @@ namespace ordering_system
 			}
 			else if (currentOrder.orderType != "Collection") // if there hasnt been a name set
 			{
-				currentOrder.orderType = "Collection";
-				customerDetails_Click(sender, e);
+				customerDetailsFormCreate("Collection");
 			}
+		}
+
+		private void customerDetails_Click(object sender, EventArgs e)
+		{
+			customerDetailsFormCreate();
+		}
+
+		private void customerDetailsFormCreate(string orderType = "")
+		{
+			CustomerDetails obj = new CustomerDetails(orderType);
+			obj.CustomerDetailsUpdate += new CustomerDetails.CustomerDetailsUpdateHandler(customerDetailsChanged); // basos update main form when anything in the customer details panel gets updated
+			obj.Show();
+			//obj.TopMost = true;
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
@@ -146,14 +157,6 @@ namespace ordering_system
 			obj.TopMost = true;
 		}
 
-		private void customerDetails_Click(object sender, EventArgs e)
-		{
-			CustomerDetails obj = new CustomerDetails();
-			obj.CustomerDetailsUpdate += new CustomerDetails.CustomerDetailsUpdateHandler(customerDetailsChanged); // basos update main form when anything in the customer details panel gets updated
-			obj.Show();
-			//obj.TopMost = true;
-		}
-
 		private void customerDetailsChanged(object sender, CustomerDetailsUpdateEventArgs e) // when stuff gets updated in the customer details panel
 		{
 			currentOrder.customerID = e.customerID;
@@ -171,7 +174,7 @@ namespace ordering_system
 				decimal deliveryCharge = Convert.ToDecimal(addressDataSet.Tables[0].Rows[0]["deliveryCharge"]);
 				customerDetailsLabel.Text = $"{phoneNumber} - {houseNumber} {streetName} {postcode}";
 				deliveryChargePriceLabel.Text = deliveryCharge.ToString("0.00"); // edit delivery charge
-				// add subtotal and delivery charge together
+																																				 // add subtotal and delivery charge together
 				totalPriceLabel.Text = (deliveryCharge + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString("0.00");
 			}
 			else if (e.orderType == "Collection")

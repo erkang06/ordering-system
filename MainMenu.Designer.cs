@@ -50,6 +50,7 @@
 			priceEditButton = new Button();
 			memoButton = new Button();
 			runningOrderPanel = new Panel();
+			dataGridView1 = new DataGridView();
 			estimatedTimeLabel = new Label();
 			estimatedTimePicker = new DateTimePicker();
 			totalPriceLabel = new Label();
@@ -63,7 +64,6 @@
 			paymentPanel = new Panel();
 			viewOrdersPanel = new Panel();
 			timer = new System.Windows.Forms.Timer(components);
-			dataGridView1 = new DataGridView();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -82,7 +82,6 @@
 			customerDetailsPanel.Name = "customerDetailsPanel";
 			customerDetailsPanel.Size = new Size(1110, 80);
 			customerDetailsPanel.TabIndex = 0;
-			customerDetailsPanel.Click += customerDetails_Click;
 			// 
 			// customerDetailsLabel
 			// 
@@ -312,6 +311,18 @@
 			runningOrderPanel.Size = new Size(700, 660);
 			runningOrderPanel.TabIndex = 2;
 			// 
+			// dataGridView1
+			// 
+			dataGridView1.BackgroundColor = Color.Maroon;
+			dataGridView1.BorderStyle = BorderStyle.None;
+			dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			dataGridView1.Location = new Point(0, 0);
+			dataGridView1.Name = "dataGridView1";
+			dataGridView1.RowHeadersWidth = 82;
+			dataGridView1.ScrollBars = ScrollBars.Vertical;
+			dataGridView1.Size = new Size(700, 580);
+			dataGridView1.TabIndex = 9;
+			// 
 			// estimatedTimeLabel
 			// 
 			estimatedTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -457,18 +468,6 @@
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
 			// 
-			// dataGridView1
-			// 
-			dataGridView1.BackgroundColor = Color.Maroon;
-			dataGridView1.BorderStyle = BorderStyle.None;
-			dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridView1.Location = new Point(0, 0);
-			dataGridView1.Name = "dataGridView1";
-			dataGridView1.RowHeadersWidth = 82;
-			dataGridView1.ScrollBars = ScrollBars.Vertical;
-			dataGridView1.Size = new Size(700, 580);
-			dataGridView1.TabIndex = 9;
-			// 
 			// MainMenu
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
@@ -524,7 +523,6 @@
 		private Button increaseQuantityButton;
 		private Button decreaseQuantityButton;
 		private Button priceEditButton;
-		private Button timeEditButton;
 		private Panel paymentPanel;
 		private Label totalPriceLabel;
 		private Button managerFunctionsButton;

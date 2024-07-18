@@ -553,7 +553,6 @@
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "CustomerDetails";
 			Text = "Customer Details";
-			Load += CustomerDetails_Load;
 			((System.ComponentModel.ISupportInitialize)deliveryAddressDataGridView).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
@@ -561,7 +560,6 @@
 
 		#endregion
 
-		private Label SubtotalPriceLabel;
 		private Label CustomerNameLabel;
 		private Label deliveryCityLabel;
 		private Label phoneNumberLabel;

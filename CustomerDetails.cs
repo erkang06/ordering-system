@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Xml.Serialization;
 
 namespace ordering_system
 {
@@ -22,9 +23,17 @@ namespace ordering_system
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the 
 		// the connection string to the database
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
-		public CustomerDetails()
+		public CustomerDetails(string orderType)
 		{
 			InitializeComponent();
+			if (orderType == "Delivery")
+			{
+				changeToDelivery();
+			}
+			else if (orderType == "Collection")
+			{
+				changeToCollection();
+			}
 		}
 
 		private void findCustomerID() // find customerid from phonenumber
@@ -56,7 +65,7 @@ namespace ordering_system
 			checkIfAddressExists.Parameters.AddWithValue("@CID", customerID);
 			checkIfAddressExists.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
 			checkIfAddressExists.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
-			int addressExists = (int)checkIfAddressExists.ExecuteScalar();
+			addressExists = (int)checkIfAddressExists.ExecuteScalar();
 		}
 
 		private DataSet getCustomer(int customerID) // get customer details from customerid
@@ -153,6 +162,12 @@ namespace ordering_system
 
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
+			// this is weird to allow deliveries passed through main menu to change customer details too
+			changeToDelivery();
+		}
+
+		private void changeToDelivery()
+		{
 			deliveryButton.BackColor = Color.Yellow;
 			collectionButton.BackColor = Color.Transparent;
 			deliveryHouseNumberTextBox.Enabled = true;
@@ -166,6 +181,12 @@ namespace ordering_system
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
+			// this is weird to allow collections passed through main menu to change customer details too
+			changeToCollection();
+		}
+
+		private void changeToCollection()
+		{
 			collectionButton.BackColor = Color.Yellow;
 			deliveryButton.BackColor = Color.Transparent;
 			deliveryHouseNumberTextBox.Enabled = false;
@@ -173,20 +194,8 @@ namespace ordering_system
 			deliveryVillageTextBox.Enabled = false;
 			deliveryCityTextBox.Enabled = false;
 			deliveryPostcodeTextBox.Enabled = false;
-			deliveryDeliveryChargeTextBox.Enabled =	false;
+			deliveryDeliveryChargeTextBox.Enabled = false;
 			deliveryAddressDataGridView.Enabled = false;
-		}
-
-		private void CustomerDetails_Load(object sender, EventArgs e) // presets whether order type is delivery or collection if form not opened by cust deets panel
-		{
-			if (MainMenu.currentOrder.orderType == "Delivery")
-			{
-				deliveryButton_Click(sender, e);
-			}
-			else if (MainMenu.currentOrder.orderType == "Collection")
-			{
-				collectionButton_Click(sender, e);
-			}
 		}
 
 		private void findCustomerButton_Click(object sender, EventArgs e) // wtf help xoxo
@@ -227,7 +236,8 @@ namespace ordering_system
 
 		private void billingAsDeliveryCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			if (billingAsDeliveryCheckBox.Checked == true)
+			// if box is checked and is acc a delivery
+			if (billingAsDeliveryCheckBox.Checked == true && deliveryButton.BackColor == Color.Yellow)
 			{
 				deliveryHouseNumberTextBox.Text = billingHouseNumberTextBox.Text;
 				deliveryStreetNameTextBox.Text = billingStreetNameTextBox.Text;
