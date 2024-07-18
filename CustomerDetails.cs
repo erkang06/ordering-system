@@ -25,7 +25,7 @@ namespace ordering_system
 		int customerID, addressID, customerExists, addressExists;
 		string orderType;
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the 
-		// the connection string to the database
+																// the connection string to the database
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
 		public CustomerDetails(string orderType)
 		{
@@ -81,11 +81,29 @@ namespace ordering_system
 			return customer;
 		}
 
+		private bool areAllCustomerFieldsFilled() // checks if all required fields have been filled in
+		{
+			if (customerNameTextBox.Text != "" && phoneNumberTextBox.Text != "" && billingHouseNumberTextBox.Text != "" && billingStreetNameTextBox.Text != "" && billingCityTextBox.Text != "" && billingPostcodeTextBox.Text != "")
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool areAllAddressFieldsFilled() // checks if all required fields have been filled in
+		{
+			if (deliveryHouseNumberTextBox.Text != "" && deliveryStreetNameTextBox.Text != "" && deliveryCityTextBox.Text != "" && deliveryPostcodeTextBox.Text != "" && deliveryDeliveryChargeTextBox.Text != "")
+			{
+				return true;
+			}
+			return false;
+		}
+
 		private void acceptAddressButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
 			checkIfCustomerExists();
-			if (customerExists == 0) // if customer doesnt alr exist in database
+			if (customerExists == 0 && areAllCustomerFieldsFilled() == true) // if customer doesnt alr exist in database
 			{
 				// add customer details to database
 				SqlCommand addCustomerToDatabase = new SqlCommand("INSERT INTO CustomerTbl(customerName, phoneNumber, houseNumber, streetName, village, city, postcode) VALUES(@CN, @PN, @HN, @SN, @VL, @CT, @PC)", con);
@@ -99,7 +117,7 @@ namespace ordering_system
 				addCustomerToDatabase.ExecuteNonQuery();
 				findCustomerID();
 			}
-			else // update just in case details have changed
+			else if (areAllCustomerFieldsFilled() == true) // update just in case details have changed
 			{
 				findCustomerID();
 				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
@@ -112,12 +130,17 @@ namespace ordering_system
 				updateCustomerDetails.Parameters.AddWithValue("@CID", customerID);
 				updateCustomerDetails.ExecuteNonQuery();
 			}
+			else // cant continue w/out all fields filled in
+			{
+				MessageBox.Show("Not all customer fields filled in", "Ordering System");
+				return;
+			}
 
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
 				checkIfAddressExists();
 
-				if (addressExists == 0) // address doesnt exist in addresstbl
+				if (addressExists == 0 && areAllAddressFieldsFilled() == true) // address doesnt exist in addresstbl
 				{
 					// add customer details to database
 					SqlCommand addAddressToDatabase = new SqlCommand("INSERT INTO AddressTbl(customerID, houseNumber, streetName, village, city, postcode, deliveryCharge) VALUES(@CID, @HN, @SN, @VL, @CT, @PC, @DC)", con);
@@ -131,7 +154,7 @@ namespace ordering_system
 					addAddressToDatabase.ExecuteNonQuery();
 					findAddressID();
 				}
-				else // update just in case details have changed
+				else if (areAllAddressFieldsFilled() == true) // update just in case details have changed
 				{
 					findAddressID();
 					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET customerID = @CID, houseNumber = @HN, streetName = @SN, village = @VL, @city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
@@ -144,6 +167,11 @@ namespace ordering_system
 					updateDeliveryAddress.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
 					updateDeliveryAddress.Parameters.AddWithValue("@AID", addressID);
 					updateDeliveryAddress.ExecuteNonQuery();
+				}
+				else // cant continue w/out all fields filled in
+				{
+					MessageBox.Show("Not all customer fields filled in", "Ordering System");
+					return;
 				}
 				orderType = "Delivery";
 				// send delivery details back to main menu
@@ -324,7 +352,7 @@ namespace ordering_system
 			}
 		}
 
-		private void billingHouseNumberTextBox_TextChanged(object sender, EventArgs e)
+		private void billingHouseNumberTextBox_Leave(object sender, EventArgs e)
 		{
 			if (billingHouseNumberTextBox.Text.Length > 30) // if house number too long for database
 			{
@@ -333,16 +361,16 @@ namespace ordering_system
 			}
 		}
 
-		private void billingStreetNameTextBox_TextChanged(object sender, EventArgs e)
+		private void billingStreetNameTextBox_Leave(object sender, EventArgs e)
 		{
-			if (billingStreetNameTextBox.Text.Length > 50) // if phone# too long for database
+			if (billingStreetNameTextBox.Text.Length > 50) // if street name too long for database
 			{
 				MessageBox.Show("Street name too long", "Ordering System");
 				billingStreetNameTextBox.Focus();
 			}
 		}
 
-		private void billingVillageTextBox_TextChanged(object sender, EventArgs e)
+		private void billingVillageTextBox_Leave(object sender, EventArgs e)
 		{
 			if (billingVillageTextBox.Text.Length > 30) // if village too long for database
 			{
@@ -351,7 +379,7 @@ namespace ordering_system
 			}
 		}
 
-		private void billingCityTextBox_TextChanged(object sender, EventArgs e)
+		private void billingCityTextBox_Leave(object sender, EventArgs e)
 		{
 			if (billingCityTextBox.Text.Length > 30) // if city too long for database
 			{
@@ -360,12 +388,70 @@ namespace ordering_system
 			}
 		}
 
-		private void billingPostcodeTextBox_TextChanged(object sender, EventArgs e)
+		private void billingPostcodeTextBox_Leave(object sender, EventArgs e)
 		{
 			if (billingPostcodeTextBox.Text.Length > 10) // if postcode too long for database
 			{
 				MessageBox.Show("Postcode too long", "Ordering System");
 				billingPostcodeTextBox.Focus();
+			}
+		}
+
+		private void deliveryHouseNumberTextBox_Leave(object sender, EventArgs e)
+		{
+			if (deliveryHouseNumberTextBox.Text.Length > 30) // if house number too long for database
+			{
+				MessageBox.Show("House number too long", "Ordering System");
+				deliveryHouseNumberTextBox.Focus();
+			}
+		}
+
+		private void deliveryStreetNameTextBox_Leave(object sender, EventArgs e)
+		{
+			if (deliveryHouseNumberTextBox.Text.Length > 50) // if street name too long for database
+			{
+				MessageBox.Show("Street name too long", "Ordering System");
+				deliveryHouseNumberTextBox.Focus();
+			}
+		}
+
+		private void deliveryVillageTextBox_Leave(object sender, EventArgs e)
+		{
+			if (deliveryVillageTextBox.Text.Length > 30) // if village too long for database
+			{
+				MessageBox.Show("Village too long", "Ordering System");
+				deliveryVillageTextBox.Focus();
+			}
+		}
+
+		private void deliveryCityTextBox_Leave(object sender, EventArgs e)
+		{
+			if (deliveryCityTextBox.Text.Length > 30) // if city too long for database
+			{
+				MessageBox.Show("City too long", "Ordering System");
+				deliveryCityTextBox.Focus();
+			}
+		}
+
+		private void deliveryPostcodeTextBox_Leave(object sender, EventArgs e)
+		{
+			if (deliveryPostcodeTextBox.Text.Length > 10) // if post too long for database
+			{
+				MessageBox.Show("Postcode too long", "Ordering System");
+				deliveryPostcodeTextBox.Focus();
+			}
+		}
+
+		private void deliveryDeliveryChargeTextBox_Leave(object sender, EventArgs e)
+		{
+			try
+			{
+				Convert.ToDecimal(deliveryDeliveryChargeTextBox); // check if value is acc decimal
+			}
+			catch // not decimal
+			{
+				MessageBox.Show("Category index not an decimal", "Ordering System");
+				deliveryDeliveryChargeTextBox.Focus();
 			}
 		}
 	}

@@ -130,7 +130,7 @@
 			billingHouseNumberTextBox.Name = "billingHouseNumberTextBox";
 			billingHouseNumberTextBox.Size = new Size(550, 57);
 			billingHouseNumberTextBox.TabIndex = 5;
-			billingHouseNumberTextBox.TextChanged += billingHouseNumberTextBox_TextChanged;
+			billingHouseNumberTextBox.Leave += billingHouseNumberTextBox_Leave;
 			// 
 			// billingHouseNumberLabel
 			// 
@@ -163,7 +163,7 @@
 			billingStreetNameTextBox.Name = "billingStreetNameTextBox";
 			billingStreetNameTextBox.Size = new Size(550, 57);
 			billingStreetNameTextBox.TabIndex = 6;
-			billingStreetNameTextBox.TextChanged += billingStreetNameTextBox_TextChanged;
+			billingStreetNameTextBox.Leave += billingStreetNameTextBox_Leave;
 			// 
 			// billingStreetNameLabel
 			// 
@@ -184,7 +184,7 @@
 			billingVillageTextBox.Name = "billingVillageTextBox";
 			billingVillageTextBox.Size = new Size(550, 57);
 			billingVillageTextBox.TabIndex = 7;
-			billingVillageTextBox.TextChanged += billingVillageTextBox_TextChanged;
+			billingVillageTextBox.Leave += billingVillageTextBox_Leave;
 			// 
 			// billingVillageLabel
 			// 
@@ -205,7 +205,7 @@
 			billingCityTextBox.Name = "billingCityTextBox";
 			billingCityTextBox.Size = new Size(550, 57);
 			billingCityTextBox.TabIndex = 8;
-			billingCityTextBox.TextChanged += billingCityTextBox_TextChanged;
+			billingCityTextBox.Leave += billingCityTextBox_Leave;
 			// 
 			// billingCityLabel
 			// 
@@ -226,7 +226,7 @@
 			billingPostcodeTextBox.Name = "billingPostcodeTextBox";
 			billingPostcodeTextBox.Size = new Size(550, 57);
 			billingPostcodeTextBox.TabIndex = 9;
-			billingPostcodeTextBox.TextChanged += billingPostcodeTextBox_TextChanged;
+			billingPostcodeTextBox.Leave += billingPostcodeTextBox_Leave;
 			// 
 			// billingPostcodeLabel
 			// 
@@ -248,6 +248,7 @@
 			deliveryPostcodeTextBox.Name = "deliveryPostcodeTextBox";
 			deliveryPostcodeTextBox.Size = new Size(550, 57);
 			deliveryPostcodeTextBox.TabIndex = 19;
+			deliveryPostcodeTextBox.Leave += deliveryPostcodeTextBox_Leave;
 			// 
 			// deliveryPostcodeLabel
 			// 
@@ -270,6 +271,7 @@
 			deliveryCityTextBox.Name = "deliveryCityTextBox";
 			deliveryCityTextBox.Size = new Size(550, 57);
 			deliveryCityTextBox.TabIndex = 18;
+			deliveryCityTextBox.Leave += deliveryCityTextBox_Leave;
 			// 
 			// deliveryCityLabel
 			// 
@@ -292,6 +294,7 @@
 			deliveryVillageTextBox.Name = "deliveryVillageTextBox";
 			deliveryVillageTextBox.Size = new Size(550, 57);
 			deliveryVillageTextBox.TabIndex = 17;
+			deliveryVillageTextBox.Leave += deliveryVillageTextBox_Leave;
 			// 
 			// deliveryVillageLabel
 			// 
@@ -314,6 +317,7 @@
 			deliveryStreetNameTextBox.Name = "deliveryStreetNameTextBox";
 			deliveryStreetNameTextBox.Size = new Size(550, 57);
 			deliveryStreetNameTextBox.TabIndex = 16;
+			deliveryStreetNameTextBox.Leave += deliveryStreetNameTextBox_Leave;
 			// 
 			// deliveryStreetNameLabel
 			// 
@@ -336,6 +340,7 @@
 			deliveryHouseNumberTextBox.Name = "deliveryHouseNumberTextBox";
 			deliveryHouseNumberTextBox.Size = new Size(550, 57);
 			deliveryHouseNumberTextBox.TabIndex = 15;
+			deliveryHouseNumberTextBox.Leave += deliveryHouseNumberTextBox_Leave;
 			// 
 			// deliveryHouseNumberLabel
 			// 
@@ -398,6 +403,7 @@
 			deliveryDeliveryChargeTextBox.Name = "deliveryDeliveryChargeTextBox";
 			deliveryDeliveryChargeTextBox.Size = new Size(550, 57);
 			deliveryDeliveryChargeTextBox.TabIndex = 20;
+			deliveryDeliveryChargeTextBox.Leave += deliveryDeliveryChargeTextBox_Leave;
 			// 
 			// deliveryDeliveryChargeLabel
 			// 
