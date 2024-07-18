@@ -23,7 +23,6 @@ namespace ordering_system
 		public CustomerDetailsCancelHandler CustomerDetailsCancel;
 
 		int customerID, addressID;
-		string orderType;
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the 
 																// the connection string to the database
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
@@ -145,6 +144,7 @@ namespace ordering_system
 				return;
 			}
 
+			string orderType = "";
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
 
