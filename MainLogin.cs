@@ -45,7 +45,7 @@ namespace ordering_system
 		{
 			if (e.KeyChar == (char)Keys.Return)
 			{
-				acceptButton_Click((object)sender, e);
+				acceptButton_Click(sender, e);
 			}
 		}
 

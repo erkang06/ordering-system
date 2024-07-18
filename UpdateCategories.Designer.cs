@@ -35,9 +35,9 @@
 			categoryNameLabel = new Label();
 			addCategoryButton = new Button();
 			updateCategoryButton = new Button();
-			deleteCategoryButton = new Button();
 			categoryIndexTextBox = new TextBox();
 			categoryIndexLabel = new Label();
+			deleteCategoryButton = new Button();
 			((System.ComponentModel.ISupportInitialize)categoryDataGridView).BeginInit();
 			SuspendLayout();
 			// 
@@ -101,10 +101,11 @@
 			// 
 			// addCategoryButton
 			// 
+			addCategoryButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			addCategoryButton.BackColor = SystemColors.Control;
 			addCategoryButton.FlatStyle = FlatStyle.Flat;
 			addCategoryButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			addCategoryButton.Location = new Point(352, 515);
+			addCategoryButton.Location = new Point(12, 816);
 			addCategoryButton.Name = "addCategoryButton";
 			addCategoryButton.Size = new Size(400, 80);
 			addCategoryButton.TabIndex = 47;
@@ -114,29 +115,17 @@
 			// 
 			// updateCategoryButton
 			// 
+			updateCategoryButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			updateCategoryButton.BackColor = SystemColors.Control;
 			updateCategoryButton.FlatStyle = FlatStyle.Flat;
 			updateCategoryButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			updateCategoryButton.Location = new Point(352, 601);
+			updateCategoryButton.Location = new Point(12, 902);
 			updateCategoryButton.Name = "updateCategoryButton";
 			updateCategoryButton.Size = new Size(400, 80);
 			updateCategoryButton.TabIndex = 48;
 			updateCategoryButton.Text = "Update Category";
 			updateCategoryButton.UseVisualStyleBackColor = false;
 			updateCategoryButton.Click += updateCategoryButton_Click;
-			// 
-			// deleteCategoryButton
-			// 
-			deleteCategoryButton.BackColor = SystemColors.Control;
-			deleteCategoryButton.FlatStyle = FlatStyle.Flat;
-			deleteCategoryButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			deleteCategoryButton.Location = new Point(352, 687);
-			deleteCategoryButton.Name = "deleteCategoryButton";
-			deleteCategoryButton.Size = new Size(400, 80);
-			deleteCategoryButton.TabIndex = 49;
-			deleteCategoryButton.Text = "Delete Category";
-			deleteCategoryButton.UseVisualStyleBackColor = false;
-			deleteCategoryButton.Click += deleteCategoryButton_Click;
 			// 
 			// categoryIndexTextBox
 			// 
@@ -158,6 +147,20 @@
 			categoryIndexLabel.Size = new Size(350, 50);
 			categoryIndexLabel.TabIndex = 51;
 			categoryIndexLabel.Text = "Category Index:";
+			// 
+			// deleteCategoryButton
+			// 
+			deleteCategoryButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			deleteCategoryButton.BackColor = SystemColors.Control;
+			deleteCategoryButton.FlatStyle = FlatStyle.Flat;
+			deleteCategoryButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteCategoryButton.Location = new Point(12, 988);
+			deleteCategoryButton.Name = "deleteCategoryButton";
+			deleteCategoryButton.Size = new Size(400, 80);
+			deleteCategoryButton.TabIndex = 49;
+			deleteCategoryButton.Text = "Delete Category";
+			deleteCategoryButton.UseVisualStyleBackColor = false;
+			deleteCategoryButton.Click += deleteCategoryButton_Click;
 			// 
 			// UpdateCategories
 			// 
@@ -193,8 +196,8 @@
 		private Label categoryNameLabel;
 		private Button addCategoryButton;
 		private Button updateCategoryButton;
-		private Button deleteCategoryButton;
 		private TextBox categoryIndexTextBox;
 		private Label categoryIndexLabel;
+		private Button deleteCategoryButton;
 	}
 }
