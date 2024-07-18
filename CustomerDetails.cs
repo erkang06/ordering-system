@@ -22,7 +22,7 @@ namespace ordering_system
 
 		public CustomerDetailsCancelHandler CustomerDetailsCancel;
 
-		int customerID, addressID, customerExists, addressExists;
+		int customerID, addressID;
 		string orderType;
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the 
 																// the connection string to the database
@@ -56,20 +56,30 @@ namespace ordering_system
 			addressID = (int)findAddressID.ExecuteScalar();
 		}
 
-		private void checkIfCustomerExists() // checks if customer exists in database w/ same phone number - output = # of customers w/ phone number
+		private bool doesCustomerExist() // checks if customer exists in database w/ same phone number
 		{
 			SqlCommand checkIfCustomerExists = new SqlCommand("SELECT COUNT(*) FROM CustomerTbl WHERE phoneNumber = @PN", con);
 			checkIfCustomerExists.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
-			customerExists = (int)checkIfCustomerExists.ExecuteScalar();
+			int customerExists = (int)checkIfCustomerExists.ExecuteScalar();
+			if (customerExists == 0)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		private void checkIfAddressExists() // see if address exists for customerid w/ same house # and postcode
+		private bool doesAddressExist() // see if address exists for customerid w/ same house # and postcode
 		{
 			SqlCommand checkIfAddressExists = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE CustomerID = @CID AND houseNumber = @HN AND postcode = @PC", con);
 			checkIfAddressExists.Parameters.AddWithValue("@CID", customerID);
 			checkIfAddressExists.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
 			checkIfAddressExists.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
-			addressExists = (int)checkIfAddressExists.ExecuteScalar();
+			int addressExists = (int)checkIfAddressExists.ExecuteScalar();
+			if (addressExists == 0)
+			{
+				return false;
+			}
+			return true;
 		}
 
 		private DataSet getCustomer(int customerID) // get customer details from customerid
@@ -102,8 +112,7 @@ namespace ordering_system
 		private void acceptAddressButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			checkIfCustomerExists();
-			if (customerExists == 0 && areAllCustomerFieldsFilled() == true) // if customer doesnt alr exist in database
+			if (doesCustomerExist() == false && areAllCustomerFieldsFilled() == true) // if customer doesnt alr exist in database
 			{
 				// add customer details to database
 				SqlCommand addCustomerToDatabase = new SqlCommand("INSERT INTO CustomerTbl(customerName, phoneNumber, houseNumber, streetName, village, city, postcode) VALUES(@CN, @PN, @HN, @SN, @VL, @CT, @PC)", con);
@@ -138,9 +147,8 @@ namespace ordering_system
 
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
-				checkIfAddressExists();
 
-				if (addressExists == 0 && areAllAddressFieldsFilled() == true) // address doesnt exist in addresstbl
+				if (doesAddressExist() == false && areAllAddressFieldsFilled() == true) // address doesnt exist in addresstbl
 				{
 					// add customer details to database
 					SqlCommand addAddressToDatabase = new SqlCommand("INSERT INTO AddressTbl(customerID, houseNumber, streetName, village, city, postcode, deliveryCharge) VALUES(@CID, @HN, @SN, @VL, @CT, @PC, @DC)", con);
@@ -234,8 +242,7 @@ namespace ordering_system
 		private void findCustomerButton_Click(object sender, EventArgs e) // wtf help xoxo
 		{
 			con.Open();
-			checkIfCustomerExists();
-			if (customerExists == 0) // if no customer exists for the number given
+			if (doesCustomerExist() == false) // if no customer exists for the number given
 			{
 				MessageBox.Show("No customer exists with the phone number given", "Ordering System");
 			}
@@ -299,8 +306,7 @@ namespace ordering_system
 		private void deleteCustomerButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			checkIfCustomerExists();
-			if (customerExists == 0) // phone# not found
+			if (doesCustomerExist() == false) // phone# not found
 			{
 				MessageBox.Show("Customer with phone number not found in database", "Ordering System");
 			}
@@ -318,8 +324,7 @@ namespace ordering_system
 		private void deleteDeliveryAddressButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			checkIfAddressExists();
-			if (addressExists == 0)
+			if (doesAddressExist() == false)
 			{
 				MessageBox.Show("Address with house number and postcode not found in database", "Ordering System");
 			}
