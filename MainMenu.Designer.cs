@@ -33,9 +33,6 @@
 			customerDetailsLabel = new Label();
 			orderNumberLabel = new Label();
 			orderTypePanel = new Panel();
-			collectionButton = new Button();
-			counterButton = new Button();
-			deliveryButton = new Button();
 			managerFunctionsPanel = new Panel();
 			timeLabel = new Label();
 			viewOrdersButton = new Button();
@@ -50,7 +47,7 @@
 			priceEditButton = new Button();
 			memoButton = new Button();
 			runningOrderPanel = new Panel();
-			dataGridView1 = new DataGridView();
+			runningOrderDataGridView = new DataGridView();
 			estimatedTimeLabel = new Label();
 			estimatedTimePicker = new DateTimePicker();
 			totalPriceLabel = new Label();
@@ -64,12 +61,23 @@
 			paymentPanel = new Panel();
 			viewOrdersPanel = new Panel();
 			timer = new System.Windows.Forms.Timer(components);
+			viewOrdersDataGridView = new DataGridView();
+			deliveryButton = new Button();
+			collectionButton = new Button();
+			counterButton = new Button();
+			viewOrdersCollectionButton = new Button();
+			viewOrdersCounterButton = new Button();
+			viewOrdersDeliveryButton = new Button();
+			printCustomerTicketButton = new Button();
+			printKitchenTicketButton = new Button();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
 			itemEditFunctionsPanel.SuspendLayout();
 			runningOrderPanel.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+			((System.ComponentModel.ISupportInitialize)runningOrderDataGridView).BeginInit();
+			viewOrdersPanel.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)viewOrdersDataGridView).BeginInit();
 			SuspendLayout();
 			// 
 			// customerDetailsPanel
@@ -117,42 +125,6 @@
 			orderTypePanel.Name = "orderTypePanel";
 			orderTypePanel.Size = new Size(630, 80);
 			orderTypePanel.TabIndex = 1;
-			// 
-			// collectionButton
-			// 
-			collectionButton.BackColor = Color.Transparent;
-			collectionButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-			collectionButton.Location = new Point(420, 0);
-			collectionButton.Name = "collectionButton";
-			collectionButton.Size = new Size(210, 80);
-			collectionButton.TabIndex = 2;
-			collectionButton.Text = "Collection";
-			collectionButton.UseVisualStyleBackColor = false;
-			collectionButton.Click += collectionButton_Click;
-			// 
-			// counterButton
-			// 
-			counterButton.BackColor = Color.Transparent;
-			counterButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-			counterButton.Location = new Point(210, 0);
-			counterButton.Name = "counterButton";
-			counterButton.Size = new Size(210, 80);
-			counterButton.TabIndex = 1;
-			counterButton.Text = "Counter";
-			counterButton.UseVisualStyleBackColor = false;
-			counterButton.Click += counterButton_Click;
-			// 
-			// deliveryButton
-			// 
-			deliveryButton.BackColor = Color.Transparent;
-			deliveryButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-			deliveryButton.Location = new Point(0, 0);
-			deliveryButton.Name = "deliveryButton";
-			deliveryButton.Size = new Size(210, 80);
-			deliveryButton.TabIndex = 0;
-			deliveryButton.Text = "Delivery";
-			deliveryButton.UseVisualStyleBackColor = false;
-			deliveryButton.Click += deliveryButton_Click;
 			// 
 			// managerFunctionsPanel
 			// 
@@ -297,7 +269,7 @@
 			// runningOrderPanel
 			// 
 			runningOrderPanel.BackColor = Color.Maroon;
-			runningOrderPanel.Controls.Add(dataGridView1);
+			runningOrderPanel.Controls.Add(runningOrderDataGridView);
 			runningOrderPanel.Controls.Add(estimatedTimeLabel);
 			runningOrderPanel.Controls.Add(estimatedTimePicker);
 			runningOrderPanel.Controls.Add(totalPriceLabel);
@@ -311,17 +283,17 @@
 			runningOrderPanel.Size = new Size(700, 660);
 			runningOrderPanel.TabIndex = 2;
 			// 
-			// dataGridView1
+			// runningOrderDataGridView
 			// 
-			dataGridView1.BackgroundColor = Color.Maroon;
-			dataGridView1.BorderStyle = BorderStyle.None;
-			dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridView1.Location = new Point(0, 0);
-			dataGridView1.Name = "dataGridView1";
-			dataGridView1.RowHeadersWidth = 82;
-			dataGridView1.ScrollBars = ScrollBars.Vertical;
-			dataGridView1.Size = new Size(700, 580);
-			dataGridView1.TabIndex = 9;
+			runningOrderDataGridView.BackgroundColor = Color.Maroon;
+			runningOrderDataGridView.BorderStyle = BorderStyle.None;
+			runningOrderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			runningOrderDataGridView.Location = new Point(0, 0);
+			runningOrderDataGridView.Name = "runningOrderDataGridView";
+			runningOrderDataGridView.RowHeadersWidth = 82;
+			runningOrderDataGridView.ScrollBars = ScrollBars.Vertical;
+			runningOrderDataGridView.Size = new Size(700, 580);
+			runningOrderDataGridView.TabIndex = 9;
 			// 
 			// estimatedTimeLabel
 			// 
@@ -455,6 +427,12 @@
 			// viewOrdersPanel
 			// 
 			viewOrdersPanel.BackColor = Color.HotPink;
+			viewOrdersPanel.Controls.Add(printCustomerTicketButton);
+			viewOrdersPanel.Controls.Add(printKitchenTicketButton);
+			viewOrdersPanel.Controls.Add(viewOrdersCollectionButton);
+			viewOrdersPanel.Controls.Add(viewOrdersDataGridView);
+			viewOrdersPanel.Controls.Add(viewOrdersCounterButton);
+			viewOrdersPanel.Controls.Add(viewOrdersDeliveryButton);
 			viewOrdersPanel.Location = new Point(700, 80);
 			viewOrdersPanel.Margin = new Padding(0);
 			viewOrdersPanel.Name = "viewOrdersPanel";
@@ -468,14 +446,118 @@
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
 			// 
+			// viewOrdersDataGridView
+			// 
+			viewOrdersDataGridView.BackgroundColor = Color.HotPink;
+			viewOrdersDataGridView.BorderStyle = BorderStyle.None;
+			viewOrdersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			viewOrdersDataGridView.Location = new Point(0, 0);
+			viewOrdersDataGridView.Name = "viewOrdersDataGridView";
+			viewOrdersDataGridView.RowHeadersWidth = 82;
+			viewOrdersDataGridView.Size = new Size(1040, 900);
+			viewOrdersDataGridView.TabIndex = 0;
+			// 
+			// deliveryButton
+			// 
+			deliveryButton.BackColor = Color.Transparent;
+			deliveryButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+			deliveryButton.Location = new Point(0, 0);
+			deliveryButton.Name = "deliveryButton";
+			deliveryButton.Size = new Size(210, 80);
+			deliveryButton.TabIndex = 0;
+			deliveryButton.Text = "Delivery";
+			deliveryButton.UseVisualStyleBackColor = false;
+			deliveryButton.Click += deliveryButton_Click;
+			// 
+			// collectionButton
+			// 
+			collectionButton.BackColor = Color.Transparent;
+			collectionButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+			collectionButton.Location = new Point(420, 0);
+			collectionButton.Name = "collectionButton";
+			collectionButton.Size = new Size(210, 80);
+			collectionButton.TabIndex = 2;
+			collectionButton.Text = "Collection";
+			collectionButton.UseVisualStyleBackColor = false;
+			collectionButton.Click += collectionButton_Click;
+			// 
+			// counterButton
+			// 
+			counterButton.BackColor = Color.Transparent;
+			counterButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+			counterButton.Location = new Point(210, 0);
+			counterButton.Name = "counterButton";
+			counterButton.Size = new Size(210, 80);
+			counterButton.TabIndex = 1;
+			counterButton.Text = "Counter";
+			counterButton.UseVisualStyleBackColor = false;
+			counterButton.Click += counterButton_Click;
+			// 
+			// viewOrdersCollectionButton
+			// 
+			viewOrdersCollectionButton.BackColor = SystemColors.Control;
+			viewOrdersCollectionButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			viewOrdersCollectionButton.Location = new Point(360, 900);
+			viewOrdersCollectionButton.Name = "viewOrdersCollectionButton";
+			viewOrdersCollectionButton.Size = new Size(180, 100);
+			viewOrdersCollectionButton.TabIndex = 5;
+			viewOrdersCollectionButton.Text = "Collection";
+			viewOrdersCollectionButton.UseVisualStyleBackColor = false;
+			// 
+			// viewOrdersCounterButton
+			// 
+			viewOrdersCounterButton.BackColor = SystemColors.Control;
+			viewOrdersCounterButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			viewOrdersCounterButton.Location = new Point(180, 900);
+			viewOrdersCounterButton.Name = "viewOrdersCounterButton";
+			viewOrdersCounterButton.Size = new Size(180, 100);
+			viewOrdersCounterButton.TabIndex = 4;
+			viewOrdersCounterButton.Text = "Counter";
+			viewOrdersCounterButton.UseVisualStyleBackColor = false;
+			// 
+			// viewOrdersDeliveryButton
+			// 
+			viewOrdersDeliveryButton.BackColor = SystemColors.Control;
+			viewOrdersDeliveryButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			viewOrdersDeliveryButton.Location = new Point(0, 900);
+			viewOrdersDeliveryButton.Name = "viewOrdersDeliveryButton";
+			viewOrdersDeliveryButton.Size = new Size(180, 100);
+			viewOrdersDeliveryButton.TabIndex = 3;
+			viewOrdersDeliveryButton.Text = "Delivery";
+			viewOrdersDeliveryButton.UseVisualStyleBackColor = false;
+			// 
+			// printCustomerTicketButton
+			// 
+			printCustomerTicketButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			printCustomerTicketButton.BackColor = SystemColors.Control;
+			printCustomerTicketButton.FlatAppearance.BorderSize = 0;
+			printCustomerTicketButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+			printCustomerTicketButton.Location = new Point(790, 900);
+			printCustomerTicketButton.Name = "printCustomerTicketButton";
+			printCustomerTicketButton.Size = new Size(250, 100);
+			printCustomerTicketButton.TabIndex = 56;
+			printCustomerTicketButton.Text = "Print Customer Ticket";
+			printCustomerTicketButton.UseVisualStyleBackColor = false;
+			// 
+			// printKitchenTicketButton
+			// 
+			printKitchenTicketButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			printKitchenTicketButton.BackColor = SystemColors.Control;
+			printKitchenTicketButton.FlatAppearance.BorderSize = 0;
+			printKitchenTicketButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+			printKitchenTicketButton.Location = new Point(540, 900);
+			printKitchenTicketButton.Name = "printKitchenTicketButton";
+			printKitchenTicketButton.Size = new Size(250, 100);
+			printKitchenTicketButton.TabIndex = 55;
+			printKitchenTicketButton.Text = "Print Kitchen Ticket";
+			printKitchenTicketButton.UseVisualStyleBackColor = false;
+			// 
 			// MainMenu
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.White;
 			ClientSize = new Size(1920, 1080);
-			Controls.Add(categoriesPanel);
-			Controls.Add(itemsPanel);
 			Controls.Add(runningOrderPanel);
 			Controls.Add(itemEditFunctionsPanel);
 			Controls.Add(managerFunctionsPanel);
@@ -484,16 +566,21 @@
 			Controls.Add(viewOrdersPanel);
 			Controls.Add(commonItemsPanel);
 			Controls.Add(paymentPanel);
+			Controls.Add(itemsPanel);
+			Controls.Add(categoriesPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "MainMenu";
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "Main Menu";
+			Load += MainMenu_Load;
 			customerDetailsPanel.ResumeLayout(false);
 			orderTypePanel.ResumeLayout(false);
 			managerFunctionsPanel.ResumeLayout(false);
 			itemEditFunctionsPanel.ResumeLayout(false);
 			runningOrderPanel.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+			((System.ComponentModel.ISupportInitialize)runningOrderDataGridView).EndInit();
+			viewOrdersPanel.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)viewOrdersDataGridView).EndInit();
 			ResumeLayout(false);
 		}
 
@@ -513,9 +600,6 @@
 		private Label deliveryChargeTextLabel;
 		private Label deliveryChargePriceLabel;
 		private Label subtotalPriceLabel;
-		private Button deliveryButton;
-		private Button collectionButton;
-		private Button counterButton;
 		private Button memoButton;
 		private Button smallPriceButton;
 		private Button largePriceButton;
@@ -533,6 +617,15 @@
 		private System.Windows.Forms.Timer timer;
 		private DateTimePicker estimatedTimePicker;
 		private Label estimatedTimeLabel;
-		private DataGridView dataGridView1;
+		private DataGridView runningOrderDataGridView;
+		private Button collectionButton;
+		private Button counterButton;
+		private Button deliveryButton;
+		private Button viewOrdersCollectionButton;
+		private DataGridView viewOrdersDataGridView;
+		private Button viewOrdersCounterButton;
+		private Button viewOrdersDeliveryButton;
+		private Button printCustomerTicketButton;
+		private Button printKitchenTicketButton;
 	}
 }

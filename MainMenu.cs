@@ -202,7 +202,7 @@ namespace ordering_system
 			}
 			else if (currentOrder.orderType == "Collection")
 			{
-				collectionButton.BackColor= Color.Yellow;
+				collectionButton.BackColor = Color.Yellow;
 			}
 		}
 
@@ -213,6 +213,14 @@ namespace ordering_system
 			deliveryButton.BackColor = Color.Transparent;
 			counterButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
+		}
+
+		private void MainMenu_Load(object sender, EventArgs e)
+		{
+			paymentPanel.SendToBack();
+			paymentPanel.Visible = false;
+			viewOrdersPanel.SendToBack();
+			viewOrdersPanel.Visible = false;
 		}
 	}
 }
