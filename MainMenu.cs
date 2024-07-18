@@ -20,6 +20,8 @@ namespace ordering_system
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
 		DataSet customerDataSet = new DataSet(); // data row for customer
 		DataSet addressDataSet = new DataSet();
+		DataView ordersDataView = new DataView();
+		int viewOrdersSelectedOrderID;
 		public MainMenu()
 		{
 			InitializeComponent();
@@ -221,6 +223,85 @@ namespace ordering_system
 			paymentPanel.Visible = false;
 			viewOrdersPanel.SendToBack();
 			viewOrdersPanel.Visible = false;
+		}
+
+		private void viewOrdersDeliveryButton_Click(object sender, EventArgs e)
+		{
+			viewOrdersByOrderType("Deliver");
+		}
+
+		private void viewOrdersCounterButton_Click(object sender, EventArgs e)
+		{
+			viewOrdersByOrderType("Counter");
+		}
+
+		private void viewOrdersCollectionButton_Click(object sender, EventArgs e)
+		{
+			viewOrdersByOrderType("Colection");
+		}
+
+		private void viewOrdersByOrderType(string orderType)
+		{
+			con.Open();
+			// get orders from order type
+			SqlDataAdapter getOrders = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderType = @OT", con);
+			getOrders.SelectCommand.Parameters.AddWithValue("@CID", orderType);
+			DataSet ordersDataSet = new DataSet();
+			getOrders.Fill(ordersDataSet);
+			ordersDataView = new DataView(ordersDataSet.Tables[0]);
+			DataTable ordersDataTable;
+
+			// fill in order datagridview
+			if (orderType == "Delivery")
+			{
+				// orderid, address, ordertime, price
+				ordersDataTable = ordersDataView.ToTable(true, "orderID", "orderTime");
+			}
+			else if (orderType == "Counter")
+			{
+				// orderid, ordertime, price
+				ordersDataTable = ordersDataView.ToTable(true, "orderID", "orderTime");
+			}
+			else if (orderType == "Collection")
+			{
+				// orderid, customername, ordertime, price
+				ordersDataTable = ordersDataView.ToTable(true, "orderID", "orderTime");
+			}
+			viewOrdersDataGridView.DataSource = getOrders;
+			con.Close();
+		}
+
+		private void viewOrdersDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			// find clicked row of table in order to search through ordersdatagridview to find the full deets
+			int selectedRowIndex = viewOrdersDataGridView.SelectedCells[0].RowIndex;
+			DataRowView selectedRow = viewOrdersDataView[selectedRowIndex];
+			viewOrdersSelectedOrderID = Convert.ToInt32(selectedRow.Row["orderID"]);
+			viewOrdersDataGridView.ClearSelection(); // unselect row
+		}
+
+		private void printKitchenTicketButton_Click(object sender, EventArgs e)
+		{
+			if (viewOrdersSelectedOrderID != default) // if theres a selected order
+			{
+
+			}
+			else
+			{
+				MessageBox.Show("Order hasn't been selected", "Ordering System");
+			}
+		}
+
+		private void printCustomerTicketButton_Click(object sender, EventArgs e)
+		{
+			if (viewOrdersSelectedOrderID != default) // if theres a selected order
+			{
+
+			}
+			else
+			{
+				MessageBox.Show("Order hasn't been selected", "Ordering System");
+			}
 		}
 	}
 }

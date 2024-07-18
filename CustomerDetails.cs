@@ -228,10 +228,10 @@ namespace ordering_system
 				{
 					SqlDataAdapter getAddresses = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", con);
 					getAddresses.SelectCommand.Parameters.AddWithValue("@CID", customerID);
-					DataSet addresses = new DataSet();
-					getAddresses.Fill(addresses);
-					addressesDataView = new DataView(addresses.Tables[0]);
-					// fill in address dataview
+					DataSet addressesDataSet = new DataSet();
+					getAddresses.Fill(addressesDataSet);
+					addressesDataView = new DataView(addressesDataSet.Tables[0]);
+					// fill in address datagridview
 					DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
 					deliveryAddressDataGridView.DataSource = addressesDataTable;
 				}
@@ -254,7 +254,7 @@ namespace ordering_system
 
 		private void deliveryAddressDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			// find clicked row of table in order to search through addressesdataview to find the full deets
+			// find clicked row of table in order to search through addressesdatagridview to find the full deets
 			int selectedRowIndex = deliveryAddressDataGridView.SelectedCells[0].RowIndex;
 			DataRowView selectedRow = addressesDataView[selectedRowIndex];
 			addressID = Convert.ToInt32(selectedRow.Row["addressID"]);
