@@ -30,7 +30,7 @@ namespace ordering_system
 			{
 				ManagerFunctions obj = new ManagerFunctions();
 				obj.Show();
-				obj.TopMost = true;
+				//obj.TopMost = true;
 				Close();
 			}
 			else

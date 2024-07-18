@@ -32,7 +32,7 @@ namespace ordering_system
 			Application.Exit();
 		}
 
-		private void changeLoginButton_Click(object sender, EventArgs e)
+		private void changeLoginPasswordButton_Click(object sender, EventArgs e)
 		{
 			string loginPassword = Interaction.InputBox("Enter the new login password:", "Manager Functions");
 			File.WriteAllText(@"./LoginPassword.txt", loginPassword);
@@ -52,9 +52,23 @@ namespace ordering_system
 			configuration = configurationBuilder.AddUserSecrets<ManagerFunctions>().Build();
 		}
 
+		private void updateCategoriesButton_Click(object sender, EventArgs e)
+		{
+			UpdateCategories obj = new UpdateCategories();
+			obj.Show();
+			//obj.TopMost = true;
+		}
+
+		private void updateItemsButton_Click(object sender, EventArgs e)
+		{
+			
+		}
+
 		private void orderSummaryButton_Click(object sender, EventArgs e)
 		{
-
+			OrderSummary obj = new OrderSummary();
+			obj.Show();
+			obj.TopMost = true;
 		}
 	}
 }

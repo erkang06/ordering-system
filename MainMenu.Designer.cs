@@ -479,7 +479,7 @@
 			// printCustomerTicketButton
 			// 
 			printCustomerTicketButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			printCustomerTicketButton.BackColor = SystemColors.Control;
+			printCustomerTicketButton.BackColor = Color.Transparent;
 			printCustomerTicketButton.FlatAppearance.BorderSize = 0;
 			printCustomerTicketButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 			printCustomerTicketButton.Location = new Point(790, 900);
@@ -493,7 +493,7 @@
 			// printKitchenTicketButton
 			// 
 			printKitchenTicketButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			printKitchenTicketButton.BackColor = SystemColors.Control;
+			printKitchenTicketButton.BackColor = Color.Transparent;
 			printKitchenTicketButton.FlatAppearance.BorderSize = 0;
 			printKitchenTicketButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 			printKitchenTicketButton.Location = new Point(540, 900);
@@ -506,7 +506,7 @@
 			// 
 			// viewOrdersCollectionButton
 			// 
-			viewOrdersCollectionButton.BackColor = SystemColors.Control;
+			viewOrdersCollectionButton.BackColor = Color.Transparent;
 			viewOrdersCollectionButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			viewOrdersCollectionButton.Location = new Point(360, 900);
 			viewOrdersCollectionButton.Name = "viewOrdersCollectionButton";
@@ -532,7 +532,7 @@
 			// 
 			// viewOrdersCounterButton
 			// 
-			viewOrdersCounterButton.BackColor = SystemColors.Control;
+			viewOrdersCounterButton.BackColor = Color.Transparent;
 			viewOrdersCounterButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			viewOrdersCounterButton.Location = new Point(180, 900);
 			viewOrdersCounterButton.Name = "viewOrdersCounterButton";
@@ -544,7 +544,7 @@
 			// 
 			// viewOrdersDeliveryButton
 			// 
-			viewOrdersDeliveryButton.BackColor = SystemColors.Control;
+			viewOrdersDeliveryButton.BackColor = Color.Transparent;
 			viewOrdersDeliveryButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			viewOrdersDeliveryButton.Location = new Point(0, 900);
 			viewOrdersDeliveryButton.Name = "viewOrdersDeliveryButton";
@@ -571,11 +571,11 @@
 			Controls.Add(managerFunctionsPanel);
 			Controls.Add(orderTypePanel);
 			Controls.Add(customerDetailsPanel);
-			Controls.Add(viewOrdersPanel);
 			Controls.Add(commonItemsPanel);
 			Controls.Add(paymentPanel);
 			Controls.Add(itemsPanel);
 			Controls.Add(categoriesPanel);
+			Controls.Add(viewOrdersPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "MainMenu";
 			StartPosition = FormStartPosition.CenterScreen;

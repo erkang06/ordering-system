@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace ordering_system
 {
@@ -106,7 +107,7 @@ namespace ordering_system
 			obj.CustomerDetailsUpdate += new CustomerDetails.CustomerDetailsUpdateHandler(customerDetailsChanged);
 			obj.CustomerDetailsCancel += new CustomerDetails.CustomerDetailsCancelHandler(customerDetailsCancelled);
 			obj.Show();
-			//obj.TopMost = true;
+			obj.TopMost = true;
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
@@ -122,9 +123,9 @@ namespace ordering_system
 				else if (acceptOrderButton.Text == "Accept Payment") // order accepted
 				{
 					currentOrder.orderType = string.Empty; // unselect all order type buttons
-					collectionButton.BackColor = Color.Transparent;
-					counterButton.BackColor = Color.Transparent;
 					deliveryButton.BackColor = Color.Transparent;
+					counterButton.BackColor = Color.Transparent;
+					collectionButton.BackColor = Color.Transparent;
 					acceptOrderButton.Text = "Accept Order";
 					paymentPanel.SendToBack();
 					paymentPanel.Visible = false;
@@ -135,6 +136,9 @@ namespace ordering_system
 
 		private void viewOrdersButton_Click(object sender, EventArgs e)
 		{
+			viewOrdersDeliveryButton.BackColor = Color.Transparent;
+			viewOrdersCounterButton.BackColor = Color.Transparent;
+			viewOrdersCollectionButton.BackColor = Color.Transparent;
 			if (viewOrdersButton.Text == "View Orders" && acceptOrderButton.Text == "Accept Order") // cant open both panels at once lmao
 			{
 				viewOrdersButton.Text = "Cancel";
@@ -227,55 +231,46 @@ namespace ordering_system
 
 		private void viewOrdersDeliveryButton_Click(object sender, EventArgs e)
 		{
-			viewOrdersByOrderType("Deliver");
+			// selects delivery, unselects rest
+			viewOrdersDeliveryButton.BackColor = Color.Yellow;
+			viewOrdersCounterButton.BackColor = Color.Transparent;
+			viewOrdersCollectionButton.BackColor = Color.Transparent;
+			// orderid, address, ordertime, price
 		}
 
 		private void viewOrdersCounterButton_Click(object sender, EventArgs e)
 		{
-			viewOrdersByOrderType("Counter");
+			viewOrdersDataGridView.Rows.Clear();
+			// selects counter, unselects rest
+			viewOrdersDeliveryButton.BackColor = Color.Transparent;
+			viewOrdersCounterButton.BackColor = Color.Yellow;
+			viewOrdersCollectionButton.BackColor = Color.Transparent;
+			// orderid, ordertime, price
+			con.Open();
+			SqlDataAdapter getOrders = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderType = @OT", con);
+			getOrders.SelectCommand.Parameters.AddWithValue("@OT", "Counter");
+			DataSet ordersDataSet = new DataSet();
+			getOrders.Fill(ordersDataSet);
+			ordersDataView = new DataView(ordersDataSet.Tables[0]);
+			con.Close();
+			DataTable ordersDataTable = ordersDataView.ToTable(true, "orderID", "orderTime");
+			viewOrdersDataGridView.DataSource = ordersDataTable;
 		}
 
 		private void viewOrdersCollectionButton_Click(object sender, EventArgs e)
 		{
-			viewOrdersByOrderType("Colection");
-		}
-
-		private void viewOrdersByOrderType(string orderType)
-		{
-			con.Open();
-			// get orders from order type
-			SqlDataAdapter getOrders = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderType = @OT", con);
-			getOrders.SelectCommand.Parameters.AddWithValue("@CID", orderType);
-			DataSet ordersDataSet = new DataSet();
-			getOrders.Fill(ordersDataSet);
-			ordersDataView = new DataView(ordersDataSet.Tables[0]);
-			DataTable ordersDataTable;
-
-			// fill in order datagridview
-			if (orderType == "Delivery")
-			{
-				// orderid, address, ordertime, price
-				ordersDataTable = ordersDataView.ToTable(true, "orderID", "orderTime");
-			}
-			else if (orderType == "Counter")
-			{
-				// orderid, ordertime, price
-				ordersDataTable = ordersDataView.ToTable(true, "orderID", "orderTime");
-			}
-			else if (orderType == "Collection")
-			{
-				// orderid, customername, ordertime, price
-				ordersDataTable = ordersDataView.ToTable(true, "orderID", "orderTime");
-			}
-			viewOrdersDataGridView.DataSource = getOrders;
-			con.Close();
+			// selects collection, unselects rest
+			viewOrdersDeliveryButton.BackColor = Color.Transparent;
+			viewOrdersCounterButton.BackColor = Color.Transparent;
+			viewOrdersCollectionButton.BackColor = Color.Yellow;
+			// orderid, customername, ordertime, price
 		}
 
 		private void viewOrdersDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through ordersdatagridview to find the full deets
 			int selectedRowIndex = viewOrdersDataGridView.SelectedCells[0].RowIndex;
-			DataRowView selectedRow = viewOrdersDataView[selectedRowIndex];
+			DataRowView selectedRow = ordersDataView[selectedRowIndex];
 			viewOrdersSelectedOrderID = Convert.ToInt32(selectedRow.Row["orderID"]);
 			viewOrdersDataGridView.ClearSelection(); // unselect row
 		}

@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			CustomerNameLabel = new Label();
+			customerNameLabel = new Label();
 			phoneNumberLabel = new Label();
 			customerNameTextBox = new TextBox();
 			phoneNumberTextBox = new TextBox();
@@ -69,17 +69,17 @@
 			((System.ComponentModel.ISupportInitialize)deliveryAddressDataGridView).BeginInit();
 			SuspendLayout();
 			// 
-			// CustomerNameLabel
+			// customerNameLabel
 			// 
-			CustomerNameLabel.BackColor = Color.Transparent;
-			CustomerNameLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			CustomerNameLabel.ForeColor = Color.Black;
-			CustomerNameLabel.Location = new Point(12, 12);
-			CustomerNameLabel.Margin = new Padding(3, 5, 3, 5);
-			CustomerNameLabel.Name = "CustomerNameLabel";
-			CustomerNameLabel.Size = new Size(350, 50);
-			CustomerNameLabel.TabIndex = 4;
-			CustomerNameLabel.Text = "Customer Name:";
+			customerNameLabel.BackColor = Color.Transparent;
+			customerNameLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			customerNameLabel.ForeColor = Color.Black;
+			customerNameLabel.Location = new Point(12, 12);
+			customerNameLabel.Margin = new Padding(3, 5, 3, 5);
+			customerNameLabel.Name = "customerNameLabel";
+			customerNameLabel.Size = new Size(350, 50);
+			customerNameLabel.TabIndex = 4;
+			customerNameLabel.Text = "Customer Name:";
 			// 
 			// phoneNumberLabel
 			// 
@@ -379,7 +379,7 @@
 			// deliveryAddressDataGridView
 			// 
 			deliveryAddressDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			deliveryAddressDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader;
+			deliveryAddressDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			deliveryAddressDataGridView.BackgroundColor = Color.White;
 			deliveryAddressDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			deliveryAddressDataGridView.Location = new Point(1000, 12);
@@ -549,7 +549,7 @@
 			Controls.Add(phoneNumberTextBox);
 			Controls.Add(customerNameTextBox);
 			Controls.Add(phoneNumberLabel);
-			Controls.Add(CustomerNameLabel);
+			Controls.Add(customerNameLabel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "CustomerDetails";
 			Text = "Customer Details";
@@ -560,7 +560,7 @@
 
 		#endregion
 
-		private Label CustomerNameLabel;
+		private Label customerNameLabel;
 		private Label deliveryCityLabel;
 		private Label phoneNumberLabel;
 		private TextBox customerNameTextBox;
