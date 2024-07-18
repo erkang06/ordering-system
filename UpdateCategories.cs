@@ -15,17 +15,22 @@ namespace ordering_system
 	{
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
 		DataView categoriesDataView;
-		int categoryID, categoryExists;
+		int categoryID;
 		public UpdateCategories()
 		{
 			InitializeComponent();
 		}
 
-		private void checkIfCategoryExists() // checks if category exists in database w/ same name - output = # of categories w/ name
+		private bool doesCategoryExist() // checks if category exists in database w/ same name
 		{
 			SqlCommand checkIfCategoryExists = new SqlCommand("SELECT COUNT(*) FROM CategoryTbl WHERE categoryName = @CN", con);
 			checkIfCategoryExists.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
-			categoryExists = (int)checkIfCategoryExists.ExecuteScalar();
+			int categoryExists = (int)checkIfCategoryExists.ExecuteScalar();
+			if (categoryExists == 0)
+			{
+				return false;
+			}
+			return true;
 		}
 
 		private bool areAllFieldsFilled() // checks if all fields have been filled in
@@ -88,8 +93,7 @@ namespace ordering_system
 		private void addCategoryButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			checkIfCategoryExists();
-			if (categoryExists == 0 && areAllFieldsFilled() == true) // if category doesnt alr exist and all textboxes filled in
+			if (doesCategoryExist() == false && areAllFieldsFilled() == true) // if category doesnt alr exist and all textboxes filled in
 			{
 				SqlCommand addCategoryToDatabase = new SqlCommand("INSERT INTO CategoryTbl(categoryName, categoryIndex) VALUES(@CN, @CI)", con);
 				addCategoryToDatabase.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
@@ -141,8 +145,7 @@ namespace ordering_system
 		private void deleteCategoryButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			checkIfCategoryExists();
-			if (categoryExists == 0) // category not found
+			if (doesCategoryExist() == false) // category not found
 			{
 				MessageBox.Show("Category not found in database", "Ordering System");
 			}
