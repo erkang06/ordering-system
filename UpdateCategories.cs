@@ -57,9 +57,9 @@ namespace ordering_system
 		private void updateDataGridView()
 		{
 			SqlDataAdapter getCategories = new SqlDataAdapter("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
-			DataSet addressesDataSet = new DataSet();
-			getCategories.Fill(addressesDataSet);
-			categoriesDataView = new DataView(addressesDataSet.Tables[0]);
+			DataSet categoriesDataSet = new DataSet();
+			getCategories.Fill(categoriesDataSet);
+			categoriesDataView = new DataView(categoriesDataSet.Tables[0]);
 			// fill in category datagridview
 			DataTable categoriesDataTable = categoriesDataView.ToTable(true, "categoryName", "categoryIndex");
 			categoryDataGridView.DataSource = categoriesDataTable;

@@ -32,20 +32,6 @@ namespace ordering_system
 			Application.Exit();
 		}
 
-		private void changeLoginPasswordButton_Click(object sender, EventArgs e)
-		{
-			string loginPassword = Interaction.InputBox("Enter the new login password:", "Manager Functions");
-			File.WriteAllText(@"./LoginPassword.txt", loginPassword);
-			MessageBox.Show("Login password has been changed successfully", "Ordering System");
-		}
-
-		private void changeManagerPasswordButton_Click(object sender, EventArgs e)
-		{
-			string managerPassword = Interaction.InputBox("Enter the new manager password:", "Manager Functions");
-			File.WriteAllText(@"./ManagerPassword.txt", managerPassword);
-			MessageBox.Show("Manager password has been changed successfully", "Ordering System");
-		}
-
 		private void ManagerFunctions_Load(object sender, EventArgs e)
 		{
 			configurationBuilder = new ConfigurationBuilder();
@@ -69,6 +55,20 @@ namespace ordering_system
 			OrderSummary obj = new OrderSummary();
 			obj.Show();
 			obj.TopMost = true;
+		}
+
+		private void changeLoginPasswordButton_Click(object sender, EventArgs e)
+		{
+			string loginPassword = Interaction.InputBox("Enter the new login password:", "Manager Functions");
+			File.WriteAllText(@"./LoginPassword.txt", loginPassword);
+			MessageBox.Show("Login password has been changed successfully", "Ordering System");
+		}
+
+		private void changeManagerPasswordButton_Click(object sender, EventArgs e)
+		{
+			string managerPassword = Interaction.InputBox("Enter the new manager password:", "Manager Functions");
+			File.WriteAllText(@"./ManagerPassword.txt", managerPassword);
+			MessageBox.Show("Manager password has been changed successfully", "Ordering System");
 		}
 	}
 }
