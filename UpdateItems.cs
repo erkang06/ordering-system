@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ordering_system
 {
@@ -23,15 +25,20 @@ namespace ordering_system
 		private void UpdateItems_Load(object sender, EventArgs e)
 		{
 			con.Open();
-			// populate category autocomplete thingy yk
-			SqlDataAdapter getCategories = new SqlDataAdapter("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
-			DataSet categoriesDataSet = new DataSet();
-			getCategories.Fill(categoriesDataSet);
-			categoriesDataView = new DataView(categoriesDataSet.Tables[0]);
-			DataTable categoriesDataTable = categoriesDataView.ToTable();
-			categoryComboBox.DataSource = categoriesDataTable.Columns.Cast<DataColumn>().ToList();
-			categoryComboBox.ValueMember = "categoryName";
-			categoryComboBox.DisplayMember = "categoryName";
+			// get category table to fill in category combobox
+			SqlCommand getCategories = new SqlCommand("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
+			SqlDataReader categoriesDataReader = getCategories.ExecuteReader();
+			// put all names from data reader into list
+			List<string> categoryNames = new List<string>();
+			while (categoriesDataReader.Read())
+			{
+				categoryNames.Add(categoriesDataReader[1].ToString());
+			}
+			// fill in category combobox
+			foreach (string categoryName in categoryNames)
+			{
+				categoryComboBox.Items.Add(categoryName.Trim());
+			}
 			con.Close();
 		}
 

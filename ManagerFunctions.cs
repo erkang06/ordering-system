@@ -42,12 +42,13 @@ namespace ordering_system
 		{
 			UpdateCategories obj = new UpdateCategories();
 			obj.Show();
-			//obj.TopMost = true;
 		}
 
 		private void updateItemsButton_Click(object sender, EventArgs e)
 		{
-			
+			UpdateItems obj = new UpdateItems();
+			obj.Show();
+			//obj.TopMost = true;
 		}
 
 		private void orderSummaryButton_Click(object sender, EventArgs e)
