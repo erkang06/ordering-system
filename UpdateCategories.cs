@@ -123,7 +123,7 @@ namespace ordering_system
 				updateCategory.Parameters.AddWithValue("@CI", Convert.ToInt32(categoryIndexTextBox.Text));
 				updateCategory.Parameters.AddWithValue("@CID", categoryID);
 				updateCategory.ExecuteNonQuery();
-				MessageBox.Show("Category name updated", "Ordering System");
+				MessageBox.Show("Category updated", "Ordering System");
 				updateDataGridView();
 			}
 			else

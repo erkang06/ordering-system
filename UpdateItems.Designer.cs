@@ -262,6 +262,7 @@
 			// 
 			// categoryComboBox
 			// 
+			categoryComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 			categoryComboBox.Font = new Font("Segoe UI", 14F);
 			categoryComboBox.FormattingEnabled = true;
 			categoryComboBox.Location = new Point(413, 524);
