@@ -15,7 +15,7 @@ namespace ordering_system
 	{
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
 		DataView categoriesDataView; // full databases compared to whats shown in datagridview
-		int categoryID; // id of selected category from datagridview
+		int categoryID = -1; // id of selected category from datagridview
 		public UpdateCategories()
 		{
 			InitializeComponent();
@@ -76,7 +76,7 @@ namespace ordering_system
 				maxCategoryIndex = 0;
 			}
 			categoryIndexTextBox.Text = (maxCategoryIndex + 1).ToString();
-			categoryNameTextBox.Text = string.Empty;
+			categoryNameTextBox.Text = "";
 		}
 
 		private void categoryDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -116,7 +116,7 @@ namespace ordering_system
 		private void updateCategoryButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (areAllFieldsFilled() == true) // if all fields filled in
+			if (areAllFieldsFilled() == true && categoryID != -1) // if all fields filled in
 			{
 				SqlCommand updateCategory = new SqlCommand("UPDATE CategoryTbl SET categoryName = @CN, categoryIndex = @CI WHERE categoryID = @CID", con);
 				updateCategory.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
@@ -126,7 +126,11 @@ namespace ordering_system
 				MessageBox.Show("Category updated", "Ordering System");
 				updateDataGridView();
 			}
-			else
+			else if (areAllFieldsFilled() == true) // category not selected
+			{
+				MessageBox.Show("Category not selected", "Ordering System");
+			}
+			else // incomplete form
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");
 			}

@@ -26,18 +26,6 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
-		private bool doesCategoryExist() // checks if category exists in database w/ same name
-		{
-			SqlCommand checkIfCategoryExists = new SqlCommand("SELECT COUNT(*) FROM CategoryTbl WHERE categoryName = @CN", con);
-			checkIfCategoryExists.Parameters.AddWithValue("@CN", categoryComboBox.Text);
-			int categoryExists = (int)checkIfCategoryExists.ExecuteScalar();
-			if (categoryExists == 0)
-			{
-				return false;
-			}
-			return true;
-		}
-
 		private bool doesItemExist() // checks if item exists in database w/ same name
 		{
 			SqlCommand checkIfItemExists = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE foodName = @FN", con);
@@ -170,6 +158,7 @@ namespace ordering_system
 			{
 				int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
 				SqlCommand addFoodItemToDatabase = new SqlCommand();
+				addFoodItemToDatabase.Connection = con;
 				addFoodItemToDatabase.Parameters.AddWithValue("@FN", itemNameTextBox.Text);
 				addFoodItemToDatabase.Parameters.AddWithValue("@DLP", defaultToLargePriceCheckBox.Checked);
 				addFoodItemToDatabase.Parameters.AddWithValue("@LIP", largePriceTextBox.Text);
@@ -202,19 +191,36 @@ namespace ordering_system
 		private void updateItemButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (areAllFieldsFilled() == true && getCategoryIDFromCategoryName(categoryComboBox.Text) != -1) // if all fields filled in
+			if (areAllFieldsFilled() == true && getCategoryIDFromCategoryName(categoryComboBox.Text) != -1 && foodItemID != null) // if all fields filled in
 			{
-				SqlCommand updateItem = new SqlCommand("UPDATE CategoryTbl SET categoryName = @CN, categoryIndex = @CI WHERE categoryID = @CID", con);
-				updateItem.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
-				updateItem.Parameters.AddWithValue("@CI", Convert.ToInt32(categoryIndexTextBox.Text));
-				updateItem.Parameters.AddWithValue("@CID", categoryID);
-				updateItem.ExecuteNonQuery();
+				int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
+				SqlCommand updateFoodItem = new SqlCommand();
+				updateFoodItem.Connection = con;
+				updateFoodItem.Parameters.AddWithValue("@FN", itemNameTextBox.Text);
+				updateFoodItem.Parameters.AddWithValue("@DLP", defaultToLargePriceCheckBox.Checked);
+				updateFoodItem.Parameters.AddWithValue("@LIP", largePriceTextBox.Text);
+				updateFoodItem.Parameters.AddWithValue("@OOS", isOutOfStockCheckBox.Checked);
+				updateFoodItem.Parameters.AddWithValue("@CID", categoryID);
+				if (hasSmallPriceCheckBox.Checked) // has small price
+				{
+					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodName = @FN, defaulttoLargePrice = @DIP, hasSmallOption = 1, smallItemPrice = @SIP, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
+					updateFoodItem.Parameters.AddWithValue("@SIP", smallPriceTextBox.Text);
+				}
+				else // no small price
+				{
+					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodName = @FN, defaulttoLargePrice = @DIP, hasSmallOption = 0, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
+				}
+				updateFoodItem.ExecuteNonQuery();
 				MessageBox.Show("Item updated", "Ordering System");
 				updateDataGridView();
 			}
-			else
+			else if (foodItemID != null) // incomplete form
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			else // category not selected
+			{
+				MessageBox.Show("Category not selected", "Ordering System");
 			}
 			con.Close();
 		}
