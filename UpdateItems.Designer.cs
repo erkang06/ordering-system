@@ -28,9 +28,9 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			deleteCategoryButton = new Button();
-			updateCategoryButton = new Button();
-			addCategoryButton = new Button();
+			deleteItemButton = new Button();
+			updateItemButton = new Button();
+			addItemButton = new Button();
 			itemIDTextBox = new TextBox();
 			itemIDLabel = new Label();
 			updateItemsLabel = new Label();
@@ -50,44 +50,47 @@
 			((System.ComponentModel.ISupportInitialize)itemDataGridView).BeginInit();
 			SuspendLayout();
 			// 
-			// deleteCategoryButton
+			// deleteItemButton
 			// 
-			deleteCategoryButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			deleteCategoryButton.BackColor = SystemColors.Control;
-			deleteCategoryButton.FlatStyle = FlatStyle.Flat;
-			deleteCategoryButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			deleteCategoryButton.Location = new Point(12, 988);
-			deleteCategoryButton.Name = "deleteCategoryButton";
-			deleteCategoryButton.Size = new Size(400, 80);
-			deleteCategoryButton.TabIndex = 59;
-			deleteCategoryButton.Text = "Delete Category";
-			deleteCategoryButton.UseVisualStyleBackColor = false;
+			deleteItemButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			deleteItemButton.BackColor = SystemColors.Control;
+			deleteItemButton.FlatStyle = FlatStyle.Flat;
+			deleteItemButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteItemButton.Location = new Point(12, 988);
+			deleteItemButton.Name = "deleteItemButton";
+			deleteItemButton.Size = new Size(400, 80);
+			deleteItemButton.TabIndex = 59;
+			deleteItemButton.Text = "Delete Item";
+			deleteItemButton.UseVisualStyleBackColor = false;
+			deleteItemButton.Click += deleteItemButton_Click;
 			// 
-			// updateCategoryButton
+			// updateItemButton
 			// 
-			updateCategoryButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			updateCategoryButton.BackColor = SystemColors.Control;
-			updateCategoryButton.FlatStyle = FlatStyle.Flat;
-			updateCategoryButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			updateCategoryButton.Location = new Point(12, 902);
-			updateCategoryButton.Name = "updateCategoryButton";
-			updateCategoryButton.Size = new Size(400, 80);
-			updateCategoryButton.TabIndex = 58;
-			updateCategoryButton.Text = "Update Category";
-			updateCategoryButton.UseVisualStyleBackColor = false;
+			updateItemButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			updateItemButton.BackColor = SystemColors.Control;
+			updateItemButton.FlatStyle = FlatStyle.Flat;
+			updateItemButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			updateItemButton.Location = new Point(12, 902);
+			updateItemButton.Name = "updateItemButton";
+			updateItemButton.Size = new Size(400, 80);
+			updateItemButton.TabIndex = 58;
+			updateItemButton.Text = "Update Item";
+			updateItemButton.UseVisualStyleBackColor = false;
+			updateItemButton.Click += updateItemButton_Click;
 			// 
-			// addCategoryButton
+			// addItemButton
 			// 
-			addCategoryButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			addCategoryButton.BackColor = SystemColors.Control;
-			addCategoryButton.FlatStyle = FlatStyle.Flat;
-			addCategoryButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			addCategoryButton.Location = new Point(12, 816);
-			addCategoryButton.Name = "addCategoryButton";
-			addCategoryButton.Size = new Size(400, 80);
-			addCategoryButton.TabIndex = 57;
-			addCategoryButton.Text = "Add Category";
-			addCategoryButton.UseVisualStyleBackColor = false;
+			addItemButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			addItemButton.BackColor = SystemColors.Control;
+			addItemButton.FlatStyle = FlatStyle.Flat;
+			addItemButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			addItemButton.Location = new Point(12, 816);
+			addItemButton.Name = "addItemButton";
+			addItemButton.Size = new Size(400, 80);
+			addItemButton.TabIndex = 57;
+			addItemButton.Text = "Add Item";
+			addItemButton.UseVisualStyleBackColor = false;
+			addItemButton.Click += addItemButton_Click;
 			// 
 			// itemIDTextBox
 			// 
@@ -144,6 +147,7 @@
 			itemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			itemDataGridView.Size = new Size(939, 970);
 			itemDataGridView.TabIndex = 52;
+			itemDataGridView.CellClick += itemDataGridView_CellClick;
 			// 
 			// itemNameTextBox
 			// 
@@ -229,6 +233,7 @@
 			hasSmallPriceCheckBox.TabIndex = 67;
 			hasSmallPriceCheckBox.Text = "Has Small Price?";
 			hasSmallPriceCheckBox.UseVisualStyleBackColor = false;
+			hasSmallPriceCheckBox.CheckedChanged += hasSmallPriceCheckBox_CheckedChanged;
 			// 
 			// isOutOfStockCheckBox
 			// 
@@ -281,9 +286,9 @@
 			Controls.Add(smallPriceLabel);
 			Controls.Add(itemNameTextBox);
 			Controls.Add(itemNameLabel);
-			Controls.Add(deleteCategoryButton);
-			Controls.Add(updateCategoryButton);
-			Controls.Add(addCategoryButton);
+			Controls.Add(deleteItemButton);
+			Controls.Add(updateItemButton);
+			Controls.Add(addItemButton);
 			Controls.Add(itemIDTextBox);
 			Controls.Add(itemIDLabel);
 			Controls.Add(updateItemsLabel);
@@ -299,9 +304,9 @@
 		}
 
 		#endregion
-		private Button deleteCategoryButton;
-		private Button updateCategoryButton;
-		private Button addCategoryButton;
+		private Button deleteItemButton;
+		private Button updateItemButton;
+		private Button addItemButton;
 		private TextBox itemIDTextBox;
 		private Label itemIDLabel;
 		private Label updateItemsLabel;

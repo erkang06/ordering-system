@@ -14,8 +14,6 @@ namespace ordering_system
 {
 	public partial class ManagerFunctions : Form
 	{
-		ConfigurationBuilder configurationBuilder;
-		IConfiguration configuration;
 
 		public ManagerFunctions()
 		{
@@ -32,23 +30,17 @@ namespace ordering_system
 			Application.Exit();
 		}
 
-		private void ManagerFunctions_Load(object sender, EventArgs e)
-		{
-			configurationBuilder = new ConfigurationBuilder();
-			configuration = configurationBuilder.AddUserSecrets<ManagerFunctions>().Build();
-		}
-
 		private void updateCategoriesButton_Click(object sender, EventArgs e)
 		{
 			UpdateCategories obj = new UpdateCategories();
 			obj.Show();
+			obj.TopMost = true;
 		}
 
 		private void updateItemsButton_Click(object sender, EventArgs e)
 		{
 			UpdateItems obj = new UpdateItems();
 			obj.Show();
-			//obj.TopMost = true;
 		}
 
 		private void orderSummaryButton_Click(object sender, EventArgs e)

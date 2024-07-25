@@ -185,7 +185,6 @@
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "ManagerFunctions";
 			Text = "Manager Functions";
-			Load += ManagerFunctions_Load;
 			ResumeLayout(false);
 		}
 

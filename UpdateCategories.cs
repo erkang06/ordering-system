@@ -14,8 +14,8 @@ namespace ordering_system
 	public partial class UpdateCategories : Form
 	{
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
-		DataView categoriesDataView;
-		int categoryID;
+		DataView categoriesDataView; // full databases compared to whats shown in datagridview
+		int categoryID; // id of selected category from datagridview
 		public UpdateCategories()
 		{
 			InitializeComponent();
@@ -85,7 +85,7 @@ namespace ordering_system
 			int selectedRowIndex = categoryDataGridView.SelectedCells[0].RowIndex;
 			DataRowView selectedRow = categoriesDataView[selectedRowIndex];
 			categoryID = Convert.ToInt32(selectedRow.Row["categoryID"]);
-			// update category
+			// update textboxes
 			categoryNameTextBox.Text = selectedRow.Row["categoryName"].ToString().Trim();
 			categoryIndexTextBox.Text = selectedRow.Row["categoryIndex"].ToString().Trim();
 		}
