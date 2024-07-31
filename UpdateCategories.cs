@@ -191,7 +191,7 @@ namespace ordering_system
 		{
 			try
 			{
-				Convert.ToInt32(categoryIndexTextBox); // check if value is acc int
+				Convert.ToInt32(categoryIndexTextBox.Text); // check if value is acc int
 			}
 			catch // not int
 			{

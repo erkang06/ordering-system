@@ -47,7 +47,7 @@
 			cancelButton.Location = new Point(522, 12);
 			cancelButton.Name = "cancelButton";
 			cancelButton.Size = new Size(90, 80);
-			cancelButton.TabIndex = 41;
+			cancelButton.TabIndex = 9;
 			cancelButton.UseVisualStyleBackColor = true;
 			cancelButton.Click += cancelButton_Click;
 			// 
@@ -72,7 +72,7 @@
 			exitProgramButton.Location = new Point(312, 968);
 			exitProgramButton.Name = "exitProgramButton";
 			exitProgramButton.Size = new Size(300, 100);
-			exitProgramButton.TabIndex = 43;
+			exitProgramButton.TabIndex = 8;
 			exitProgramButton.Text = "Exit Program";
 			exitProgramButton.UseVisualStyleBackColor = false;
 			exitProgramButton.Click += exitProgramButton_Click;
@@ -85,7 +85,7 @@
 			updateItemsButton.Location = new Point(12, 236);
 			updateItemsButton.Name = "updateItemsButton";
 			updateItemsButton.Size = new Size(600, 80);
-			updateItemsButton.TabIndex = 44;
+			updateItemsButton.TabIndex = 2;
 			updateItemsButton.Text = "Update Items";
 			updateItemsButton.UseVisualStyleBackColor = false;
 			updateItemsButton.Click += updateItemsButton_Click;
@@ -98,7 +98,7 @@
 			updateSetMealsButton.Location = new Point(12, 322);
 			updateSetMealsButton.Name = "updateSetMealsButton";
 			updateSetMealsButton.Size = new Size(600, 80);
-			updateSetMealsButton.TabIndex = 45;
+			updateSetMealsButton.TabIndex = 3;
 			updateSetMealsButton.Text = "Update Set Meals";
 			updateSetMealsButton.UseVisualStyleBackColor = false;
 			// 
@@ -110,7 +110,7 @@
 			updateCustomersButton.Location = new Point(12, 408);
 			updateCustomersButton.Name = "updateCustomersButton";
 			updateCustomersButton.Size = new Size(600, 80);
-			updateCustomersButton.TabIndex = 46;
+			updateCustomersButton.TabIndex = 4;
 			updateCustomersButton.Text = "Update Customers";
 			updateCustomersButton.UseVisualStyleBackColor = false;
 			updateCustomersButton.Click += updateCustomersButton_Click;
@@ -123,7 +123,7 @@
 			orderSummaryButton.Location = new Point(12, 494);
 			orderSummaryButton.Name = "orderSummaryButton";
 			orderSummaryButton.Size = new Size(600, 80);
-			orderSummaryButton.TabIndex = 47;
+			orderSummaryButton.TabIndex = 5;
 			orderSummaryButton.Text = "Order Summary";
 			orderSummaryButton.UseVisualStyleBackColor = false;
 			orderSummaryButton.Click += orderSummaryButton_Click;
@@ -136,7 +136,7 @@
 			changeLoginPasswordButton.Location = new Point(12, 580);
 			changeLoginPasswordButton.Name = "changeLoginPasswordButton";
 			changeLoginPasswordButton.Size = new Size(600, 80);
-			changeLoginPasswordButton.TabIndex = 48;
+			changeLoginPasswordButton.TabIndex = 6;
 			changeLoginPasswordButton.Text = "Change Login Password";
 			changeLoginPasswordButton.UseVisualStyleBackColor = false;
 			changeLoginPasswordButton.Click += changeLoginPasswordButton_Click;
@@ -149,7 +149,7 @@
 			changeManagerPasswordButton.Location = new Point(12, 666);
 			changeManagerPasswordButton.Name = "changeManagerPasswordButton";
 			changeManagerPasswordButton.Size = new Size(600, 80);
-			changeManagerPasswordButton.TabIndex = 49;
+			changeManagerPasswordButton.TabIndex = 7;
 			changeManagerPasswordButton.Text = "Change Manager Password";
 			changeManagerPasswordButton.UseVisualStyleBackColor = false;
 			changeManagerPasswordButton.Click += changeManagerPasswordButton_Click;
@@ -162,7 +162,7 @@
 			updateCategoriesButton.Location = new Point(12, 150);
 			updateCategoriesButton.Name = "updateCategoriesButton";
 			updateCategoriesButton.Size = new Size(600, 80);
-			updateCategoriesButton.TabIndex = 50;
+			updateCategoriesButton.TabIndex = 1;
 			updateCategoriesButton.Text = "Update Categories";
 			updateCategoriesButton.UseVisualStyleBackColor = false;
 			updateCategoriesButton.Click += updateCategoriesButton_Click;
