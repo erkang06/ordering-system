@@ -263,5 +263,59 @@ namespace ordering_system
 			}
 			con.Close();
 		}
+
+		private void itemIDTextBox_Leave(object sender, EventArgs e)
+		{
+			if (itemIDTextBox.Text.Length > 10) // if id too long for database
+			{
+				MessageBox.Show("Item ID too long", "Ordering System");
+				itemIDTextBox.Focus();
+			}
+		}
+
+		private void itemNameTextBox_Leave(object sender, EventArgs e)
+		{
+			if (itemNameTextBox.Text.Length > 30) // if item name too long for database
+			{
+				MessageBox.Show("Item name too long", "Ordering System");
+				itemNameTextBox.Focus();
+			}
+		}
+
+		private void smallPriceTextBox_Leave(object sender, EventArgs e)
+		{
+			try
+			{
+				Convert.ToDecimal(smallPriceTextBox.Text); // check if value is acc decimal
+			}
+			catch // not decimal
+			{
+				MessageBox.Show("Small price not a decimal", "Ordering System");
+				smallPriceTextBox.Focus();
+			}
+			if (Convert.ToDecimal(smallPriceTextBox.Text) < 0 || Convert.ToDecimal(smallPriceTextBox.Text) >= 1000) // not within range
+			{
+				MessageBox.Show("Small price not within range", "Ordering System");
+				smallPriceTextBox.Focus();
+			}
+		}
+
+		private void largePriceTextBox_Leave(object sender, EventArgs e)
+		{
+			try
+			{
+				Convert.ToDecimal(largePriceTextBox.Text); // check if value is acc decimal
+			}
+			catch // not decimal
+			{
+				MessageBox.Show("Large price not a decimal", "Ordering System");
+				largePriceTextBox.Focus();
+			}
+			if (Convert.ToDecimal(largePriceTextBox.Text) < 0 || Convert.ToDecimal(largePriceTextBox.Text) >= 1000) // not within range
+			{
+				MessageBox.Show("Large price not within range", "Ordering System");
+				largePriceTextBox.Focus();
+			}
+		}
 	}
 }

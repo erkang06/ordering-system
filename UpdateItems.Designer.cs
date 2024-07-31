@@ -99,6 +99,7 @@
 			itemIDTextBox.Name = "itemIDTextBox";
 			itemIDTextBox.Size = new Size(550, 57);
 			itemIDTextBox.TabIndex = 1;
+			itemIDTextBox.Leave += itemIDTextBox_Leave;
 			// 
 			// itemIDLabel
 			// 
@@ -158,6 +159,7 @@
 			itemNameTextBox.Name = "itemNameTextBox";
 			itemNameTextBox.Size = new Size(550, 57);
 			itemNameTextBox.TabIndex = 2;
+			itemNameTextBox.Leave += itemNameTextBox_Leave;
 			// 
 			// itemNameLabel
 			// 
@@ -178,6 +180,7 @@
 			smallPriceTextBox.Name = "smallPriceTextBox";
 			smallPriceTextBox.Size = new Size(550, 57);
 			smallPriceTextBox.TabIndex = 4;
+			smallPriceTextBox.Leave += smallPriceTextBox_Leave;
 			// 
 			// smallPriceLabel
 			// 
@@ -198,6 +201,7 @@
 			largePriceTextBox.Name = "largePriceTextBox";
 			largePriceTextBox.Size = new Size(550, 57);
 			largePriceTextBox.TabIndex = 5;
+			largePriceTextBox.Leave += largePriceTextBox_Leave;
 			// 
 			// largePriceLabel
 			// 
