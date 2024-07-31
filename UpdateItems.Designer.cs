@@ -143,6 +143,7 @@
 			itemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			itemDataGridView.Location = new Point(969, 98);
 			itemDataGridView.Name = "itemDataGridView";
+			itemDataGridView.ReadOnly = true;
 			itemDataGridView.RowHeadersWidth = 82;
 			itemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			itemDataGridView.Size = new Size(939, 970);

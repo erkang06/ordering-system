@@ -65,7 +65,6 @@ namespace ordering_system
 			categoryDataGridView.DataSource = categoriesDataTable;
 			// fill in default for category index
 			SqlCommand findMaxCategoryIndex = new SqlCommand("SELECT MAX(categoryIndex) FROM CategoryTbl", con);
-			findMaxCategoryIndex.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
 			int maxCategoryIndex;
 			try // get the biggest category index
 			{
@@ -77,17 +76,25 @@ namespace ordering_system
 			}
 			categoryIndexTextBox.Text = (maxCategoryIndex + 1).ToString();
 			categoryNameTextBox.Text = "";
+			categoryDataGridView.ClearSelection();
 		}
 
 		private void categoryDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through categoriesdatagridview to find the full deets
 			int selectedRowIndex = categoryDataGridView.SelectedCells[0].RowIndex;
-			DataRowView selectedRow = categoriesDataView[selectedRowIndex];
-			categoryID = Convert.ToInt32(selectedRow.Row["categoryID"]);
-			// update textboxes
-			categoryNameTextBox.Text = selectedRow.Row["categoryName"].ToString().Trim();
-			categoryIndexTextBox.Text = selectedRow.Row["categoryIndex"].ToString().Trim();
+			if (categoryDataGridView.RowCount > 1 && selectedRowIndex < categoryDataGridView.RowCount - 1) // just in case theres no selectable rows or u click the blank row
+			{
+				DataRowView selectedRow = categoriesDataView[selectedRowIndex];
+				categoryID = Convert.ToInt32(selectedRow.Row["categoryID"]);
+				// update textboxes
+				categoryNameTextBox.Text = selectedRow.Row["categoryName"].ToString().Trim();
+				categoryIndexTextBox.Text = selectedRow.Row["categoryIndex"].ToString().Trim();
+			}
+			else // unselect flop row
+			{
+				categoryDataGridView.ClearSelection();
+			}
 		}
 
 		private void addCategoryButton_Click(object sender, EventArgs e)
@@ -146,18 +153,23 @@ namespace ordering_system
 			}
 		}
 
-		private void deleteCategoryButton_Click(object sender, EventArgs e)
+		private void deleteCategoryButton_Click(object sender, EventArgs e) // ADD DEFENSE AGAINST NONE CAT IDS
 		{
 			con.Open();
 			if (doesCategoryExist() == false) // category not found
 			{
 				MessageBox.Show("Category not found in database", "Ordering System");
 			}
+			else if (categoryID == -1) // no category selected
+			{
+				MessageBox.Show("Category not selected", "Ordering System");
+			}
 			else // category found
 			{
 				SqlCommand deleteCategory = new SqlCommand("DELETE FROM CustomerTbl WHERE categoryID = @CID", con);
 				deleteCategory.Parameters.AddWithValue("@CN", categoryID);
 				deleteCategory.ExecuteNonQuery();
+				categoryID = -1;
 				MessageBox.Show("Customer deleted", "Ordering System");
 				updateDataGridView();
 			}

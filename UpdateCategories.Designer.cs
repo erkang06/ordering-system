@@ -49,6 +49,7 @@
 			categoryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			categoryDataGridView.Location = new Point(969, 98);
 			categoryDataGridView.Name = "categoryDataGridView";
+			categoryDataGridView.ReadOnly = true;
 			categoryDataGridView.RowHeadersWidth = 82;
 			categoryDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			categoryDataGridView.Size = new Size(939, 970);

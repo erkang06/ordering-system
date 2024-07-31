@@ -28,8 +28,9 @@ namespace ordering_system
 
 		private bool doesItemExist() // checks if item exists in database w/ same name
 		{
-			SqlCommand checkIfItemExists = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE foodName = @FN", con);
+			SqlCommand checkIfItemExists = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE foodName = @FN OR foodItemID = @FIID", con);
 			checkIfItemExists.Parameters.AddWithValue("@FN", itemNameTextBox.Text);
+			checkIfItemExists.Parameters.AddWithValue("@FIID", itemIDTextBox.Text);
 			int categoryExists = (int)checkIfItemExists.ExecuteScalar();
 			if (categoryExists == 0)
 			{
@@ -68,7 +69,7 @@ namespace ordering_system
 			int categoryNameIndex = categoriesDataViewSortByName.Find(categoryName);
 			if (categoryNameIndex != -1) // if category exists lmao
 			{
-				return Convert.ToInt32(categoriesDataViewSortByName[categoryNameIndex]["categoryName"]);
+				return Convert.ToInt32(categoriesDataViewSortByName[categoryNameIndex]["categoryID"]);
 			}
 			return categoryNameIndex;
 		}
@@ -92,6 +93,7 @@ namespace ordering_system
 			{
 				categoryComboBox.Items.Add(categoryName.Trim());
 			}
+			hasSmallPriceCheckBox_CheckedChanged(sender, e); // sorts out weird bits w/ checkboxes
 			updateDataGridView();
 			con.Close();
 		}
@@ -102,32 +104,40 @@ namespace ordering_system
 			DataSet foodItemsDataSet = new DataSet();
 			getFoodItems.Fill(foodItemsDataSet);
 			foodItemsDataView = new DataView(foodItemsDataSet.Tables[0]);
-			// fill in category datagridview
+			// fill in item datagridview
 			DataTable foodItemsDataTable = foodItemsDataView.ToTable(true, "foodItemID", "foodName", "smallItemPrice", "largeItemPrice");
 			itemDataGridView.DataSource = foodItemsDataTable;
+			itemDataGridView.ClearSelection();
 		}
 
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through fooditemsdatagridview to find the full deets
 			int selectedRowIndex = itemDataGridView.SelectedCells[0].RowIndex;
-			DataRowView selectedRow = foodItemsDataView[selectedRowIndex];
-			foodItemID = selectedRow.Row["foodItemID"].ToString().Trim();
-			// update textboxes and checkboxes
-			itemIDTextBox.Text = foodItemID;
-			itemNameTextBox.Text = selectedRow.Row["categoryIndex"].ToString().Trim();
-			hasSmallPriceCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["hasSmallOption"]);
-			smallPriceTextBox.Text = selectedRow.Row["smallItemPrice"].ToString().Trim();
-			hasSmallPriceCheckBox_CheckedChanged(sender, new EventArgs()); // if theres no small option, can clear
-			largePriceTextBox.Text = selectedRow.Row["largeItemPrice"].ToString().Trim();
-			defaultToLargePriceCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["defaultToLargePrice"]);
-			isOutOfStockCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["isOutOfStock"]);
-			// need to convert categoryid to name
-			int categoryID = Convert.ToInt32(selectedRow.Row["categoryID"]);
-			string categoryName = getCategoryNameFromCategoryID(categoryID);
-			if (categoryName != null) // if category exists lmao
+			if (itemDataGridView.RowCount > 1 && selectedRowIndex < itemDataGridView.RowCount - 1) // just in case theres no rows
 			{
-				categoryComboBox.Text = categoryName;
+				DataRowView selectedRow = foodItemsDataView[selectedRowIndex];
+				foodItemID = selectedRow.Row["foodItemID"].ToString().Trim();
+				// update textboxes and checkboxes
+				itemIDTextBox.Text = foodItemID;
+				itemNameTextBox.Text = selectedRow.Row["foodName"].ToString().Trim();
+				hasSmallPriceCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["hasSmallOption"]);
+				smallPriceTextBox.Text = selectedRow.Row["smallItemPrice"].ToString().Trim();
+				hasSmallPriceCheckBox_CheckedChanged(sender, new EventArgs()); // if theres no small option, can clear
+				largePriceTextBox.Text = selectedRow.Row["largeItemPrice"].ToString().Trim();
+				defaultToLargePriceCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["defaultToLargePrice"]);
+				isOutOfStockCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["isOutOfStock"]);
+				// need to convert categoryid to name
+				int categoryID = Convert.ToInt32(selectedRow.Row["categoryID"]);
+				string categoryName = getCategoryNameFromCategoryID(categoryID);
+				if (categoryName != null) // if category exists lmao
+				{
+					categoryComboBox.Text = categoryName;
+				}
+			}
+			else // unselect flop row
+			{
+				itemDataGridView.ClearSelection();
 			}
 		}
 
@@ -140,25 +150,30 @@ namespace ordering_system
 		{
 			if (hasSmallPriceCheckBox.Checked == false)
 			{
-				// clear and disable if doesnt have small price
+				// clear and disable small price text box if doesnt have small price
 				smallPriceTextBox.Text = string.Empty;
 				smallPriceTextBox.Enabled = false;
+				// has to default to large price if theres no small price
+				defaultToLargePriceCheckBox.Checked = true;
+				defaultToLargePriceCheckBox.Enabled = false;
 			}
 			else
 			{
 				// enable if has
 				smallPriceTextBox.Enabled = true;
+				defaultToLargePriceCheckBox.Enabled = true;
 			}
 		}
 
 		private void addItemButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (doesItemExist() == false && areAllFieldsFilled() == true && getCategoryIDFromCategoryName(categoryComboBox.Text) != -1) // if category doesnt alr exist and all required textboxes filled in
+			if (doesItemExist() == false && areAllFieldsFilled() == true && getCategoryIDFromCategoryName(categoryComboBox.Text) != -1) // if item doesnt alr exist and all required textboxes filled in
 			{
 				int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
 				SqlCommand addFoodItemToDatabase = new SqlCommand();
 				addFoodItemToDatabase.Connection = con;
+				addFoodItemToDatabase.Parameters.AddWithValue("@FIID", itemIDTextBox.Text);
 				addFoodItemToDatabase.Parameters.AddWithValue("@FN", itemNameTextBox.Text);
 				addFoodItemToDatabase.Parameters.AddWithValue("@DLP", defaultToLargePriceCheckBox.Checked);
 				addFoodItemToDatabase.Parameters.AddWithValue("@LIP", largePriceTextBox.Text);
@@ -166,24 +181,24 @@ namespace ordering_system
 				addFoodItemToDatabase.Parameters.AddWithValue("@CID", categoryID);
 				if (hasSmallPriceCheckBox.Checked) // has small price
 				{
-					addFoodItemToDatabase.CommandText = "INSERT INTO FoodItemTbl(foodName, defaultToLargePrice, hasSmallOption, smallItemPrice, largeItemPrice, isOutOfStock, categoryID) VALUES(@FN, @DLP, 1, @SIP, @LIP, @OOS, @CID)";
+					addFoodItemToDatabase.CommandText = "INSERT INTO FoodItemTbl(foodItemID, foodName, defaultToLargePrice, hasSmallOption, smallItemPrice, largeItemPrice, isOutOfStock, categoryID) VALUES(@FIID, @FN, @DLP, 1, @SIP, @LIP, @OOS, @CID)";
 					addFoodItemToDatabase.Parameters.AddWithValue("@SIP", smallPriceTextBox.Text);
 				}
 				else // no small price
 				{
-					addFoodItemToDatabase.CommandText = "INSERT INTO FoodItemTbl(foodName, defaultToLargePrice, hasSmallOption, largeItemPrice, isOutOfStock, categoryID) VALUES(@FN, @DLP, 0, @LIP, @OOS, @CID)";
+					addFoodItemToDatabase.CommandText = "INSERT INTO FoodItemTbl(foodItemID, foodName, defaultToLargePrice, hasSmallOption, largeItemPrice, isOutOfStock, categoryID) VALUES(@FIID, @FN, @DLP, 0, @LIP, @OOS, @CID)";
 				}
 				addFoodItemToDatabase.ExecuteNonQuery();
 				MessageBox.Show("Item added to database", "Ordering System");
 				updateDataGridView();
 			}
-			else if (areAllFieldsFilled() == true) // if category exists
-			{
-				MessageBox.Show("Category already exists with same name", "Ordering System");
-			}
-			else // if not all fields filled in
+			else if (doesItemExist() == false) // if not all fields filled in
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			else // if item exists
+			{
+				MessageBox.Show("Item already exists with same name or ID", "Ordering System");
 			}
 			con.Close();
 		}
@@ -201,14 +216,15 @@ namespace ordering_system
 				updateFoodItem.Parameters.AddWithValue("@LIP", largePriceTextBox.Text);
 				updateFoodItem.Parameters.AddWithValue("@OOS", isOutOfStockCheckBox.Checked);
 				updateFoodItem.Parameters.AddWithValue("@CID", categoryID);
+				updateFoodItem.Parameters.AddWithValue("@FIID", foodItemID);
 				if (hasSmallPriceCheckBox.Checked) // has small price
 				{
-					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodName = @FN, defaulttoLargePrice = @DIP, hasSmallOption = 1, smallItemPrice = @SIP, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
+					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 1, smallItemPrice = @SIP, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
 					updateFoodItem.Parameters.AddWithValue("@SIP", smallPriceTextBox.Text);
 				}
 				else // no small price
 				{
-					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodName = @FN, defaulttoLargePrice = @DIP, hasSmallOption = 0, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
+					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 0, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
 				}
 				updateFoodItem.ExecuteNonQuery();
 				MessageBox.Show("Item updated", "Ordering System");
@@ -218,9 +234,9 @@ namespace ordering_system
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");
 			}
-			else // category not selected
+			else // item not selected
 			{
-				MessageBox.Show("Category not selected", "Ordering System");
+				MessageBox.Show("Item not selected", "Ordering System");
 			}
 			con.Close();
 		}
@@ -228,7 +244,23 @@ namespace ordering_system
 		private void deleteItemButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			updateDataGridView();
+			if (doesItemExist() == false) // item not found
+			{
+				MessageBox.Show("Item not found in database", "Ordering System");
+			}
+			else if (foodItemID == null) // no food item selected
+			{
+				MessageBox.Show("Item not selected", "Ordering System");
+			}
+			else // item found
+			{
+				SqlCommand deleteCategory = new SqlCommand("DELETE FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+				deleteCategory.Parameters.AddWithValue("@FIID", foodItemID);
+				deleteCategory.ExecuteNonQuery();
+				foodItemID = null;
+				MessageBox.Show("Customer deleted", "Ordering System");
+				updateDataGridView();
+			}
 			con.Close();
 		}
 	}
