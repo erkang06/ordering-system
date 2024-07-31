@@ -192,6 +192,11 @@ namespace ordering_system
 			try
 			{
 				Convert.ToInt32(categoryIndexTextBox.Text); // check if value is acc int
+				if (Convert.ToDecimal(categoryIndexTextBox.Text) < 0) // not within range
+				{
+					MessageBox.Show("Category index not within range", "Ordering System");
+					categoryIndexTextBox.Focus();
+				}
 			}
 			catch // not int
 			{
