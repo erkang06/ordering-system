@@ -452,15 +452,15 @@ namespace ordering_system
 			try
 			{
 				Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text); // check if value is acc decimal
+				if (Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text) < 0 || Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text) >= 100) // not within range
+				{
+					MessageBox.Show("Delivery charge not within range", "Ordering System");
+					deliveryDeliveryChargeTextBox.Focus();
+				}
 			}
 			catch // not decimal
 			{
 				MessageBox.Show("Delivery charge not a decimal", "Ordering System");
-				deliveryDeliveryChargeTextBox.Focus();
-			}
-			if (Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text) < 0 || Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text) >= 100) // not within range
-			{
-				MessageBox.Show("Delivery charge not within range", "Ordering System");
 				deliveryDeliveryChargeTextBox.Focus();
 			}
 		}

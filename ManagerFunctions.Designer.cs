@@ -101,6 +101,7 @@
 			updateSetMealsButton.TabIndex = 3;
 			updateSetMealsButton.Text = "Update Set Meals";
 			updateSetMealsButton.UseVisualStyleBackColor = false;
+			updateSetMealsButton.Click += updateSetMealsButton_Click;
 			// 
 			// updateCustomersButton
 			// 

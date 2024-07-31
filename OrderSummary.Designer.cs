@@ -62,11 +62,13 @@
 			allOrdersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			allOrdersDataGridView.Location = new Point(12, 102);
 			allOrdersDataGridView.Name = "allOrdersDataGridView";
+			allOrdersDataGridView.ReadOnly = true;
 			allOrdersDataGridView.RowHeadersWidth = 82;
 			allOrdersDataGridView.ScrollBars = ScrollBars.Vertical;
 			allOrdersDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			allOrdersDataGridView.Size = new Size(1302, 835);
 			allOrdersDataGridView.TabIndex = 44;
+			allOrdersDataGridView.TabStop = false;
 			// 
 			// deliveryChargePriceLabel
 			// 
@@ -176,11 +178,13 @@
 			singleOrderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			singleOrderDataGridView.Location = new Point(1320, 0);
 			singleOrderDataGridView.Name = "singleOrderDataGridView";
+			singleOrderDataGridView.ReadOnly = true;
 			singleOrderDataGridView.RowHeadersWidth = 82;
 			singleOrderDataGridView.ScrollBars = ScrollBars.Vertical;
 			singleOrderDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			singleOrderDataGridView.Size = new Size(600, 1080);
 			singleOrderDataGridView.TabIndex = 55;
+			singleOrderDataGridView.TabStop = false;
 			// 
 			// printOrderSummaryButton
 			// 

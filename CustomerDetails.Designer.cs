@@ -389,6 +389,7 @@
 			deliveryAddressDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			deliveryAddressDataGridView.Location = new Point(1000, 12);
 			deliveryAddressDataGridView.Name = "deliveryAddressDataGridView";
+			deliveryAddressDataGridView.ReadOnly = true;
 			deliveryAddressDataGridView.RowHeadersWidth = 10;
 			deliveryAddressDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			deliveryAddressDataGridView.Size = new Size(908, 590);
