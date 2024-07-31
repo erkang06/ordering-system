@@ -113,6 +113,7 @@
 			updateCustomersButton.TabIndex = 46;
 			updateCustomersButton.Text = "Update Customers";
 			updateCustomersButton.UseVisualStyleBackColor = false;
+			updateCustomersButton.Click += updateCustomersButton_Click;
 			// 
 			// orderSummaryButton
 			// 

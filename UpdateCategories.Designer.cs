@@ -54,6 +54,7 @@
 			categoryDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			categoryDataGridView.Size = new Size(939, 970);
 			categoryDataGridView.TabIndex = 0;
+			categoryDataGridView.TabStop = false;
 			categoryDataGridView.CellClick += categoryDataGridView_CellClick;
 			// 
 			// cancelButton
@@ -63,7 +64,7 @@
 			cancelButton.Location = new Point(1818, 12);
 			cancelButton.Name = "cancelButton";
 			cancelButton.Size = new Size(90, 80);
-			cancelButton.TabIndex = 42;
+			cancelButton.TabIndex = 6;
 			cancelButton.UseVisualStyleBackColor = true;
 			cancelButton.Click += cancelButton_Click;
 			// 
@@ -85,7 +86,7 @@
 			categoryNameTextBox.Location = new Point(12, 162);
 			categoryNameTextBox.Name = "categoryNameTextBox";
 			categoryNameTextBox.Size = new Size(550, 57);
-			categoryNameTextBox.TabIndex = 44;
+			categoryNameTextBox.TabIndex = 1;
 			categoryNameTextBox.Leave += categoryNameTextBox_Leave;
 			// 
 			// categoryNameLabel
@@ -109,7 +110,7 @@
 			addCategoryButton.Location = new Point(12, 816);
 			addCategoryButton.Name = "addCategoryButton";
 			addCategoryButton.Size = new Size(400, 80);
-			addCategoryButton.TabIndex = 47;
+			addCategoryButton.TabIndex = 3;
 			addCategoryButton.Text = "Add Category";
 			addCategoryButton.UseVisualStyleBackColor = false;
 			addCategoryButton.Click += addCategoryButton_Click;
@@ -123,7 +124,7 @@
 			updateCategoryButton.Location = new Point(12, 902);
 			updateCategoryButton.Name = "updateCategoryButton";
 			updateCategoryButton.Size = new Size(400, 80);
-			updateCategoryButton.TabIndex = 48;
+			updateCategoryButton.TabIndex = 4;
 			updateCategoryButton.Text = "Update Category";
 			updateCategoryButton.UseVisualStyleBackColor = false;
 			updateCategoryButton.Click += updateCategoryButton_Click;
@@ -134,7 +135,7 @@
 			categoryIndexTextBox.Location = new Point(12, 285);
 			categoryIndexTextBox.Name = "categoryIndexTextBox";
 			categoryIndexTextBox.Size = new Size(550, 57);
-			categoryIndexTextBox.TabIndex = 50;
+			categoryIndexTextBox.TabIndex = 2;
 			categoryIndexTextBox.Leave += categoryIndexTextBox_Leave;
 			// 
 			// categoryIndexLabel
@@ -158,7 +159,7 @@
 			deleteCategoryButton.Location = new Point(12, 988);
 			deleteCategoryButton.Name = "deleteCategoryButton";
 			deleteCategoryButton.Size = new Size(400, 80);
-			deleteCategoryButton.TabIndex = 49;
+			deleteCategoryButton.TabIndex = 5;
 			deleteCategoryButton.Text = "Delete Category";
 			deleteCategoryButton.UseVisualStyleBackColor = false;
 			deleteCategoryButton.Click += deleteCategoryButton_Click;

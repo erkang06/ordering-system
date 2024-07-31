@@ -166,12 +166,23 @@ namespace ordering_system
 			}
 			else // category found
 			{
-				SqlCommand deleteCategory = new SqlCommand("DELETE FROM CustomerTbl WHERE categoryID = @CID", con);
-				deleteCategory.Parameters.AddWithValue("@CN", categoryID);
-				deleteCategory.ExecuteNonQuery();
-				categoryID = -1;
-				MessageBox.Show("Customer deleted", "Ordering System");
-				updateDataGridView();
+				// check if category used in food item tbl
+				SqlCommand checkIfCategoryUsed = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE categoryID = @CID", con);
+				checkIfCategoryUsed.Parameters.AddWithValue("@CID", categoryID);
+				int instancesOfCategoryUsed = (int)checkIfCategoryUsed.ExecuteScalar();
+				if (instancesOfCategoryUsed > 0)
+				{
+					MessageBox.Show("There is at least one item that uses this category. Remove them before deleting a category", "Ordering System");
+				}
+				else
+				{
+					SqlCommand deleteCategory = new SqlCommand("DELETE FROM CustomerTbl WHERE categoryID = @CID", con);
+					deleteCategory.Parameters.AddWithValue("@CID", categoryID);
+					deleteCategory.ExecuteNonQuery();
+					categoryID = -1;
+					MessageBox.Show("Category deleted", "Ordering System");
+					updateDataGridView();
+				}
 			}
 			con.Close();
 		}

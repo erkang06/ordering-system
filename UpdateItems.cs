@@ -258,7 +258,7 @@ namespace ordering_system
 				deleteCategory.Parameters.AddWithValue("@FIID", foodItemID);
 				deleteCategory.ExecuteNonQuery();
 				foodItemID = null;
-				MessageBox.Show("Customer deleted", "Ordering System");
+				MessageBox.Show("Item deleted", "Ordering System");
 				updateDataGridView();
 			}
 			con.Close();

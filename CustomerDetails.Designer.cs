@@ -393,6 +393,7 @@
 			deliveryAddressDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			deliveryAddressDataGridView.Size = new Size(908, 590);
 			deliveryAddressDataGridView.TabIndex = 35;
+			deliveryAddressDataGridView.TabStop = false;
 			deliveryAddressDataGridView.CellClick += deliveryAddressDataGridView_CellClick;
 			// 
 			// deliveryDeliveryChargeTextBox
@@ -427,7 +428,7 @@
 			acceptAddressButton.Location = new Point(12, 967);
 			acceptAddressButton.Name = "acceptAddressButton";
 			acceptAddressButton.Size = new Size(200, 100);
-			acceptAddressButton.TabIndex = 23;
+			acceptAddressButton.TabIndex = 22;
 			acceptAddressButton.Text = "Accept";
 			acceptAddressButton.UseVisualStyleBackColor = false;
 			acceptAddressButton.Click += acceptAddressButton_Click;
@@ -441,7 +442,7 @@
 			cancelAddressButton.Location = new Point(218, 968);
 			cancelAddressButton.Name = "cancelAddressButton";
 			cancelAddressButton.Size = new Size(200, 100);
-			cancelAddressButton.TabIndex = 24;
+			cancelAddressButton.TabIndex = 23;
 			cancelAddressButton.Text = "Cancel";
 			cancelAddressButton.UseVisualStyleBackColor = false;
 			cancelAddressButton.Click += cancelAddressButton_Click;
@@ -455,7 +456,7 @@
 			deleteDeliveryAddressButton.Location = new Point(1508, 610);
 			deleteDeliveryAddressButton.Name = "deleteDeliveryAddressButton";
 			deleteDeliveryAddressButton.Size = new Size(400, 80);
-			deleteDeliveryAddressButton.TabIndex = 22;
+			deleteDeliveryAddressButton.TabIndex = 21;
 			deleteDeliveryAddressButton.Text = "Delete Address";
 			deleteDeliveryAddressButton.UseVisualStyleBackColor = false;
 			deleteDeliveryAddressButton.Click += deleteDeliveryAddressButton_Click;

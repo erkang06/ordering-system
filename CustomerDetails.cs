@@ -24,7 +24,7 @@ namespace ordering_system
 
 		int customerID, addressID;
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the 
-																// the connection string to the database
+		// the connection string to the database
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
 		public CustomerDetails(string orderType)
 		{
@@ -451,11 +451,16 @@ namespace ordering_system
 		{
 			try
 			{
-				Convert.ToDecimal(deliveryDeliveryChargeTextBox); // check if value is acc decimal
+				Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text); // check if value is acc decimal
 			}
 			catch // not decimal
 			{
-				MessageBox.Show("Category index not an decimal", "Ordering System");
+				MessageBox.Show("Delivery charge not a decimal", "Ordering System");
+				deliveryDeliveryChargeTextBox.Focus();
+			}
+			if (Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text) < 0 || Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text) >= 100) // not within range
+			{
+				MessageBox.Show("Delivery charge not within range", "Ordering System");
 				deliveryDeliveryChargeTextBox.Focus();
 			}
 		}

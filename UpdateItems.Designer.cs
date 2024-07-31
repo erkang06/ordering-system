@@ -59,7 +59,7 @@
 			deleteItemButton.Location = new Point(12, 988);
 			deleteItemButton.Name = "deleteItemButton";
 			deleteItemButton.Size = new Size(400, 80);
-			deleteItemButton.TabIndex = 59;
+			deleteItemButton.TabIndex = 11;
 			deleteItemButton.Text = "Delete Item";
 			deleteItemButton.UseVisualStyleBackColor = false;
 			deleteItemButton.Click += deleteItemButton_Click;
@@ -73,7 +73,7 @@
 			updateItemButton.Location = new Point(12, 902);
 			updateItemButton.Name = "updateItemButton";
 			updateItemButton.Size = new Size(400, 80);
-			updateItemButton.TabIndex = 58;
+			updateItemButton.TabIndex = 10;
 			updateItemButton.Text = "Update Item";
 			updateItemButton.UseVisualStyleBackColor = false;
 			updateItemButton.Click += updateItemButton_Click;
@@ -87,7 +87,7 @@
 			addItemButton.Location = new Point(12, 816);
 			addItemButton.Name = "addItemButton";
 			addItemButton.Size = new Size(400, 80);
-			addItemButton.TabIndex = 57;
+			addItemButton.TabIndex = 9;
 			addItemButton.Text = "Add Item";
 			addItemButton.UseVisualStyleBackColor = false;
 			addItemButton.Click += addItemButton_Click;
@@ -98,7 +98,7 @@
 			itemIDTextBox.Location = new Point(413, 104);
 			itemIDTextBox.Name = "itemIDTextBox";
 			itemIDTextBox.Size = new Size(550, 57);
-			itemIDTextBox.TabIndex = 55;
+			itemIDTextBox.TabIndex = 1;
 			// 
 			// itemIDLabel
 			// 
@@ -131,7 +131,7 @@
 			cancelButton.Location = new Point(1818, 12);
 			cancelButton.Name = "cancelButton";
 			cancelButton.Size = new Size(90, 80);
-			cancelButton.TabIndex = 53;
+			cancelButton.TabIndex = 12;
 			cancelButton.UseVisualStyleBackColor = true;
 			cancelButton.Click += cancelButton_Click;
 			// 
@@ -148,6 +148,7 @@
 			itemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			itemDataGridView.Size = new Size(939, 970);
 			itemDataGridView.TabIndex = 52;
+			itemDataGridView.TabStop = false;
 			itemDataGridView.CellClick += itemDataGridView_CellClick;
 			// 
 			// itemNameTextBox
@@ -156,7 +157,7 @@
 			itemNameTextBox.Location = new Point(413, 164);
 			itemNameTextBox.Name = "itemNameTextBox";
 			itemNameTextBox.Size = new Size(550, 57);
-			itemNameTextBox.TabIndex = 60;
+			itemNameTextBox.TabIndex = 2;
 			// 
 			// itemNameLabel
 			// 
@@ -176,7 +177,7 @@
 			smallPriceTextBox.Location = new Point(413, 284);
 			smallPriceTextBox.Name = "smallPriceTextBox";
 			smallPriceTextBox.Size = new Size(550, 57);
-			smallPriceTextBox.TabIndex = 62;
+			smallPriceTextBox.TabIndex = 4;
 			// 
 			// smallPriceLabel
 			// 
@@ -196,7 +197,7 @@
 			largePriceTextBox.Location = new Point(413, 344);
 			largePriceTextBox.Name = "largePriceTextBox";
 			largePriceTextBox.Size = new Size(550, 57);
-			largePriceTextBox.TabIndex = 64;
+			largePriceTextBox.TabIndex = 5;
 			// 
 			// largePriceLabel
 			// 
@@ -219,7 +220,7 @@
 			defaultToLargePriceCheckBox.Location = new Point(12, 404);
 			defaultToLargePriceCheckBox.Name = "defaultToLargePriceCheckBox";
 			defaultToLargePriceCheckBox.Size = new Size(459, 55);
-			defaultToLargePriceCheckBox.TabIndex = 66;
+			defaultToLargePriceCheckBox.TabIndex = 6;
 			defaultToLargePriceCheckBox.Text = "Default to Large Price?";
 			defaultToLargePriceCheckBox.UseVisualStyleBackColor = false;
 			// 
@@ -231,7 +232,7 @@
 			hasSmallPriceCheckBox.Location = new Point(12, 224);
 			hasSmallPriceCheckBox.Name = "hasSmallPriceCheckBox";
 			hasSmallPriceCheckBox.Size = new Size(343, 55);
-			hasSmallPriceCheckBox.TabIndex = 67;
+			hasSmallPriceCheckBox.TabIndex = 3;
 			hasSmallPriceCheckBox.Text = "Has Small Price?";
 			hasSmallPriceCheckBox.UseVisualStyleBackColor = false;
 			hasSmallPriceCheckBox.CheckedChanged += hasSmallPriceCheckBox_CheckedChanged;
@@ -244,7 +245,7 @@
 			isOutOfStockCheckBox.Location = new Point(12, 464);
 			isOutOfStockCheckBox.Name = "isOutOfStockCheckBox";
 			isOutOfStockCheckBox.Size = new Size(292, 55);
-			isOutOfStockCheckBox.TabIndex = 68;
+			isOutOfStockCheckBox.TabIndex = 7;
 			isOutOfStockCheckBox.Text = "Out of Stock?";
 			isOutOfStockCheckBox.UseVisualStyleBackColor = false;
 			// 
@@ -269,7 +270,7 @@
 			categoryComboBox.Location = new Point(413, 524);
 			categoryComboBox.Name = "categoryComboBox";
 			categoryComboBox.Size = new Size(550, 58);
-			categoryComboBox.TabIndex = 71;
+			categoryComboBox.TabIndex = 8;
 			// 
 			// UpdateItems
 			// 

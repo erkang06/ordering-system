@@ -43,6 +43,11 @@ namespace ordering_system
 			obj.Show();
 		}
 
+		private void updateCustomersButton_Click(object sender, EventArgs e)
+		{
+
+		}
+
 		private void orderSummaryButton_Click(object sender, EventArgs e)
 		{
 			OrderSummary obj = new OrderSummary();
