@@ -99,9 +99,9 @@
 			deleteSetMealButton.BackColor = SystemColors.Control;
 			deleteSetMealButton.FlatStyle = FlatStyle.Flat;
 			deleteSetMealButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			deleteSetMealButton.Location = new Point(1608, 230);
+			deleteSetMealButton.Location = new Point(1608, 282);
 			deleteSetMealButton.Name = "deleteSetMealButton";
-			deleteSetMealButton.Size = new Size(300, 60);
+			deleteSetMealButton.Size = new Size(300, 86);
 			deleteSetMealButton.TabIndex = 81;
 			deleteSetMealButton.Text = "Delete Set Meal";
 			deleteSetMealButton.UseVisualStyleBackColor = false;
@@ -112,9 +112,9 @@
 			updateSetMealButton.BackColor = SystemColors.Control;
 			updateSetMealButton.FlatStyle = FlatStyle.Flat;
 			updateSetMealButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			updateSetMealButton.Location = new Point(1608, 164);
+			updateSetMealButton.Location = new Point(1608, 190);
 			updateSetMealButton.Name = "updateSetMealButton";
-			updateSetMealButton.Size = new Size(300, 60);
+			updateSetMealButton.Size = new Size(300, 86);
 			updateSetMealButton.TabIndex = 80;
 			updateSetMealButton.Text = "Update Set Meal";
 			updateSetMealButton.UseVisualStyleBackColor = false;
@@ -127,7 +127,7 @@
 			addSetMealButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			addSetMealButton.Location = new Point(1608, 98);
 			addSetMealButton.Name = "addSetMealButton";
-			addSetMealButton.Size = new Size(300, 60);
+			addSetMealButton.Size = new Size(300, 86);
 			addSetMealButton.TabIndex = 79;
 			addSetMealButton.Text = "Add Set Meal";
 			addSetMealButton.UseVisualStyleBackColor = false;
@@ -183,12 +183,12 @@
 			setMealitemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			setMealitemDataGridView.BackgroundColor = Color.White;
 			setMealitemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			setMealitemDataGridView.Location = new Point(718, 351);
+			setMealitemDataGridView.Location = new Point(718, 374);
 			setMealitemDataGridView.Name = "setMealitemDataGridView";
 			setMealitemDataGridView.ReadOnly = true;
 			setMealitemDataGridView.RowHeadersWidth = 82;
 			setMealitemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			setMealitemDataGridView.Size = new Size(884, 592);
+			setMealitemDataGridView.Size = new Size(1190, 569);
 			setMealitemDataGridView.TabIndex = 83;
 			setMealitemDataGridView.TabStop = false;
 			setMealitemDataGridView.CellClick += setMealitemDataGridView_CellClick;
@@ -204,7 +204,7 @@
 			setMealDataGridView.ReadOnly = true;
 			setMealDataGridView.RowHeadersWidth = 82;
 			setMealDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			setMealDataGridView.Size = new Size(884, 247);
+			setMealDataGridView.Size = new Size(884, 270);
 			setMealDataGridView.TabIndex = 89;
 			setMealDataGridView.TabStop = false;
 			setMealDataGridView.CellClick += setMealDataGridView_CellClick;

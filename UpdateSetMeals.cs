@@ -16,7 +16,7 @@ namespace ordering_system
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
 		DataView foodItemsDataView, setMealsDataView; // full database compared to whats shown in datagridview
 		DataSet categoriesDataSet; // same as above xoxo
-		string foodItemID; // id of currently selected item from datagridview
+		string foodItemID, setMealID; // id of currently selected item/setmeal from datagridview
 
 		public UpdateSetMeals()
 		{
@@ -62,15 +62,40 @@ namespace ordering_system
 			List<string> categoryNames = new List<string>();
 			foreach (DataRowView category in categoriesDataView)
 			{
-				categoryNames.Add(category["categoryName"].ToString());
+				categoryNames.Add(category["categoryName"].ToString().Trim());
 			}
 			// fill in category combobox
+			bool setMealExists = false; // checks if set meal exists in categorytbl
 			foreach (string categoryName in categoryNames)
 			{
-				if (categoryName.Trim() != "Set Meal") // you cant add set meals to a set meal xoxo
+				if (categoryName.Trim() != "Set Meals") // you cant add set meals to a set meal xoxo
 				{
-					categoryComboBox.Items.Add(categoryName.Trim());
+					categoryComboBox.Items.Add(categoryName);
 				}
+				else
+				{
+					setMealExists = true;
+				}
+			}
+			if (setMealExists == false) // create set meal in categorytbl if it doesnt exist
+			{
+				// find next value for categoryindex
+				SqlCommand findMaxCategoryIndex = new SqlCommand("SELECT MAX(categoryIndex) FROM CategoryTbl", con);
+				int maxCategoryIndex;
+				try // get the biggest category index
+				{
+					maxCategoryIndex = (int)findMaxCategoryIndex.ExecuteScalar();
+				}
+				catch // if database empty
+				{
+					maxCategoryIndex = 0;
+				}
+				maxCategoryIndex++;
+				SqlCommand addSetMealToDatabase = new SqlCommand("INSERT INTO CategoryTbl(categoryName, categoryIndex) VALUES(@CN, @CI)", con);
+				addSetMealToDatabase.Parameters.AddWithValue("@CN", "Set Meals");
+				addSetMealToDatabase.Parameters.AddWithValue("@CI", maxCategoryIndex);
+				addSetMealToDatabase.ExecuteNonQuery();
+				MessageBox.Show("Set meals didn't exist as a category, so has been added to database", "Ordering System");
 			}
 			updateSetMealDataGridView();
 			con.Close();
