@@ -23,6 +23,28 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
+		private string getCategoryNameFromCategoryID(int categoryID)
+		{
+			DataView categoriesDataViewSortByID = new DataView(categoriesDataSet.Tables[0], "", "categoryID", DataViewRowState.CurrentRows);
+			int categoryIDIndex = categoriesDataViewSortByID.Find(categoryID);
+			if (categoryIDIndex != -1) // if category exists lmao
+			{
+				return categoriesDataViewSortByID[categoryIDIndex]["categoryName"].ToString().Trim();
+			}
+			return null;
+		}
+
+		private int getCategoryIDFromCategoryName(string categoryName)
+		{
+			DataView categoriesDataViewSortByName = new DataView(categoriesDataSet.Tables[0], "", "categoryName", DataViewRowState.CurrentRows);
+			int categoryNameIndex = categoriesDataViewSortByName.Find(categoryName);
+			if (categoryNameIndex != -1) // if category exists lmao
+			{
+				return Convert.ToInt32(categoriesDataViewSortByName[categoryNameIndex]["categoryID"]);
+			}
+			return categoryNameIndex;
+		}
+
 		private void cancelButton_Click(object sender, EventArgs e)
 		{
 			Close();
@@ -45,7 +67,10 @@ namespace ordering_system
 			// fill in category combobox
 			foreach (string categoryName in categoryNames)
 			{
-				categoryComboBox.Items.Add(categoryName.Trim());
+				if (categoryName.Trim() != "Set Meal") // you cant add set meals to a set meal xoxo
+				{
+					categoryComboBox.Items.Add(categoryName.Trim());
+				}
 			}
 			updateSetMealDataGridView();
 			con.Close();
@@ -61,6 +86,81 @@ namespace ordering_system
 			DataTable setMealsDataTable = setMealsDataView.ToTable(true, "setMealID", "setMealName", "price");
 			setMealDataGridView.DataSource = setMealsDataTable;
 			setMealDataGridView.ClearSelection();
+		}
+
+		private void increaseQuantityButton_Click(object sender, EventArgs e)
+		{
+			int currentQuantity = Convert.ToInt32(itemQuantityValueLabel.Text);
+			currentQuantity++;
+			itemQuantityValueLabel.Text = currentQuantity.ToString();
+		}
+
+		private void decreaseQuantityButton_Click(object sender, EventArgs e)
+		{
+			int currentQuantity = Convert.ToInt32(itemQuantityValueLabel.Text);
+			currentQuantity--;
+			if (currentQuantity > 0)
+			{
+				itemQuantityValueLabel.Text = currentQuantity.ToString();
+			}
+		}
+
+		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			// find clicked row of table in order to search through fooditemsdataview to find the full deets
+			int selectedRowIndex = itemDataGridView.SelectedCells[0].RowIndex;
+			if (itemDataGridView.RowCount > 1 && selectedRowIndex < itemDataGridView.RowCount - 1) // just in case theres no rows
+			{
+
+			}
+			else // unselect flop row
+			{
+				itemDataGridView.ClearSelection();
+			}
+		}
+
+		private void setMealDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			// find clicked row of table in order to search through setmealdataview to find the full deets
+			int selectedRowIndex = setMealDataGridView.SelectedCells[0].RowIndex;
+			if (setMealDataGridView.RowCount > 1 && selectedRowIndex < setMealDataGridView.RowCount - 1) // just in case theres no rows
+			{
+
+			}
+			else // unselect flop row
+			{
+				setMealDataGridView.ClearSelection();
+			}
+		}
+
+		private void setMealitemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			// find clicked row of table in order to search through setmealfooditemsdataview to find the full deets
+			int selectedRowIndex = setMealitemDataGridView.SelectedCells[0].RowIndex;
+			if (setMealitemDataGridView.RowCount > 1 && selectedRowIndex < setMealitemDataGridView.RowCount - 1) // just in case theres no rows
+			{
+
+			}
+			else // unselect flop row
+			{
+				setMealitemDataGridView.ClearSelection();
+			}
+		}
+
+		private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			con.Open();
+			int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
+			SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
+			getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
+			DataSet foodItemsDataSet = new DataSet();
+			getFoodItemsByCategory.Fill(foodItemsDataSet);
+			foodItemsDataView = new DataView(foodItemsDataSet.Tables[0]);
+			// fill in set meals datagridview
+			DataTable foodItemsDataTable = foodItemsDataView.ToTable(true, "foodItemID", "foodName");
+			itemDataGridView.DataSource = foodItemsDataTable;
+			itemDataGridView.ClearSelection();
+			con.Close();
 		}
 	}
 }

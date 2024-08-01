@@ -112,7 +112,7 @@ namespace ordering_system
 
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			// find clicked row of table in order to search through fooditemsdatagridview to find the full deets
+			// find clicked row of table in order to search through fooditemsdataview to find the full deets
 			int selectedRowIndex = itemDataGridView.SelectedCells[0].RowIndex;
 			if (itemDataGridView.RowCount > 1 && selectedRowIndex < itemDataGridView.RowCount - 1) // just in case theres no rows
 			{

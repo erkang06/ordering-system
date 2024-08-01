@@ -191,6 +191,7 @@
 			setMealitemDataGridView.Size = new Size(884, 592);
 			setMealitemDataGridView.TabIndex = 83;
 			setMealitemDataGridView.TabStop = false;
+			setMealitemDataGridView.CellClick += setMealitemDataGridView_CellClick;
 			// 
 			// setMealDataGridView
 			// 
@@ -206,6 +207,7 @@
 			setMealDataGridView.Size = new Size(884, 247);
 			setMealDataGridView.TabIndex = 89;
 			setMealDataGridView.TabStop = false;
+			setMealDataGridView.CellClick += setMealDataGridView_CellClick;
 			// 
 			// categoryComboBox
 			// 
@@ -216,6 +218,7 @@
 			categoryComboBox.Name = "categoryComboBox";
 			categoryComboBox.Size = new Size(494, 58);
 			categoryComboBox.TabIndex = 90;
+			categoryComboBox.SelectedIndexChanged += categoryComboBox_SelectedIndexChanged;
 			// 
 			// categoryLabel
 			// 
@@ -244,6 +247,7 @@
 			itemDataGridView.Size = new Size(700, 535);
 			itemDataGridView.TabIndex = 92;
 			itemDataGridView.TabStop = false;
+			itemDataGridView.CellClick += itemDataGridView_CellClick;
 			// 
 			// setMealPriceTextBox
 			// 
@@ -339,6 +343,7 @@
 			increaseQuantityButton.Size = new Size(80, 57);
 			increaseQuantityButton.TabIndex = 104;
 			increaseQuantityButton.UseVisualStyleBackColor = true;
+			increaseQuantityButton.Click += increaseQuantityButton_Click;
 			// 
 			// decreaseQuantityButton
 			// 
@@ -348,6 +353,7 @@
 			decreaseQuantityButton.Size = new Size(80, 57);
 			decreaseQuantityButton.TabIndex = 103;
 			decreaseQuantityButton.UseVisualStyleBackColor = true;
+			decreaseQuantityButton.Click += decreaseQuantityButton_Click;
 			// 
 			// UpdateSetMeals
 			// 
