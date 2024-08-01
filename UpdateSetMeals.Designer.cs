@@ -77,7 +77,7 @@
 			setMealNameTextBox.Font = new Font("Segoe UI", 14F);
 			setMealNameTextBox.Location = new Point(12, 886);
 			setMealNameTextBox.Name = "setMealNameTextBox";
-			setMealNameTextBox.Size = new Size(700, 57);
+			setMealNameTextBox.Size = new Size(756, 57);
 			setMealNameTextBox.TabIndex = 72;
 			// 
 			// setMealNameLabel
@@ -138,7 +138,7 @@
 			setMealIDTextBox.Font = new Font("Segoe UI", 14F);
 			setMealIDTextBox.Location = new Point(12, 763);
 			setMealIDTextBox.Name = "setMealIDTextBox";
-			setMealIDTextBox.Size = new Size(700, 57);
+			setMealIDTextBox.Size = new Size(756, 57);
 			setMealIDTextBox.TabIndex = 71;
 			// 
 			// setMealIDLabel
@@ -183,12 +183,12 @@
 			setMealitemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			setMealitemDataGridView.BackgroundColor = Color.White;
 			setMealitemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			setMealitemDataGridView.Location = new Point(718, 374);
+			setMealitemDataGridView.Location = new Point(774, 374);
 			setMealitemDataGridView.Name = "setMealitemDataGridView";
 			setMealitemDataGridView.ReadOnly = true;
 			setMealitemDataGridView.RowHeadersWidth = 82;
 			setMealitemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			setMealitemDataGridView.Size = new Size(1190, 569);
+			setMealitemDataGridView.Size = new Size(1134, 569);
 			setMealitemDataGridView.TabIndex = 83;
 			setMealitemDataGridView.TabStop = false;
 			setMealitemDataGridView.CellClick += setMealitemDataGridView_CellClick;
@@ -199,12 +199,12 @@
 			setMealDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			setMealDataGridView.BackgroundColor = Color.White;
 			setMealDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			setMealDataGridView.Location = new Point(718, 98);
+			setMealDataGridView.Location = new Point(774, 98);
 			setMealDataGridView.Name = "setMealDataGridView";
 			setMealDataGridView.ReadOnly = true;
 			setMealDataGridView.RowHeadersWidth = 82;
 			setMealDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			setMealDataGridView.Size = new Size(884, 270);
+			setMealDataGridView.Size = new Size(828, 270);
 			setMealDataGridView.TabIndex = 89;
 			setMealDataGridView.TabStop = false;
 			setMealDataGridView.CellClick += setMealDataGridView_CellClick;
@@ -216,7 +216,7 @@
 			categoryComboBox.FormattingEnabled = true;
 			categoryComboBox.Location = new Point(218, 98);
 			categoryComboBox.Name = "categoryComboBox";
-			categoryComboBox.Size = new Size(494, 58);
+			categoryComboBox.Size = new Size(550, 58);
 			categoryComboBox.TabIndex = 90;
 			categoryComboBox.SelectedIndexChanged += categoryComboBox_SelectedIndexChanged;
 			// 
@@ -244,7 +244,7 @@
 			itemDataGridView.ReadOnly = true;
 			itemDataGridView.RowHeadersWidth = 82;
 			itemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			itemDataGridView.Size = new Size(700, 535);
+			itemDataGridView.Size = new Size(756, 535);
 			itemDataGridView.TabIndex = 92;
 			itemDataGridView.TabStop = false;
 			itemDataGridView.CellClick += itemDataGridView_CellClick;
@@ -255,7 +255,7 @@
 			setMealPriceTextBox.Font = new Font("Segoe UI", 14F);
 			setMealPriceTextBox.Location = new Point(12, 1011);
 			setMealPriceTextBox.Name = "setMealPriceTextBox";
-			setMealPriceTextBox.Size = new Size(700, 57);
+			setMealPriceTextBox.Size = new Size(756, 57);
 			setMealPriceTextBox.TabIndex = 93;
 			// 
 			// itemSizeLabel
@@ -264,11 +264,11 @@
 			itemSizeLabel.BackColor = Color.Transparent;
 			itemSizeLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			itemSizeLabel.ForeColor = Color.Black;
-			itemSizeLabel.Location = new Point(718, 1011);
+			itemSizeLabel.Location = new Point(774, 1011);
 			itemSizeLabel.Margin = new Padding(3, 5, 3, 5);
 			itemSizeLabel.Name = "itemSizeLabel";
 			itemSizeLabel.RightToLeft = RightToLeft.No;
-			itemSizeLabel.Size = new Size(356, 50);
+			itemSizeLabel.Size = new Size(300, 50);
 			itemSizeLabel.TabIndex = 98;
 			itemSizeLabel.Text = "Item Size:";
 			// 
@@ -278,10 +278,10 @@
 			itemQuantityLabel.BackColor = Color.Transparent;
 			itemQuantityLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			itemQuantityLabel.ForeColor = Color.Black;
-			itemQuantityLabel.Location = new Point(718, 951);
+			itemQuantityLabel.Location = new Point(774, 951);
 			itemQuantityLabel.Margin = new Padding(3, 5, 3, 5);
 			itemQuantityLabel.Name = "itemQuantityLabel";
-			itemQuantityLabel.Size = new Size(356, 50);
+			itemQuantityLabel.Size = new Size(300, 50);
 			itemQuantityLabel.TabIndex = 97;
 			itemQuantityLabel.Text = "Item Quantity:";
 			// 

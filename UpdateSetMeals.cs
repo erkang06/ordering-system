@@ -14,7 +14,7 @@ namespace ordering_system
 	public partial class UpdateSetMeals : Form
 	{
 		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
-		DataView foodItemsDataView, setMealsDataView; // full database compared to whats shown in datagridview
+		DataView foodItemsDataView, setMealsDataView, setMealFoodItemsDataView; // full database compared to whats shown in datagridview
 		DataSet categoriesDataSet; // same as above xoxo
 		string foodItemID, setMealID; // id of currently selected item/setmeal from datagridview
 
@@ -136,7 +136,18 @@ namespace ordering_system
 			int selectedRowIndex = itemDataGridView.SelectedCells[0].RowIndex;
 			if (itemDataGridView.RowCount > 1 && selectedRowIndex < itemDataGridView.RowCount - 1) // just in case theres no rows
 			{
-
+				if (setMealitemDataGridView.Columns.Count == 0) // if theres no columns in setmealfooditemdatagridview
+				{
+					// create datatable
+					DataTable setMealFoodItemsDataTable = new DataTable();
+					setMealFoodItemsDataTable.Columns.Add("setMealID");
+					setMealFoodItemsDataTable.Columns.Add("foodItemID");
+					setMealFoodItemsDataTable.Columns.Add("foodName");
+					setMealFoodItemsDataTable.Columns.Add("size");
+					setMealFoodItemsDataTable.Columns.Add("quantity");
+					setMealFoodItemsDataView = new DataView(setMealFoodItemsDataTable);
+					setMealitemDataGridView.DataSource = setMealFoodItemsDataView.ToTable(true, "foodItemID", "foodName", "size", "quantity");
+				}
 			}
 			else // unselect flop row
 			{
