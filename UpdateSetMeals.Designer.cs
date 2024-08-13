@@ -38,7 +38,7 @@
 			setMealIDLabel = new Label();
 			updateSetMealsLabel = new Label();
 			cancelButton = new Button();
-			setMealitemDataGridView = new DataGridView();
+			setMealItemDataGridView = new DataGridView();
 			setMealDataGridView = new DataGridView();
 			categoryComboBox = new ComboBox();
 			categoryLabel = new Label();
@@ -47,12 +47,10 @@
 			itemSizeLabel = new Label();
 			itemQuantityLabel = new Label();
 			itemSizeComboBox = new ComboBox();
-			deleteItemButton = new Button();
-			updateItemButton = new Button();
 			itemQuantityValueLabel = new Label();
 			increaseQuantityButton = new Button();
 			decreaseQuantityButton = new Button();
-			((System.ComponentModel.ISupportInitialize)setMealitemDataGridView).BeginInit();
+			((System.ComponentModel.ISupportInitialize)setMealItemDataGridView).BeginInit();
 			((System.ComponentModel.ISupportInitialize)setMealDataGridView).BeginInit();
 			((System.ComponentModel.ISupportInitialize)itemDataGridView).BeginInit();
 			SuspendLayout();
@@ -99,9 +97,9 @@
 			deleteSetMealButton.BackColor = SystemColors.Control;
 			deleteSetMealButton.FlatStyle = FlatStyle.Flat;
 			deleteSetMealButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			deleteSetMealButton.Location = new Point(1608, 282);
+			deleteSetMealButton.Location = new Point(1608, 342);
 			deleteSetMealButton.Name = "deleteSetMealButton";
-			deleteSetMealButton.Size = new Size(300, 86);
+			deleteSetMealButton.Size = new Size(300, 116);
 			deleteSetMealButton.TabIndex = 81;
 			deleteSetMealButton.Text = "Delete Set Meal";
 			deleteSetMealButton.UseVisualStyleBackColor = false;
@@ -112,9 +110,9 @@
 			updateSetMealButton.BackColor = SystemColors.Control;
 			updateSetMealButton.FlatStyle = FlatStyle.Flat;
 			updateSetMealButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			updateSetMealButton.Location = new Point(1608, 190);
+			updateSetMealButton.Location = new Point(1608, 220);
 			updateSetMealButton.Name = "updateSetMealButton";
-			updateSetMealButton.Size = new Size(300, 86);
+			updateSetMealButton.Size = new Size(300, 116);
 			updateSetMealButton.TabIndex = 80;
 			updateSetMealButton.Text = "Update Set Meal";
 			updateSetMealButton.UseVisualStyleBackColor = false;
@@ -127,7 +125,7 @@
 			addSetMealButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			addSetMealButton.Location = new Point(1608, 98);
 			addSetMealButton.Name = "addSetMealButton";
-			addSetMealButton.Size = new Size(300, 86);
+			addSetMealButton.Size = new Size(300, 116);
 			addSetMealButton.TabIndex = 79;
 			addSetMealButton.Text = "Add Set Meal";
 			addSetMealButton.UseVisualStyleBackColor = false;
@@ -177,21 +175,21 @@
 			cancelButton.UseVisualStyleBackColor = true;
 			cancelButton.Click += cancelButton_Click;
 			// 
-			// setMealitemDataGridView
+			// setMealItemDataGridView
 			// 
-			setMealitemDataGridView.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			setMealitemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-			setMealitemDataGridView.BackgroundColor = Color.White;
-			setMealitemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			setMealitemDataGridView.Location = new Point(774, 374);
-			setMealitemDataGridView.Name = "setMealitemDataGridView";
-			setMealitemDataGridView.ReadOnly = true;
-			setMealitemDataGridView.RowHeadersWidth = 82;
-			setMealitemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			setMealitemDataGridView.Size = new Size(1134, 569);
-			setMealitemDataGridView.TabIndex = 83;
-			setMealitemDataGridView.TabStop = false;
-			setMealitemDataGridView.CellClick += setMealitemDataGridView_CellClick;
+			setMealItemDataGridView.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			setMealItemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+			setMealItemDataGridView.BackgroundColor = Color.White;
+			setMealItemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			setMealItemDataGridView.Location = new Point(774, 464);
+			setMealItemDataGridView.Name = "setMealItemDataGridView";
+			setMealItemDataGridView.ReadOnly = true;
+			setMealItemDataGridView.RowHeadersWidth = 82;
+			setMealItemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			setMealItemDataGridView.Size = new Size(1134, 479);
+			setMealItemDataGridView.TabIndex = 83;
+			setMealItemDataGridView.TabStop = false;
+			setMealItemDataGridView.CellClick += setMealitemDataGridView_CellClick;
 			// 
 			// setMealDataGridView
 			// 
@@ -204,7 +202,7 @@
 			setMealDataGridView.ReadOnly = true;
 			setMealDataGridView.RowHeadersWidth = 82;
 			setMealDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			setMealDataGridView.Size = new Size(828, 270);
+			setMealDataGridView.Size = new Size(828, 360);
 			setMealDataGridView.TabIndex = 89;
 			setMealDataGridView.TabStop = false;
 			setMealDataGridView.CellClick += setMealDataGridView_CellClick;
@@ -296,32 +294,6 @@
 			itemSizeComboBox.Size = new Size(522, 58);
 			itemSizeComboBox.TabIndex = 99;
 			// 
-			// deleteItemButton
-			// 
-			deleteItemButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			deleteItemButton.BackColor = SystemColors.Control;
-			deleteItemButton.FlatStyle = FlatStyle.Flat;
-			deleteItemButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-			deleteItemButton.Location = new Point(1608, 1014);
-			deleteItemButton.Name = "deleteItemButton";
-			deleteItemButton.Size = new Size(300, 60);
-			deleteItemButton.TabIndex = 101;
-			deleteItemButton.Text = "Delete Item";
-			deleteItemButton.UseVisualStyleBackColor = false;
-			// 
-			// updateItemButton
-			// 
-			updateItemButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			updateItemButton.BackColor = SystemColors.Control;
-			updateItemButton.FlatStyle = FlatStyle.Flat;
-			updateItemButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-			updateItemButton.Location = new Point(1608, 948);
-			updateItemButton.Name = "updateItemButton";
-			updateItemButton.Size = new Size(300, 60);
-			updateItemButton.TabIndex = 100;
-			updateItemButton.Text = "Update Item";
-			updateItemButton.UseVisualStyleBackColor = false;
-			// 
 			// itemQuantityValueLabel
 			// 
 			itemQuantityValueLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -364,8 +336,6 @@
 			Controls.Add(increaseQuantityButton);
 			Controls.Add(decreaseQuantityButton);
 			Controls.Add(itemQuantityValueLabel);
-			Controls.Add(deleteItemButton);
-			Controls.Add(updateItemButton);
 			Controls.Add(itemSizeComboBox);
 			Controls.Add(itemSizeLabel);
 			Controls.Add(itemQuantityLabel);
@@ -384,12 +354,12 @@
 			Controls.Add(setMealIDLabel);
 			Controls.Add(updateSetMealsLabel);
 			Controls.Add(cancelButton);
-			Controls.Add(setMealitemDataGridView);
+			Controls.Add(setMealItemDataGridView);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "UpdateSetMeals";
 			Text = "UpdateSetMeals";
 			Load += UpdateSetMeals_Load;
-			((System.ComponentModel.ISupportInitialize)setMealitemDataGridView).EndInit();
+			((System.ComponentModel.ISupportInitialize)setMealItemDataGridView).EndInit();
 			((System.ComponentModel.ISupportInitialize)setMealDataGridView).EndInit();
 			((System.ComponentModel.ISupportInitialize)itemDataGridView).EndInit();
 			ResumeLayout(false);
@@ -413,7 +383,7 @@
 		private Label setMealIDLabel;
 		private Label updateSetMealsLabel;
 		private Button cancelButton;
-		private DataGridView setMealitemDataGridView;
+		private DataGridView setMealItemDataGridView;
 		private DataGridView setMealDataGridView;
 		private ComboBox categoryComboBox;
 		private Label categoryLabel;
@@ -422,8 +392,6 @@
 		private Label itemSizeLabel;
 		private Label itemQuantityLabel;
 		private ComboBox itemSizeComboBox;
-		private Button deleteItemButton;
-		private Button updateItemButton;
 		private Label itemQuantityValueLabel;
 		private Button increaseQuantityButton;
 		private Button decreaseQuantityButton;

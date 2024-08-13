@@ -13,9 +13,10 @@ namespace ordering_system
 {
 	public partial class UpdateSetMeals : Form
 	{
-		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
-		DataView foodItemsDataView, setMealsDataView, setMealFoodItemsDataView; // full database compared to whats shown in datagridview
+		readonly SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
+		DataView foodItemsDataViewByCategory, setMealsDataView; // full database compared to whats shown in datagridview
 		DataSet categoriesDataSet; // same as above xoxo
+		DataTable setMealFoodItemsDataTable; // separate table to work through the setmeal items while in progress; reduces number of edits to main table
 		string foodItemID, setMealID; // id of currently selected item/setmeal from datagridview
 
 		public UpdateSetMeals()
@@ -43,6 +44,17 @@ namespace ordering_system
 				return Convert.ToInt32(categoriesDataViewSortByName[categoryNameIndex]["categoryID"]);
 			}
 			return categoryNameIndex;
+		}
+
+		private int doesFoodItemExist(string foodItemID) // returns index of food item in set meal if exists, else returns -1
+		{
+			DataRow[] foodItem = setMealFoodItemsDataTable.Select($"foodItemID = '{foodItemID}'");
+			if (foodItem.Length > 0) // theres only 1 cuz its a primary key innit
+			{
+				int index = setMealFoodItemsDataTable.Rows.IndexOf(foodItem[0]);
+				return index;
+			}
+			return -1;
 		}
 
 		private void cancelButton_Click(object sender, EventArgs e)
@@ -97,6 +109,13 @@ namespace ordering_system
 				addSetMealToDatabase.ExecuteNonQuery();
 				MessageBox.Show("Set meals didn't exist as a category, so has been added to database", "Ordering System");
 			}
+			// sort out setmealfooditemsdatatable
+			setMealFoodItemsDataTable = new DataTable();
+			setMealFoodItemsDataTable.Columns.Add("foodItemID");
+			setMealFoodItemsDataTable.Columns.Add("foodName");
+			setMealFoodItemsDataTable.Columns.Add("size");
+			setMealFoodItemsDataTable.Columns.Add("quantity");
+			setMealItemDataGridView.DataSource = setMealFoodItemsDataTable;
 			updateSetMealDataGridView();
 			con.Close();
 		}
@@ -136,17 +155,34 @@ namespace ordering_system
 			int selectedRowIndex = itemDataGridView.SelectedCells[0].RowIndex;
 			if (itemDataGridView.RowCount > 1 && selectedRowIndex < itemDataGridView.RowCount - 1) // just in case theres no rows
 			{
-				if (setMealitemDataGridView.Columns.Count == 0) // if theres no columns in setmealfooditemdatagridview
+				// find food item id to search through tbl
+				DataRowView selectedRow = foodItemsDataViewByCategory[selectedRowIndex];
+				foodItemID = selectedRow["foodItemID"].ToString().Trim();
+				int foodItemIndex = doesFoodItemExist(foodItemID); // find index of food in set meal datatable if exists
+				if (foodItemIndex == -1) // food item doesnt alr exist in set meal
 				{
-					// create datatable
-					DataTable setMealFoodItemsDataTable = new DataTable();
-					setMealFoodItemsDataTable.Columns.Add("setMealID");
-					setMealFoodItemsDataTable.Columns.Add("foodItemID");
-					setMealFoodItemsDataTable.Columns.Add("foodName");
-					setMealFoodItemsDataTable.Columns.Add("size");
-					setMealFoodItemsDataTable.Columns.Add("quantity");
-					setMealFoodItemsDataView = new DataView(setMealFoodItemsDataTable);
-					setMealitemDataGridView.DataSource = setMealFoodItemsDataView.ToTable(true, "foodItemID", "foodName", "size", "quantity");
+					// creating record for datagridview
+					DataRow setMealFoodItemNewRow = setMealFoodItemsDataTable.NewRow();
+					setMealFoodItemNewRow[0] = foodItemID;
+					setMealFoodItemNewRow[1] = selectedRow["foodName"].ToString().Trim();
+					string size = "Large"; // size defaults to large unless default is small
+					if (Convert.ToBoolean(selectedRow["defaultToLargePrice"]) == false)
+					{
+						size = "Small";
+					}
+					setMealFoodItemNewRow[2] = size;
+					setMealFoodItemNewRow[3] = 1; // default to 1
+					setMealFoodItemsDataTable.Rows.Add(setMealFoodItemNewRow);
+					setMealItemDataGridView.ClearSelection();
+					// select new row in datatable
+					int newRowIndex = setMealFoodItemsDataTable.Rows.IndexOf(setMealFoodItemNewRow);
+					setMealItemDataGridView.Rows[newRowIndex].Selected = true;
+				}
+				else // if exists, add 1 to quantity instead
+				{
+					int quantity = Convert.ToInt32(setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"]);
+					quantity++;
+					setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"] = quantity;
 				}
 			}
 			else // unselect flop row
@@ -172,14 +208,14 @@ namespace ordering_system
 		private void setMealitemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through setmealfooditemsdataview to find the full deets
-			int selectedRowIndex = setMealitemDataGridView.SelectedCells[0].RowIndex;
-			if (setMealitemDataGridView.RowCount > 1 && selectedRowIndex < setMealitemDataGridView.RowCount - 1) // just in case theres no rows
+			int selectedRowIndex = setMealItemDataGridView.SelectedCells[0].RowIndex;
+			if (setMealItemDataGridView.RowCount > 1 && selectedRowIndex < setMealItemDataGridView.RowCount - 1) // just in case theres no rows
 			{
 
 			}
 			else // unselect flop row
 			{
-				setMealitemDataGridView.ClearSelection();
+				setMealItemDataGridView.ClearSelection();
 			}
 		}
 
@@ -191,9 +227,9 @@ namespace ordering_system
 			getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
 			DataSet foodItemsDataSet = new DataSet();
 			getFoodItemsByCategory.Fill(foodItemsDataSet);
-			foodItemsDataView = new DataView(foodItemsDataSet.Tables[0]);
+			foodItemsDataViewByCategory = new DataView(foodItemsDataSet.Tables[0]);
 			// fill in set meals datagridview
-			DataTable foodItemsDataTable = foodItemsDataView.ToTable(true, "foodItemID", "foodName");
+			DataTable foodItemsDataTable = foodItemsDataViewByCategory.ToTable(true, "foodItemID", "foodName");
 			itemDataGridView.DataSource = foodItemsDataTable;
 			itemDataGridView.ClearSelection();
 			con.Close();
