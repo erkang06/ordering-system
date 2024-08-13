@@ -254,5 +254,18 @@ namespace ordering_system
 			itemDataGridView.ClearSelection();
 			con.Close();
 		}
+
+		private void deleteItemButton_Click(object sender, EventArgs e)
+		{
+			try // in case theres none selected
+			{
+				int selectedIndex = setMealItemDataGridView.SelectedRows[0].Index;
+				setMealFoodItemsDataTable.Rows.RemoveAt(selectedIndex);
+			}
+			catch
+			{
+				MessageBox.Show("Item not selected from set meal items", "Ordering System");
+			}
+		}
 	}
 }

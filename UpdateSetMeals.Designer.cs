@@ -50,6 +50,7 @@
 			itemQuantityValueLabel = new Label();
 			increaseQuantityButton = new Button();
 			decreaseQuantityButton = new Button();
+			deleteItemButton = new Button();
 			((System.ComponentModel.ISupportInitialize)setMealItemDataGridView).BeginInit();
 			((System.ComponentModel.ISupportInitialize)setMealDataGridView).BeginInit();
 			((System.ComponentModel.ISupportInitialize)itemDataGridView).BeginInit();
@@ -93,7 +94,7 @@
 			// 
 			// deleteSetMealButton
 			// 
-			deleteSetMealButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			deleteSetMealButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			deleteSetMealButton.BackColor = SystemColors.Control;
 			deleteSetMealButton.FlatStyle = FlatStyle.Flat;
 			deleteSetMealButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
@@ -106,7 +107,7 @@
 			// 
 			// updateSetMealButton
 			// 
-			updateSetMealButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			updateSetMealButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			updateSetMealButton.BackColor = SystemColors.Control;
 			updateSetMealButton.FlatStyle = FlatStyle.Flat;
 			updateSetMealButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
@@ -119,7 +120,7 @@
 			// 
 			// addSetMealButton
 			// 
-			addSetMealButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			addSetMealButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			addSetMealButton.BackColor = SystemColors.Control;
 			addSetMealButton.FlatStyle = FlatStyle.Flat;
 			addSetMealButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
@@ -193,7 +194,7 @@
 			// 
 			// setMealDataGridView
 			// 
-			setMealDataGridView.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			setMealDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			setMealDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			setMealDataGridView.BackgroundColor = Color.White;
 			setMealDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -258,7 +259,7 @@
 			// 
 			// itemSizeLabel
 			// 
-			itemSizeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			itemSizeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			itemSizeLabel.BackColor = Color.Transparent;
 			itemSizeLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			itemSizeLabel.ForeColor = Color.Black;
@@ -272,7 +273,7 @@
 			// 
 			// itemQuantityLabel
 			// 
-			itemQuantityLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			itemQuantityLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			itemQuantityLabel.BackColor = Color.Transparent;
 			itemQuantityLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			itemQuantityLabel.ForeColor = Color.Black;
@@ -285,6 +286,7 @@
 			// 
 			// itemSizeComboBox
 			// 
+			itemSizeComboBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			itemSizeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 			itemSizeComboBox.Font = new Font("Segoe UI", 14F);
 			itemSizeComboBox.FormattingEnabled = true;
@@ -297,7 +299,7 @@
 			// 
 			// itemQuantityValueLabel
 			// 
-			itemQuantityValueLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			itemQuantityValueLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			itemQuantityValueLabel.BackColor = Color.White;
 			itemQuantityValueLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			itemQuantityValueLabel.ForeColor = Color.Black;
@@ -310,6 +312,7 @@
 			// 
 			// increaseQuantityButton
 			// 
+			increaseQuantityButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			increaseQuantityButton.Image = Properties.Resources.increaseQuantity;
 			increaseQuantityButton.Location = new Point(1272, 951);
 			increaseQuantityButton.Name = "increaseQuantityButton";
@@ -320,6 +323,7 @@
 			// 
 			// decreaseQuantityButton
 			// 
+			decreaseQuantityButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			decreaseQuantityButton.Image = Properties.Resources.decreaseQuantity;
 			decreaseQuantityButton.Location = new Point(1080, 951);
 			decreaseQuantityButton.Name = "decreaseQuantityButton";
@@ -328,12 +332,27 @@
 			decreaseQuantityButton.UseVisualStyleBackColor = true;
 			decreaseQuantityButton.Click += decreaseQuantityButton_Click;
 			// 
+			// deleteItemButton
+			// 
+			deleteItemButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			deleteItemButton.BackColor = SystemColors.Control;
+			deleteItemButton.FlatStyle = FlatStyle.Flat;
+			deleteItemButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteItemButton.Location = new Point(1608, 951);
+			deleteItemButton.Name = "deleteItemButton";
+			deleteItemButton.Size = new Size(300, 121);
+			deleteItemButton.TabIndex = 105;
+			deleteItemButton.Text = "Delete Item";
+			deleteItemButton.UseVisualStyleBackColor = false;
+			deleteItemButton.Click += deleteItemButton_Click;
+			// 
 			// UpdateSetMeals
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(deleteItemButton);
 			Controls.Add(increaseQuantityButton);
 			Controls.Add(decreaseQuantityButton);
 			Controls.Add(itemQuantityValueLabel);
@@ -396,5 +415,6 @@
 		private Label itemQuantityValueLabel;
 		private Button increaseQuantityButton;
 		private Button decreaseQuantityButton;
+		private Button deleteItemButton;
 	}
 }
