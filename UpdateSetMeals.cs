@@ -132,10 +132,19 @@ namespace ordering_system
 			setMealDataGridView.ClearSelection();
 		}
 
+		private void updateItemQuantitySize() // update item quantity and size after adding/selecting fooditem
+		{
+			int selectedIndex = setMealItemDataGridView.SelectedRows[0].Index;
+			itemQuantityValueLabel.Text = setMealFoodItemsDataTable.Rows[selectedIndex]["quantity"].ToString();
+			itemSizeComboBox.Text = setMealFoodItemsDataTable.Rows[selectedIndex]["size"].ToString();
+		}
+
 		private void increaseQuantityButton_Click(object sender, EventArgs e)
 		{
 			int currentQuantity = Convert.ToInt32(itemQuantityValueLabel.Text);
 			currentQuantity++;
+			int selectedIndex = setMealItemDataGridView.SelectedRows[0].Index;
+			setMealFoodItemsDataTable.Rows[selectedIndex]["quantity"] = currentQuantity;
 			itemQuantityValueLabel.Text = currentQuantity.ToString();
 		}
 
@@ -143,10 +152,18 @@ namespace ordering_system
 		{
 			int currentQuantity = Convert.ToInt32(itemQuantityValueLabel.Text);
 			currentQuantity--;
-			if (currentQuantity > 0)
+			if (currentQuantity > 0) // quantity cant go below 1
 			{
+				int selectedIndex = setMealItemDataGridView.SelectedRows[0].Index;
+				setMealFoodItemsDataTable.Rows[selectedIndex]["quantity"] = currentQuantity;
 				itemQuantityValueLabel.Text = currentQuantity.ToString();
 			}
+		}
+
+		private void itemSizeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			int selectedIndex = setMealItemDataGridView.SelectedRows[0].Index;
+			setMealFoodItemsDataTable.Rows[selectedIndex]["size"] = itemSizeComboBox.Text;
 		}
 
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -155,6 +172,7 @@ namespace ordering_system
 			int selectedRowIndex = itemDataGridView.SelectedCells[0].RowIndex;
 			if (itemDataGridView.RowCount > 1 && selectedRowIndex < itemDataGridView.RowCount - 1) // just in case theres no rows
 			{
+				setMealItemDataGridView.ClearSelection();
 				// find food item id to search through tbl
 				DataRowView selectedRow = foodItemsDataViewByCategory[selectedRowIndex];
 				foodItemID = selectedRow["foodItemID"].ToString().Trim();
@@ -183,7 +201,9 @@ namespace ordering_system
 					int quantity = Convert.ToInt32(setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"]);
 					quantity++;
 					setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"] = quantity;
+					setMealItemDataGridView.Rows[foodItemIndex].Selected = true;
 				}
+				updateItemQuantitySize();
 			}
 			else // unselect flop row
 			{
@@ -211,7 +231,7 @@ namespace ordering_system
 			int selectedRowIndex = setMealItemDataGridView.SelectedCells[0].RowIndex;
 			if (setMealItemDataGridView.RowCount > 1 && selectedRowIndex < setMealItemDataGridView.RowCount - 1) // just in case theres no rows
 			{
-
+				updateItemQuantitySize();
 			}
 			else // unselect flop row
 			{

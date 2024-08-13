@@ -293,6 +293,7 @@
 			itemSizeComboBox.Name = "itemSizeComboBox";
 			itemSizeComboBox.Size = new Size(522, 58);
 			itemSizeComboBox.TabIndex = 99;
+			itemSizeComboBox.SelectedIndexChanged += itemSizeComboBox_SelectedIndexChanged;
 			// 
 			// itemQuantityValueLabel
 			// 
