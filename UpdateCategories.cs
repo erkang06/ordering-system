@@ -107,8 +107,8 @@ namespace ordering_system
 				addCategoryToDatabase.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
 				addCategoryToDatabase.Parameters.AddWithValue("@CI", Convert.ToInt32(categoryIndexTextBox.Text));
 				addCategoryToDatabase.ExecuteNonQuery();
-				categoryID = -1;
 				MessageBox.Show("Category added to database", "Ordering System");
+				clearCategoryScreen();
 				updateDataGridView();
 			}
 			else if (areAllFieldsFilled() == true) // if category exists
@@ -116,6 +116,31 @@ namespace ordering_system
 				MessageBox.Show("Category already exists with same name", "Ordering System");
 			}
 			else // if not all fields filled in
+			{
+				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			con.Close();
+		}
+
+		private void updateCategoryButton_Click(object sender, EventArgs e)
+		{
+			con.Open();
+			if (areAllFieldsFilled() == true && categoryID != -1) // if all fields filled in
+			{
+				SqlCommand updateCategory = new SqlCommand("UPDATE CategoryTbl SET categoryName = @CN, categoryIndex = @CI WHERE categoryID = @CID", con);
+				updateCategory.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
+				updateCategory.Parameters.AddWithValue("@CI", Convert.ToInt32(categoryIndexTextBox.Text));
+				updateCategory.Parameters.AddWithValue("@CID", categoryID);
+				updateCategory.ExecuteNonQuery();
+				MessageBox.Show("Category updated", "Ordering System");
+				clearCategoryScreen();
+				updateDataGridView();
+			}
+			else if (areAllFieldsFilled() == true) // category not selected
+			{
+				MessageBox.Show("Category not selected", "Ordering System");
+			}
+			else // incomplete form
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");
 			}
@@ -145,40 +170,22 @@ namespace ordering_system
 				}
 				else // doesnt exist - can delete
 				{
-					SqlCommand deleteCategory = new SqlCommand("DELETE FROM CustomerTbl WHERE categoryID = @CID", con);
+					SqlCommand deleteCategory = new SqlCommand("DELETE FROM CategoryTbl WHERE categoryID = @CID", con);
 					deleteCategory.Parameters.AddWithValue("@CID", categoryID);
 					deleteCategory.ExecuteNonQuery();
-					categoryID = -1;
 					MessageBox.Show("Category deleted", "Ordering System");
+					clearCategoryScreen();
 					updateDataGridView();
 				}
 			}
 			con.Close();
 		}
 
-		private void updateCategoryButton_Click(object sender, EventArgs e)
+		private void clearCategoryScreen() // clears textboxes and categoryid
 		{
-			con.Open();
-			if (areAllFieldsFilled() == true && categoryID != -1) // if all fields filled in
-			{
-				SqlCommand updateCategory = new SqlCommand("UPDATE CategoryTbl SET categoryName = @CN, categoryIndex = @CI WHERE categoryID = @CID", con);
-				updateCategory.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
-				updateCategory.Parameters.AddWithValue("@CI", Convert.ToInt32(categoryIndexTextBox.Text));
-				updateCategory.Parameters.AddWithValue("@CID", categoryID);
-				updateCategory.ExecuteNonQuery();
-				categoryID = -1;
-				MessageBox.Show("Category updated", "Ordering System");
-				updateDataGridView();
-			}
-			else if (areAllFieldsFilled() == true) // category not selected
-			{
-				MessageBox.Show("Category not selected", "Ordering System");
-			}
-			else // incomplete form
-			{
-				MessageBox.Show("Not all fields filled in", "Ordering System");
-			}
-			con.Close();
+			categoryID = -1;
+			categoryNameTextBox.Text = string.Empty;
+			categoryIndexTextBox.Text = string.Empty;
 		}
 
 		private void categoryNameTextBox_Leave(object sender, EventArgs e)

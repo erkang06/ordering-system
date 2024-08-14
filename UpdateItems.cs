@@ -1,4 +1,5 @@
 ﻿using ordering_system.Properties;
+using ordering_system.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
@@ -193,8 +195,8 @@ namespace ordering_system
 					addFoodItemToDatabase.CommandText = "INSERT INTO FoodItemTbl(foodItemID, foodName, defaultToLargePrice, hasSmallOption, largeItemPrice, isOutOfStock, categoryID) VALUES(@FIID, @FN, @DLP, 0, @LIP, @OOS, @CID)";
 				}
 				addFoodItemToDatabase.ExecuteNonQuery();
-				foodItemID = null;
 				MessageBox.Show("Item added to database", "Ordering System");
+				clearItemScreen(sender, e);
 				updateDataGridView();
 			}
 			else if (doesItemExist() == false) // if not all fields filled in
@@ -232,8 +234,8 @@ namespace ordering_system
 					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 0, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
 				}
 				updateFoodItem.ExecuteNonQuery();
-				foodItemID = null;
 				MessageBox.Show("Item updated", "Ordering System");
+				clearItemScreen(sender, e);
 				updateDataGridView();
 			}
 			else if (foodItemID != null) // incomplete form
@@ -273,12 +275,24 @@ namespace ordering_system
 					SqlCommand deleteFoodItem = new SqlCommand("DELETE FROM FoodItemTbl WHERE foodItemID = @FIID", con);
 					deleteFoodItem.Parameters.AddWithValue("@FIID", foodItemID);
 					deleteFoodItem.ExecuteNonQuery();
-					foodItemID = null;
 					MessageBox.Show("Item deleted", "Ordering System");
+					clearItemScreen(sender, e);
 					updateDataGridView();
 				}
 			}
 			con.Close();
+		}
+
+		private void clearItemScreen(object sender, EventArgs e) // clears textboxes and fooditemid
+		{
+			foodItemID = null;
+			itemIDTextBox.Text = string.Empty;
+			itemNameTextBox.Text = string.Empty;
+			hasSmallPriceCheckBox.Checked = false;
+			smallPriceTextBox.Text = string.Empty;
+			largePriceTextBox.Text = string.Empty;
+			categoryComboBox.Text = string.Empty;
+			hasSmallPriceCheckBox_CheckedChanged(sender, e); // sorts out weird bits w/ checkboxes
 		}
 
 		private void itemIDTextBox_Leave(object sender, EventArgs e)

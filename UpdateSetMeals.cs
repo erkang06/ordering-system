@@ -389,12 +389,12 @@ namespace ordering_system
 			}
 			else // set meal found
 			{
+				// delete setmealfooditems from setmealfooditemtbl
+				deleteSetMealFoodItems();
 				// delete set meal from setmealtbl
 				SqlCommand deleteSetMeal = new SqlCommand("DELETE FROM SetMealTbl WHERE setMealID = @SMID", con);
 				deleteSetMeal.Parameters.AddWithValue("@SMID", setMealID);
 				deleteSetMeal.ExecuteNonQuery();
-				// delete setmealfooditems from setmealfooditemtbl
-				deleteSetMealFoodItems();
 				setMealID = null;
 				MessageBox.Show("Set meal deleted", "Ordering System");
 				clearSetMealScreen();

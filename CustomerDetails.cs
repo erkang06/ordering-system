@@ -25,7 +25,7 @@ namespace ordering_system
 
 		int customerID, addressID;
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the 
-		// the connection string to the database
+																// the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		public CustomerDetails(string orderType, int customerIDFromMainMenu)
 		{
@@ -98,7 +98,7 @@ namespace ordering_system
 
 		private bool areAllCustomerFieldsFilled() // checks if all required fields have been filled in
 		{
-			if (customerNameTextBox.Text != "" && phoneNumberTextBox.Text != "" && billingHouseNumberTextBox.Text != "" && billingStreetNameTextBox.Text != "" && billingCityTextBox.Text != "" && billingPostcodeTextBox.Text != "")
+			if (customerNameTextBox.Text != "" && phoneNumberTextBox.Text != "")
 			{
 				return true;
 			}
@@ -146,7 +146,7 @@ namespace ordering_system
 			}
 			else // cant continue w/out all fields filled in
 			{
-				MessageBox.Show("Not all customer fields filled in", "Ordering System");
+				MessageBox.Show("Not all required customer fields filled in", "Ordering System");
 				return;
 			}
 

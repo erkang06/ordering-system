@@ -45,7 +45,7 @@
 			customerNameTextBox = new TextBox();
 			phoneNumberLabel = new Label();
 			customerNameLabel = new Label();
-			deliveryAddressDataGridView = new DataGridView();
+			addressDataGridView = new DataGridView();
 			deliveryDeliveryChargeTextBox = new TextBox();
 			deliveryDeliveryChargeLabel = new Label();
 			deliveryPostcodeTextBox = new TextBox();
@@ -58,14 +58,15 @@
 			deliveryStreetNameLabel = new Label();
 			deliveryHouseNumberTextBox = new TextBox();
 			deliveryHouseNumberLabel = new Label();
-			deleteDeliveryAddressButton = new Button();
-			button1 = new Button();
+			deleteAddressButton = new Button();
+			updateAddressButton = new Button();
 			deleteCustomerButton = new Button();
 			button2 = new Button();
-			deliveryAddressPanel = new Panel();
+			addressPanel = new Panel();
+			goBackButton = new Button();
 			customerDataGridView = new DataGridView();
-			((System.ComponentModel.ISupportInitialize)deliveryAddressDataGridView).BeginInit();
-			deliveryAddressPanel.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)addressDataGridView).BeginInit();
+			addressPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)customerDataGridView).BeginInit();
 			SuspendLayout();
 			// 
@@ -78,6 +79,7 @@
 			cancelButton.Size = new Size(90, 80);
 			cancelButton.TabIndex = 13;
 			cancelButton.UseVisualStyleBackColor = true;
+			cancelButton.Click += cancelButton_Click;
 			// 
 			// updateCustomersLabel
 			// 
@@ -243,20 +245,21 @@
 			customerNameLabel.TabIndex = 48;
 			customerNameLabel.Text = "Customer Name:";
 			// 
-			// deliveryAddressDataGridView
+			// addressDataGridView
 			// 
-			deliveryAddressDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			deliveryAddressDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-			deliveryAddressDataGridView.BackgroundColor = Color.White;
-			deliveryAddressDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			deliveryAddressDataGridView.Location = new Point(3, 3);
-			deliveryAddressDataGridView.Name = "deliveryAddressDataGridView";
-			deliveryAddressDataGridView.ReadOnly = true;
-			deliveryAddressDataGridView.RowHeadersWidth = 10;
-			deliveryAddressDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			deliveryAddressDataGridView.Size = new Size(976, 511);
-			deliveryAddressDataGridView.TabIndex = 61;
-			deliveryAddressDataGridView.TabStop = false;
+			addressDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			addressDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+			addressDataGridView.BackgroundColor = Color.White;
+			addressDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			addressDataGridView.Location = new Point(3, 0);
+			addressDataGridView.Name = "addressDataGridView";
+			addressDataGridView.ReadOnly = true;
+			addressDataGridView.RowHeadersWidth = 10;
+			addressDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			addressDataGridView.Size = new Size(976, 514);
+			addressDataGridView.TabIndex = 61;
+			addressDataGridView.TabStop = false;
+			addressDataGridView.CellClick += addressDataGridView_CellClick;
 			// 
 			// deliveryDeliveryChargeTextBox
 			// 
@@ -390,31 +393,31 @@
 			deliveryHouseNumberLabel.TabIndex = 68;
 			deliveryHouseNumberLabel.Text = "House Number:";
 			// 
-			// deleteDeliveryAddressButton
+			// deleteAddressButton
 			// 
-			deleteDeliveryAddressButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			deleteDeliveryAddressButton.BackColor = SystemColors.Control;
-			deleteDeliveryAddressButton.FlatStyle = FlatStyle.Flat;
-			deleteDeliveryAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			deleteDeliveryAddressButton.Location = new Point(494, 885);
-			deleteDeliveryAddressButton.Name = "deleteDeliveryAddressButton";
-			deleteDeliveryAddressButton.Size = new Size(485, 80);
-			deleteDeliveryAddressButton.TabIndex = 74;
-			deleteDeliveryAddressButton.Text = "Delete Address";
-			deleteDeliveryAddressButton.UseVisualStyleBackColor = false;
+			deleteAddressButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			deleteAddressButton.BackColor = SystemColors.Control;
+			deleteAddressButton.FlatStyle = FlatStyle.Flat;
+			deleteAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteAddressButton.Location = new Point(369, 885);
+			deleteAddressButton.Name = "deleteAddressButton";
+			deleteAddressButton.Size = new Size(360, 80);
+			deleteAddressButton.TabIndex = 74;
+			deleteAddressButton.Text = "Delete Address";
+			deleteAddressButton.UseVisualStyleBackColor = false;
 			// 
-			// button1
+			// updateAddressButton
 			// 
-			button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			button1.BackColor = SystemColors.Control;
-			button1.FlatStyle = FlatStyle.Flat;
-			button1.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			button1.Location = new Point(3, 885);
-			button1.Name = "button1";
-			button1.Size = new Size(485, 80);
-			button1.TabIndex = 75;
-			button1.Text = "Update Address";
-			button1.UseVisualStyleBackColor = false;
+			updateAddressButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			updateAddressButton.BackColor = SystemColors.Control;
+			updateAddressButton.FlatStyle = FlatStyle.Flat;
+			updateAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			updateAddressButton.Location = new Point(3, 885);
+			updateAddressButton.Name = "updateAddressButton";
+			updateAddressButton.Size = new Size(360, 80);
+			updateAddressButton.TabIndex = 75;
+			updateAddressButton.Text = "Update Address";
+			updateAddressButton.UseVisualStyleBackColor = false;
 			// 
 			// deleteCustomerButton
 			// 
@@ -424,7 +427,7 @@
 			deleteCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
 			deleteCustomerButton.Location = new Point(12, 988);
 			deleteCustomerButton.Name = "deleteCustomerButton";
-			deleteCustomerButton.Size = new Size(451, 80);
+			deleteCustomerButton.Size = new Size(450, 80);
 			deleteCustomerButton.TabIndex = 76;
 			deleteCustomerButton.Text = "Delete Customer";
 			deleteCustomerButton.UseVisualStyleBackColor = false;
@@ -437,34 +440,49 @@
 			button2.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
 			button2.Location = new Point(12, 902);
 			button2.Name = "button2";
-			button2.Size = new Size(451, 80);
+			button2.Size = new Size(450, 80);
 			button2.TabIndex = 77;
 			button2.Text = "Update Customer";
 			button2.UseVisualStyleBackColor = false;
 			// 
-			// deliveryAddressPanel
+			// addressPanel
 			// 
-			deliveryAddressPanel.Anchor = AnchorStyles.Right;
-			deliveryAddressPanel.Controls.Add(deliveryAddressDataGridView);
-			deliveryAddressPanel.Controls.Add(button1);
-			deliveryAddressPanel.Controls.Add(deliveryDeliveryChargeTextBox);
-			deliveryAddressPanel.Controls.Add(deliveryDeliveryChargeLabel);
-			deliveryAddressPanel.Controls.Add(deleteDeliveryAddressButton);
-			deliveryAddressPanel.Controls.Add(deliveryPostcodeTextBox);
-			deliveryAddressPanel.Controls.Add(deliveryHouseNumberLabel);
-			deliveryAddressPanel.Controls.Add(deliveryPostcodeLabel);
-			deliveryAddressPanel.Controls.Add(deliveryHouseNumberTextBox);
-			deliveryAddressPanel.Controls.Add(deliveryCityTextBox);
-			deliveryAddressPanel.Controls.Add(deliveryStreetNameLabel);
-			deliveryAddressPanel.Controls.Add(deliveryCityLabel);
-			deliveryAddressPanel.Controls.Add(deliveryStreetNameTextBox);
-			deliveryAddressPanel.Controls.Add(deliveryVillageTextBox);
-			deliveryAddressPanel.Controls.Add(deliveryVillageLabel);
-			deliveryAddressPanel.Location = new Point(926, 104);
-			deliveryAddressPanel.Name = "deliveryAddressPanel";
-			deliveryAddressPanel.Size = new Size(982, 970);
-			deliveryAddressPanel.TabIndex = 78;
-			deliveryAddressPanel.Visible = false;
+			addressPanel.Anchor = AnchorStyles.Right;
+			addressPanel.Controls.Add(goBackButton);
+			addressPanel.Controls.Add(addressDataGridView);
+			addressPanel.Controls.Add(updateAddressButton);
+			addressPanel.Controls.Add(deliveryDeliveryChargeTextBox);
+			addressPanel.Controls.Add(deliveryDeliveryChargeLabel);
+			addressPanel.Controls.Add(deleteAddressButton);
+			addressPanel.Controls.Add(deliveryPostcodeTextBox);
+			addressPanel.Controls.Add(deliveryHouseNumberLabel);
+			addressPanel.Controls.Add(deliveryPostcodeLabel);
+			addressPanel.Controls.Add(deliveryHouseNumberTextBox);
+			addressPanel.Controls.Add(deliveryCityTextBox);
+			addressPanel.Controls.Add(deliveryStreetNameLabel);
+			addressPanel.Controls.Add(deliveryCityLabel);
+			addressPanel.Controls.Add(deliveryStreetNameTextBox);
+			addressPanel.Controls.Add(deliveryVillageTextBox);
+			addressPanel.Controls.Add(deliveryVillageLabel);
+			addressPanel.Location = new Point(926, 104);
+			addressPanel.Name = "addressPanel";
+			addressPanel.Size = new Size(982, 970);
+			addressPanel.TabIndex = 78;
+			addressPanel.Visible = false;
+			// 
+			// goBackButton
+			// 
+			goBackButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			goBackButton.BackColor = SystemColors.Control;
+			goBackButton.FlatStyle = FlatStyle.Flat;
+			goBackButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			goBackButton.Location = new Point(735, 885);
+			goBackButton.Name = "goBackButton";
+			goBackButton.Size = new Size(244, 80);
+			goBackButton.TabIndex = 76;
+			goBackButton.Text = "Go Back";
+			goBackButton.UseVisualStyleBackColor = false;
+			goBackButton.Click += goBackButton_Click;
 			// 
 			// customerDataGridView
 			// 
@@ -480,6 +498,7 @@
 			customerDataGridView.Size = new Size(982, 970);
 			customerDataGridView.TabIndex = 79;
 			customerDataGridView.TabStop = false;
+			customerDataGridView.CellClick += customerDataGridView_CellClick;
 			// 
 			// UpdateCustomers
 			// 
@@ -506,15 +525,15 @@
 			Controls.Add(customerNameLabel);
 			Controls.Add(updateCustomersLabel);
 			Controls.Add(cancelButton);
+			Controls.Add(addressPanel);
 			Controls.Add(customerDataGridView);
-			Controls.Add(deliveryAddressPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "UpdateCustomers";
 			Text = "UpdateCustomers";
 			Load += UpdateCustomers_Load;
-			((System.ComponentModel.ISupportInitialize)deliveryAddressDataGridView).EndInit();
-			deliveryAddressPanel.ResumeLayout(false);
-			deliveryAddressPanel.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)addressDataGridView).EndInit();
+			addressPanel.ResumeLayout(false);
+			addressPanel.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)customerDataGridView).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
@@ -539,7 +558,7 @@
 		private TextBox customerNameTextBox;
 		private Label phoneNumberLabel;
 		private Label customerNameLabel;
-		private DataGridView deliveryAddressDataGridView;
+		private DataGridView addressDataGridView;
 		private TextBox deliveryDeliveryChargeTextBox;
 		private Label deliveryDeliveryChargeLabel;
 		private TextBox deliveryPostcodeTextBox;
@@ -552,11 +571,12 @@
 		private Label deliveryStreetNameLabel;
 		private TextBox deliveryHouseNumberTextBox;
 		private Label deliveryHouseNumberLabel;
-		private Button deleteDeliveryAddressButton;
-		private Button button1;
+		private Button deleteAddressButton;
+		private Button updateAddressButton;
 		private Button deleteCustomerButton;
 		private Button button2;
-		private Panel deliveryAddressPanel;
+		private Panel addressPanel;
 		private DataGridView customerDataGridView;
+		private Button goBackButton;
 	}
 }
