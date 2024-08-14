@@ -107,6 +107,7 @@ namespace ordering_system
 				addCategoryToDatabase.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
 				addCategoryToDatabase.Parameters.AddWithValue("@CI", Convert.ToInt32(categoryIndexTextBox.Text));
 				addCategoryToDatabase.ExecuteNonQuery();
+				categoryID = -1;
 				MessageBox.Show("Category added to database", "Ordering System");
 				updateDataGridView();
 			}
@@ -131,6 +132,7 @@ namespace ordering_system
 				updateCategory.Parameters.AddWithValue("@CI", Convert.ToInt32(categoryIndexTextBox.Text));
 				updateCategory.Parameters.AddWithValue("@CID", categoryID);
 				updateCategory.ExecuteNonQuery();
+				categoryID = -1;
 				MessageBox.Show("Category updated", "Ordering System");
 				updateDataGridView();
 			}

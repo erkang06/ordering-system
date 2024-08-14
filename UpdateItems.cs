@@ -190,6 +190,7 @@ namespace ordering_system
 					addFoodItemToDatabase.CommandText = "INSERT INTO FoodItemTbl(foodItemID, foodName, defaultToLargePrice, hasSmallOption, largeItemPrice, isOutOfStock, categoryID) VALUES(@FIID, @FN, @DLP, 0, @LIP, @OOS, @CID)";
 				}
 				addFoodItemToDatabase.ExecuteNonQuery();
+				foodItemID = null;
 				MessageBox.Show("Item added to database", "Ordering System");
 				updateDataGridView();
 			}
@@ -228,6 +229,7 @@ namespace ordering_system
 					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 0, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
 				}
 				updateFoodItem.ExecuteNonQuery();
+				foodItemID = null;
 				MessageBox.Show("Item updated", "Ordering System");
 				updateDataGridView();
 			}

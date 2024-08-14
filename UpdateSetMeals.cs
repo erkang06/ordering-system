@@ -130,7 +130,7 @@ namespace ordering_system
 				addSetMealToDatabase.Parameters.AddWithValue("@CN", "Set Meals");
 				addSetMealToDatabase.Parameters.AddWithValue("@CI", maxCategoryIndex);
 				addSetMealToDatabase.ExecuteNonQuery();
-				MessageBox.Show("Set meals didn't exist as a category, so has been added to database", "Ordering System");
+				MessageBox.Show("Set meal didn't exist as a category, so has been added to database", "Ordering System");
 			}
 			// sort out setmealfooditemsdatatable
 			setMealFoodItemsDataTable = new DataTable();
@@ -244,6 +244,10 @@ namespace ordering_system
 				// get set meal id
 				DataRowView selectedRow = setMealsDataView[selectedRowIndex];
 				setMealID = selectedRow.Row["setMealID"].ToString();
+				// fill in text boxes
+				setMealIDTextBox.Text = selectedRow.Row["setMealID"].ToString();
+				setMealNameTextBox.Text = selectedRow.Row["setMealName"].ToString();
+				setMealPriceTextBox.Text = selectedRow.Row["price"].ToString();
 				// get set meal from setmealfooditemtbl
 				SqlDataAdapter getSetMealFoodItems = new SqlDataAdapter("SELECT foodItemID, size, quantity FROM SetMealFoodItemTbl WHERE setMealID = @SMID ORDER BY foodItemID", con);
 				getSetMealFoodItems.SelectCommand.Parameters.AddWithValue("@SMID", setMealID);
@@ -356,6 +360,7 @@ namespace ordering_system
 				// add new fooditems
 				addSetMealFoodItems();
 				MessageBox.Show("Set meal updated", "Ordering System");
+				setMealFoodItemsDataTable.Clear();
 				updateDataGridView();
 			}
 			else if (setMealID != null) // incomplete form
@@ -389,7 +394,8 @@ namespace ordering_system
 				// delete setmealfooditems from setmealfooditemtbl
 				deleteSetMealFoodItems();
 				setMealID = null;
-				MessageBox.Show("Set Meal deleted", "Ordering System");
+				MessageBox.Show("Set meal deleted", "Ordering System");
+				setMealFoodItemsDataTable.Clear();
 				updateDataGridView();
 			}
 			con.Close();
@@ -422,7 +428,7 @@ namespace ordering_system
 		{
 			if (setMealIDTextBox.Text.Length > 10) // if id too long for database
 			{
-				MessageBox.Show("Set Meal ID too long", "Ordering System");
+				MessageBox.Show("Set meal ID too long", "Ordering System");
 				setMealIDTextBox.Focus();
 			}
 		}
@@ -431,7 +437,7 @@ namespace ordering_system
 		{
 			if (setMealNameTextBox.Text.Length > 50) // if set meal name too long for database
 			{
-				MessageBox.Show("Item name too long", "Ordering System");
+				MessageBox.Show("Set meal name too long", "Ordering System");
 				setMealNameTextBox.Focus();
 			}
 		}
@@ -443,13 +449,13 @@ namespace ordering_system
 				Convert.ToDecimal(setMealPriceTextBox.Text); // check if value is acc decimal
 				if (Convert.ToDecimal(setMealPriceTextBox.Text) < 0 || Convert.ToDecimal(setMealPriceTextBox.Text) >= 1000) // not within range
 				{
-					MessageBox.Show("Small price not within range", "Ordering System");
+					MessageBox.Show("Price not within range", "Ordering System");
 					setMealPriceTextBox.Focus();
 				}
 			}
 			catch // not decimal
 			{
-				MessageBox.Show("Small price not a decimal", "Ordering System");
+				MessageBox.Show("Price not a decimal", "Ordering System");
 				setMealPriceTextBox.Focus();
 			}
 		}
