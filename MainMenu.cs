@@ -84,8 +84,8 @@ namespace ordering_system
 			deliveryButton.BackColor = Color.Transparent;
 			if (currentOrder.orderType == "Delivery") // take customer details from delivery and put them into collection
 			{
-				string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString().Trim();
-				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString().Trim();
+				string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString();
+				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString();
 				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
 				currentOrder.orderType = "Collection";
 				currentOrder.addressID = -1;
@@ -108,7 +108,7 @@ namespace ordering_system
 			obj.CustomerDetailsUpdate += new CustomerDetails.CustomerDetailsUpdateHandler(customerDetailsChanged);
 			obj.CustomerDetailsCancel += new CustomerDetails.CustomerDetailsCancelHandler(customerDetailsCancelled);
 			obj.Show();
-			//obj.TopMost = true;
+			obj.TopMost = true;
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)

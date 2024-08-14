@@ -59,7 +59,7 @@ namespace ordering_system
 			int categoryIDIndex = categoriesDataViewSortByID.Find(categoryID);
 			if (categoryIDIndex != -1) // if category exists lmao
 			{
-				return categoriesDataViewSortByID[categoryIDIndex]["categoryName"].ToString().Trim();
+				return categoriesDataViewSortByID[categoryIDIndex]["categoryName"].ToString();
 			}
 			return null;
 		}
@@ -92,7 +92,7 @@ namespace ordering_system
 			// fill in category combobox
 			foreach (string categoryName in categoryNames)
 			{
-				categoryComboBox.Items.Add(categoryName.Trim());
+				categoryComboBox.Items.Add(categoryName);
 			}
 			hasSmallPriceCheckBox_CheckedChanged(sender, e); // sorts out weird bits w/ checkboxes
 			updateDataGridView();
@@ -118,10 +118,10 @@ namespace ordering_system
 			if (itemDataGridView.RowCount > 1 && selectedRowIndex < itemDataGridView.RowCount - 1) // just in case theres no rows
 			{
 				DataRowView selectedRow = foodItemsDataView[selectedRowIndex];
-				foodItemID = selectedRow.Row["foodItemID"].ToString().Trim();
+				foodItemID = selectedRow.Row["foodItemID"].ToString();
 				// update textboxes and checkboxes
 				itemIDTextBox.Text = foodItemID;
-				itemNameTextBox.Text = selectedRow.Row["foodName"].ToString().Trim();
+				itemNameTextBox.Text = selectedRow.Row["foodName"].ToString();
 				hasSmallPriceCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["hasSmallOption"]);
 				smallPriceTextBox.Text = selectedRow.Row["smallItemPrice"].ToString();
 				hasSmallPriceCheckBox_CheckedChanged(sender, new EventArgs()); // if theres no small option, can clear

@@ -89,8 +89,8 @@ namespace ordering_system
 				DataRowView selectedRow = categoriesDataView[selectedRowIndex];
 				categoryID = Convert.ToInt32(selectedRow.Row["categoryID"]);
 				// update textboxes
-				categoryNameTextBox.Text = selectedRow.Row["categoryName"].ToString().Trim();
-				categoryIndexTextBox.Text = selectedRow.Row["categoryIndex"].ToString().Trim();
+				categoryNameTextBox.Text = selectedRow.Row["categoryName"].ToString();
+				categoryIndexTextBox.Text = selectedRow.Row["categoryIndex"].ToString();
 			}
 			else // unselect flop row
 			{

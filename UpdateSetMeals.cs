@@ -31,7 +31,7 @@ namespace ordering_system
 			int categoryIDIndex = categoriesDataViewSortByID.Find(categoryID);
 			if (categoryIDIndex != -1) // if category exists lmao
 			{
-				return categoriesDataViewSortByID[categoryIDIndex]["categoryName"].ToString().Trim();
+				return categoriesDataViewSortByID[categoryIDIndex]["categoryName"].ToString();
 			}
 			return null;
 		}
@@ -97,13 +97,13 @@ namespace ordering_system
 			List<string> categoryNames = new List<string>();
 			foreach (DataRowView category in categoriesDataView)
 			{
-				categoryNames.Add(category["categoryName"].ToString().Trim());
+				categoryNames.Add(category["categoryName"].ToString());
 			}
 			// fill in category combobox
 			bool setMealExists = false; // checks if set meal exists in categorytbl
 			foreach (string categoryName in categoryNames)
 			{
-				if (categoryName.Trim() != "Set Meals") // you cant add set meals to a set meal xoxo
+				if (categoryName != "Set Meals") // you cant add set meals to a set meal xoxo
 				{
 					categoryComboBox.Items.Add(categoryName);
 				}
@@ -198,14 +198,14 @@ namespace ordering_system
 				setMealItemDataGridView.ClearSelection();
 				// find food item id to search through tbl
 				DataRowView selectedRow = foodItemsDataViewByCategory[selectedRowIndex];
-				foodItemID = selectedRow["foodItemID"].ToString().Trim();
+				foodItemID = selectedRow["foodItemID"].ToString();
 				int foodItemIndex = doesFoodItemExist(foodItemID); // find index of food in set meal datatable if exists
 				if (foodItemIndex == -1) // food item doesnt alr exist in set meal
 				{
 					// creating record for datagridview
 					DataRow setMealFoodItemNewRow = setMealFoodItemsDataTable.NewRow();
 					setMealFoodItemNewRow[0] = foodItemID;
-					setMealFoodItemNewRow[1] = selectedRow["foodName"].ToString().Trim();
+					setMealFoodItemNewRow[1] = selectedRow["foodName"].ToString();
 					string size = "Large"; // size defaults to large unless default is small
 					if (Convert.ToBoolean(selectedRow["defaultToLargePrice"]) == false)
 					{

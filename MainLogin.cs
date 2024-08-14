@@ -54,7 +54,7 @@ namespace ordering_system
 			try
 			{
 				StreamReader passwordFile = new StreamReader(@"./LoginPassword.txt");
-				password = passwordFile.ReadLine().Trim();
+				password = passwordFile.ReadLine();
 				passwordFile.Close();
 			}
 			catch // if file doesnt exist, set to default
