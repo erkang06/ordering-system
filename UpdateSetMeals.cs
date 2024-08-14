@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ordering_system.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,7 +14,7 @@ namespace ordering_system
 {
 	public partial class UpdateSetMeals : Form
 	{
-		readonly SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
+		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataView foodItemsDataViewByCategory, setMealsDataView; // full database compared to whats shown in datagridview
 		DataSet categoriesDataSet; // same as above xoxo
 		DataTable setMealFoodItemsDataTable; // separate table to work through the setmeal items while in progress; reduces number of edits to main table

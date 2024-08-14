@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Xml.Serialization;
+using ordering_system.Properties;
 
 namespace ordering_system
 {
@@ -25,7 +26,7 @@ namespace ordering_system
 		int customerID, addressID;
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the 
 		// the connection string to the database
-		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
+		readonly SqlConnection con = new SqlConnection(Resources.con);
 		public CustomerDetails(string orderType)
 		{
 			InitializeComponent();

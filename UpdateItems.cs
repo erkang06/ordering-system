@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ordering_system.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,7 +18,7 @@ namespace ordering_system
 {
 	public partial class UpdateItems : Form
 	{
-		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
+		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataView foodItemsDataView; // full database compared to whats shown in datagridview
 		DataSet categoriesDataSet; // same as above xoxo
 		string foodItemID; // id of currently selected item from datagridview

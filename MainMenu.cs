@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using ordering_system.Properties;
 
 namespace ordering_system
 {
@@ -18,7 +19,7 @@ namespace ordering_system
 		Order currentOrder = new Order();
 		List<OrderItem> currentOrderItems = new List<OrderItem>();
 		// the connection string to the database
-		SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30");
+		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataSet customerDataSet = new DataSet(); // data row for customer
 		DataSet addressDataSet = new DataSet();
 		DataView ordersDataView = new DataView();
@@ -240,21 +241,21 @@ namespace ordering_system
 
 		private void viewOrdersCounterButton_Click(object sender, EventArgs e)
 		{
+			con.Open();
 			viewOrdersDataGridView.Rows.Clear();
 			// selects counter, unselects rest
 			viewOrdersDeliveryButton.BackColor = Color.Transparent;
 			viewOrdersCounterButton.BackColor = Color.Yellow;
 			viewOrdersCollectionButton.BackColor = Color.Transparent;
 			// orderid, ordertime, price
-			con.Open();
 			SqlDataAdapter getOrders = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderType = @OT", con);
 			getOrders.SelectCommand.Parameters.AddWithValue("@OT", "Counter");
 			DataSet ordersDataSet = new DataSet();
 			getOrders.Fill(ordersDataSet);
 			ordersDataView = new DataView(ordersDataSet.Tables[0]);
-			con.Close();
 			DataTable ordersDataTable = ordersDataView.ToTable(true, "orderID", "orderTime");
 			viewOrdersDataGridView.DataSource = ordersDataTable;
+			con.Close();
 		}
 
 		private void viewOrdersCollectionButton_Click(object sender, EventArgs e)

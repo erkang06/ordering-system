@@ -61,6 +61,15 @@ namespace ordering_system.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benny\Documents\CS\NEA\ordering system\Ordering System.mdf;Integrated Security=True;Connect Timeout=30.
+        /// </summary>
+        internal static string con {
+            get {
+                return ResourceManager.GetString("con", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap decreaseQuantity {
