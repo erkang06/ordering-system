@@ -184,8 +184,10 @@ namespace ordering_system
 			con.Open();
 			if (areAllCustomerFieldsFilled() == true && customerID != -1) // update just in case details have changed
 			{
-				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
+				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, phoneNumber = @PN, isBlackListed = @IBL, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
 				updateCustomerDetails.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@IBL", blacklistedCheckBox.Checked);
 				updateCustomerDetails.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
 				updateCustomerDetails.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
 				updateCustomerDetails.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
@@ -257,6 +259,7 @@ namespace ordering_system
 
 		private void updateAddressButton_Click(object sender, EventArgs e)
 		{
+			con.Open();
 			if (areAllAddressFieldsFilled() == true) // update just in case details have changed
 			{
 				SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
@@ -276,6 +279,7 @@ namespace ordering_system
 			{
 				MessageBox.Show("Not all customer fields filled in", "Ordering System");
 			}
+			con.Close();
 		}
 
 		private void deleteAddressButton_Click(object sender, EventArgs e)

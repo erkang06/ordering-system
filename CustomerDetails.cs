@@ -120,9 +120,10 @@ namespace ordering_system
 			if (doesCustomerExist() == false && areAllCustomerFieldsFilled() == true) // if customer doesnt alr exist in database
 			{
 				// add customer details to database
-				SqlCommand addCustomerToDatabase = new SqlCommand("INSERT INTO CustomerTbl(customerName, phoneNumber, houseNumber, streetName, village, city, postcode) VALUES(@CN, @PN, @HN, @SN, @VL, @CT, @PC)", con);
+				SqlCommand addCustomerToDatabase = new SqlCommand("INSERT INTO CustomerTbl(customerName, phoneNumber, isBlacklisted, houseNumber, streetName, village, city, postcode) VALUES(@CN, @PN, @IBL, @HN, @SN, @VL, @CT, @PC)", con);
 				addCustomerToDatabase.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
 				addCustomerToDatabase.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@IBL", blacklistedCheckBox.Checked);
 				addCustomerToDatabase.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
 				addCustomerToDatabase.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
 				addCustomerToDatabase.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
@@ -134,8 +135,9 @@ namespace ordering_system
 			else if (areAllCustomerFieldsFilled() == true) // update just in case details have changed
 			{
 				customerID = findCustomerID();
-				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
+				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, isBlackListed = @IBL, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
 				updateCustomerDetails.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@IBL", blacklistedCheckBox.Checked);
 				updateCustomerDetails.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
 				updateCustomerDetails.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
 				updateCustomerDetails.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
