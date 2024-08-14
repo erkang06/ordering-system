@@ -61,7 +61,7 @@
 			deleteAddressButton = new Button();
 			updateAddressButton = new Button();
 			deleteCustomerButton = new Button();
-			button2 = new Button();
+			updateCustomerButton = new Button();
 			addressPanel = new Panel();
 			goBackButton = new Button();
 			customerDataGridView = new DataGridView();
@@ -405,6 +405,7 @@
 			deleteAddressButton.TabIndex = 74;
 			deleteAddressButton.Text = "Delete Address";
 			deleteAddressButton.UseVisualStyleBackColor = false;
+			deleteAddressButton.Click += deleteAddressButton_Click;
 			// 
 			// updateAddressButton
 			// 
@@ -418,6 +419,7 @@
 			updateAddressButton.TabIndex = 75;
 			updateAddressButton.Text = "Update Address";
 			updateAddressButton.UseVisualStyleBackColor = false;
+			updateAddressButton.Click += updateAddressButton_Click;
 			// 
 			// deleteCustomerButton
 			// 
@@ -431,19 +433,21 @@
 			deleteCustomerButton.TabIndex = 76;
 			deleteCustomerButton.Text = "Delete Customer";
 			deleteCustomerButton.UseVisualStyleBackColor = false;
+			deleteCustomerButton.Click += deleteCustomerButton_Click;
 			// 
-			// button2
+			// updateCustomerButton
 			// 
-			button2.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			button2.BackColor = SystemColors.Control;
-			button2.FlatStyle = FlatStyle.Flat;
-			button2.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			button2.Location = new Point(12, 902);
-			button2.Name = "button2";
-			button2.Size = new Size(450, 80);
-			button2.TabIndex = 77;
-			button2.Text = "Update Customer";
-			button2.UseVisualStyleBackColor = false;
+			updateCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			updateCustomerButton.BackColor = SystemColors.Control;
+			updateCustomerButton.FlatStyle = FlatStyle.Flat;
+			updateCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			updateCustomerButton.Location = new Point(12, 902);
+			updateCustomerButton.Name = "updateCustomerButton";
+			updateCustomerButton.Size = new Size(450, 80);
+			updateCustomerButton.TabIndex = 77;
+			updateCustomerButton.Text = "Update Customer";
+			updateCustomerButton.UseVisualStyleBackColor = false;
+			updateCustomerButton.Click += updateCustomerButton_Click;
 			// 
 			// addressPanel
 			// 
@@ -506,7 +510,7 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
-			Controls.Add(button2);
+			Controls.Add(updateCustomerButton);
 			Controls.Add(deleteCustomerButton);
 			Controls.Add(billingPostcodeTextBox);
 			Controls.Add(billingPostcodeLabel);
@@ -574,7 +578,7 @@
 		private Button deleteAddressButton;
 		private Button updateAddressButton;
 		private Button deleteCustomerButton;
-		private Button button2;
+		private Button updateCustomerButton;
 		private Panel addressPanel;
 		private DataGridView customerDataGridView;
 		private Button goBackButton;

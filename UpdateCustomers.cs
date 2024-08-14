@@ -36,6 +36,27 @@ namespace ordering_system
 			return true;
 		}
 
+		private bool areAllCustomerFieldsFilled() // checks if all required fields have been filled in
+		{
+			if (customerNameTextBox.Text != "" && phoneNumberTextBox.Text != "")
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool doesCustomerExist() // checks if customer exists in database w/ same phone number
+		{
+			SqlCommand checkIfCustomerExists = new SqlCommand("SELECT COUNT(*) FROM CustomerTbl WHERE phoneNumber = @PN", con);
+			checkIfCustomerExists.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+			int customerExists = (int)checkIfCustomerExists.ExecuteScalar();
+			if (customerExists == 0)
+			{
+				return false;
+			}
+			return true;
+		}
+
 		private void UpdateCustomers_Load(object sender, EventArgs e)
 		{
 			con.Open();
@@ -128,6 +149,92 @@ namespace ordering_system
 		{
 			addressPanel.Visible = false;
 			addressPanel.SendToBack();
+		}
+
+		private void updateCustomerButton_Click(object sender, EventArgs e)
+		{
+			con.Open();
+			if (areAllCustomerFieldsFilled() == true && customerID != -1) // update just in case details have changed
+			{
+				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
+				updateCustomerDetails.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@CT", billingCityTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@CID", customerID);
+				updateCustomerDetails.ExecuteNonQuery();
+				MessageBox.Show("Customer updated", "Ordering System");
+				clearCustomerScreen();
+				updateCustomerDataGridView();
+			}
+			else if (customerID != -1) // cant continue w/out all fields filled in
+			{
+				MessageBox.Show("Not all required customer fields filled in", "Ordering System");
+			}
+			else
+			{
+				MessageBox.Show("Customer not selected", "Ordering System");
+			}
+			con.Close();
+		}
+
+		private void deleteCustomerButton_Click(object sender, EventArgs e)
+		{
+			con.Open();
+			if (doesCustomerExist() == false) // customer not found
+			{
+				MessageBox.Show("Customer not found in database", "Ordering System");
+			}
+			else if (customerID == -1) // no customer selected
+			{
+				MessageBox.Show("Customer not selected", "Ordering System");
+			}
+			else // customer found
+			{
+				// check if customer used in ordertbl
+				SqlCommand checkIfCustomerUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE customerID = @CID", con);
+				checkIfCustomerUsed.Parameters.AddWithValue("@CID", customerID);
+				int instancesOfCustomerUsed = (int)checkIfCustomerUsed.ExecuteScalar();
+				if (instancesOfCustomerUsed > 0) // exists
+				{
+					MessageBox.Show("There is at least one order that has been placed by this customer. Remove them before deleting this customer", "Ordering System");
+				}
+				else // doesnt exist - can delete
+				{
+					SqlCommand deleteCustomer = new SqlCommand("DELETE FROM CustomerTbl WHERE customerID = @CID", con);
+					deleteCustomer.Parameters.AddWithValue("@CID", customerID);
+					deleteCustomer.ExecuteNonQuery();
+					MessageBox.Show("Customer deleted", "Ordering System");
+					clearCustomerScreen();
+					updateCustomerDataGridView();
+				}
+			}
+			con.Close();
+		}
+
+		private void clearCustomerScreen() // clears textboxes and customerid
+		{
+			customerID = -1;
+			customerNameTextBox.Text = "";
+			phoneNumberTextBox.Text = "";
+			blacklistedCheckBox.Checked = false;
+			billingHouseNumberTextBox.Text = "";
+			billingStreetNameTextBox.Text = "";
+			billingVillageTextBox.Text = "";
+			billingCityTextBox.Text = "";
+			billingPostcodeTextBox.Text = "";
+		}
+
+		private void updateAddressButton_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void deleteAddressButton_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
