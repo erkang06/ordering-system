@@ -236,16 +236,36 @@ namespace ordering_system
 
 		private void setMealDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
+			con.Open();
 			// find clicked row of table in order to search through setmealdataview to find the full deets
 			int selectedRowIndex = setMealDataGridView.SelectedCells[0].RowIndex;
 			if (setMealDataGridView.RowCount > 1 && selectedRowIndex < setMealDataGridView.RowCount - 1) // just in case theres no rows
 			{
-
+				// get set meal id
+				DataRowView selectedRow = setMealsDataView[selectedRowIndex];
+				setMealID = selectedRow.Row["setMealID"].ToString();
+				// get set meal from setmealfooditemtbl
+				SqlDataAdapter getSetMealFoodItems = new SqlDataAdapter("SELECT foodItemID, size, quantity FROM SetMealFoodItemTbl WHERE setMealID = @SMID ORDER BY foodItemID", con);
+				getSetMealFoodItems.SelectCommand.Parameters.AddWithValue("@SMID", setMealID);
+				getSetMealFoodItems.Fill(setMealFoodItemsDataTable);
+				// add food name to each fooditem
+				SqlCommand getFoodItemName = new SqlCommand("SELECT foodName FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+				getFoodItemName.Parameters.Add("@FIID", SqlDbType.NVarChar);
+				string foodItemName;
+				for (int i = 0; i < setMealFoodItemsDataTable.Rows.Count; i++)
+				{
+					// add fooditemid to sqlcommand
+					getFoodItemName.Parameters["@FIID"].Value = setMealFoodItemsDataTable.Rows[i]["foodItemID"];
+					foodItemName = getFoodItemName.ExecuteScalar().ToString();
+					setMealFoodItemsDataTable.Rows[i]["foodName"] = foodItemName;
+				}
+				updateItemQuantitySize(); // for some reason datagridviews always highlight a row
 			}
 			else // unselect flop row
 			{
 				setMealDataGridView.ClearSelection();
 			}
+			con.Close();
 		}
 
 		private void setMealitemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -306,8 +326,8 @@ namespace ordering_system
 				SqlCommand addSetMealFoodItemToDatabase = new SqlCommand("INSERT INTO SetMealFoodItemTbl(setMealID, foodItemID, size, quantity) VALUES(@SMID, @FIID, @SZ, @QTT)", con);
 				addSetMealFoodItemToDatabase.Parameters.AddWithValue("@SMID", setMealIDTextBox.Text);
 				addSetMealFoodItemToDatabase.Parameters.Add("@FIID", SqlDbType.NVarChar);
-				addSetMealFoodItemToDatabase.Parameters.Add("@SZ");
-				addSetMealFoodItemToDatabase.Parameters.Add("@QTT");
+				addSetMealFoodItemToDatabase.Parameters.Add("@SZ", SqlDbType.NChar);
+				addSetMealFoodItemToDatabase.Parameters.Add("@QTT", SqlDbType.Int);
 				foreach (DataRow row in setMealFoodItemsDataTable.Rows)
 				{
 					addSetMealFoodItemToDatabase.Parameters["@FIID"].Value = row[0];
@@ -316,6 +336,7 @@ namespace ordering_system
 					addSetMealFoodItemToDatabase.ExecuteNonQuery();
 				}
 				MessageBox.Show("Set meal added to database", "Ordering System");
+				setMealFoodItemsDataTable.Clear();
 				updateDataGridView();
 			}
 			else if (areAllFieldsFilled() == true) // if item exists
@@ -325,6 +346,40 @@ namespace ordering_system
 			else // if not all fields filled in
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			con.Close();
+		}
+
+		private void updateSetMealButton_Click(object sender, EventArgs e)
+		{
+			con.Open();
+			con.Close();
+		}
+
+		private void deleteSetMealButton_Click(object sender, EventArgs e)
+		{
+			con.Open();
+			if (doesItemExist() == false) // set meal not found
+			{
+				MessageBox.Show("Set meal not found in database", "Ordering System");
+			}
+			else if (setMealID == null) // no set meal selected
+			{
+				MessageBox.Show("Set meal not selected", "Ordering System");
+			}
+			else // set meal found
+			{
+				// delete set meal from setmealtbl
+				SqlCommand deleteSetMeal = new SqlCommand("DELETE FROM SetMealTbl WHERE setMealID = @SMID", con);
+				deleteSetMeal.Parameters.AddWithValue("@SMID", setMealID);
+				deleteSetMeal.ExecuteNonQuery();
+				// delete setmealfooditems from setmealfooditemtbl
+				SqlCommand deleteSetMealFoodItems = new SqlCommand("DELETE FROM SetMealFoodItemTbl WHERE setMealID = @SMID", con);
+				deleteSetMealFoodItems.Parameters.AddWithValue("@SMID", setMealID);
+				deleteSetMealFoodItems.ExecuteNonQuery();
+				setMealID = null;
+				MessageBox.Show("Set Meal deleted", "Ordering System");
+				updateDataGridView();
 			}
 			con.Close();
 		}

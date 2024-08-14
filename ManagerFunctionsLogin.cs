@@ -53,7 +53,7 @@ namespace ordering_system
 			try
 			{
 				StreamReader passwordFile = new StreamReader(@"./ManagerPassword.txt");
-				password = passwordFile.ReadLine();
+				password = passwordFile.ReadLine().Trim();
 				passwordFile.Close();
 			}
 			catch // if file doesnt exist, set to default

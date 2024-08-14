@@ -104,6 +104,7 @@
 			deleteSetMealButton.TabIndex = 81;
 			deleteSetMealButton.Text = "Delete Set Meal";
 			deleteSetMealButton.UseVisualStyleBackColor = false;
+			deleteSetMealButton.Click += deleteSetMealButton_Click;
 			// 
 			// updateSetMealButton
 			// 
@@ -117,6 +118,7 @@
 			updateSetMealButton.TabIndex = 80;
 			updateSetMealButton.Text = "Update Set Meal";
 			updateSetMealButton.UseVisualStyleBackColor = false;
+			updateSetMealButton.Click += updateSetMealButton_Click;
 			// 
 			// addSetMealButton
 			// 
