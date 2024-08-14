@@ -78,6 +78,7 @@
 			setMealNameTextBox.Name = "setMealNameTextBox";
 			setMealNameTextBox.Size = new Size(756, 57);
 			setMealNameTextBox.TabIndex = 72;
+			setMealNameTextBox.Leave += setMealNameTextBox_Leave;
 			// 
 			// setMealNameLabel
 			// 
@@ -142,6 +143,7 @@
 			setMealIDTextBox.Name = "setMealIDTextBox";
 			setMealIDTextBox.Size = new Size(756, 57);
 			setMealIDTextBox.TabIndex = 71;
+			setMealIDTextBox.Leave += setMealIDTextBox_Leave;
 			// 
 			// setMealIDLabel
 			// 
@@ -259,6 +261,7 @@
 			setMealPriceTextBox.Name = "setMealPriceTextBox";
 			setMealPriceTextBox.Size = new Size(756, 57);
 			setMealPriceTextBox.TabIndex = 93;
+			setMealPriceTextBox.Leave += setMealPriceTextBox_Leave;
 			// 
 			// itemSizeLabel
 			// 

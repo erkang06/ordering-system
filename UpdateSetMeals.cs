@@ -60,7 +60,7 @@ namespace ordering_system
 
 		private bool areAllFieldsFilled() // checks if all fields have been filled in
 		{
-			if (setMealIDTextBox.Text != "" && setMealNameTextBox.Text != "" && setMealPriceTextBox.Text != "")
+			if (setMealIDTextBox.Text != "" && setMealNameTextBox.Text != "" && setMealPriceTextBox.Text != "" && setMealFoodItemsDataTable.Rows.Count > 1)
 			{
 				return true;
 			}
@@ -382,6 +382,42 @@ namespace ordering_system
 				updateDataGridView();
 			}
 			con.Close();
+		}
+
+		private void setMealIDTextBox_Leave(object sender, EventArgs e)
+		{
+			if (setMealIDTextBox.Text.Length > 10) // if id too long for database
+			{
+				MessageBox.Show("Set Meal ID too long", "Ordering System");
+				setMealIDTextBox.Focus();
+			}
+		}
+
+		private void setMealNameTextBox_Leave(object sender, EventArgs e)
+		{
+			if (setMealNameTextBox.Text.Length > 50) // if set meal name too long for database
+			{
+				MessageBox.Show("Item name too long", "Ordering System");
+				setMealNameTextBox.Focus();
+			}
+		}
+
+		private void setMealPriceTextBox_Leave(object sender, EventArgs e)
+		{
+			try
+			{
+				Convert.ToDecimal(setMealPriceTextBox.Text); // check if value is acc decimal
+				if (Convert.ToDecimal(setMealPriceTextBox.Text) < 0 || Convert.ToDecimal(setMealPriceTextBox.Text) >= 1000) // not within range
+				{
+					MessageBox.Show("Small price not within range", "Ordering System");
+					setMealPriceTextBox.Focus();
+				}
+			}
+			catch // not decimal
+			{
+				MessageBox.Show("Small price not a decimal", "Ordering System");
+				setMealPriceTextBox.Focus();
+			}
 		}
 	}
 }
