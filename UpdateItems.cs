@@ -123,9 +123,9 @@ namespace ordering_system
 				itemIDTextBox.Text = foodItemID;
 				itemNameTextBox.Text = selectedRow.Row["foodName"].ToString().Trim();
 				hasSmallPriceCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["hasSmallOption"]);
-				smallPriceTextBox.Text = selectedRow.Row["smallItemPrice"].ToString().Trim();
+				smallPriceTextBox.Text = selectedRow.Row["smallItemPrice"].ToString();
 				hasSmallPriceCheckBox_CheckedChanged(sender, new EventArgs()); // if theres no small option, can clear
-				largePriceTextBox.Text = selectedRow.Row["largeItemPrice"].ToString().Trim();
+				largePriceTextBox.Text = selectedRow.Row["largeItemPrice"].ToString();
 				defaultToLargePriceCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["defaultToLargePrice"]);
 				isOutOfStockCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["isOutOfStock"]);
 				// need to convert categoryid to name

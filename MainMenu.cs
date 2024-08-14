@@ -55,7 +55,7 @@ namespace ordering_system
 			collectionButton.BackColor = Color.Transparent;
 			if (currentOrder.orderType != "Delivery") // if there hasnt been an address set
 			{
-				customerDetailsFormCreate("Delivery");
+				customerDetailsFormCreate("Delivery", currentOrder.customerID);
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace ordering_system
 			}
 			else if (currentOrder.orderType != "Collection") // if there hasnt been a name set
 			{
-				customerDetailsFormCreate("Collection");
+				customerDetailsFormCreate("Collection", currentOrder.customerID);
 			}
 		}
 
@@ -101,14 +101,14 @@ namespace ordering_system
 			customerDetailsFormCreate();
 		}
 
-		private void customerDetailsFormCreate(string orderType = "")
+		private void customerDetailsFormCreate(string orderType = "", int customerID = -1)
 		{
-			CustomerDetails obj = new CustomerDetails(orderType);
+			CustomerDetails obj = new CustomerDetails(orderType, customerID);
 			// basos update main form when anything in the customer details panel gets updated
 			obj.CustomerDetailsUpdate += new CustomerDetails.CustomerDetailsUpdateHandler(customerDetailsChanged);
 			obj.CustomerDetailsCancel += new CustomerDetails.CustomerDetailsCancelHandler(customerDetailsCancelled);
 			obj.Show();
-			obj.TopMost = true;
+			//obj.TopMost = true;
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
@@ -171,25 +171,25 @@ namespace ordering_system
 			currentOrder.customerID = e.customerID;
 			currentOrder.orderType = e.orderType;
 			getCustomer(e.customerID);
-			string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString().Trim();
+			string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString();
 			if (e.orderType == "Delivery")
 			{
 				currentOrder.addressID = e.addressID;
 				deliveryButton_Click(sender, e);
 				getAddress(e.addressID);
-				string houseNumber = addressDataSet.Tables[0].Rows[0]["houseNumber"].ToString().Trim();
-				string streetName = addressDataSet.Tables[0].Rows[0]["streetName"].ToString().Trim();
-				string postcode = addressDataSet.Tables[0].Rows[0]["postcode"].ToString().Trim();
+				string houseNumber = addressDataSet.Tables[0].Rows[0]["houseNumber"].ToString();
+				string streetName = addressDataSet.Tables[0].Rows[0]["streetName"].ToString();
+				string postcode = addressDataSet.Tables[0].Rows[0]["postcode"].ToString();
 				decimal deliveryCharge = Convert.ToDecimal(addressDataSet.Tables[0].Rows[0]["deliveryCharge"]);
 				customerDetailsLabel.Text = $"{phoneNumber} - {houseNumber} {streetName} {postcode}";
-				deliveryChargePriceLabel.Text = deliveryCharge.ToString("0.00"); // edit delivery charge
-																																				 // add subtotal and delivery charge together
-				totalPriceLabel.Text = (deliveryCharge + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString("0.00");
+				deliveryChargePriceLabel.Text = deliveryCharge.ToString(); // edit delivery charge
+				// add subtotal and delivery charge together
+				totalPriceLabel.Text = (deliveryCharge + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString();
 			}
 			else if (e.orderType == "Collection")
 			{
 				collectionButton_Click(sender, e);
-				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString().Trim();
+				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString();
 				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
 			}
 		}

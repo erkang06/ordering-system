@@ -58,6 +58,28 @@ namespace ordering_system
 			return -1;
 		}
 
+		private bool areAllFieldsFilled() // checks if all fields have been filled in
+		{
+			if (setMealIDTextBox.Text != "" && setMealNameTextBox.Text != "" && setMealPriceTextBox.Text != "")
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool doesItemExist() // checks if item exists in database w/ same name
+		{
+			SqlCommand checkIfItemExists = new SqlCommand("SELECT COUNT(*) FROM SetMealTbl WHERE setMealName = @SMN OR setMealID = @SMID", con);
+			checkIfItemExists.Parameters.AddWithValue("@SMN", setMealNameTextBox.Text);
+			checkIfItemExists.Parameters.AddWithValue("@SMID", setMealIDTextBox.Text);
+			int categoryExists = (int)checkIfItemExists.ExecuteScalar();
+			if (categoryExists == 0)
+			{
+				return false;
+			}
+			return true;
+		}
+
 		private void cancelButton_Click(object sender, EventArgs e)
 		{
 			Close();
@@ -117,11 +139,11 @@ namespace ordering_system
 			setMealFoodItemsDataTable.Columns.Add("size");
 			setMealFoodItemsDataTable.Columns.Add("quantity");
 			setMealItemDataGridView.DataSource = setMealFoodItemsDataTable;
-			updateSetMealDataGridView();
+			updateDataGridView();
 			con.Close();
 		}
 
-		private void updateSetMealDataGridView()
+		private void updateDataGridView()
 		{
 			SqlDataAdapter getSetMeals = new SqlDataAdapter("SELECT * FROM SetMealTbl ORDER BY SetMealID", con);
 			DataSet setMealsDataSet = new DataSet();
@@ -267,6 +289,44 @@ namespace ordering_system
 			{
 				MessageBox.Show("Item not selected from set meal items", "Ordering System");
 			}
+		}
+
+		private void addSetMealButton_Click(object sender, EventArgs e)
+		{
+			con.Open();
+			if (doesItemExist() == false && areAllFieldsFilled() == true)
+			{
+				// add the set meal to setmealtbl
+				SqlCommand addSetMealToDatabase = new SqlCommand("INSERT INTO SetMealTbl(setMealID, setMealName, price) VALUES(@SMID, @SMN, @PR)", con);
+				addSetMealToDatabase.Parameters.AddWithValue("@SMID", setMealIDTextBox.Text);
+				addSetMealToDatabase.Parameters.AddWithValue("@SMN", setMealNameTextBox.Text);
+				addSetMealToDatabase.Parameters.AddWithValue("@PR", Convert.ToDecimal(setMealPriceTextBox.Text));
+				addSetMealToDatabase.ExecuteNonQuery();
+				// add each item to setmealfooditemtbl
+				SqlCommand addSetMealFoodItemToDatabase = new SqlCommand("INSERT INTO SetMealFoodItemTbl(setMealID, foodItemID, size, quantity) VALUES(@SMID, @FIID, @SZ, @QTT)", con);
+				addSetMealFoodItemToDatabase.Parameters.AddWithValue("@SMID", setMealIDTextBox.Text);
+				addSetMealFoodItemToDatabase.Parameters.Add("@FIID", SqlDbType.NVarChar);
+				addSetMealFoodItemToDatabase.Parameters.Add("@SZ");
+				addSetMealFoodItemToDatabase.Parameters.Add("@QTT");
+				foreach (DataRow row in setMealFoodItemsDataTable.Rows)
+				{
+					addSetMealFoodItemToDatabase.Parameters["@FIID"].Value = row[0];
+					addSetMealFoodItemToDatabase.Parameters["@SZ"].Value = row[2];
+					addSetMealFoodItemToDatabase.Parameters["@QTT"].Value = row[3];
+					addSetMealFoodItemToDatabase.ExecuteNonQuery();
+				}
+				MessageBox.Show("Set meal added to database", "Ordering System");
+				updateDataGridView();
+			}
+			else if (areAllFieldsFilled() == true) // if item exists
+			{
+				MessageBox.Show("Set meal already exists with same name or ID", "Ordering System");
+			}
+			else // if not all fields filled in
+			{
+				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			con.Close();
 		}
 	}
 }

@@ -130,6 +130,7 @@
 			addSetMealButton.TabIndex = 79;
 			addSetMealButton.Text = "Add Set Meal";
 			addSetMealButton.UseVisualStyleBackColor = false;
+			addSetMealButton.Click += addSetMealButton_Click;
 			// 
 			// setMealIDTextBox
 			// 
@@ -387,13 +388,7 @@
 		}
 
 		#endregion
-		private CheckBox isOutOfStockCheckBox;
-		private CheckBox hasSmallPriceCheckBox;
-		private CheckBox defaultToLargePriceCheckBox;
-		private TextBox largePriceTextBox;
 		private Label setMealPriceLabel;
-		private TextBox smallPriceTextBox;
-		private Label smallPriceLabel;
 		private TextBox setMealNameTextBox;
 		private Label setMealNameLabel;
 		private Button deleteSetMealButton;

@@ -27,7 +27,7 @@ namespace ordering_system
 		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the 
 		// the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
-		public CustomerDetails(string orderType)
+		public CustomerDetails(string orderType, int customerIDFromMainMenu)
 		{
 			InitializeComponent();
 			if (orderType == "Delivery")
@@ -38,13 +38,18 @@ namespace ordering_system
 			{
 				changeToCollection();
 			}
+			if (customerIDFromMainMenu > 0)
+			{
+				customerID = customerIDFromMainMenu;
+				fillInCustomerDetails(false);
+			}
 		}
 
-		private void findCustomerID() // find customerid from phonenumber
+		private int findCustomerID() // find customerid from phonenumber
 		{
 			SqlCommand findcustomerID = new SqlCommand("SELECT CustomerID FROM CustomerTbl WHERE phoneNumber = @PN", con);
 			findcustomerID.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
-			customerID = (int)findcustomerID.ExecuteScalar();
+			return (int)findcustomerID.ExecuteScalar();
 		}
 
 		private void findAddressID() // find addressid from customer# house# postcode
@@ -124,11 +129,11 @@ namespace ordering_system
 				addCustomerToDatabase.Parameters.AddWithValue("@CT", billingCityTextBox.Text);
 				addCustomerToDatabase.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
 				addCustomerToDatabase.ExecuteNonQuery();
-				findCustomerID();
+				customerID = findCustomerID();
 			}
 			else if (areAllCustomerFieldsFilled() == true) // update just in case details have changed
 			{
-				findCustomerID();
+				customerID = findCustomerID();
 				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
 				updateCustomerDetails.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
 				updateCustomerDetails.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
@@ -145,7 +150,7 @@ namespace ordering_system
 				return;
 			}
 
-			string orderType = "";
+			string orderType = "Collection"; // set default ordertype to collection since theres nothing more that needs to be updated databasewise
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
 
@@ -166,7 +171,7 @@ namespace ordering_system
 				else if (areAllAddressFieldsFilled() == true) // update just in case details have changed
 				{
 					findAddressID();
-					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET customerID = @CID, houseNumber = @HN, streetName = @SN, village = @VL, @city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
+					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET customerID = @CID, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
 					updateDeliveryAddress.Parameters.AddWithValue("@CID", customerID);
 					updateDeliveryAddress.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
 					updateDeliveryAddress.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
@@ -183,13 +188,9 @@ namespace ordering_system
 					return;
 				}
 				orderType = "Delivery";
-				// send delivery details back to main menu
-			}
-			else if (collectionButton.BackColor == Color.Yellow) // if its a collection by the end
-			{
-				orderType = "Collection";
 			}
 
+			// send delivery details back to main menu
 			CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(customerID, orderType, addressID);
 			CustomerDetailsUpdate(this, args);
 			con.Close();
@@ -240,7 +241,7 @@ namespace ordering_system
 			deliveryAddressDataGridView.Enabled = false;
 		}
 
-		private void findCustomerButton_Click(object sender, EventArgs e) // wtf help xoxo
+		private void findCustomerButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
 			if (doesCustomerExist() == false) // if no customer exists for the number given
@@ -249,30 +250,38 @@ namespace ordering_system
 			}
 			else
 			{
-				// fill in customer details and billing address
-				findCustomerID();
-				DataSet customer = getCustomer(customerID);
-				customerNameTextBox.Text = customer.Tables[0].Rows[0]["customerName"].ToString().Trim();
-				blacklistedCheckBox.Checked = Convert.ToBoolean(customer.Tables[0].Rows[0]["isBlackListed"]);
-				billingHouseNumberTextBox.Text = customer.Tables[0].Rows[0]["houseNumber"].ToString().Trim();
-				billingStreetNameTextBox.Text = customer.Tables[0].Rows[0]["streetName"].ToString().Trim();
-				billingVillageTextBox.Text = customer.Tables[0].Rows[0]["village"].ToString().Trim();
-				billingCityTextBox.Text = customer.Tables[0].Rows[0]["city"].ToString().Trim();
-				billingPostcodeTextBox.Text = customer.Tables[0].Rows[0]["postcode"].ToString().Trim();
-
-				if (deliveryButton.BackColor == Color.Yellow) // deliveries need the address data grid view filling in
-				{
-					SqlDataAdapter getAddresses = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", con);
-					getAddresses.SelectCommand.Parameters.AddWithValue("@CID", customerID);
-					DataSet addressesDataSet = new DataSet();
-					getAddresses.Fill(addressesDataSet);
-					addressesDataView = new DataView(addressesDataSet.Tables[0]);
-					// fill in address datagridview
-					DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
-					deliveryAddressDataGridView.DataSource = addressesDataTable;
-				}
+				customerID = findCustomerID();
+				fillInCustomerDetails(true);
 			}
 			con.Close();
+		}
+
+		private void fillInCustomerDetails(bool phoneNumberAlreadyInputted) // fill in customer details and billing address
+		{
+			DataSet customer = getCustomer(customerID);
+			customerNameTextBox.Text = customer.Tables[0].Rows[0]["customerName"].ToString();
+			blacklistedCheckBox.Checked = Convert.ToBoolean(customer.Tables[0].Rows[0]["isBlackListed"]);
+			billingHouseNumberTextBox.Text = customer.Tables[0].Rows[0]["houseNumber"].ToString();
+			billingStreetNameTextBox.Text = customer.Tables[0].Rows[0]["streetName"].ToString();
+			billingVillageTextBox.Text = customer.Tables[0].Rows[0]["village"].ToString();
+			billingCityTextBox.Text = customer.Tables[0].Rows[0]["city"].ToString();
+			billingPostcodeTextBox.Text = customer.Tables[0].Rows[0]["postcode"].ToString();
+			if (phoneNumberAlreadyInputted == false)
+			{
+				phoneNumberTextBox.Text = customer.Tables[0].Rows[0]["phoneNumber"].ToString();
+			}
+
+			if (deliveryButton.BackColor == Color.Yellow) // deliveries need the address data grid view filling in
+			{
+				SqlDataAdapter getAddresses = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", con);
+				getAddresses.SelectCommand.Parameters.AddWithValue("@CID", customerID);
+				DataSet addressesDataSet = new DataSet();
+				getAddresses.Fill(addressesDataSet);
+				addressesDataView = new DataView(addressesDataSet.Tables[0]);
+				// fill in address datagridview
+				DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
+				deliveryAddressDataGridView.DataSource = addressesDataTable;
+			}
 		}
 
 		private void billingAsDeliveryCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -292,16 +301,23 @@ namespace ordering_system
 		{
 			// find clicked row of table in order to search through addressesdatagridview to find the full deets
 			int selectedRowIndex = deliveryAddressDataGridView.SelectedCells[0].RowIndex;
-			DataRowView selectedRow = addressesDataView[selectedRowIndex];
-			addressID = Convert.ToInt32(selectedRow.Row["addressID"]);
-			// update delivery address
-			deliveryHouseNumberTextBox.Text = selectedRow.Row["houseNumber"].ToString().Trim();
-			deliveryStreetNameTextBox.Text = selectedRow.Row["streetName"].ToString().Trim();
-			deliveryVillageTextBox.Text = selectedRow.Row["village"].ToString().Trim();
-			deliveryCityTextBox.Text = selectedRow.Row["city"].ToString().Trim();
-			deliveryPostcodeTextBox.Text = selectedRow.Row["postcode"].ToString().Trim();
-			deliveryDeliveryChargeTextBox.Text = Convert.ToDecimal(selectedRow.Row["deliveryCharge"]).ToString("0.00").Trim();
-			deliveryAddressDataGridView.ClearSelection(); // unselect row
+			if (deliveryAddressDataGridView.RowCount > 1 && selectedRowIndex < deliveryAddressDataGridView.RowCount - 1) // just in case theres no rows
+			{
+				DataRowView selectedRow = addressesDataView[selectedRowIndex];
+				addressID = Convert.ToInt32(selectedRow.Row["addressID"]);
+				// update delivery address
+				deliveryHouseNumberTextBox.Text = selectedRow.Row["houseNumber"].ToString();
+				deliveryStreetNameTextBox.Text = selectedRow.Row["streetName"].ToString();
+				deliveryVillageTextBox.Text = selectedRow.Row["village"].ToString();
+				deliveryCityTextBox.Text = selectedRow.Row["city"].ToString();
+				deliveryPostcodeTextBox.Text = selectedRow.Row["postcode"].ToString();
+				deliveryDeliveryChargeTextBox.Text = selectedRow.Row["deliveryCharge"].ToString();
+				deliveryAddressDataGridView.ClearSelection(); // unselect row
+			}
+			else // unselect flop row
+			{
+				deliveryAddressDataGridView.ClearSelection();
+			}
 		}
 
 		private void deleteCustomerButton_Click(object sender, EventArgs e)
@@ -313,7 +329,7 @@ namespace ordering_system
 			}
 			else // phone# found
 			{
-				findCustomerID();
+				customerID = findCustomerID();
 				SqlCommand deleteCustomer = new SqlCommand("DELETE FROM CustomerTbl WHERE customerID = @CID", con);
 				deleteCustomer.Parameters.AddWithValue("@CID", customerID);
 				deleteCustomer.ExecuteNonQuery();
