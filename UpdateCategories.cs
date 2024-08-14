@@ -139,11 +139,11 @@ namespace ordering_system
 				SqlCommand checkIfCategoryUsed = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE categoryID = @CID", con);
 				checkIfCategoryUsed.Parameters.AddWithValue("@CID", categoryID);
 				int instancesOfCategoryUsed = (int)checkIfCategoryUsed.ExecuteScalar();
-				if (instancesOfCategoryUsed > 0)
+				if (instancesOfCategoryUsed > 0) // exists
 				{
 					MessageBox.Show("There is at least one item that uses this category. Remove them before deleting this category", "Ordering System");
 				}
-				else
+				else // doesnt exist - can delete
 				{
 					SqlCommand deleteCategory = new SqlCommand("DELETE FROM CustomerTbl WHERE categoryID = @CID", con);
 					deleteCategory.Parameters.AddWithValue("@CID", categoryID);

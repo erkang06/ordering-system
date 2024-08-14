@@ -241,6 +241,7 @@ namespace ordering_system
 			int selectedRowIndex = setMealDataGridView.SelectedCells[0].RowIndex;
 			if (setMealDataGridView.RowCount > 1 && selectedRowIndex < setMealDataGridView.RowCount - 1) // just in case theres no rows
 			{
+				setMealFoodItemsDataTable.Clear(); // clear prev set meal
 				// get set meal id
 				DataRowView selectedRow = setMealsDataView[selectedRowIndex];
 				setMealID = selectedRow.Row["setMealID"].ToString();
@@ -268,6 +269,7 @@ namespace ordering_system
 			else // unselect flop row
 			{
 				setMealDataGridView.ClearSelection();
+				clearSetMealScreen();
 			}
 			con.Close();
 		}
@@ -329,7 +331,7 @@ namespace ordering_system
 				// add each item to setmealfooditemtbl
 				addSetMealFoodItems();
 				MessageBox.Show("Set meal added to database", "Ordering System");
-				setMealFoodItemsDataTable.Clear();
+				clearSetMealScreen();
 				updateDataGridView();
 			}
 			else if (areAllFieldsFilled() == true) // if item exists
@@ -360,7 +362,7 @@ namespace ordering_system
 				// add new fooditems
 				addSetMealFoodItems();
 				MessageBox.Show("Set meal updated", "Ordering System");
-				setMealFoodItemsDataTable.Clear();
+				clearSetMealScreen();
 				updateDataGridView();
 			}
 			else if (setMealID != null) // incomplete form
@@ -395,7 +397,7 @@ namespace ordering_system
 				deleteSetMealFoodItems();
 				setMealID = null;
 				MessageBox.Show("Set meal deleted", "Ordering System");
-				setMealFoodItemsDataTable.Clear();
+				clearSetMealScreen();
 				updateDataGridView();
 			}
 			con.Close();
@@ -422,6 +424,14 @@ namespace ordering_system
 			SqlCommand deleteSetMealFoodItems = new SqlCommand("DELETE FROM SetMealFoodItemTbl WHERE setMealID = @SMID", con);
 			deleteSetMealFoodItems.Parameters.AddWithValue("@SMID", setMealID);
 			deleteSetMealFoodItems.ExecuteNonQuery();
+		}
+
+		private void clearSetMealScreen() // clears textboxes and setmealitemdatagridview
+		{
+			setMealFoodItemsDataTable.Clear();
+			setMealIDTextBox.Text = string.Empty;
+			setMealNameTextBox.Text = string.Empty;
+			setMealPriceTextBox.Text = string.Empty;
 		}
 
 		private void setMealIDTextBox_Leave(object sender, EventArgs e)

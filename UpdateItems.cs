@@ -87,7 +87,10 @@ namespace ordering_system
 			List<string> categoryNames = new List<string>();
 			foreach (DataRowView category in categoriesDataView)
 			{
-				categoryNames.Add(category["categoryName"].ToString());
+				if (category["categoryName"].ToString() != "Set Meals") // cant add items to set meals yk
+				{
+					categoryNames.Add(category["categoryName"].ToString());
+				}
 			}
 			// fill in category combobox
 			foreach (string categoryName in categoryNames)
@@ -259,13 +262,13 @@ namespace ordering_system
 			{
 				// check if item used in setmealfooditemtbl
 				SqlCommand checkIfFoodItemUsed = new SqlCommand("SELECT COUNT(*) FROM SetMealFoodItemTbl WHERE foodItemID = @FIID", con);
-				checkIfFoodItemUsed.Parameters.AddWithValue("@FID", foodItemID);
+				checkIfFoodItemUsed.Parameters.AddWithValue("@FIID", foodItemID);
 				int instancesOfFoodItemUsed = (int)checkIfFoodItemUsed.ExecuteScalar();
-				if (instancesOfFoodItemUsed > 0)
+				if (instancesOfFoodItemUsed > 0) // exists
 				{
 					MessageBox.Show("There is at least one set meal that uses this item. Remove them before deleting this item", "Ordering System");
 				}
-				else
+				else // doesnt exist - can delete
 				{
 					SqlCommand deleteFoodItem = new SqlCommand("DELETE FROM FoodItemTbl WHERE foodItemID = @FIID", con);
 					deleteFoodItem.Parameters.AddWithValue("@FIID", foodItemID);

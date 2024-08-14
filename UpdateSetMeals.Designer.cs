@@ -77,7 +77,7 @@
 			setMealNameTextBox.Location = new Point(12, 886);
 			setMealNameTextBox.Name = "setMealNameTextBox";
 			setMealNameTextBox.Size = new Size(756, 57);
-			setMealNameTextBox.TabIndex = 72;
+			setMealNameTextBox.TabIndex = 3;
 			setMealNameTextBox.Leave += setMealNameTextBox_Leave;
 			// 
 			// setMealNameLabel
@@ -102,7 +102,7 @@
 			deleteSetMealButton.Location = new Point(1608, 342);
 			deleteSetMealButton.Name = "deleteSetMealButton";
 			deleteSetMealButton.Size = new Size(300, 116);
-			deleteSetMealButton.TabIndex = 81;
+			deleteSetMealButton.TabIndex = 7;
 			deleteSetMealButton.Text = "Delete Set Meal";
 			deleteSetMealButton.UseVisualStyleBackColor = false;
 			deleteSetMealButton.Click += deleteSetMealButton_Click;
@@ -116,7 +116,7 @@
 			updateSetMealButton.Location = new Point(1608, 220);
 			updateSetMealButton.Name = "updateSetMealButton";
 			updateSetMealButton.Size = new Size(300, 116);
-			updateSetMealButton.TabIndex = 80;
+			updateSetMealButton.TabIndex = 6;
 			updateSetMealButton.Text = "Update Set Meal";
 			updateSetMealButton.UseVisualStyleBackColor = false;
 			updateSetMealButton.Click += updateSetMealButton_Click;
@@ -130,7 +130,7 @@
 			addSetMealButton.Location = new Point(1608, 98);
 			addSetMealButton.Name = "addSetMealButton";
 			addSetMealButton.Size = new Size(300, 116);
-			addSetMealButton.TabIndex = 79;
+			addSetMealButton.TabIndex = 5;
 			addSetMealButton.Text = "Add Set Meal";
 			addSetMealButton.UseVisualStyleBackColor = false;
 			addSetMealButton.Click += addSetMealButton_Click;
@@ -142,7 +142,7 @@
 			setMealIDTextBox.Location = new Point(12, 763);
 			setMealIDTextBox.Name = "setMealIDTextBox";
 			setMealIDTextBox.Size = new Size(756, 57);
-			setMealIDTextBox.TabIndex = 71;
+			setMealIDTextBox.TabIndex = 2;
 			setMealIDTextBox.Leave += setMealIDTextBox_Leave;
 			// 
 			// setMealIDLabel
@@ -177,7 +177,7 @@
 			cancelButton.Location = new Point(1818, 12);
 			cancelButton.Name = "cancelButton";
 			cancelButton.Size = new Size(90, 80);
-			cancelButton.TabIndex = 82;
+			cancelButton.TabIndex = 12;
 			cancelButton.UseVisualStyleBackColor = true;
 			cancelButton.Click += cancelButton_Click;
 			// 
@@ -221,7 +221,7 @@
 			categoryComboBox.Location = new Point(218, 98);
 			categoryComboBox.Name = "categoryComboBox";
 			categoryComboBox.Size = new Size(550, 58);
-			categoryComboBox.TabIndex = 90;
+			categoryComboBox.TabIndex = 1;
 			categoryComboBox.SelectedIndexChanged += categoryComboBox_SelectedIndexChanged;
 			// 
 			// categoryLabel
@@ -260,7 +260,7 @@
 			setMealPriceTextBox.Location = new Point(12, 1011);
 			setMealPriceTextBox.Name = "setMealPriceTextBox";
 			setMealPriceTextBox.Size = new Size(756, 57);
-			setMealPriceTextBox.TabIndex = 93;
+			setMealPriceTextBox.TabIndex = 4;
 			setMealPriceTextBox.Leave += setMealPriceTextBox_Leave;
 			// 
 			// itemSizeLabel
@@ -300,7 +300,7 @@
 			itemSizeComboBox.Location = new Point(1080, 1014);
 			itemSizeComboBox.Name = "itemSizeComboBox";
 			itemSizeComboBox.Size = new Size(522, 58);
-			itemSizeComboBox.TabIndex = 99;
+			itemSizeComboBox.TabIndex = 10;
 			itemSizeComboBox.SelectedIndexChanged += itemSizeComboBox_SelectedIndexChanged;
 			// 
 			// itemQuantityValueLabel
@@ -323,7 +323,7 @@
 			increaseQuantityButton.Location = new Point(1272, 951);
 			increaseQuantityButton.Name = "increaseQuantityButton";
 			increaseQuantityButton.Size = new Size(80, 57);
-			increaseQuantityButton.TabIndex = 104;
+			increaseQuantityButton.TabIndex = 9;
 			increaseQuantityButton.UseVisualStyleBackColor = true;
 			increaseQuantityButton.Click += increaseQuantityButton_Click;
 			// 
@@ -334,7 +334,7 @@
 			decreaseQuantityButton.Location = new Point(1080, 951);
 			decreaseQuantityButton.Name = "decreaseQuantityButton";
 			decreaseQuantityButton.Size = new Size(80, 57);
-			decreaseQuantityButton.TabIndex = 103;
+			decreaseQuantityButton.TabIndex = 8;
 			decreaseQuantityButton.UseVisualStyleBackColor = true;
 			decreaseQuantityButton.Click += decreaseQuantityButton_Click;
 			// 
@@ -347,7 +347,7 @@
 			deleteItemButton.Location = new Point(1608, 951);
 			deleteItemButton.Name = "deleteItemButton";
 			deleteItemButton.Size = new Size(300, 121);
-			deleteItemButton.TabIndex = 105;
+			deleteItemButton.TabIndex = 11;
 			deleteItemButton.Text = "Delete Item";
 			deleteItemButton.UseVisualStyleBackColor = false;
 			deleteItemButton.Click += deleteItemButton_Click;
