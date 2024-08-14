@@ -53,7 +53,9 @@ namespace ordering_system
 
 		private void updateCustomersButton_Click(object sender, EventArgs e)
 		{
-
+			UpdateCustomers obj = new UpdateCustomers();
+			obj.Show();
+			//obj.TopMost = true;
 		}
 
 		private void orderSummaryButton_Click(object sender, EventArgs e)
