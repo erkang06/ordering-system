@@ -122,6 +122,40 @@ namespace ordering_system
 			con.Close();
 		}
 
+		private void deleteCategoryButton_Click(object sender, EventArgs e) // ADD DEFENSE AGAINST NONE CAT IDS
+		{
+			con.Open();
+			if (doesCategoryExist() == false) // category not found
+			{
+				MessageBox.Show("Category not found in database", "Ordering System");
+			}
+			else if (categoryID == -1) // no category selected
+			{
+				MessageBox.Show("Category not selected", "Ordering System");
+			}
+			else // category found
+			{
+				// check if category used in fooditemtbl
+				SqlCommand checkIfCategoryUsed = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE categoryID = @CID", con);
+				checkIfCategoryUsed.Parameters.AddWithValue("@CID", categoryID);
+				int instancesOfCategoryUsed = (int)checkIfCategoryUsed.ExecuteScalar();
+				if (instancesOfCategoryUsed > 0)
+				{
+					MessageBox.Show("There is at least one item that uses this category. Remove them before deleting this category", "Ordering System");
+				}
+				else
+				{
+					SqlCommand deleteCategory = new SqlCommand("DELETE FROM CustomerTbl WHERE categoryID = @CID", con);
+					deleteCategory.Parameters.AddWithValue("@CID", categoryID);
+					deleteCategory.ExecuteNonQuery();
+					categoryID = -1;
+					MessageBox.Show("Category deleted", "Ordering System");
+					updateDataGridView();
+				}
+			}
+			con.Close();
+		}
+
 		private void updateCategoryButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
@@ -154,40 +188,6 @@ namespace ordering_system
 				MessageBox.Show("Category name too long", "Ordering System");
 				categoryNameTextBox.Focus();
 			}
-		}
-
-		private void deleteCategoryButton_Click(object sender, EventArgs e) // ADD DEFENSE AGAINST NONE CAT IDS
-		{
-			con.Open();
-			if (doesCategoryExist() == false) // category not found
-			{
-				MessageBox.Show("Category not found in database", "Ordering System");
-			}
-			else if (categoryID == -1) // no category selected
-			{
-				MessageBox.Show("Category not selected", "Ordering System");
-			}
-			else // category found
-			{
-				// check if category used in food item tbl
-				SqlCommand checkIfCategoryUsed = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE categoryID = @CID", con);
-				checkIfCategoryUsed.Parameters.AddWithValue("@CID", categoryID);
-				int instancesOfCategoryUsed = (int)checkIfCategoryUsed.ExecuteScalar();
-				if (instancesOfCategoryUsed > 0)
-				{
-					MessageBox.Show("There is at least one item that uses this category. Remove them before deleting a category", "Ordering System");
-				}
-				else
-				{
-					SqlCommand deleteCategory = new SqlCommand("DELETE FROM CustomerTbl WHERE categoryID = @CID", con);
-					deleteCategory.Parameters.AddWithValue("@CID", categoryID);
-					deleteCategory.ExecuteNonQuery();
-					categoryID = -1;
-					MessageBox.Show("Category deleted", "Ordering System");
-					updateDataGridView();
-				}
-			}
-			con.Close();
 		}
 
 		private void categoryIndexTextBox_Leave(object sender, EventArgs e)

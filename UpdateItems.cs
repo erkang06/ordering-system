@@ -257,12 +257,23 @@ namespace ordering_system
 			}
 			else // item found
 			{
-				SqlCommand deleteCategory = new SqlCommand("DELETE FROM FoodItemTbl WHERE foodItemID = @FIID", con);
-				deleteCategory.Parameters.AddWithValue("@FIID", foodItemID);
-				deleteCategory.ExecuteNonQuery();
-				foodItemID = null;
-				MessageBox.Show("Item deleted", "Ordering System");
-				updateDataGridView();
+				// check if item used in setmealfooditemtbl
+				SqlCommand checkIfFoodItemUsed = new SqlCommand("SELECT COUNT(*) FROM SetMealFoodItemTbl WHERE foodItemID = @FIID", con);
+				checkIfFoodItemUsed.Parameters.AddWithValue("@FID", foodItemID);
+				int instancesOfFoodItemUsed = (int)checkIfFoodItemUsed.ExecuteScalar();
+				if (instancesOfFoodItemUsed > 0)
+				{
+					MessageBox.Show("There is at least one set meal that uses this item. Remove them before deleting this item", "Ordering System");
+				}
+				else
+				{
+					SqlCommand deleteFoodItem = new SqlCommand("DELETE FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+					deleteFoodItem.Parameters.AddWithValue("@FIID", foodItemID);
+					deleteFoodItem.ExecuteNonQuery();
+					foodItemID = null;
+					MessageBox.Show("Item deleted", "Ordering System");
+					updateDataGridView();
+				}
 			}
 			con.Close();
 		}
