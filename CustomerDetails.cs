@@ -171,8 +171,7 @@ namespace ordering_system
 				else if (areAllAddressFieldsFilled() == true) // update just in case details have changed
 				{
 					findAddressID();
-					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET customerID = @CID, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
-					updateDeliveryAddress.Parameters.AddWithValue("@CID", customerID);
+					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
 					updateDeliveryAddress.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
 					updateDeliveryAddress.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
 					updateDeliveryAddress.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
@@ -184,7 +183,7 @@ namespace ordering_system
 				}
 				else // cant continue w/out all fields filled in
 				{
-					MessageBox.Show("Not all customer fields filled in", "Ordering System");
+					MessageBox.Show("Not all required address fields filled in", "Ordering System");
 					return;
 				}
 				orderType = "Delivery";

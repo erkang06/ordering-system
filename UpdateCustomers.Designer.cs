@@ -529,8 +529,8 @@
 			Controls.Add(customerNameLabel);
 			Controls.Add(updateCustomersLabel);
 			Controls.Add(cancelButton);
-			Controls.Add(addressPanel);
 			Controls.Add(customerDataGridView);
+			Controls.Add(addressPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "UpdateCustomers";
 			Text = "UpdateCustomers";

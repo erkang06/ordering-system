@@ -45,12 +45,35 @@ namespace ordering_system
 			return false;
 		}
 
+		private bool areAllAddressFieldsFilled() // checks if all required fields have been filled in
+		{
+			if (deliveryHouseNumberTextBox.Text != "" && deliveryStreetNameTextBox.Text != "" && deliveryCityTextBox.Text != "" && deliveryPostcodeTextBox.Text != "" && deliveryDeliveryChargeTextBox.Text != "")
+			{
+				return true;
+			}
+			return false;
+		}
+
 		private bool doesCustomerExist() // checks if customer exists in database w/ same phone number
 		{
 			SqlCommand checkIfCustomerExists = new SqlCommand("SELECT COUNT(*) FROM CustomerTbl WHERE phoneNumber = @PN", con);
 			checkIfCustomerExists.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
 			int customerExists = (int)checkIfCustomerExists.ExecuteScalar();
 			if (customerExists == 0)
+			{
+				return false;
+			}
+			return true;
+		}
+
+		private bool doesAddressExist() // see if address exists for customerid w/ same house # and postcode
+		{
+			SqlCommand checkIfAddressExists = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE CustomerID = @CID AND houseNumber = @HN AND postcode = @PC", con);
+			checkIfAddressExists.Parameters.AddWithValue("@CID", customerID);
+			checkIfAddressExists.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+			checkIfAddressExists.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+			int addressExists = (int)checkIfAddressExists.ExecuteScalar();
+			if (addressExists == 0)
 			{
 				return false;
 			}
@@ -76,6 +99,18 @@ namespace ordering_system
 			// hide deliveryaddress panel by default
 			addressPanel.Visible = false;
 			addressPanel.SendToBack();
+		}
+
+		private void updateAddressDataGridView()
+		{
+			SqlDataAdapter getAddressesForCustomer = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID ORDER BY addressID", con);
+			getAddressesForCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
+			DataSet addressesDataSet = new DataSet();
+			getAddressesForCustomer.Fill(addressesDataSet);
+			addressesDataView = new DataView(addressesDataSet.Tables[0]);
+			// fill in address datagridview
+			DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postcode");
+			addressDataGridView.DataSource = addressesDataTable;
 		}
 
 		private void cancelButton_Click(object sender, EventArgs e)
@@ -105,14 +140,7 @@ namespace ordering_system
 				{
 					addressPanel.BringToFront();
 					addressPanel.Visible = true;
-					SqlDataAdapter getAddressesForCustomer = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID ORDER BY addressID", con);
-					getAddressesForCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
-					DataSet addressesDataSet = new DataSet();
-					getAddressesForCustomer.Fill(addressesDataSet);
-					addressesDataView = new DataView(addressesDataSet.Tables[0]);
-					// fill in address datagridview
-					DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postcode");
-					addressDataGridView.DataSource = addressesDataTable;
+					updateAddressDataGridView();
 				}
 			}
 			else // unselect flop row
@@ -229,12 +257,70 @@ namespace ordering_system
 
 		private void updateAddressButton_Click(object sender, EventArgs e)
 		{
-
+			if (areAllAddressFieldsFilled() == true) // update just in case details have changed
+			{
+				SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
+				updateDeliveryAddress.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+				updateDeliveryAddress.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
+				updateDeliveryAddress.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
+				updateDeliveryAddress.Parameters.AddWithValue("@CT", deliveryCityTextBox.Text);
+				updateDeliveryAddress.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+				updateDeliveryAddress.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
+				updateDeliveryAddress.Parameters.AddWithValue("@AID", addressID);
+				updateDeliveryAddress.ExecuteNonQuery();
+				MessageBox.Show("Address updated", "Ordering System");
+				clearAddressScreen();
+				updateAddressDataGridView();
+			}
+			else // cant continue w/out all fields filled in
+			{
+				MessageBox.Show("Not all customer fields filled in", "Ordering System");
+			}
 		}
 
 		private void deleteAddressButton_Click(object sender, EventArgs e)
 		{
+			con.Open();
+			if (doesAddressExist() == false) // address not found
+			{
+				MessageBox.Show("Address not found in database", "Ordering System");
+			}
+			else if (addressID == -1) // no address selected
+			{
+				MessageBox.Show("Address not selected", "Ordering System");
+			}
+			else // address found
+			{
+				// check if address used in ordertbl
+				SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE addressID = @AID", con);
+				checkIfAddressUsed.Parameters.AddWithValue("@AID", addressID);
+				int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
+				if (instancesOfAddressUsed > 0) // exists
+				{
+					MessageBox.Show("There is at least one order that uses this address. Remove them before deleting this address", "Ordering System");
+				}
+				else // doesnt exist - can delete
+				{
+					SqlCommand deleteAddress = new SqlCommand("DELETE FROM AddressTbl WHERE addressID = @AID", con);
+					deleteAddress.Parameters.AddWithValue("@CID", addressID);
+					deleteAddress.ExecuteNonQuery();
+					MessageBox.Show("Address deleted", "Ordering System");
+					clearAddressScreen();
+					updateAddressDataGridView();
+				}
+			}
+			con.Close();
+		}
 
+		private void clearAddressScreen() // clears textboxes and customerid
+		{
+			addressID = -1;
+			deliveryHouseNumberTextBox.Text = "";
+			deliveryStreetNameTextBox.Text = "";
+			deliveryVillageTextBox.Text = "";
+			deliveryCityTextBox.Text = "";
+			deliveryPostcodeTextBox.Text = "";
+			deliveryDeliveryChargeTextBox.Text = "";
 		}
 	}
 }
