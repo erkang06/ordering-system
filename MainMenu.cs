@@ -25,9 +25,9 @@ namespace ordering_system
 		DataView ordersDataView = new DataView();
 		DataView categoriesDataView;
 		DataView foodDataView;
-		Button[] categoryButtonArray = new Button[28]; // cant have any more since its hardcoded
+		Button[] categoryButtonArray = new Button[21]; // cant have any more since its hardcoded
 		Button[] foodButtonArray = new Button[30];
-		int viewOrdersSelectedOrderID;
+		int viewOrdersSelectedOrderID = -1;
 		public MainMenu()
 		{
 			InitializeComponent();
@@ -87,7 +87,7 @@ namespace ordering_system
 				categoryButtonArray[i].Tag = categoriesDataView[i]["categoryID"].ToString();
 				categoryButtonArray[i].Text = categoriesDataView[i]["categoryName"].ToString();
 				categoryButtonArray[i].Width = 150;
-				categoryButtonArray[i].Height = 75;
+				categoryButtonArray[i].Height = 80;
 				categoryButtonArray[i].Left = xpos;
 				categoryButtonArray[i].Top = ypos;
 				categoryButtonArray[i].BackColor = Color.Gainsboro;
@@ -97,7 +97,7 @@ namespace ordering_system
 				if ((i + 1) % 7 == 0) // new row
 				{
 					xpos = 0;
-					ypos += 75;
+					ypos += 80;
 				}
 			}
 		}
@@ -270,7 +270,7 @@ namespace ordering_system
 				foodButtonArray[i].Tag = foodDataView[i].Row[foodID].ToString();
 				foodButtonArray[i].Text = foodDataView[i].Row[foodName].ToString();
 				foodButtonArray[i].Width = 350;
-				foodButtonArray[i].Height = 70;
+				foodButtonArray[i].Height = 75;
 				foodButtonArray[i].Left = xpos;
 				foodButtonArray[i].Top = ypos;
 				foodButtonArray[i].BackColor = Color.Gainsboro;
@@ -280,7 +280,7 @@ namespace ordering_system
 				if ((i + 1) % 3 == 0) // new row
 				{
 					xpos = 0;
-					ypos += 70;
+					ypos += 75;
 				}
 			}
 		}
@@ -407,7 +407,7 @@ namespace ordering_system
 
 		private void printKitchenTicketButton_Click(object sender, EventArgs e)
 		{
-			if (viewOrdersSelectedOrderID != default) // if theres a selected order
+			if (viewOrdersSelectedOrderID != -1) // if theres a selected order
 			{
 
 			}
@@ -419,7 +419,7 @@ namespace ordering_system
 
 		private void printCustomerTicketButton_Click(object sender, EventArgs e)
 		{
-			if (viewOrdersSelectedOrderID != default) // if theres a selected order
+			if (viewOrdersSelectedOrderID != -1) // if theres a selected order
 			{
 
 			}

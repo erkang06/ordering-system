@@ -436,17 +436,17 @@
 			itemsPanel.Location = new Point(700, 80);
 			itemsPanel.Margin = new Padding(0);
 			itemsPanel.Name = "itemsPanel";
-			itemsPanel.Size = new Size(1050, 700);
+			itemsPanel.Size = new Size(1050, 750);
 			itemsPanel.TabIndex = 4;
 			// 
 			// categoriesPanel
 			// 
 			categoriesPanel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			categoriesPanel.BackColor = Color.Gainsboro;
-			categoriesPanel.Location = new Point(700, 780);
+			categoriesPanel.Location = new Point(700, 830);
 			categoriesPanel.Margin = new Padding(0);
 			categoriesPanel.Name = "categoriesPanel";
-			categoriesPanel.Size = new Size(1050, 300);
+			categoriesPanel.Size = new Size(1050, 250);
 			categoriesPanel.TabIndex = 6;
 			// 
 			// paymentPanel
