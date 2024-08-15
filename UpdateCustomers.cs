@@ -103,7 +103,7 @@ namespace ordering_system
 
 		private void updateAddressDataGridView()
 		{
-			SqlDataAdapter getAddressesForCustomer = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID ORDER BY addressID", con);
+			SqlDataAdapter getAddressesForCustomer = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", con);
 			getAddressesForCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
 			DataSet addressesDataSet = new DataSet();
 			getAddressesForCustomer.Fill(addressesDataSet);
@@ -221,27 +221,55 @@ namespace ordering_system
 			{
 				MessageBox.Show("Customer not selected", "Ordering System");
 			}
-			else // customer found
+			else if (hasCustomerBeenUsedInAddress()) // customer exists in addresstbl
 			{
-				// check if customer used in ordertbl
-				SqlCommand checkIfCustomerUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE customerID = @CID", con);
-				checkIfCustomerUsed.Parameters.AddWithValue("@CID", customerID);
-				int instancesOfCustomerUsed = (int)checkIfCustomerUsed.ExecuteScalar();
-				if (instancesOfCustomerUsed > 0) // exists
-				{
-					MessageBox.Show("There is at least one order that has been placed by this customer. Remove them before deleting this customer", "Ordering System");
-				}
-				else // doesnt exist - can delete
-				{
-					SqlCommand deleteCustomer = new SqlCommand("DELETE FROM CustomerTbl WHERE customerID = @CID", con);
-					deleteCustomer.Parameters.AddWithValue("@CID", customerID);
-					deleteCustomer.ExecuteNonQuery();
-					MessageBox.Show("Customer deleted", "Ordering System");
-					clearCustomerScreen();
-					updateCustomerDataGridView();
-				}
+				MessageBox.Show("There is at least one address that is associated with this customer. Remove them before deleting this customer", "Ordering System");
+			}
+			else if (hasCustomerBeenUsedInOrder()) // customer exists in an order
+			{
+				MessageBox.Show("There is at least one order that has been placed by this customer. Remove them before deleting this customer", "Ordering System");
+			}
+			else // doesnt exist - can delete
+			{
+				// delete all addresses w/ same customerid
+				SqlCommand deleteAssociatedAddresses = new SqlCommand("DELETE FROM AddressTbl WHERE customerID = @CID", con);
+				deleteAssociatedAddresses.Parameters.AddWithValue("@CID", customerID);
+				deleteAssociatedAddresses.ExecuteNonQuery();
+				// delete customer
+				SqlCommand deleteCustomer = new SqlCommand("DELETE FROM CustomerTbl WHERE customerID = @CID", con);
+				deleteCustomer.Parameters.AddWithValue("@CID", customerID);
+				deleteCustomer.ExecuteNonQuery();
+				MessageBox.Show("Customer deleted", "Ordering System");
+				clearCustomerScreen();
+				updateCustomerDataGridView();
 			}
 			con.Close();
+		}
+
+		private bool hasCustomerBeenUsedInAddress()
+		{
+			// check if customer used in addresstbl
+			SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE customerID = @CID", con);
+			checkIfAddressUsed.Parameters.AddWithValue("@CID", customerID);
+			int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
+			if (instancesOfAddressUsed > 0) // exists
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool hasCustomerBeenUsedInOrder()
+		{
+			// check if customer used in ordertbl
+			SqlCommand checkIfCustomerUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE customerID = @CID", con);
+			checkIfCustomerUsed.Parameters.AddWithValue("@CID", customerID);
+			int instancesOfCustomerUsed = (int)checkIfCustomerUsed.ExecuteScalar();
+			if (instancesOfCustomerUsed > 0) // exists
+			{
+				return true;
+			}
+			return false;
 		}
 
 		private void clearCustomerScreen() // clears textboxes and customerid
@@ -293,27 +321,33 @@ namespace ordering_system
 			{
 				MessageBox.Show("Address not selected", "Ordering System");
 			}
-			else // address found
+			else if (hasAddressBeenUsedInOrder()) // exists in an order
 			{
-				// check if address used in ordertbl
-				SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE addressID = @AID", con);
-				checkIfAddressUsed.Parameters.AddWithValue("@AID", addressID);
-				int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
-				if (instancesOfAddressUsed > 0) // exists
-				{
-					MessageBox.Show("There is at least one order that uses this address. Remove them before deleting this address", "Ordering System");
-				}
-				else // doesnt exist - can delete
-				{
-					SqlCommand deleteAddress = new SqlCommand("DELETE FROM AddressTbl WHERE addressID = @AID", con);
-					deleteAddress.Parameters.AddWithValue("@CID", addressID);
-					deleteAddress.ExecuteNonQuery();
-					MessageBox.Show("Address deleted", "Ordering System");
-					clearAddressScreen();
-					updateAddressDataGridView();
-				}
+				MessageBox.Show("There is at least one order that uses this address. Remove them before deleting this address", "Ordering System");
+			}
+			else // doesnt exist - can delete
+			{
+				SqlCommand deleteAddress = new SqlCommand("DELETE FROM AddressTbl WHERE addressID = @AID", con);
+				deleteAddress.Parameters.AddWithValue("@AID", addressID);
+				deleteAddress.ExecuteNonQuery();
+				MessageBox.Show("Address deleted", "Ordering System");
+				clearAddressScreen();
+				updateAddressDataGridView();
 			}
 			con.Close();
+		}
+
+		private bool hasAddressBeenUsedInOrder()
+		{
+			// check if address used in ordertbl
+			SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE addressID = @AID", con);
+			checkIfAddressUsed.Parameters.AddWithValue("@AID", addressID);
+			int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
+			if (instancesOfAddressUsed > 0) // exists
+			{
+				return true;
+			}
+			return false;
 		}
 
 		private void clearAddressScreen() // clears textboxes and customerid

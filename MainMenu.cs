@@ -108,7 +108,54 @@ namespace ordering_system
 			obj.CustomerDetailsUpdate += new CustomerDetails.CustomerDetailsUpdateHandler(customerDetailsChanged);
 			obj.CustomerDetailsCancel += new CustomerDetails.CustomerDetailsCancelHandler(customerDetailsCancelled);
 			obj.Show();
-			obj.TopMost = true;
+			//obj.TopMost = true;
+		}
+
+		private void customerDetailsChanged(object sender, CustomerDetailsUpdateEventArgs e) // when stuff gets updated in the customer details panel
+		{
+			currentOrder.customerID = e.customerID;
+			currentOrder.orderType = e.orderType;
+			getCustomer(e.customerID);
+			string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString();
+			if (e.orderType == "Delivery")
+			{
+				currentOrder.addressID = e.addressID;
+				deliveryButton_Click(sender, e);
+				getAddress(e.addressID);
+				string houseNumber = addressDataSet.Tables[0].Rows[0]["houseNumber"].ToString();
+				string streetName = addressDataSet.Tables[0].Rows[0]["streetName"].ToString();
+				string postcode = addressDataSet.Tables[0].Rows[0]["postcode"].ToString();
+				decimal deliveryCharge = Convert.ToDecimal(addressDataSet.Tables[0].Rows[0]["deliveryCharge"]);
+				customerDetailsLabel.Text = $"{phoneNumber} - {houseNumber} {streetName} {postcode}";
+				deliveryChargePriceLabel.Text = deliveryCharge.ToString(); // edit delivery charge
+																																	 // add subtotal and delivery charge together
+				totalPriceLabel.Text = (deliveryCharge + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString();
+			}
+			else if (e.orderType == "Collection")
+			{
+				collectionButton_Click(sender, e);
+				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString();
+				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
+			}
+		}
+
+		private void customerDetailsCancelled() // if you press cancel in customer details panel youve revert to prior order type
+		{
+			collectionButton.BackColor = Color.Transparent;
+			counterButton.BackColor = Color.Transparent;
+			deliveryButton.BackColor = Color.Transparent;
+			if (currentOrder.orderType == "Delivery")
+			{
+				deliveryButton.BackColor = Color.Yellow;
+			}
+			else if (currentOrder.orderType == "Counter")
+			{
+				counterButton.BackColor = Color.Yellow;
+			}
+			else if (currentOrder.orderType == "Collection")
+			{
+				collectionButton.BackColor = Color.Yellow;
+			}
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
@@ -164,53 +211,6 @@ namespace ordering_system
 			ManagerFunctionsLogin obj = new ManagerFunctionsLogin();
 			obj.Show();
 			obj.TopMost = true;
-		}
-
-		private void customerDetailsChanged(object sender, CustomerDetailsUpdateEventArgs e) // when stuff gets updated in the customer details panel
-		{
-			currentOrder.customerID = e.customerID;
-			currentOrder.orderType = e.orderType;
-			getCustomer(e.customerID);
-			string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString();
-			if (e.orderType == "Delivery")
-			{
-				currentOrder.addressID = e.addressID;
-				deliveryButton_Click(sender, e);
-				getAddress(e.addressID);
-				string houseNumber = addressDataSet.Tables[0].Rows[0]["houseNumber"].ToString();
-				string streetName = addressDataSet.Tables[0].Rows[0]["streetName"].ToString();
-				string postcode = addressDataSet.Tables[0].Rows[0]["postcode"].ToString();
-				decimal deliveryCharge = Convert.ToDecimal(addressDataSet.Tables[0].Rows[0]["deliveryCharge"]);
-				customerDetailsLabel.Text = $"{phoneNumber} - {houseNumber} {streetName} {postcode}";
-				deliveryChargePriceLabel.Text = deliveryCharge.ToString(); // edit delivery charge
-				// add subtotal and delivery charge together
-				totalPriceLabel.Text = (deliveryCharge + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString();
-			}
-			else if (e.orderType == "Collection")
-			{
-				collectionButton_Click(sender, e);
-				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString();
-				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
-			}
-		}
-
-		private void customerDetailsCancelled() // if you press cancel in customer details panel youve revert to prior order type
-		{
-			collectionButton.BackColor = Color.Transparent;
-			counterButton.BackColor = Color.Transparent;
-			deliveryButton.BackColor = Color.Transparent;
-			if (currentOrder.orderType == "Delivery")
-			{
-				deliveryButton.BackColor = Color.Yellow;
-			}
-			else if (currentOrder.orderType == "Counter")
-			{
-				counterButton.BackColor = Color.Yellow;
-			}
-			else if (currentOrder.orderType == "Collection")
-			{
-				collectionButton.BackColor = Color.Yellow;
-			}
 		}
 
 		private void cancelOrderButton_Click(object sender, EventArgs e)

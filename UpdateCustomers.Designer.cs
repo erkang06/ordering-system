@@ -111,7 +111,7 @@
 			billingPostcodeLabel.Name = "billingPostcodeLabel";
 			billingPostcodeLabel.Size = new Size(350, 50);
 			billingPostcodeLabel.TabIndex = 60;
-			billingPostcodeLabel.Text = "*Postcode:";
+			billingPostcodeLabel.Text = "Postcode:";
 			// 
 			// billingCityTextBox
 			// 
@@ -131,7 +131,7 @@
 			billingCityLabel.Name = "billingCityLabel";
 			billingCityLabel.Size = new Size(350, 50);
 			billingCityLabel.TabIndex = 59;
-			billingCityLabel.Text = "*City:";
+			billingCityLabel.Text = "City:";
 			// 
 			// billingVillageTextBox
 			// 
@@ -171,7 +171,7 @@
 			billingStreetNameLabel.Name = "billingStreetNameLabel";
 			billingStreetNameLabel.Size = new Size(350, 50);
 			billingStreetNameLabel.TabIndex = 57;
-			billingStreetNameLabel.Text = "*Street Name:";
+			billingStreetNameLabel.Text = "Street Name:";
 			// 
 			// blacklistedCheckBox
 			// 
@@ -203,7 +203,7 @@
 			billingHouseNumberLabel.Name = "billingHouseNumberLabel";
 			billingHouseNumberLabel.Size = new Size(350, 50);
 			billingHouseNumberLabel.TabIndex = 56;
-			billingHouseNumberLabel.Text = "*House Number:";
+			billingHouseNumberLabel.Text = "House Number:";
 			// 
 			// phoneNumberTextBox
 			// 

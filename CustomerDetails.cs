@@ -52,13 +52,13 @@ namespace ordering_system
 			return (int)findcustomerID.ExecuteScalar();
 		}
 
-		private void findAddressID() // find addressid from customer# house# postcode
+		private int findAddressID() // find addressid from customer# house# postcode
 		{
 			SqlCommand findAddressID = new SqlCommand("SELECT AddressID FROM AddressTbl WHERE CustomerID = @CID AND houseNumber = @HN AND postcode = @PC", con);
 			findAddressID.Parameters.AddWithValue("@CID", customerID);
 			findAddressID.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
 			findAddressID.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
-			addressID = (int)findAddressID.ExecuteScalar();
+			return (int)findAddressID.ExecuteScalar();
 		}
 
 		private bool doesCustomerExist() // checks if customer exists in database w/ same phone number
@@ -112,6 +112,79 @@ namespace ordering_system
 				return true;
 			}
 			return false;
+		}
+
+		private bool hasCustomerBeenUsedInAddress()
+		{
+			// check if customer used in addresstbl
+			SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE customerID = @CID", con);
+			checkIfAddressUsed.Parameters.AddWithValue("@CID", customerID);
+			int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
+			if (instancesOfAddressUsed > 0) // exists
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool hasCustomerBeenUsedInOrder()
+		{
+			// check if customer used in ordertbl
+			SqlCommand checkIfCustomerUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE customerID = @CID", con);
+			checkIfCustomerUsed.Parameters.AddWithValue("@CID", customerID);
+			int instancesOfCustomerUsed = (int)checkIfCustomerUsed.ExecuteScalar();
+			if (instancesOfCustomerUsed > 0) // exists
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool hasAddressBeenUsedInOrder()
+		{
+			// check if address used in ordertbl
+			SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE addressID = @AID", con);
+			checkIfAddressUsed.Parameters.AddWithValue("@AID", addressID);
+			int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
+			if (instancesOfAddressUsed > 0) // exists
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private void clearCustomerScreen() // clears textboxes
+		{
+			customerNameTextBox.Text = string.Empty;
+			phoneNumberTextBox.Text = string.Empty;
+			blacklistedCheckBox.Checked = false;
+			billingHouseNumberTextBox.Text = string.Empty;
+			billingStreetNameTextBox.Text = string.Empty;
+			billingVillageTextBox.Text = string.Empty;
+			billingCityTextBox.Text = string.Empty;
+			billingPostcodeTextBox.Text = string.Empty;
+		}
+
+		private void clearAddressScreen() // clears textboxes
+		{
+			deliveryHouseNumberTextBox.Text = string.Empty;
+			deliveryStreetNameTextBox.Text = string.Empty;
+			deliveryVillageTextBox.Text = string.Empty;
+			deliveryCityTextBox.Text = string.Empty;
+			deliveryPostcodeTextBox.Text = string.Empty;
+			deliveryDeliveryChargeTextBox.Text = string.Empty;
+		}
+
+		private void updateDataGridView()
+		{
+			SqlDataAdapter getAddresses = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", con);
+			getAddresses.SelectCommand.Parameters.AddWithValue("@CID", customerID);
+			DataSet addressesDataSet = new DataSet();
+			getAddresses.Fill(addressesDataSet);
+			addressesDataView = new DataView(addressesDataSet.Tables[0]);
+			// fill in address datagridview
+			DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
+			addressDataGridView.DataSource = addressesDataTable;
 		}
 
 		private void acceptAddressButton_Click(object sender, EventArgs e)
@@ -168,11 +241,11 @@ namespace ordering_system
 					addAddressToDatabase.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
 					addAddressToDatabase.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
 					addAddressToDatabase.ExecuteNonQuery();
-					findAddressID();
+					addressID = findAddressID();
 				}
 				else if (areAllAddressFieldsFilled() == true) // update just in case details have changed
 				{
-					findAddressID();
+					addressID = findAddressID();
 					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
 					updateDeliveryAddress.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
 					updateDeliveryAddress.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
@@ -189,6 +262,11 @@ namespace ordering_system
 					return;
 				}
 				orderType = "Delivery";
+			}
+			else if (collectionButton.BackColor != Color.Yellow) // if collection button isnt selected
+			{
+				MessageBox.Show("Order type not selected", "Ordering System");
+				return;
 			}
 
 			// send delivery details back to main menu
@@ -225,7 +303,7 @@ namespace ordering_system
 			deliveryPostcodeLabel.Text = "*Postcode:";
 			deliveryDeliveryChargeTextBox.Enabled = true;
 			deliveryDeliveryChargeLabel.Text = "*Delivery Charge:";
-			deliveryAddressDataGridView.Enabled = true;
+			addressDataGridView.Enabled = true;
 			billingAsDeliveryCheckBox.Enabled = true;
 		}
 
@@ -256,7 +334,7 @@ namespace ordering_system
 			deliveryDeliveryChargeTextBox.Enabled = false;
 			deliveryDeliveryChargeTextBox.Text = string.Empty;
 			deliveryDeliveryChargeLabel.Text = "Delivery Charge:";
-			deliveryAddressDataGridView.Enabled = false;
+			addressDataGridView.Enabled = false;
 			billingAsDeliveryCheckBox.Enabled = false;
 			billingAsDeliveryCheckBox.Checked = false;
 		}
@@ -271,6 +349,7 @@ namespace ordering_system
 			else
 			{
 				customerID = findCustomerID();
+				clearAddressScreen();
 				fillInCustomerDetails(true);
 			}
 			con.Close();
@@ -293,14 +372,7 @@ namespace ordering_system
 
 			if (deliveryButton.BackColor == Color.Yellow) // deliveries need the address data grid view filling in
 			{
-				SqlDataAdapter getAddresses = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", con);
-				getAddresses.SelectCommand.Parameters.AddWithValue("@CID", customerID);
-				DataSet addressesDataSet = new DataSet();
-				getAddresses.Fill(addressesDataSet);
-				addressesDataView = new DataView(addressesDataSet.Tables[0]);
-				// fill in address datagridview
-				DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
-				deliveryAddressDataGridView.DataSource = addressesDataTable;
+				updateDataGridView();
 			}
 		}
 
@@ -317,11 +389,11 @@ namespace ordering_system
 			}
 		}
 
-		private void deliveryAddressDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+		private void addressDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through addressesdatagridview to find the full deets
-			int selectedRowIndex = deliveryAddressDataGridView.SelectedCells[0].RowIndex;
-			if (deliveryAddressDataGridView.RowCount > 1 && selectedRowIndex < deliveryAddressDataGridView.RowCount - 1) // just in case theres no rows
+			int selectedRowIndex = addressDataGridView.SelectedCells[0].RowIndex;
+			if (addressDataGridView.RowCount > 1 && selectedRowIndex < addressDataGridView.RowCount - 1) // just in case theres no rows
 			{
 				DataRowView selectedRow = addressesDataView[selectedRowIndex];
 				addressID = Convert.ToInt32(selectedRow.Row["addressID"]);
@@ -332,11 +404,11 @@ namespace ordering_system
 				deliveryCityTextBox.Text = selectedRow.Row["city"].ToString();
 				deliveryPostcodeTextBox.Text = selectedRow.Row["postcode"].ToString();
 				deliveryDeliveryChargeTextBox.Text = selectedRow.Row["deliveryCharge"].ToString();
-				deliveryAddressDataGridView.ClearSelection(); // unselect row
+				addressDataGridView.ClearSelection(); // unselect row
 			}
 			else // unselect flop row
 			{
-				deliveryAddressDataGridView.ClearSelection();
+				addressDataGridView.ClearSelection();
 			}
 		}
 
@@ -350,10 +422,22 @@ namespace ordering_system
 			else // phone# found
 			{
 				customerID = findCustomerID();
-				SqlCommand deleteCustomer = new SqlCommand("DELETE FROM CustomerTbl WHERE customerID = @CID", con);
-				deleteCustomer.Parameters.AddWithValue("@CID", customerID);
-				deleteCustomer.ExecuteNonQuery();
-				MessageBox.Show("Customer deleted", "Ordering System");
+				if (hasCustomerBeenUsedInAddress()) // customer exists in addresstbl
+				{
+					MessageBox.Show("There is at least one address that is associated with this customer. Remove them through manager functions before deleting this customer", "Ordering System");
+				}
+				else if (hasCustomerBeenUsedInOrder()) // customer exists in an order
+				{
+					MessageBox.Show("There is at least one order that has been placed by this customer. Remove them through manager functions before deleting this customer", "Ordering System");
+				}
+				else
+				{
+					SqlCommand deleteCustomer = new SqlCommand("DELETE FROM CustomerTbl WHERE customerID = @CID", con);
+					deleteCustomer.Parameters.AddWithValue("@CID", customerID);
+					deleteCustomer.ExecuteNonQuery();
+					MessageBox.Show("Customer deleted", "Ordering System");
+					clearCustomerScreen();
+				}
 			}
 			con.Close();
 		}
@@ -367,11 +451,20 @@ namespace ordering_system
 			}
 			else
 			{
-				findAddressID();
-				SqlCommand deleteAddress = new SqlCommand("DELETE FROM AddressTbl WHERE addressID = @AID");
-				deleteAddress.Parameters.AddWithValue("@AID", addressID);
-				deleteAddress.ExecuteNonQuery();
-				MessageBox.Show("Address deleted", "Ordering System");
+				addressID = findAddressID();
+				if (hasAddressBeenUsedInOrder()) // exists in an order
+				{
+					MessageBox.Show("There is at least one order that uses this address. Remove them through manager functions before deleting this address", "Ordering System");
+				}
+				else
+				{
+					SqlCommand deleteAddress = new SqlCommand("DELETE FROM AddressTbl WHERE addressID = @AID", con);
+					deleteAddress.Parameters.AddWithValue("@AID", addressID);
+					deleteAddress.ExecuteNonQuery();
+					MessageBox.Show("Address deleted", "Ordering System");
+					clearAddressScreen();
+					updateDataGridView();
+				}
 			}
 			con.Close();
 		}

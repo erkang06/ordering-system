@@ -73,7 +73,7 @@ namespace ordering_system
 		{
 			get
 			{
-				return _customerID;
+				return _addressID;
 			}
 		}
 	}
