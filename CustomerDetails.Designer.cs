@@ -79,7 +79,7 @@
 			customerNameLabel.Name = "customerNameLabel";
 			customerNameLabel.Size = new Size(350, 50);
 			customerNameLabel.TabIndex = 4;
-			customerNameLabel.Text = "Customer Name:";
+			customerNameLabel.Text = "*Customer Name:";
 			// 
 			// phoneNumberLabel
 			// 
@@ -91,7 +91,7 @@
 			phoneNumberLabel.Name = "phoneNumberLabel";
 			phoneNumberLabel.Size = new Size(350, 50);
 			phoneNumberLabel.TabIndex = 6;
-			phoneNumberLabel.Text = "Phone Number:";
+			phoneNumberLabel.Text = "*Phone Number:";
 			// 
 			// customerNameTextBox
 			// 
@@ -261,7 +261,7 @@
 			deliveryPostcodeLabel.Name = "deliveryPostcodeLabel";
 			deliveryPostcodeLabel.Size = new Size(350, 50);
 			deliveryPostcodeLabel.TabIndex = 32;
-			deliveryPostcodeLabel.Text = "Postcode:";
+			deliveryPostcodeLabel.Text = "*Postcode:";
 			// 
 			// deliveryCityTextBox
 			// 
@@ -284,7 +284,7 @@
 			deliveryCityLabel.Name = "deliveryCityLabel";
 			deliveryCityLabel.Size = new Size(350, 50);
 			deliveryCityLabel.TabIndex = 30;
-			deliveryCityLabel.Text = "City:";
+			deliveryCityLabel.Text = "*City:";
 			// 
 			// deliveryVillageTextBox
 			// 
@@ -330,7 +330,7 @@
 			deliveryStreetNameLabel.Name = "deliveryStreetNameLabel";
 			deliveryStreetNameLabel.Size = new Size(350, 50);
 			deliveryStreetNameLabel.TabIndex = 26;
-			deliveryStreetNameLabel.Text = "Street Name:";
+			deliveryStreetNameLabel.Text = "*Street Name:";
 			// 
 			// deliveryHouseNumberTextBox
 			// 
@@ -353,7 +353,7 @@
 			deliveryHouseNumberLabel.Name = "deliveryHouseNumberLabel";
 			deliveryHouseNumberLabel.Size = new Size(350, 50);
 			deliveryHouseNumberLabel.TabIndex = 24;
-			deliveryHouseNumberLabel.Text = "House Number:";
+			deliveryHouseNumberLabel.Text = "*House Number:";
 			// 
 			// deliveryAddressLabel
 			// 
@@ -418,7 +418,7 @@
 			deliveryDeliveryChargeLabel.Name = "deliveryDeliveryChargeLabel";
 			deliveryDeliveryChargeLabel.Size = new Size(350, 50);
 			deliveryDeliveryChargeLabel.TabIndex = 36;
-			deliveryDeliveryChargeLabel.Text = "Delivery Charge:";
+			deliveryDeliveryChargeLabel.Text = "*Delivery Charge:";
 			// 
 			// acceptAddressButton
 			// 

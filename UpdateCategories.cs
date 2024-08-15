@@ -76,7 +76,7 @@ namespace ordering_system
 				maxCategoryIndex = 0;
 			}
 			categoryIndexTextBox.Text = (maxCategoryIndex + 1).ToString();
-			categoryNameTextBox.Text = "";
+			categoryNameTextBox.Text = string.Empty;
 			categoryDataGridView.ClearSelection();
 		}
 

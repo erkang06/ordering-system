@@ -99,7 +99,7 @@
 			categoryNameLabel.Name = "categoryNameLabel";
 			categoryNameLabel.Size = new Size(350, 50);
 			categoryNameLabel.TabIndex = 46;
-			categoryNameLabel.Text = "Category Name:";
+			categoryNameLabel.Text = "*Category Name:";
 			// 
 			// addCategoryButton
 			// 
@@ -148,7 +148,7 @@
 			categoryIndexLabel.Name = "categoryIndexLabel";
 			categoryIndexLabel.Size = new Size(350, 50);
 			categoryIndexLabel.TabIndex = 51;
-			categoryIndexLabel.Text = "Category Index:";
+			categoryIndexLabel.Text = "*Category Index:";
 			// 
 			// deleteCategoryButton
 			// 

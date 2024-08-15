@@ -111,7 +111,7 @@
 			billingPostcodeLabel.Name = "billingPostcodeLabel";
 			billingPostcodeLabel.Size = new Size(350, 50);
 			billingPostcodeLabel.TabIndex = 60;
-			billingPostcodeLabel.Text = "Postcode:";
+			billingPostcodeLabel.Text = "*Postcode:";
 			// 
 			// billingCityTextBox
 			// 
@@ -131,7 +131,7 @@
 			billingCityLabel.Name = "billingCityLabel";
 			billingCityLabel.Size = new Size(350, 50);
 			billingCityLabel.TabIndex = 59;
-			billingCityLabel.Text = "City:";
+			billingCityLabel.Text = "*City:";
 			// 
 			// billingVillageTextBox
 			// 
@@ -171,7 +171,7 @@
 			billingStreetNameLabel.Name = "billingStreetNameLabel";
 			billingStreetNameLabel.Size = new Size(350, 50);
 			billingStreetNameLabel.TabIndex = 57;
-			billingStreetNameLabel.Text = "Street Name:";
+			billingStreetNameLabel.Text = "*Street Name:";
 			// 
 			// blacklistedCheckBox
 			// 
@@ -203,7 +203,7 @@
 			billingHouseNumberLabel.Name = "billingHouseNumberLabel";
 			billingHouseNumberLabel.Size = new Size(350, 50);
 			billingHouseNumberLabel.TabIndex = 56;
-			billingHouseNumberLabel.Text = "House Number:";
+			billingHouseNumberLabel.Text = "*House Number:";
 			// 
 			// phoneNumberTextBox
 			// 
@@ -231,7 +231,7 @@
 			phoneNumberLabel.Name = "phoneNumberLabel";
 			phoneNumberLabel.Size = new Size(350, 50);
 			phoneNumberLabel.TabIndex = 51;
-			phoneNumberLabel.Text = "Phone Number:";
+			phoneNumberLabel.Text = "*Phone Number:";
 			// 
 			// customerNameLabel
 			// 
@@ -243,7 +243,7 @@
 			customerNameLabel.Name = "customerNameLabel";
 			customerNameLabel.Size = new Size(350, 50);
 			customerNameLabel.TabIndex = 48;
-			customerNameLabel.Text = "Customer Name:";
+			customerNameLabel.Text = "*Customer Name:";
 			// 
 			// addressDataGridView
 			// 
@@ -281,7 +281,7 @@
 			deliveryDeliveryChargeLabel.Name = "deliveryDeliveryChargeLabel";
 			deliveryDeliveryChargeLabel.Size = new Size(350, 50);
 			deliveryDeliveryChargeLabel.TabIndex = 73;
-			deliveryDeliveryChargeLabel.Text = "Delivery Charge:";
+			deliveryDeliveryChargeLabel.Text = "*Delivery Charge:";
 			// 
 			// deliveryPostcodeTextBox
 			// 
@@ -303,7 +303,7 @@
 			deliveryPostcodeLabel.Name = "deliveryPostcodeLabel";
 			deliveryPostcodeLabel.Size = new Size(350, 50);
 			deliveryPostcodeLabel.TabIndex = 72;
-			deliveryPostcodeLabel.Text = "Postcode:";
+			deliveryPostcodeLabel.Text = "*Postcode:";
 			// 
 			// deliveryCityTextBox
 			// 
@@ -325,7 +325,7 @@
 			deliveryCityLabel.Name = "deliveryCityLabel";
 			deliveryCityLabel.Size = new Size(350, 50);
 			deliveryCityLabel.TabIndex = 71;
-			deliveryCityLabel.Text = "City:";
+			deliveryCityLabel.Text = "*City:";
 			// 
 			// deliveryVillageTextBox
 			// 
@@ -369,7 +369,7 @@
 			deliveryStreetNameLabel.Name = "deliveryStreetNameLabel";
 			deliveryStreetNameLabel.Size = new Size(350, 50);
 			deliveryStreetNameLabel.TabIndex = 69;
-			deliveryStreetNameLabel.Text = "Street Name:";
+			deliveryStreetNameLabel.Text = "*Street Name:";
 			// 
 			// deliveryHouseNumberTextBox
 			// 
@@ -391,7 +391,7 @@
 			deliveryHouseNumberLabel.Name = "deliveryHouseNumberLabel";
 			deliveryHouseNumberLabel.Size = new Size(350, 50);
 			deliveryHouseNumberLabel.TabIndex = 68;
-			deliveryHouseNumberLabel.Text = "House Number:";
+			deliveryHouseNumberLabel.Text = "*House Number:";
 			// 
 			// deleteAddressButton
 			// 

@@ -247,14 +247,14 @@ namespace ordering_system
 		private void clearCustomerScreen() // clears textboxes and customerid
 		{
 			customerID = -1;
-			customerNameTextBox.Text = "";
-			phoneNumberTextBox.Text = "";
+			customerNameTextBox.Text = string.Empty;
+			phoneNumberTextBox.Text = string.Empty;
 			blacklistedCheckBox.Checked = false;
-			billingHouseNumberTextBox.Text = "";
-			billingStreetNameTextBox.Text = "";
-			billingVillageTextBox.Text = "";
-			billingCityTextBox.Text = "";
-			billingPostcodeTextBox.Text = "";
+			billingHouseNumberTextBox.Text = string.Empty;
+			billingStreetNameTextBox.Text = string.Empty;
+			billingVillageTextBox.Text = string.Empty;
+			billingCityTextBox.Text = string.Empty;
+			billingPostcodeTextBox.Text = string.Empty;
 		}
 
 		private void updateAddressButton_Click(object sender, EventArgs e)
@@ -319,12 +319,12 @@ namespace ordering_system
 		private void clearAddressScreen() // clears textboxes and customerid
 		{
 			addressID = -1;
-			deliveryHouseNumberTextBox.Text = "";
-			deliveryStreetNameTextBox.Text = "";
-			deliveryVillageTextBox.Text = "";
-			deliveryCityTextBox.Text = "";
-			deliveryPostcodeTextBox.Text = "";
-			deliveryDeliveryChargeTextBox.Text = "";
+			deliveryHouseNumberTextBox.Text = string.Empty;
+			deliveryStreetNameTextBox.Text = string.Empty;
+			deliveryVillageTextBox.Text = string.Empty;
+			deliveryCityTextBox.Text = string.Empty;
+			deliveryPostcodeTextBox.Text = string.Empty;
+			deliveryDeliveryChargeTextBox.Text = string.Empty;
 		}
 	}
 }

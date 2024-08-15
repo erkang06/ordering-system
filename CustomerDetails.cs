@@ -215,12 +215,18 @@ namespace ordering_system
 			deliveryButton.BackColor = Color.Yellow;
 			collectionButton.BackColor = Color.Transparent;
 			deliveryHouseNumberTextBox.Enabled = true;
+			deliveryHouseNumberLabel.Text = "*House Number:";
 			deliveryStreetNameTextBox.Enabled = true;
+			deliveryStreetNameLabel.Text = "*Street Name:";
 			deliveryVillageTextBox.Enabled = true;
 			deliveryCityTextBox.Enabled = true;
+			deliveryCityLabel.Text = "*City:";
 			deliveryPostcodeTextBox.Enabled = true;
+			deliveryPostcodeLabel.Text = "*Postcode:";
 			deliveryDeliveryChargeTextBox.Enabled = true;
+			deliveryDeliveryChargeLabel.Text = "*Delivery Charge:";
 			deliveryAddressDataGridView.Enabled = true;
+			billingAsDeliveryCheckBox.Enabled = true;
 		}
 
 		private void collectionButton_Click(object sender, EventArgs e)
@@ -234,12 +240,25 @@ namespace ordering_system
 			collectionButton.BackColor = Color.Yellow;
 			deliveryButton.BackColor = Color.Transparent;
 			deliveryHouseNumberTextBox.Enabled = false;
+			deliveryHouseNumberTextBox.Text = string.Empty;
+			deliveryHouseNumberLabel.Text = "House Number:";
 			deliveryStreetNameTextBox.Enabled = false;
+			deliveryStreetNameTextBox.Text = string.Empty;
+			deliveryStreetNameLabel.Text = "Street Name:";
 			deliveryVillageTextBox.Enabled = false;
+			deliveryVillageTextBox.Text = string.Empty;
 			deliveryCityTextBox.Enabled = false;
+			deliveryCityTextBox.Text = string.Empty;
+			deliveryCityLabel.Text = "City:";
 			deliveryPostcodeTextBox.Enabled = false;
+			deliveryPostcodeTextBox.Text = string.Empty;
+			deliveryPostcodeLabel.Text = "Postcode:";
 			deliveryDeliveryChargeTextBox.Enabled = false;
+			deliveryDeliveryChargeTextBox.Text = string.Empty;
+			deliveryDeliveryChargeLabel.Text = "Delivery Charge:";
 			deliveryAddressDataGridView.Enabled = false;
+			billingAsDeliveryCheckBox.Enabled = false;
+			billingAsDeliveryCheckBox.Checked = false;
 		}
 
 		private void findCustomerButton_Click(object sender, EventArgs e)

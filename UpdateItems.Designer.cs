@@ -111,7 +111,7 @@
 			itemIDLabel.Name = "itemIDLabel";
 			itemIDLabel.Size = new Size(395, 50);
 			itemIDLabel.TabIndex = 56;
-			itemIDLabel.Text = "Item ID:";
+			itemIDLabel.Text = "*Item ID:";
 			// 
 			// updateItemsLabel
 			// 
@@ -171,7 +171,7 @@
 			itemNameLabel.Name = "itemNameLabel";
 			itemNameLabel.Size = new Size(395, 50);
 			itemNameLabel.TabIndex = 61;
-			itemNameLabel.Text = "Item Name:";
+			itemNameLabel.Text = "*Item Name:";
 			// 
 			// smallPriceTextBox
 			// 
@@ -214,7 +214,7 @@
 			largePriceLabel.RightToLeft = RightToLeft.No;
 			largePriceLabel.Size = new Size(395, 50);
 			largePriceLabel.TabIndex = 65;
-			largePriceLabel.Text = "Large Price:";
+			largePriceLabel.Text = "*Large Price:";
 			// 
 			// defaultToLargePriceCheckBox
 			// 
@@ -264,7 +264,7 @@
 			categoryLabel.RightToLeft = RightToLeft.No;
 			categoryLabel.Size = new Size(395, 50);
 			categoryLabel.TabIndex = 70;
-			categoryLabel.Text = "Category:";
+			categoryLabel.Text = "*Category:";
 			// 
 			// categoryComboBox
 			// 

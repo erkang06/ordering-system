@@ -66,9 +66,9 @@
 			setMealPriceLabel.Margin = new Padding(3, 5, 3, 5);
 			setMealPriceLabel.Name = "setMealPriceLabel";
 			setMealPriceLabel.RightToLeft = RightToLeft.No;
-			setMealPriceLabel.Size = new Size(310, 50);
+			setMealPriceLabel.Size = new Size(350, 50);
 			setMealPriceLabel.TabIndex = 88;
-			setMealPriceLabel.Text = "Price:";
+			setMealPriceLabel.Text = "*Price:";
 			// 
 			// setMealNameTextBox
 			// 
@@ -89,9 +89,9 @@
 			setMealNameLabel.Location = new Point(12, 828);
 			setMealNameLabel.Margin = new Padding(3, 5, 3, 5);
 			setMealNameLabel.Name = "setMealNameLabel";
-			setMealNameLabel.Size = new Size(310, 50);
+			setMealNameLabel.Size = new Size(350, 50);
 			setMealNameLabel.TabIndex = 86;
-			setMealNameLabel.Text = "Set Meal Name:";
+			setMealNameLabel.Text = "*Set Meal Name:";
 			// 
 			// deleteSetMealButton
 			// 
@@ -154,9 +154,9 @@
 			setMealIDLabel.Location = new Point(12, 705);
 			setMealIDLabel.Margin = new Padding(3, 5, 3, 5);
 			setMealIDLabel.Name = "setMealIDLabel";
-			setMealIDLabel.Size = new Size(310, 50);
+			setMealIDLabel.Size = new Size(350, 50);
 			setMealIDLabel.TabIndex = 85;
-			setMealIDLabel.Text = "Set Meal ID:";
+			setMealIDLabel.Text = "*Set Meal ID:";
 			// 
 			// updateSetMealsLabel
 			// 
@@ -275,7 +275,7 @@
 			itemSizeLabel.RightToLeft = RightToLeft.No;
 			itemSizeLabel.Size = new Size(300, 50);
 			itemSizeLabel.TabIndex = 98;
-			itemSizeLabel.Text = "Item Size:";
+			itemSizeLabel.Text = "*Item Size:";
 			// 
 			// itemQuantityLabel
 			// 
@@ -288,7 +288,7 @@
 			itemQuantityLabel.Name = "itemQuantityLabel";
 			itemQuantityLabel.Size = new Size(300, 50);
 			itemQuantityLabel.TabIndex = 97;
-			itemQuantityLabel.Text = "Item Quantity:";
+			itemQuantityLabel.Text = "*Item Quantity:";
 			// 
 			// itemSizeComboBox
 			// 

@@ -159,6 +159,7 @@ namespace ordering_system
 				// clear and disable small price text box if doesnt have small price
 				smallPriceTextBox.Text = string.Empty;
 				smallPriceTextBox.Enabled = false;
+				smallPriceLabel.Text = "Small Price:";
 				// has to default to large price if theres no small price
 				defaultToLargePriceCheckBox.Checked = true;
 				defaultToLargePriceCheckBox.Enabled = false;
@@ -167,6 +168,7 @@ namespace ordering_system
 			{
 				// enable if has
 				smallPriceTextBox.Enabled = true;
+				smallPriceLabel.Text = "*Small Price:";
 				defaultToLargePriceCheckBox.Enabled = true;
 			}
 		}
