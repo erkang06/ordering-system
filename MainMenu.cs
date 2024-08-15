@@ -20,9 +20,13 @@ namespace ordering_system
 		List<OrderItem> currentOrderItems = new List<OrderItem>();
 		// the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
-		DataSet customerDataSet = new DataSet(); // data row for customer
-		DataSet addressDataSet = new DataSet();
+		DataRow customerDataRow; // data row for customer
+		DataRow addressDataRow;
 		DataView ordersDataView = new DataView();
+		DataView categoriesDataView;
+		DataView foodDataView;
+		Button[] categoryButtonArray = new Button[28]; // cant have any more since its hardcoded
+		Button[] foodButtonArray = new Button[30];
 		int viewOrdersSelectedOrderID;
 		public MainMenu()
 		{
@@ -34,7 +38,9 @@ namespace ordering_system
 			con.Open();
 			SqlDataAdapter getCustomer = new SqlDataAdapter("SELECT * FROM CustomerTbl WHERE customerID = @CID", con);
 			getCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
+			DataSet customerDataSet = new DataSet();
 			getCustomer.Fill(customerDataSet);
+			customerDataRow = customerDataSet.Tables[0].Rows[0];
 			con.Close();
 		}
 
@@ -43,8 +49,57 @@ namespace ordering_system
 			con.Open();
 			SqlDataAdapter getAddress = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE addressID = @AID", con);
 			getAddress.SelectCommand.Parameters.AddWithValue("@AID", addressID);
+			DataSet addressDataSet = new DataSet();
 			getAddress.Fill(addressDataSet);
+			addressDataRow = addressDataSet.Tables[0].Rows[0];
 			con.Close();
+		}
+
+		private void MainMenu_Load(object sender, EventArgs e)
+		{
+			con.Open();
+			paymentPanel.SendToBack();
+			paymentPanel.Visible = false;
+			viewOrdersPanel.SendToBack();
+			viewOrdersPanel.Visible = false;
+			getCategories();
+			loadCategoryButtons();
+			con.Close();
+		}
+
+		private void getCategories()
+		{
+			// get category table to fill in category combobox
+			SqlDataAdapter getCategories = new SqlDataAdapter("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
+			DataSet categoriesDataSet = new DataSet();
+			getCategories.Fill(categoriesDataSet);
+			categoriesDataView = new DataView(categoriesDataSet.Tables[0]);
+		}
+
+		private void loadCategoryButtons() // fill in categorypanel w/ buttons
+		{
+			// fill in category buttons
+			int xpos = 0, ypos = 0;
+			for (int i = 0; i < categoriesDataView.Count; i++)
+			{
+				// create each category button
+				categoryButtonArray[i] = new Button();
+				categoryButtonArray[i].Tag = categoriesDataView[i]["categoryID"].ToString();
+				categoryButtonArray[i].Text = categoriesDataView[i]["categoryName"].ToString();
+				categoryButtonArray[i].Width = 150;
+				categoryButtonArray[i].Height = 75;
+				categoryButtonArray[i].Left = xpos;
+				categoryButtonArray[i].Top = ypos;
+				categoryButtonArray[i].BackColor = Color.Gainsboro;
+				categoryButtonArray[i].MouseClick += new MouseEventHandler(categoryButton_Click);
+				categoriesPanel.Controls.Add(categoryButtonArray[i]);
+				xpos += 150;
+				if ((i + 1) % 7 == 0) // new row
+				{
+					xpos = 0;
+					ypos += 75;
+				}
+			}
 		}
 
 		private void deliveryButton_Click(object sender, EventArgs e)
@@ -84,8 +139,8 @@ namespace ordering_system
 			deliveryButton.BackColor = Color.Transparent;
 			if (currentOrder.orderType == "Delivery") // take customer details from delivery and put them into collection
 			{
-				string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString();
-				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString();
+				string phoneNumber = customerDataRow["phoneNumber"].ToString();
+				string customerName = customerDataRow["customerName"].ToString();
 				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
 				currentOrder.orderType = "Collection";
 				currentOrder.addressID = -1;
@@ -116,25 +171,25 @@ namespace ordering_system
 			currentOrder.customerID = e.customerID;
 			currentOrder.orderType = e.orderType;
 			getCustomer(e.customerID);
-			string phoneNumber = customerDataSet.Tables[0].Rows[0]["phoneNumber"].ToString();
+			string phoneNumber = customerDataRow["phoneNumber"].ToString();
 			if (e.orderType == "Delivery")
 			{
 				currentOrder.addressID = e.addressID;
 				deliveryButton_Click(sender, e);
 				getAddress(e.addressID);
-				string houseNumber = addressDataSet.Tables[0].Rows[0]["houseNumber"].ToString();
-				string streetName = addressDataSet.Tables[0].Rows[0]["streetName"].ToString();
-				string postcode = addressDataSet.Tables[0].Rows[0]["postcode"].ToString();
-				decimal deliveryCharge = Convert.ToDecimal(addressDataSet.Tables[0].Rows[0]["deliveryCharge"]);
+				string houseNumber = addressDataRow["houseNumber"].ToString();
+				string streetName = addressDataRow["streetName"].ToString();
+				string postcode = addressDataRow["postcode"].ToString();
+				decimal deliveryCharge = Convert.ToDecimal(addressDataRow["deliveryCharge"]);
 				customerDetailsLabel.Text = $"{phoneNumber} - {houseNumber} {streetName} {postcode}";
 				deliveryChargePriceLabel.Text = deliveryCharge.ToString(); // edit delivery charge
-																																	 // add subtotal and delivery charge together
+				// add subtotal and delivery charge together
 				totalPriceLabel.Text = (deliveryCharge + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString();
 			}
 			else if (e.orderType == "Collection")
 			{
 				collectionButton_Click(sender, e);
-				string customerName = customerDataSet.Tables[0].Rows[0]["customerName"].ToString();
+				string customerName = customerDataRow["customerName"].ToString();
 				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
 			}
 		}
@@ -156,6 +211,88 @@ namespace ordering_system
 			{
 				collectionButton.BackColor = Color.Yellow;
 			}
+		}
+
+		public void categoryButton_Click(object sender, MouseEventArgs e)
+		{
+			con.Open();
+			// remove prev buttons
+			for (int i = 0; i < foodButtonArray.Length; i++)
+			{
+				itemsPanel.Controls.Remove(foodButtonArray[i]);
+			}
+			Array.Clear(foodButtonArray);
+			// create new buttons
+			Button categoryButton = (Button)sender;
+			int categoryID = Convert.ToInt32(categoryButton.Tag);
+			string categoryName = categoryButton.Text.ToString();
+			DataSet foodDataSet = new DataSet();
+			string foodType;
+			if (categoryName != "Set Meals") // set meals come from their own tbl
+			{
+				// get all items in category
+				SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
+				getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
+				getFoodItemsByCategory.Fill(foodDataSet);
+				foodType = "Food Item";
+			}
+			else // get set meals
+			{
+				SqlDataAdapter getSetMeals = new SqlDataAdapter("SELECT * FROM SetMealTbl", con);
+				getSetMeals.Fill(foodDataSet);
+				foodType = "Set Meal";
+			}
+			foodDataView = new DataView(foodDataSet.Tables[0]);
+			loadFoodButtons(foodType);
+			con.Close();
+		}
+
+		private void loadFoodButtons(string foodType) // fill in categorypanel w/ buttons
+		{
+			string foodID, foodName;
+			// get right field names
+			if (foodType == "Food Item")
+			{
+				foodID = "foodItemID";
+				foodName = "foodName";
+			}
+			else // set meal
+			{
+				foodID = "setMealID";
+				foodName = "setMealName";
+			}
+			// fill in category buttons
+			int xpos = 0, ypos = 0;
+			for (int i = 0; i < foodDataView.Count; i++)
+			{
+				// create each category button
+				foodButtonArray[i] = new Button();
+				foodButtonArray[i].Tag = foodDataView[i].Row[foodID].ToString();
+				foodButtonArray[i].Text = foodDataView[i].Row[foodName].ToString();
+				foodButtonArray[i].Width = 350;
+				foodButtonArray[i].Height = 70;
+				foodButtonArray[i].Left = xpos;
+				foodButtonArray[i].Top = ypos;
+				foodButtonArray[i].BackColor = Color.Gainsboro;
+				foodButtonArray[i].MouseClick += new MouseEventHandler(foodButton_Click);
+				itemsPanel.Controls.Add(foodButtonArray[i]);
+				xpos += 350;
+				if ((i + 1) % 3 == 0) // new row
+				{
+					xpos = 0;
+					ypos += 70;
+				}
+			}
+		}
+
+		public void foodButton_Click(object sender, MouseEventArgs e)
+		{
+			//con.Open();
+			Button categoryButton = (Button)sender;
+			int foodID = Convert.ToInt32(categoryButton.Tag);
+			string foodName = categoryButton.Text.ToString();
+			DataSet foodDataSet = new DataSet();
+			//con.Close();
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
@@ -220,14 +357,6 @@ namespace ordering_system
 			deliveryButton.BackColor = Color.Transparent;
 			counterButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
-		}
-
-		private void MainMenu_Load(object sender, EventArgs e)
-		{
-			paymentPanel.SendToBack();
-			paymentPanel.Visible = false;
-			viewOrdersPanel.SendToBack();
-			viewOrdersPanel.Visible = false;
 		}
 
 		private void viewOrdersDeliveryButton_Click(object sender, EventArgs e)
