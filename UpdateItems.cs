@@ -34,8 +34,21 @@ namespace ordering_system
 			SqlCommand checkIfItemExists = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE foodName = @FN OR foodItemID = @FIID", con);
 			checkIfItemExists.Parameters.AddWithValue("@FN", itemNameTextBox.Text);
 			checkIfItemExists.Parameters.AddWithValue("@FIID", itemIDTextBox.Text);
-			int categoryExists = (int)checkIfItemExists.ExecuteScalar();
-			if (categoryExists == 0)
+			int itemExists = (int)checkIfItemExists.ExecuteScalar();
+			if (itemExists == 0)
+			{
+				return false;
+			}
+			return true;
+		}
+
+		private bool doesSetMealExist() // checks if set meal exists in database w/ same name
+		{
+			SqlCommand checkIfSetMealExists = new SqlCommand("SELECT COUNT(*) FROM SetMealTbl WHERE setMealName = @SMN OR setMealID = @SMID", con);
+			checkIfSetMealExists.Parameters.AddWithValue("@SMN", itemNameTextBox.Text);
+			checkIfSetMealExists.Parameters.AddWithValue("@SMID", itemIDTextBox.Text);
+			int setMealExists = (int)checkIfSetMealExists.ExecuteScalar();
+			if (setMealExists == 0)
 			{
 				return false;
 			}
@@ -176,7 +189,19 @@ namespace ordering_system
 		private void addItemButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (doesItemExist() == false && areAllFieldsFilled() == true && getCategoryIDFromCategoryName(categoryComboBox.Text) != -1) // if item doesnt alr exist and all required textboxes filled in
+			if (doesItemExist()) // if item exists
+			{
+				MessageBox.Show("Item already exists with same name or ID", "Ordering System");
+			}
+			else if (doesSetMealExist()) // if id/name been used as set meal
+			{
+				MessageBox.Show("Set meal already exists with same name or ID", "Ordering System");
+			}
+			else if (!areAllFieldsFilled()) // if not all fields filled in
+			{
+				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			else // acc works
 			{
 				int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
 				SqlCommand addFoodItemToDatabase = new SqlCommand();
@@ -200,14 +225,6 @@ namespace ordering_system
 				MessageBox.Show("Item added to database", "Ordering System");
 				clearItemScreen(sender, e);
 				updateDataGridView();
-			}
-			else if (doesItemExist() == false) // if not all fields filled in
-			{
-				MessageBox.Show("Not all fields filled in", "Ordering System");
-			}
-			else // if item exists
-			{
-				MessageBox.Show("Item already exists with same name or ID", "Ordering System");
 			}
 			con.Close();
 		}

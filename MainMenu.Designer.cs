@@ -88,7 +88,7 @@
 			customerDetailsPanel.Location = new Point(0, 0);
 			customerDetailsPanel.Margin = new Padding(0);
 			customerDetailsPanel.Name = "customerDetailsPanel";
-			customerDetailsPanel.Size = new Size(1120, 80);
+			customerDetailsPanel.Size = new Size(1110, 80);
 			customerDetailsPanel.TabIndex = 0;
 			// 
 			// customerDetailsLabel
@@ -98,7 +98,7 @@
 			customerDetailsLabel.ForeColor = Color.White;
 			customerDetailsLabel.Location = new Point(90, 21);
 			customerDetailsLabel.Name = "customerDetailsLabel";
-			customerDetailsLabel.Size = new Size(1020, 45);
+			customerDetailsLabel.Size = new Size(1010, 45);
 			customerDetailsLabel.TabIndex = 1;
 			customerDetailsLabel.Click += customerDetails_Click;
 			// 
@@ -120,7 +120,7 @@
 			orderTypePanel.Controls.Add(collectionButton);
 			orderTypePanel.Controls.Add(counterButton);
 			orderTypePanel.Controls.Add(deliveryButton);
-			orderTypePanel.Location = new Point(1120, 0);
+			orderTypePanel.Location = new Point(1110, 0);
 			orderTypePanel.Margin = new Padding(0);
 			orderTypePanel.Name = "orderTypePanel";
 			orderTypePanel.Size = new Size(630, 80);
@@ -170,10 +170,10 @@
 			managerFunctionsPanel.Controls.Add(viewOrdersButton);
 			managerFunctionsPanel.Controls.Add(acceptOrderButton);
 			managerFunctionsPanel.Controls.Add(managerFunctionsButton);
-			managerFunctionsPanel.Location = new Point(1750, 0);
+			managerFunctionsPanel.Location = new Point(1740, 0);
 			managerFunctionsPanel.Margin = new Padding(0);
 			managerFunctionsPanel.Name = "managerFunctionsPanel";
-			managerFunctionsPanel.Size = new Size(170, 1080);
+			managerFunctionsPanel.Size = new Size(180, 1080);
 			managerFunctionsPanel.TabIndex = 2;
 			// 
 			// timeLabel
@@ -192,7 +192,7 @@
 			viewOrdersButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			viewOrdersButton.Location = new Point(0, 100);
 			viewOrdersButton.Name = "viewOrdersButton";
-			viewOrdersButton.Size = new Size(170, 100);
+			viewOrdersButton.Size = new Size(180, 100);
 			viewOrdersButton.TabIndex = 5;
 			viewOrdersButton.Text = "View Orders";
 			viewOrdersButton.UseVisualStyleBackColor = false;
@@ -204,7 +204,7 @@
 			acceptOrderButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			acceptOrderButton.Location = new Point(0, 0);
 			acceptOrderButton.Name = "acceptOrderButton";
-			acceptOrderButton.Size = new Size(170, 100);
+			acceptOrderButton.Size = new Size(180, 100);
 			acceptOrderButton.TabIndex = 4;
 			acceptOrderButton.Text = "Accept Order";
 			acceptOrderButton.UseVisualStyleBackColor = false;
@@ -216,7 +216,7 @@
 			managerFunctionsButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			managerFunctionsButton.Location = new Point(0, 980);
 			managerFunctionsButton.Name = "managerFunctionsButton";
-			managerFunctionsButton.Size = new Size(170, 100);
+			managerFunctionsButton.Size = new Size(180, 100);
 			managerFunctionsButton.TabIndex = 3;
 			managerFunctionsButton.Text = "Manager Functions";
 			managerFunctionsButton.UseVisualStyleBackColor = false;
@@ -436,17 +436,17 @@
 			itemsPanel.Location = new Point(700, 80);
 			itemsPanel.Margin = new Padding(0);
 			itemsPanel.Name = "itemsPanel";
-			itemsPanel.Size = new Size(1050, 750);
+			itemsPanel.Size = new Size(1040, 760);
 			itemsPanel.TabIndex = 4;
 			// 
 			// categoriesPanel
 			// 
 			categoriesPanel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			categoriesPanel.BackColor = Color.Gainsboro;
-			categoriesPanel.Location = new Point(700, 830);
+			categoriesPanel.Location = new Point(700, 840);
 			categoriesPanel.Margin = new Padding(0);
 			categoriesPanel.Name = "categoriesPanel";
-			categoriesPanel.Size = new Size(1050, 250);
+			categoriesPanel.Size = new Size(1040, 240);
 			categoriesPanel.TabIndex = 6;
 			// 
 			// paymentPanel
@@ -472,7 +472,7 @@
 			viewOrdersPanel.Location = new Point(700, 80);
 			viewOrdersPanel.Margin = new Padding(0);
 			viewOrdersPanel.Name = "viewOrdersPanel";
-			viewOrdersPanel.Size = new Size(1050, 1000);
+			viewOrdersPanel.Size = new Size(1040, 1000);
 			viewOrdersPanel.TabIndex = 1;
 			viewOrdersPanel.Visible = false;
 			// 
@@ -486,7 +486,7 @@
 			viewOrdersDataGridView.RightToLeft = RightToLeft.No;
 			viewOrdersDataGridView.RowHeadersWidth = 82;
 			viewOrdersDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			viewOrdersDataGridView.Size = new Size(1050, 900);
+			viewOrdersDataGridView.Size = new Size(1040, 900);
 			viewOrdersDataGridView.TabIndex = 0;
 			viewOrdersDataGridView.CellClick += viewOrdersDataGridView_CellClick;
 			// 
@@ -496,9 +496,9 @@
 			printCustomerTicketButton.BackColor = Color.Transparent;
 			printCustomerTicketButton.FlatAppearance.BorderSize = 0;
 			printCustomerTicketButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-			printCustomerTicketButton.Location = new Point(795, 900);
+			printCustomerTicketButton.Location = new Point(790, 900);
 			printCustomerTicketButton.Name = "printCustomerTicketButton";
-			printCustomerTicketButton.Size = new Size(255, 100);
+			printCustomerTicketButton.Size = new Size(250, 100);
 			printCustomerTicketButton.TabIndex = 56;
 			printCustomerTicketButton.Text = "Print Customer Ticket";
 			printCustomerTicketButton.UseVisualStyleBackColor = false;
@@ -512,7 +512,7 @@
 			printKitchenTicketButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 			printKitchenTicketButton.Location = new Point(540, 900);
 			printKitchenTicketButton.Name = "printKitchenTicketButton";
-			printKitchenTicketButton.Size = new Size(255, 100);
+			printKitchenTicketButton.Size = new Size(250, 100);
 			printKitchenTicketButton.TabIndex = 55;
 			printKitchenTicketButton.Text = "Print Kitchen Ticket";
 			printKitchenTicketButton.UseVisualStyleBackColor = false;

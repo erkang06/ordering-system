@@ -67,13 +67,26 @@ namespace ordering_system
 			return false;
 		}
 
+		private bool doesSetMealExist() // checks if set meal exists in database w/ same name
+		{
+			SqlCommand checkIfSetMealExists = new SqlCommand("SELECT COUNT(*) FROM SetMealTbl WHERE setMealName = @SMN OR setMealID = @SMID", con);
+			checkIfSetMealExists.Parameters.AddWithValue("@SMN", setMealNameTextBox.Text);
+			checkIfSetMealExists.Parameters.AddWithValue("@SMID", setMealIDTextBox.Text);
+			int setMealExists = (int)checkIfSetMealExists.ExecuteScalar();
+			if (setMealExists == 0)
+			{
+				return false;
+			}
+			return true;
+		}
+
 		private bool doesItemExist() // checks if item exists in database w/ same name
 		{
-			SqlCommand checkIfItemExists = new SqlCommand("SELECT COUNT(*) FROM SetMealTbl WHERE setMealName = @SMN OR setMealID = @SMID", con);
-			checkIfItemExists.Parameters.AddWithValue("@SMN", setMealNameTextBox.Text);
-			checkIfItemExists.Parameters.AddWithValue("@SMID", setMealIDTextBox.Text);
-			int categoryExists = (int)checkIfItemExists.ExecuteScalar();
-			if (categoryExists == 0)
+			SqlCommand checkIfItemExists = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE foodName = @FN OR foodItemID = @FIID", con);
+			checkIfItemExists.Parameters.AddWithValue("@FN", setMealNameTextBox.Text);
+			checkIfItemExists.Parameters.AddWithValue("@FIID", setMealIDTextBox.Text);
+			int itemExists = (int)checkIfItemExists.ExecuteScalar();
+			if (itemExists == 0)
 			{
 				return false;
 			}
@@ -320,7 +333,19 @@ namespace ordering_system
 		private void addSetMealButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (doesItemExist() == false && areAllFieldsFilled() == true)
+			if (doesSetMealExist()) // if set meal exists
+			{
+				MessageBox.Show("Set meal already exists with same name or ID", "Ordering System");
+			}
+			else if (doesItemExist()) // has id/name been used as item
+			{
+				MessageBox.Show("Item already exists with same name or ID", "Ordering System");
+			}
+			else if (!areAllFieldsFilled()) // if not all fields filled in
+			{
+				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			else // acc works
 			{
 				// add the set meal to setmealtbl
 				SqlCommand addSetMealToDatabase = new SqlCommand("INSERT INTO SetMealTbl(setMealID, setMealName, price) VALUES(@SMID, @SMN, @PR)", con);
@@ -333,14 +358,6 @@ namespace ordering_system
 				MessageBox.Show("Set meal added to database", "Ordering System");
 				clearSetMealScreen();
 				updateDataGridView();
-			}
-			else if (areAllFieldsFilled() == true) // if item exists
-			{
-				MessageBox.Show("Set meal already exists with same name or ID", "Ordering System");
-			}
-			else // if not all fields filled in
-			{
-				MessageBox.Show("Not all fields filled in", "Ordering System");
 			}
 			con.Close();
 		}
@@ -379,7 +396,7 @@ namespace ordering_system
 		private void deleteSetMealButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (doesItemExist() == false) // set meal not found
+			if (doesSetMealExist() == false) // set meal not found
 			{
 				MessageBox.Show("Set meal not found in database", "Ordering System");
 			}

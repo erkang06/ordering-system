@@ -25,8 +25,8 @@ namespace ordering_system
 		DataView ordersDataView = new DataView();
 		DataView categoriesDataView;
 		DataView foodDataView;
-		Button[] categoryButtonArray = new Button[21]; // cant have any more since its hardcoded
-		Button[] foodButtonArray = new Button[30];
+		Button[] categoryButtonArray = new Button[24]; // cant have any more since its hardcoded
+		Button[] foodButtonArray = new Button[40];
 		int viewOrdersSelectedOrderID = -1;
 		public MainMenu()
 		{
@@ -80,21 +80,22 @@ namespace ordering_system
 		{
 			// fill in category buttons
 			int xpos = 0, ypos = 0;
-			for (int i = 0; i < categoriesDataView.Count; i++)
+			for (int i = 0; i < categoriesDataView.Count && i < categoryButtonArray.Length; i++) // cant be more than array length
 			{
 				// create each category button
 				categoryButtonArray[i] = new Button();
+				categoryButtonArray[i].UseMnemonic = false; // allows for &
 				categoryButtonArray[i].Tag = categoriesDataView[i]["categoryID"].ToString();
 				categoryButtonArray[i].Text = categoriesDataView[i]["categoryName"].ToString();
-				categoryButtonArray[i].Width = 150;
+				categoryButtonArray[i].Width = 130;
 				categoryButtonArray[i].Height = 80;
 				categoryButtonArray[i].Left = xpos;
 				categoryButtonArray[i].Top = ypos;
 				categoryButtonArray[i].BackColor = Color.Gainsboro;
 				categoryButtonArray[i].MouseClick += new MouseEventHandler(categoryButton_Click);
 				categoriesPanel.Controls.Add(categoryButtonArray[i]);
-				xpos += 150;
-				if ((i + 1) % 7 == 0) // new row
+				xpos += 130;
+				if ((i + 1) % 8 == 0) // new row
 				{
 					xpos = 0;
 					ypos += 80;
@@ -247,7 +248,7 @@ namespace ordering_system
 			con.Close();
 		}
 
-		private void loadFoodButtons(string foodType) // fill in categorypanel w/ buttons
+		private void loadFoodButtons(string foodType) // fill in itempanel w/ buttons
 		{
 			string foodID, foodName;
 			// get right field names
@@ -261,26 +262,27 @@ namespace ordering_system
 				foodID = "setMealID";
 				foodName = "setMealName";
 			}
-			// fill in category buttons
+			// fill in food buttons
 			int xpos = 0, ypos = 0;
-			for (int i = 0; i < foodDataView.Count; i++)
+			for (int i = 0; i < foodDataView.Count && i < foodButtonArray.Length; i++) // cant be more than array length
 			{
-				// create each category button
+				// create each food button
 				foodButtonArray[i] = new Button();
+				foodButtonArray[i].UseMnemonic = false; // allows for &
 				foodButtonArray[i].Tag = foodDataView[i].Row[foodID].ToString();
 				foodButtonArray[i].Text = foodDataView[i].Row[foodName].ToString();
-				foodButtonArray[i].Width = 350;
-				foodButtonArray[i].Height = 75;
+				foodButtonArray[i].Width = 260;
+				foodButtonArray[i].Height = 76;
 				foodButtonArray[i].Left = xpos;
 				foodButtonArray[i].Top = ypos;
 				foodButtonArray[i].BackColor = Color.Gainsboro;
 				foodButtonArray[i].MouseClick += new MouseEventHandler(foodButton_Click);
 				itemsPanel.Controls.Add(foodButtonArray[i]);
-				xpos += 350;
-				if ((i + 1) % 3 == 0) // new row
+				xpos += 260;
+				if ((i + 1) % 4 == 0) // new row
 				{
 					xpos = 0;
-					ypos += 75;
+					ypos += 76;
 				}
 			}
 		}
@@ -289,7 +291,7 @@ namespace ordering_system
 		{
 			//con.Open();
 			Button categoryButton = (Button)sender;
-			int foodID = Convert.ToInt32(categoryButton.Tag);
+			string foodID = categoryButton.Tag.ToString();
 			string foodName = categoryButton.Text.ToString();
 			DataSet foodDataSet = new DataSet();
 			//con.Close();
