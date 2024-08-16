@@ -51,6 +51,7 @@
 			increaseQuantityButton = new Button();
 			decreaseQuantityButton = new Button();
 			deleteItemButton = new Button();
+			clearSetMealButton = new Button();
 			((System.ComponentModel.ISupportInitialize)setMealItemDataGridView).BeginInit();
 			((System.ComponentModel.ISupportInitialize)setMealDataGridView).BeginInit();
 			((System.ComponentModel.ISupportInitialize)itemDataGridView).BeginInit();
@@ -183,13 +184,17 @@
 			// 
 			// setMealItemDataGridView
 			// 
+			setMealItemDataGridView.AllowUserToAddRows = false;
+			setMealItemDataGridView.AllowUserToDeleteRows = false;
 			setMealItemDataGridView.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			setMealItemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			setMealItemDataGridView.BackgroundColor = Color.White;
 			setMealItemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			setMealItemDataGridView.ColumnHeadersVisible = false;
 			setMealItemDataGridView.Location = new Point(774, 464);
 			setMealItemDataGridView.Name = "setMealItemDataGridView";
 			setMealItemDataGridView.ReadOnly = true;
+			setMealItemDataGridView.RowHeadersVisible = false;
 			setMealItemDataGridView.RowHeadersWidth = 82;
 			setMealItemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			setMealItemDataGridView.Size = new Size(1134, 479);
@@ -199,13 +204,17 @@
 			// 
 			// setMealDataGridView
 			// 
+			setMealDataGridView.AllowUserToAddRows = false;
+			setMealDataGridView.AllowUserToDeleteRows = false;
 			setMealDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			setMealDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			setMealDataGridView.BackgroundColor = Color.White;
 			setMealDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			setMealDataGridView.ColumnHeadersVisible = false;
 			setMealDataGridView.Location = new Point(774, 98);
 			setMealDataGridView.Name = "setMealDataGridView";
 			setMealDataGridView.ReadOnly = true;
+			setMealDataGridView.RowHeadersVisible = false;
 			setMealDataGridView.RowHeadersWidth = 82;
 			setMealDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			setMealDataGridView.Size = new Size(828, 360);
@@ -239,13 +248,17 @@
 			// 
 			// itemDataGridView
 			// 
+			itemDataGridView.AllowUserToAddRows = false;
+			itemDataGridView.AllowUserToDeleteRows = false;
 			itemDataGridView.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			itemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			itemDataGridView.BackgroundColor = Color.White;
 			itemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			itemDataGridView.ColumnHeadersVisible = false;
 			itemDataGridView.Location = new Point(12, 162);
 			itemDataGridView.Name = "itemDataGridView";
 			itemDataGridView.ReadOnly = true;
+			itemDataGridView.RowHeadersVisible = false;
 			itemDataGridView.RowHeadersWidth = 82;
 			itemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			itemDataGridView.Size = new Size(756, 535);
@@ -299,7 +312,7 @@
 			itemSizeComboBox.Items.AddRange(new object[] { "Small", "Large" });
 			itemSizeComboBox.Location = new Point(1080, 1014);
 			itemSizeComboBox.Name = "itemSizeComboBox";
-			itemSizeComboBox.Size = new Size(522, 58);
+			itemSizeComboBox.Size = new Size(272, 58);
 			itemSizeComboBox.TabIndex = 10;
 			itemSizeComboBox.SelectedIndexChanged += itemSizeComboBox_SelectedIndexChanged;
 			// 
@@ -344,13 +357,27 @@
 			deleteItemButton.BackColor = SystemColors.Control;
 			deleteItemButton.FlatStyle = FlatStyle.Flat;
 			deleteItemButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			deleteItemButton.Location = new Point(1608, 951);
+			deleteItemButton.Location = new Point(1358, 951);
 			deleteItemButton.Name = "deleteItemButton";
-			deleteItemButton.Size = new Size(300, 121);
+			deleteItemButton.Size = new Size(272, 121);
 			deleteItemButton.TabIndex = 11;
 			deleteItemButton.Text = "Delete Item";
 			deleteItemButton.UseVisualStyleBackColor = false;
 			deleteItemButton.Click += deleteItemButton_Click;
+			// 
+			// clearSetMealButton
+			// 
+			clearSetMealButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			clearSetMealButton.BackColor = SystemColors.Control;
+			clearSetMealButton.FlatStyle = FlatStyle.Flat;
+			clearSetMealButton.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+			clearSetMealButton.Location = new Point(1636, 951);
+			clearSetMealButton.Name = "clearSetMealButton";
+			clearSetMealButton.Size = new Size(272, 121);
+			clearSetMealButton.TabIndex = 103;
+			clearSetMealButton.Text = "Clear Set Meal";
+			clearSetMealButton.UseVisualStyleBackColor = false;
+			clearSetMealButton.Click += clearSetMealButton_Click;
 			// 
 			// UpdateSetMeals
 			// 
@@ -358,6 +385,7 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(clearSetMealButton);
 			Controls.Add(deleteItemButton);
 			Controls.Add(increaseQuantityButton);
 			Controls.Add(decreaseQuantityButton);
@@ -416,5 +444,6 @@
 		private Button increaseQuantityButton;
 		private Button decreaseQuantityButton;
 		private Button deleteItemButton;
+		private Button clearSetMealButton;
 	}
 }

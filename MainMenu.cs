@@ -275,7 +275,7 @@ namespace ordering_system
 				foodButtonArray[i].Height = 76;
 				foodButtonArray[i].Left = xpos;
 				foodButtonArray[i].Top = ypos;
-				foodButtonArray[i].BackColor = Color.Gainsboro;
+				foodButtonArray[i].BackColor = Color.AntiqueWhite;
 				foodButtonArray[i].MouseClick += new MouseEventHandler(foodButton_Click);
 				itemsPanel.Controls.Add(foodButtonArray[i]);
 				xpos += 260;
@@ -289,12 +289,10 @@ namespace ordering_system
 
 		public void foodButton_Click(object sender, MouseEventArgs e)
 		{
-			//con.Open();
 			Button categoryButton = (Button)sender;
 			string foodID = categoryButton.Tag.ToString();
 			string foodName = categoryButton.Text.ToString();
 			DataSet foodDataSet = new DataSet();
-			//con.Close();
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
@@ -316,9 +314,9 @@ namespace ordering_system
 					acceptOrderButton.Text = "Accept Order";
 					paymentPanel.SendToBack();
 					paymentPanel.Visible = false;
+					orderNumberLabel.Text = (Convert.ToInt32(orderNumberLabel.Text) + 1).ToString(); // increment order number
 				}
 			}
-			orderNumberLabel.Text = (Convert.ToInt32(orderNumberLabel.Text) + 1).ToString(); // increment order number
 		}
 
 		private void viewOrdersButton_Click(object sender, EventArgs e)

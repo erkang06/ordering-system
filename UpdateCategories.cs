@@ -83,18 +83,14 @@ namespace ordering_system
 		private void categoryDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through categoriesdatagridview to find the full deets
-			int selectedRowIndex = categoryDataGridView.SelectedCells[0].RowIndex;
-			if (categoryDataGridView.RowCount > 1 && selectedRowIndex < categoryDataGridView.RowCount - 1) // just in case theres no selectable rows or u click the blank row
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				DataRowView selectedRow = categoriesDataView[selectedRowIndex];
 				categoryID = Convert.ToInt32(selectedRow.Row["categoryID"]);
 				// update textboxes
 				categoryNameTextBox.Text = selectedRow.Row["categoryName"].ToString();
 				categoryIndexTextBox.Text = selectedRow.Row["categoryIndex"].ToString();
-			}
-			else // unselect flop row
-			{
-				categoryDataGridView.ClearSelection();
 			}
 		}
 

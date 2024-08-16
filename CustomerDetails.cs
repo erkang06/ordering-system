@@ -392,8 +392,8 @@ namespace ordering_system
 		private void addressDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through addressesdatagridview to find the full deets
-			int selectedRowIndex = addressDataGridView.SelectedCells[0].RowIndex;
-			if (addressDataGridView.RowCount > 1 && selectedRowIndex < addressDataGridView.RowCount - 1) // just in case theres no rows
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				DataRowView selectedRow = addressesDataView[selectedRowIndex];
 				addressID = Convert.ToInt32(selectedRow.Row["addressID"]);

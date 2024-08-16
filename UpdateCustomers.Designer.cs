@@ -247,13 +247,17 @@
 			// 
 			// addressDataGridView
 			// 
+			addressDataGridView.AllowUserToAddRows = false;
+			addressDataGridView.AllowUserToDeleteRows = false;
 			addressDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			addressDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			addressDataGridView.BackgroundColor = Color.White;
 			addressDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			addressDataGridView.ColumnHeadersVisible = false;
 			addressDataGridView.Location = new Point(3, 0);
 			addressDataGridView.Name = "addressDataGridView";
 			addressDataGridView.ReadOnly = true;
+			addressDataGridView.RowHeadersVisible = false;
 			addressDataGridView.RowHeadersWidth = 10;
 			addressDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			addressDataGridView.Size = new Size(976, 514);
@@ -490,13 +494,17 @@
 			// 
 			// customerDataGridView
 			// 
+			customerDataGridView.AllowUserToAddRows = false;
+			customerDataGridView.AllowUserToDeleteRows = false;
 			customerDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			customerDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			customerDataGridView.BackgroundColor = Color.White;
 			customerDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			customerDataGridView.ColumnHeadersVisible = false;
 			customerDataGridView.Location = new Point(926, 104);
 			customerDataGridView.Name = "customerDataGridView";
 			customerDataGridView.ReadOnly = true;
+			customerDataGridView.RowHeadersVisible = false;
 			customerDataGridView.RowHeadersWidth = 10;
 			customerDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			customerDataGridView.Size = new Size(982, 970);
@@ -529,8 +537,8 @@
 			Controls.Add(customerNameLabel);
 			Controls.Add(updateCustomersLabel);
 			Controls.Add(cancelButton);
-			Controls.Add(customerDataGridView);
 			Controls.Add(addressPanel);
+			Controls.Add(customerDataGridView);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "UpdateCustomers";
 			Text = "UpdateCustomers";

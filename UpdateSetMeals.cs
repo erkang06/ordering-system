@@ -205,8 +205,8 @@ namespace ordering_system
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through fooditemsdataview to find the full deets
-			int selectedRowIndex = itemDataGridView.SelectedCells[0].RowIndex;
-			if (itemDataGridView.RowCount > 1 && selectedRowIndex < itemDataGridView.RowCount - 1) // just in case theres no rows
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				setMealItemDataGridView.ClearSelection();
 				// find food item id to search through tbl
@@ -241,21 +241,17 @@ namespace ordering_system
 				}
 				updateItemQuantitySize();
 			}
-			else // unselect flop row
-			{
-				itemDataGridView.ClearSelection();
-			}
 		}
 
 		private void setMealDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			con.Open();
 			// find clicked row of table in order to search through setmealdataview to find the full deets
-			int selectedRowIndex = setMealDataGridView.SelectedCells[0].RowIndex;
-			if (setMealDataGridView.RowCount > 1 && selectedRowIndex < setMealDataGridView.RowCount - 1) // just in case theres no rows
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				setMealFoodItemsDataTable.Clear(); // clear prev set meal
-				// get set meal id
+																					 // get set meal id
 				DataRowView selectedRow = setMealsDataView[selectedRowIndex];
 				setMealID = selectedRow.Row["setMealID"].ToString();
 				// fill in text boxes
@@ -279,25 +275,16 @@ namespace ordering_system
 				}
 				updateItemQuantitySize(); // for some reason datagridviews always highlight a row
 			}
-			else // unselect flop row
-			{
-				setMealDataGridView.ClearSelection();
-				clearSetMealScreen();
-			}
 			con.Close();
 		}
 
 		private void setMealitemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through setmealfooditemsdataview to find the full deets
-			int selectedRowIndex = setMealItemDataGridView.SelectedCells[0].RowIndex;
-			if (setMealItemDataGridView.RowCount > 1 && selectedRowIndex < setMealItemDataGridView.RowCount - 1) // just in case theres no rows
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				updateItemQuantitySize();
-			}
-			else // unselect flop row
-			{
-				setMealItemDataGridView.ClearSelection();
 			}
 		}
 
@@ -328,6 +315,11 @@ namespace ordering_system
 			{
 				MessageBox.Show("Item not selected from set meal items", "Ordering System");
 			}
+		}
+
+		private void clearSetMealButton_Click(object sender, EventArgs e)
+		{
+			clearSetMealScreen();
 		}
 
 		private void addSetMealButton_Click(object sender, EventArgs e)

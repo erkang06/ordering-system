@@ -132,8 +132,8 @@ namespace ordering_system
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through fooditemsdataview to find the full deets
-			int selectedRowIndex = itemDataGridView.SelectedCells[0].RowIndex;
-			if (itemDataGridView.RowCount > 1 && selectedRowIndex < itemDataGridView.RowCount - 1) // just in case theres no rows
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				DataRowView selectedRow = foodItemsDataView[selectedRowIndex];
 				foodItemID = selectedRow.Row["foodItemID"].ToString();
@@ -153,10 +153,6 @@ namespace ordering_system
 				{
 					categoryComboBox.Text = categoryName;
 				}
-			}
-			else // unselect flop row
-			{
-				itemDataGridView.ClearSelection();
 			}
 		}
 

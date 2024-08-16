@@ -138,13 +138,17 @@
 			// 
 			// itemDataGridView
 			// 
+			itemDataGridView.AllowUserToAddRows = false;
+			itemDataGridView.AllowUserToDeleteRows = false;
 			itemDataGridView.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			itemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			itemDataGridView.BackgroundColor = Color.White;
 			itemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			itemDataGridView.ColumnHeadersVisible = false;
 			itemDataGridView.Location = new Point(969, 98);
 			itemDataGridView.Name = "itemDataGridView";
 			itemDataGridView.ReadOnly = true;
+			itemDataGridView.RowHeadersVisible = false;
 			itemDataGridView.RowHeadersWidth = 82;
 			itemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			itemDataGridView.Size = new Size(939, 970);

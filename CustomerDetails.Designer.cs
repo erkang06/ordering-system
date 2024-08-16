@@ -383,13 +383,17 @@
 			// 
 			// addressDataGridView
 			// 
+			addressDataGridView.AllowUserToAddRows = false;
+			addressDataGridView.AllowUserToDeleteRows = false;
 			addressDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			addressDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			addressDataGridView.BackgroundColor = Color.White;
 			addressDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			addressDataGridView.ColumnHeadersVisible = false;
 			addressDataGridView.Location = new Point(1000, 12);
 			addressDataGridView.Name = "addressDataGridView";
 			addressDataGridView.ReadOnly = true;
+			addressDataGridView.RowHeadersVisible = false;
 			addressDataGridView.RowHeadersWidth = 10;
 			addressDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			addressDataGridView.Size = new Size(908, 590);

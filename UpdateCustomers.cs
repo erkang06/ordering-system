@@ -122,8 +122,8 @@ namespace ordering_system
 		{
 			con.Open();
 			// find clicked row of table in order to search through customerdataview to find the full deets
-			int selectedRowIndex = customerDataGridView.SelectedCells[0].RowIndex;
-			if (customerDataGridView.RowCount > 1 && selectedRowIndex < customerDataGridView.RowCount - 1) // just in case theres no selectable rows or u click the blank row
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				DataRowView selectedRow = customersDataView[selectedRowIndex];
 				customerID = Convert.ToInt32(selectedRow.Row["customerID"]);
@@ -154,8 +154,8 @@ namespace ordering_system
 		{
 			con.Open();
 			// find clicked row of table in order to search through addressesdataview to find the full deets
-			int selectedRowIndex = addressDataGridView.SelectedCells[0].RowIndex;
-			if (addressDataGridView.RowCount > 1 && selectedRowIndex < addressDataGridView.RowCount - 1) // just in case theres no selectable rows or u click the blank row
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				DataRowView selectedRow = addressesDataView[selectedRowIndex];
 				addressID = Convert.ToInt32(selectedRow.Row["addressID"]);
