@@ -30,15 +30,6 @@ namespace ordering_system
 		public TimeOnly estimatedTime;
 	}
 
-	public struct OrderItem
-	{
-		public string itemID;
-		public int quantity;
-		public string size;
-		public string memo;
-		public decimal discount;
-	}
-
 	// class that lets customer details be sent from customer details to main menu
 	public class CustomerDetailsUpdateEventArgs : EventArgs
 	{

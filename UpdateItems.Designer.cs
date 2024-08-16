@@ -144,7 +144,6 @@
 			itemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			itemDataGridView.BackgroundColor = Color.White;
 			itemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			itemDataGridView.ColumnHeadersVisible = false;
 			itemDataGridView.Location = new Point(969, 98);
 			itemDataGridView.Name = "itemDataGridView";
 			itemDataGridView.ReadOnly = true;

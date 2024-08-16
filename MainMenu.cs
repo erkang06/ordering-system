@@ -17,16 +17,16 @@ namespace ordering_system
 	public partial class MainMenu : Form
 	{
 		Order currentOrder = new Order();
-		List<OrderItem> currentOrderItems = new List<OrderItem>();
+		DataTable runningOrderDataTable = new DataTable(); // running order
 		// the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataRow customerDataRow; // data row for customer
 		DataRow addressDataRow;
 		DataView ordersDataView = new DataView();
 		DataView categoriesDataView;
-		DataView foodDataView;
+		DataView itemsDataView;
 		Button[] categoryButtonArray = new Button[24]; // cant have any more since its hardcoded
-		Button[] foodButtonArray = new Button[40];
+		Button[] itemButtonArray = new Button[40];
 		int viewOrdersSelectedOrderID = -1;
 		public MainMenu()
 		{
@@ -55,6 +55,17 @@ namespace ordering_system
 			con.Close();
 		}
 
+		private int doesItemExist(string itemID, string size) // returns index of food item in running order if exists, else returns -1
+		{
+			DataRow[] item = runningOrderDataTable.Select($"itemID = '{itemID}' AND size = '{size}' AND memo = ''"); // blank memo cuz its difficult to deal w/
+			if (item.Length > 0) // theres only 1 cuz its a primary key innit
+			{
+				int index = runningOrderDataTable.Rows.IndexOf(item[0]);
+				return index;
+			}
+			return -1;
+		}
+
 		private void MainMenu_Load(object sender, EventArgs e)
 		{
 			con.Open();
@@ -64,6 +75,17 @@ namespace ordering_system
 			viewOrdersPanel.Visible = false;
 			getCategories();
 			loadCategoryButtons();
+			// create columns for runningorderdatatable
+			runningOrderDataTable.Columns.Add("itemID");
+			runningOrderDataTable.Columns.Add("itemName");
+			runningOrderDataTable.Columns.Add("size");
+			runningOrderDataTable.Columns.Add("quantity");
+			runningOrderDataTable.Columns.Add("memo");
+			runningOrderDataTable.Columns.Add("regPrice");
+			runningOrderDataTable.Columns.Add("discount");
+			runningOrderDataTable.Columns.Add("price");
+			runningOrderDataGridView.AutoGenerateColumns = false;
+			runningOrderDataGridView.DataSource = runningOrderDataTable.Columns["itemID"];
 			con.Close();
 		}
 
@@ -218,66 +240,66 @@ namespace ordering_system
 		{
 			con.Open();
 			// remove prev buttons
-			for (int i = 0; i < foodButtonArray.Length; i++)
+			for (int i = 0; i < itemButtonArray.Length; i++)
 			{
-				itemsPanel.Controls.Remove(foodButtonArray[i]);
+				itemsPanel.Controls.Remove(itemButtonArray[i]);
 			}
-			Array.Clear(foodButtonArray);
+			Array.Clear(itemButtonArray);
 			// create new buttons
 			Button categoryButton = (Button)sender;
 			int categoryID = Convert.ToInt32(categoryButton.Tag);
 			string categoryName = categoryButton.Text.ToString();
-			DataSet foodDataSet = new DataSet();
-			string foodType;
+			DataSet itemDataSet = new DataSet();
+			string itemType;
 			if (categoryName != "Set Meals") // set meals come from their own tbl
 			{
 				// get all items in category
 				SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
 				getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
-				getFoodItemsByCategory.Fill(foodDataSet);
-				foodType = "Food Item";
+				getFoodItemsByCategory.Fill(itemDataSet);
+				itemType = "Food Item";
 			}
 			else // get set meals
 			{
 				SqlDataAdapter getSetMeals = new SqlDataAdapter("SELECT * FROM SetMealTbl", con);
-				getSetMeals.Fill(foodDataSet);
-				foodType = "Set Meal";
+				getSetMeals.Fill(itemDataSet);
+				itemType = "Set Meal";
 			}
-			foodDataView = new DataView(foodDataSet.Tables[0]);
-			loadFoodButtons(foodType);
+			itemsDataView = new DataView(itemDataSet.Tables[0]);
+			loadItemButtons(itemType);
 			con.Close();
 		}
 
-		private void loadFoodButtons(string foodType) // fill in itempanel w/ buttons
+		private void loadItemButtons(string itemType) // fill in itempanel w/ buttons
 		{
-			string foodID, foodName;
+			string itemID, itemName;
 			// get right field names
-			if (foodType == "Food Item")
+			if (itemType == "Food Item")
 			{
-				foodID = "foodItemID";
-				foodName = "foodName";
+				itemID = "foodItemID";
+				itemName = "foodName";
 			}
 			else // set meal
 			{
-				foodID = "setMealID";
-				foodName = "setMealName";
+				itemID = "setMealID";
+				itemName = "setMealName";
 			}
 			// fill in food buttons
 			int xpos = 0, ypos = 0;
-			for (int i = 0; i < foodDataView.Count && i < foodButtonArray.Length; i++) // cant be more than array length
+			for (int i = 0; i < itemsDataView.Count && i < itemButtonArray.Length; i++) // cant be more than array length
 			{
 				// create each food button
-				foodButtonArray[i] = new Button();
-				foodButtonArray[i].UseMnemonic = false; // allows for &
-				foodButtonArray[i].Tag = foodDataView[i].Row[foodID].ToString();
-				foodButtonArray[i].Text = foodDataView[i].Row[foodName].ToString();
-				foodButtonArray[i].Width = 260;
-				foodButtonArray[i].Height = 76;
-				foodButtonArray[i].Left = xpos;
-				foodButtonArray[i].Top = ypos;
-				foodButtonArray[i].BackColor = Color.AntiqueWhite;
-				foodButtonArray[i].MouseClick += new MouseEventHandler(foodButton_Click);
-				itemsPanel.Controls.Add(foodButtonArray[i]);
+				itemButtonArray[i] = new Button();
+				itemButtonArray[i].UseMnemonic = false; // allows for &
+				itemButtonArray[i].Tag = itemsDataView[i].Row[itemID].ToString();
+				itemButtonArray[i].Text = itemsDataView[i].Row[itemName].ToString();
+				itemButtonArray[i].Width = 260;
+				itemButtonArray[i].Height = 76;
+				itemButtonArray[i].Left = xpos;
+				itemButtonArray[i].Top = ypos;
+				itemButtonArray[i].BackColor = Color.AntiqueWhite;
+				itemButtonArray[i].MouseClick += new MouseEventHandler(itemButton_Click);
+				itemsPanel.Controls.Add(itemButtonArray[i]);
 				xpos += 260;
 				if ((i + 1) % 4 == 0) // new row
 				{
@@ -287,12 +309,23 @@ namespace ordering_system
 			}
 		}
 
-		public void foodButton_Click(object sender, MouseEventArgs e)
+		public void itemButton_Click(object sender, MouseEventArgs e)
 		{
 			Button categoryButton = (Button)sender;
-			string foodID = categoryButton.Tag.ToString();
-			string foodName = categoryButton.Text.ToString();
-			DataSet foodDataSet = new DataSet();
+			string itemID = categoryButton.Tag.ToString();
+			string itemName = categoryButton.Text.ToString();
+			string size = "Large";
+			int itemIndex = doesItemExist(itemID, size); // find index of item and size in running order datatable if exists
+			if (itemIndex < 0) // item doesnt alr exist in running order
+			{
+				DataRow runningOrderNewRow = runningOrderDataTable.NewRow();
+				runningOrderNewRow["itemID"] = itemID;
+				runningOrderNewRow["itemName"] = itemName;
+			}
+			else
+			{
+
+			}
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
@@ -353,7 +386,6 @@ namespace ordering_system
 		private void cancelOrderButton_Click(object sender, EventArgs e)
 		{
 			currentOrder = new Order();
-			currentOrderItems.Clear();
 			deliveryButton.BackColor = Color.Transparent;
 			counterButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;

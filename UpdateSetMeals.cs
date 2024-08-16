@@ -17,7 +17,7 @@ namespace ordering_system
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataView foodItemsDataViewByCategory, setMealsDataView; // full database compared to whats shown in datagridview
 		DataSet categoriesDataSet; // same as above xoxo
-		DataTable setMealFoodItemsDataTable; // separate table to work through the setmeal items while in progress; reduces number of edits to main table
+		DataTable setMealFoodItemsDataTable = new DataTable(); // separate table to work through the setmeal items while in progress; reduces number of edits to main table
 		string foodItemID, setMealID; // id of currently selected item/setmeal from datagridview
 
 		public UpdateSetMeals()
@@ -146,7 +146,6 @@ namespace ordering_system
 				MessageBox.Show("Set meal didn't exist as a category, so has been added to database", "Ordering System");
 			}
 			// sort out setmealfooditemsdatatable
-			setMealFoodItemsDataTable = new DataTable();
 			setMealFoodItemsDataTable.Columns.Add("foodItemID");
 			setMealFoodItemsDataTable.Columns.Add("foodName");
 			setMealFoodItemsDataTable.Columns.Add("size");
@@ -213,19 +212,19 @@ namespace ordering_system
 				DataRowView selectedRow = foodItemsDataViewByCategory[selectedRowIndex];
 				foodItemID = selectedRow["foodItemID"].ToString();
 				int foodItemIndex = doesFoodItemExist(foodItemID); // find index of food in set meal datatable if exists
-				if (foodItemIndex == -1) // food item doesnt alr exist in set meal
+				if (foodItemIndex < 0) // food item doesnt alr exist in set meal
 				{
 					// creating record for datagridview
 					DataRow setMealFoodItemNewRow = setMealFoodItemsDataTable.NewRow();
-					setMealFoodItemNewRow[0] = foodItemID;
-					setMealFoodItemNewRow[1] = selectedRow["foodName"].ToString();
+					setMealFoodItemNewRow["foodItemID"] = foodItemID;
+					setMealFoodItemNewRow["foodName"] = selectedRow["foodName"].ToString();
 					string size = "Large"; // size defaults to large unless default is small
 					if (Convert.ToBoolean(selectedRow["defaultToLargePrice"]) == false)
 					{
 						size = "Small";
 					}
-					setMealFoodItemNewRow[2] = size;
-					setMealFoodItemNewRow[3] = 1; // default to 1
+					setMealFoodItemNewRow["size"] = size;
+					setMealFoodItemNewRow["quantity"] = 1; // default to 1
 					setMealFoodItemsDataTable.Rows.Add(setMealFoodItemNewRow);
 					setMealItemDataGridView.ClearSelection();
 					// select new row in datatable

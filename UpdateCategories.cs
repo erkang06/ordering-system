@@ -15,7 +15,7 @@ namespace ordering_system
 	public partial class UpdateCategories : Form
 	{
 		readonly SqlConnection con = new SqlConnection(Resources.con);
-		DataView categoriesDataView; // full databases compared to whats shown in datagridview
+		DataTable categoriesDataTable = new DataTable(); // full datatable compared to whats shown in datagridview
 		int categoryID = -1; // id of selected category from datagridview
 		public UpdateCategories()
 		{
@@ -57,13 +57,12 @@ namespace ordering_system
 
 		private void updateDataGridView()
 		{
+			// get categories from categorytbl
 			SqlDataAdapter getCategories = new SqlDataAdapter("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
-			DataSet categoriesDataSet = new DataSet();
-			getCategories.Fill(categoriesDataSet);
-			categoriesDataView = new DataView(categoriesDataSet.Tables[0]);
+			getCategories.Fill(categoriesDataTable);
+			DataView categoriesDataView = new DataView(categoriesDataTable);
 			// fill in category datagridview
-			DataTable categoriesDataTable = categoriesDataView.ToTable(true, "categoryName", "categoryIndex");
-			categoryDataGridView.DataSource = categoriesDataTable;
+			categoryDataGridView.DataSource = categoriesDataView.ToTable(true, "categoryName", "categoryIndex");
 			// fill in default for category index
 			SqlCommand findMaxCategoryIndex = new SqlCommand("SELECT MAX(categoryIndex) FROM CategoryTbl", con);
 			int maxCategoryIndex;
@@ -86,11 +85,13 @@ namespace ordering_system
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
-				DataRowView selectedRow = categoriesDataView[selectedRowIndex];
-				categoryID = Convert.ToInt32(selectedRow.Row["categoryID"]);
+				// find associated row in categoriesdataview
+				string categoryName = categoryDataGridView.Rows[selectedRowIndex].Cells["categoryName"].Value.ToString();
+				DataRow selectedRow = categoriesDataTable.Select($"categoryName = '{categoryName}'")[0];
+				categoryID = Convert.ToInt32(selectedRow["categoryID"]);
 				// update textboxes
-				categoryNameTextBox.Text = selectedRow.Row["categoryName"].ToString();
-				categoryIndexTextBox.Text = selectedRow.Row["categoryIndex"].ToString();
+				categoryNameTextBox.Text = selectedRow["categoryName"].ToString();
+				categoryIndexTextBox.Text = selectedRow["categoryIndex"].ToString();
 			}
 		}
 

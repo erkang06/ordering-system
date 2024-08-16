@@ -21,8 +21,8 @@ namespace ordering_system
 	public partial class UpdateItems : Form
 	{
 		readonly SqlConnection con = new SqlConnection(Resources.con);
-		DataView foodItemsDataView; // full database compared to whats shown in datagridview
-		DataSet categoriesDataSet; // same as above xoxo
+		DataTable foodItemsDataTable = new DataTable(); // full datatable compared to whats shown in datagridview
+		DataTable categoriesDataTable = new DataTable(); // same as above xoxo
 		string foodItemID; // id of currently selected item from datagridview
 		public UpdateItems()
 		{
@@ -70,24 +70,22 @@ namespace ordering_system
 
 		private string getCategoryNameFromCategoryID(int categoryID)
 		{
-			DataView categoriesDataViewSortByID = new DataView(categoriesDataSet.Tables[0], "", "categoryID", DataViewRowState.CurrentRows);
-			int categoryIDIndex = categoriesDataViewSortByID.Find(categoryID);
-			if (categoryIDIndex != -1) // if category exists lmao
+			DataRow selectedRow = categoriesDataTable.Select($"categoryID = '{categoryID}'")[0];
+			if (selectedRow != null) // if category exists lmao
 			{
-				return categoriesDataViewSortByID[categoryIDIndex]["categoryName"].ToString();
+				return selectedRow["categoryName"].ToString();
 			}
 			return null;
 		}
 
 		private int getCategoryIDFromCategoryName(string categoryName)
 		{
-			DataView categoriesDataViewSortByName = new DataView(categoriesDataSet.Tables[0], "", "categoryName", DataViewRowState.CurrentRows);
-			int categoryNameIndex = categoriesDataViewSortByName.Find(categoryName);
-			if (categoryNameIndex != -1) // if category exists lmao
+			DataRow selectedRow = categoriesDataTable.Select($"categoryName = '{categoryName}'")[0];
+			if (selectedRow != null) // if category exists lmao
 			{
-				return Convert.ToInt32(categoriesDataViewSortByName[categoryNameIndex]["categoryID"]);
+				return Convert.ToInt32(selectedRow["categoryID"]);
 			}
-			return categoryNameIndex;
+			return -1;
 		}
 
 		private void UpdateItems_Load(object sender, EventArgs e)
@@ -95,12 +93,10 @@ namespace ordering_system
 			con.Open();
 			// get category table to fill in category combobox
 			SqlDataAdapter getCategories = new SqlDataAdapter("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
-			categoriesDataSet = new DataSet();
-			getCategories.Fill(categoriesDataSet);
-			DataView categoriesDataView = new DataView(categoriesDataSet.Tables[0]);
+			getCategories.Fill(categoriesDataTable);
 			// put all names from data reader into category list
 			List<string> categoryNames = new List<string>();
-			foreach (DataRowView category in categoriesDataView)
+			foreach (DataRow category in categoriesDataTable.Rows)
 			{
 				if (category["categoryName"].ToString() != "Set Meals") // cant add items to set meals yk
 				{
@@ -120,12 +116,10 @@ namespace ordering_system
 		private void updateDataGridView()
 		{
 			SqlDataAdapter getFoodItems = new SqlDataAdapter("SELECT FoodItemTbl.* FROM FoodItemTbl, CategoryTbl WHERE FoodItemTbl.categoryID = CategoryTbl.categoryID ORDER BY CategoryTbl.categoryIndex, FoodItemTbl.foodItemID", con);
-			DataSet foodItemsDataSet = new DataSet();
-			getFoodItems.Fill(foodItemsDataSet);
-			foodItemsDataView = new DataView(foodItemsDataSet.Tables[0]);
+			getFoodItems.Fill(foodItemsDataTable);
+			DataView foodItemsDataView = new DataView(foodItemsDataTable);
 			// fill in item datagridview
-			DataTable foodItemsDataTable = foodItemsDataView.ToTable(true, "foodItemID", "foodName", "smallItemPrice", "largeItemPrice");
-			itemDataGridView.DataSource = foodItemsDataTable;
+			itemDataGridView.DataSource = foodItemsDataView.ToTable(true, "foodItemID", "foodName", "smallItemPrice", "largeItemPrice");
 			itemDataGridView.ClearSelection();
 		}
 
@@ -135,19 +129,19 @@ namespace ordering_system
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
-				DataRowView selectedRow = foodItemsDataView[selectedRowIndex];
-				foodItemID = selectedRow.Row["foodItemID"].ToString();
+				foodItemID = itemDataGridView.Rows[selectedRowIndex].Cells["foodItemID"].Value.ToString();
+				DataRow selectedRow = foodItemsDataTable.Select($"foodItemID = '{foodItemID}'")[0];
 				// update textboxes and checkboxes
 				itemIDTextBox.Text = foodItemID;
-				itemNameTextBox.Text = selectedRow.Row["foodName"].ToString();
-				hasSmallPriceCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["hasSmallOption"]);
-				smallPriceTextBox.Text = selectedRow.Row["smallItemPrice"].ToString();
+				itemNameTextBox.Text = selectedRow["foodName"].ToString();
+				hasSmallPriceCheckBox.Checked = Convert.ToBoolean(selectedRow["hasSmallOption"]);
+				smallPriceTextBox.Text = selectedRow["smallItemPrice"].ToString();
 				hasSmallPriceCheckBox_CheckedChanged(sender, new EventArgs()); // if theres no small option, can clear
-				largePriceTextBox.Text = selectedRow.Row["largeItemPrice"].ToString();
-				defaultToLargePriceCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["defaultToLargePrice"]);
-				isOutOfStockCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["isOutOfStock"]);
+				largePriceTextBox.Text = selectedRow["largeItemPrice"].ToString();
+				defaultToLargePriceCheckBox.Checked = Convert.ToBoolean(selectedRow["defaultToLargePrice"]);
+				isOutOfStockCheckBox.Checked = Convert.ToBoolean(selectedRow["isOutOfStock"]);
 				// need to convert categoryid to name
-				int categoryID = Convert.ToInt32(selectedRow.Row["categoryID"]);
+				int categoryID = Convert.ToInt32(selectedRow["categoryID"]);
 				string categoryName = getCategoryNameFromCategoryID(categoryID);
 				if (categoryName != null) // if category exists lmao
 				{

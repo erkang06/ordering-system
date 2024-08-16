@@ -332,7 +332,6 @@
 			runningOrderDataGridView.BackgroundColor = Color.Maroon;
 			runningOrderDataGridView.BorderStyle = BorderStyle.None;
 			runningOrderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			runningOrderDataGridView.ColumnHeadersVisible = false;
 			runningOrderDataGridView.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5 });
 			runningOrderDataGridView.Location = new Point(0, 0);
 			runningOrderDataGridView.Name = "runningOrderDataGridView";
@@ -573,33 +572,43 @@
 			// 
 			// Column1
 			// 
+			Column1.FillWeight = 48.0769234F;
 			Column1.HeaderText = "itemID";
 			Column1.MinimumWidth = 10;
 			Column1.Name = "Column1";
+			Column1.SortMode = DataGridViewColumnSortMode.NotSortable;
 			// 
 			// Column2
 			// 
+			Column2.FillWeight = 280.206116F;
 			Column2.HeaderText = "itemName";
 			Column2.MinimumWidth = 10;
 			Column2.Name = "Column2";
+			Column2.SortMode = DataGridViewColumnSortMode.NotSortable;
 			// 
 			// Column3
 			// 
+			Column3.FillWeight = 65.7434845F;
 			Column3.HeaderText = "size";
 			Column3.MinimumWidth = 10;
 			Column3.Name = "Column3";
+			Column3.SortMode = DataGridViewColumnSortMode.NotSortable;
 			// 
 			// Column4
 			// 
+			Column4.FillWeight = 51.0542679F;
 			Column4.HeaderText = "quantity";
 			Column4.MinimumWidth = 10;
 			Column4.Name = "Column4";
+			Column4.SortMode = DataGridViewColumnSortMode.NotSortable;
 			// 
 			// Column5
 			// 
+			Column5.FillWeight = 54.9192F;
 			Column5.HeaderText = "price";
 			Column5.MinimumWidth = 10;
 			Column5.Name = "Column5";
+			Column5.SortMode = DataGridViewColumnSortMode.NotSortable;
 			// 
 			// MainMenu
 			// 
