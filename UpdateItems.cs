@@ -21,7 +21,7 @@ namespace ordering_system
 	public partial class UpdateItems : Form
 	{
 		readonly SqlConnection con = new SqlConnection(Resources.con);
-		DataTable foodItemsDataTable = new DataTable(); // full datatable compared to whats shown in datagridview
+		DataTable foodItemsDataTable; // full datatable compared to whats shown in datagridview
 		DataTable categoriesDataTable = new DataTable(); // same as above xoxo
 		string foodItemID; // id of currently selected item from datagridview
 		public UpdateItems()
@@ -115,6 +115,7 @@ namespace ordering_system
 
 		private void updateDataGridView()
 		{
+			foodItemsDataTable = new DataTable(); // clear prev
 			SqlDataAdapter getFoodItems = new SqlDataAdapter("SELECT FoodItemTbl.* FROM FoodItemTbl, CategoryTbl WHERE FoodItemTbl.categoryID = CategoryTbl.categoryID ORDER BY CategoryTbl.categoryIndex, FoodItemTbl.foodItemID", con);
 			getFoodItems.Fill(foodItemsDataTable);
 			DataView foodItemsDataView = new DataView(foodItemsDataTable);
@@ -300,6 +301,7 @@ namespace ordering_system
 			hasSmallPriceCheckBox.Checked = false;
 			smallPriceTextBox.Text = string.Empty;
 			largePriceTextBox.Text = string.Empty;
+			isOutOfStockCheckBox.Checked = false;
 			categoryComboBox.Text = string.Empty;
 			hasSmallPriceCheckBox_CheckedChanged(sender, e); // sorts out weird bits w/ checkboxes
 		}

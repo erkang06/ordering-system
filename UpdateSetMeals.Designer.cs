@@ -190,7 +190,6 @@
 			setMealItemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			setMealItemDataGridView.BackgroundColor = Color.White;
 			setMealItemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			setMealItemDataGridView.ColumnHeadersVisible = false;
 			setMealItemDataGridView.Location = new Point(774, 464);
 			setMealItemDataGridView.Name = "setMealItemDataGridView";
 			setMealItemDataGridView.ReadOnly = true;
@@ -201,6 +200,7 @@
 			setMealItemDataGridView.TabIndex = 83;
 			setMealItemDataGridView.TabStop = false;
 			setMealItemDataGridView.CellClick += setMealitemDataGridView_CellClick;
+			setMealItemDataGridView.ColumnHeaderMouseClick += setMealItemDataGridView_ColumnHeaderMouseClick;
 			// 
 			// setMealDataGridView
 			// 
@@ -210,7 +210,6 @@
 			setMealDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			setMealDataGridView.BackgroundColor = Color.White;
 			setMealDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			setMealDataGridView.ColumnHeadersVisible = false;
 			setMealDataGridView.Location = new Point(774, 98);
 			setMealDataGridView.Name = "setMealDataGridView";
 			setMealDataGridView.ReadOnly = true;
@@ -254,7 +253,6 @@
 			itemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			itemDataGridView.BackgroundColor = Color.White;
 			itemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			itemDataGridView.ColumnHeadersVisible = false;
 			itemDataGridView.Location = new Point(12, 162);
 			itemDataGridView.Name = "itemDataGridView";
 			itemDataGridView.ReadOnly = true;

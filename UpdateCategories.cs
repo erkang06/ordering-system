@@ -15,7 +15,7 @@ namespace ordering_system
 	public partial class UpdateCategories : Form
 	{
 		readonly SqlConnection con = new SqlConnection(Resources.con);
-		DataTable categoriesDataTable = new DataTable(); // full datatable compared to whats shown in datagridview
+		DataTable categoriesDataTable; // full datatable compared to whats shown in datagridview
 		int categoryID = -1; // id of selected category from datagridview
 		public UpdateCategories()
 		{
@@ -57,6 +57,7 @@ namespace ordering_system
 
 		private void updateDataGridView()
 		{
+			categoriesDataTable = new DataTable(); // clear prev
 			// get categories from categorytbl
 			SqlDataAdapter getCategories = new SqlDataAdapter("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
 			getCategories.Fill(categoriesDataTable);

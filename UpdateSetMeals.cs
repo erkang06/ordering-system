@@ -15,8 +15,9 @@ namespace ordering_system
 	public partial class UpdateSetMeals : Form
 	{
 		readonly SqlConnection con = new SqlConnection(Resources.con);
-		DataView foodItemsDataViewByCategory, setMealsDataView; // full database compared to whats shown in datagridview
-		DataSet categoriesDataSet; // same as above xoxo
+		DataTable categoriesDataTable = new DataTable(); // full datatable compared to whats shown in datagridview
+		DataTable foodItemsDataTableByCategory;
+		DataTable setMealsDataTable;
 		DataTable setMealFoodItemsDataTable = new DataTable(); // separate table to work through the setmeal items while in progress; reduces number of edits to main table
 		string foodItemID, setMealID; // id of currently selected item/setmeal from datagridview
 
@@ -27,24 +28,22 @@ namespace ordering_system
 
 		private string getCategoryNameFromCategoryID(int categoryID)
 		{
-			DataView categoriesDataViewSortByID = new DataView(categoriesDataSet.Tables[0], "", "categoryID", DataViewRowState.CurrentRows);
-			int categoryIDIndex = categoriesDataViewSortByID.Find(categoryID);
-			if (categoryIDIndex != -1) // if category exists lmao
+			DataRow selectedRow = categoriesDataTable.Select($"categoryID = '{categoryID}'")[0];
+			if (selectedRow != null) // if category exists lmao
 			{
-				return categoriesDataViewSortByID[categoryIDIndex]["categoryName"].ToString();
+				return selectedRow["categoryName"].ToString();
 			}
 			return null;
 		}
 
 		private int getCategoryIDFromCategoryName(string categoryName)
 		{
-			DataView categoriesDataViewSortByName = new DataView(categoriesDataSet.Tables[0], "", "categoryName", DataViewRowState.CurrentRows);
-			int categoryNameIndex = categoriesDataViewSortByName.Find(categoryName);
-			if (categoryNameIndex != -1) // if category exists lmao
+			DataRow selectedRow = categoriesDataTable.Select($"categoryName = '{categoryName}'")[0];
+			if (selectedRow != null) // if category exists lmao
 			{
-				return Convert.ToInt32(categoriesDataViewSortByName[categoryNameIndex]["categoryID"]);
+				return Convert.ToInt32(selectedRow["categoryID"]);
 			}
-			return categoryNameIndex;
+			return -1;
 		}
 
 		private int doesFoodItemExist(string foodItemID) // returns index of food item in set meal if exists, else returns -1
@@ -103,12 +102,10 @@ namespace ordering_system
 			con.Open();
 			// get category table to fill in category combobox
 			SqlDataAdapter getCategories = new SqlDataAdapter("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
-			categoriesDataSet = new DataSet();
-			getCategories.Fill(categoriesDataSet);
-			DataView categoriesDataView = new DataView(categoriesDataSet.Tables[0]);
+			getCategories.Fill(categoriesDataTable);
 			// put all names from data reader into category list
 			List<string> categoryNames = new List<string>();
-			foreach (DataRowView category in categoriesDataView)
+			foreach (DataRow category in categoriesDataTable.Rows)
 			{
 				categoryNames.Add(category["categoryName"].ToString());
 			}
@@ -157,48 +154,62 @@ namespace ordering_system
 
 		private void updateDataGridView()
 		{
+			setMealsDataTable = new DataTable(); // clear prev
 			SqlDataAdapter getSetMeals = new SqlDataAdapter("SELECT * FROM SetMealTbl ORDER BY SetMealID", con);
-			DataSet setMealsDataSet = new DataSet();
-			getSetMeals.Fill(setMealsDataSet);
-			setMealsDataView = new DataView(setMealsDataSet.Tables[0]);
+			getSetMeals.Fill(setMealsDataTable);
+			DataView setMealsDataView = new DataView(setMealsDataTable);
 			// fill in set meals datagridview
-			DataTable setMealsDataTable = setMealsDataView.ToTable(true, "setMealID", "setMealName", "price");
-			setMealDataGridView.DataSource = setMealsDataTable;
+			setMealDataGridView.DataSource = setMealsDataView.ToTable(true, "setMealID", "setMealName", "price");
 			setMealDataGridView.ClearSelection();
 		}
 
 		private void updateItemQuantitySize() // update item quantity and size after adding/selecting fooditem
 		{
-			int selectedIndex = setMealItemDataGridView.SelectedRows[0].Index;
-			itemQuantityValueLabel.Text = setMealFoodItemsDataTable.Rows[selectedIndex]["quantity"].ToString();
-			itemSizeComboBox.Text = setMealFoodItemsDataTable.Rows[selectedIndex]["size"].ToString();
+			int selectedRowIndex = setMealItemDataGridView.SelectedRows[0].Index;
+			foodItemID = setMealItemDataGridView.Rows[selectedRowIndex].Cells["foodItemID"].Value.ToString();
+			int foodItemIndex = doesFoodItemExist(foodItemID); // find index of food in set meal datatable
+			itemQuantityValueLabel.Text = setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"].ToString();
+			itemSizeComboBox.Text = setMealFoodItemsDataTable.Rows[foodItemIndex]["size"].ToString();
 		}
 
 		private void increaseQuantityButton_Click(object sender, EventArgs e)
 		{
-			int currentQuantity = Convert.ToInt32(itemQuantityValueLabel.Text);
-			currentQuantity++;
-			int selectedIndex = setMealItemDataGridView.SelectedRows[0].Index;
-			setMealFoodItemsDataTable.Rows[selectedIndex]["quantity"] = currentQuantity;
-			itemQuantityValueLabel.Text = currentQuantity.ToString();
+			if (setMealFoodItemsDataTable.Rows.Count > 0) // if not empty
+			{
+				int currentQuantity = Convert.ToInt32(itemQuantityValueLabel.Text);
+				currentQuantity++;
+				int selectedRowIndex = setMealItemDataGridView.SelectedRows[0].Index;
+				foodItemID = setMealItemDataGridView.Rows[selectedRowIndex].Cells["foodItemID"].Value.ToString();
+				int foodItemIndex = doesFoodItemExist(foodItemID); // find index of food in set meal datatable
+				setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"] = currentQuantity;
+				itemQuantityValueLabel.Text = currentQuantity.ToString();
+			}
 		}
 
 		private void decreaseQuantityButton_Click(object sender, EventArgs e)
 		{
-			int currentQuantity = Convert.ToInt32(itemQuantityValueLabel.Text);
-			currentQuantity--;
-			if (currentQuantity > 0) // quantity cant go below 1
+			if (setMealFoodItemsDataTable.Rows.Count > 0) // if not empty
 			{
-				int selectedIndex = setMealItemDataGridView.SelectedRows[0].Index;
-				setMealFoodItemsDataTable.Rows[selectedIndex]["quantity"] = currentQuantity;
-				itemQuantityValueLabel.Text = currentQuantity.ToString();
+				int currentQuantity = Convert.ToInt32(itemQuantityValueLabel.Text);
+				currentQuantity--;
+				if (currentQuantity > 0) // quantity cant go below 1
+				{
+					int selectedRowIndex = setMealItemDataGridView.SelectedRows[0].Index;
+					foodItemID = setMealItemDataGridView.Rows[selectedRowIndex].Cells["foodItemID"].Value.ToString();
+					int foodItemIndex = doesFoodItemExist(foodItemID); // find index of food in set meal datatable
+					setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"] = currentQuantity;
+					itemQuantityValueLabel.Text = currentQuantity.ToString();
+				}
 			}
 		}
 
 		private void itemSizeComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			int selectedIndex = setMealItemDataGridView.SelectedRows[0].Index;
-			setMealFoodItemsDataTable.Rows[selectedIndex]["size"] = itemSizeComboBox.Text;
+			if (setMealFoodItemsDataTable.Rows.Count > 0) // if not empty
+			{
+				int selectedIndex = setMealItemDataGridView.SelectedRows[0].Index;
+				setMealFoodItemsDataTable.Rows[selectedIndex]["size"] = itemSizeComboBox.Text;
+			}
 		}
 
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -209,8 +220,8 @@ namespace ordering_system
 			{
 				setMealItemDataGridView.ClearSelection();
 				// find food item id to search through tbl
-				DataRowView selectedRow = foodItemsDataViewByCategory[selectedRowIndex];
-				foodItemID = selectedRow["foodItemID"].ToString();
+				foodItemID = itemDataGridView.Rows[selectedRowIndex].Cells["foodItemID"].Value.ToString();
+				DataRow selectedRow = foodItemsDataTableByCategory.Select($"foodItemID = '{foodItemID}'")[0];
 				int foodItemIndex = doesFoodItemExist(foodItemID); // find index of food in set meal datatable if exists
 				if (foodItemIndex < 0) // food item doesnt alr exist in set meal
 				{
@@ -233,10 +244,11 @@ namespace ordering_system
 				}
 				else // if exists, add 1 to quantity instead
 				{
-					int quantity = Convert.ToInt32(setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"]);
-					quantity++;
-					setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"] = quantity;
-					setMealItemDataGridView.Rows[foodItemIndex].Selected = true;
+					int currentQuantity = Convert.ToInt32(setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"]);
+					currentQuantity++;
+					setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"] = currentQuantity;
+					//int newRowIndex = setMealItemDataGridView.index; // find index in datagridview by parameter - where row = setMealFoodItemsDataTable.Rows[foodItemIndex]
+					setMealItemDataGridView.Rows[selectedRowIndex].Selected = true;
 				}
 				updateItemQuantitySize();
 			}
@@ -251,12 +263,12 @@ namespace ordering_system
 			{
 				setMealFoodItemsDataTable.Clear(); // clear prev set meal
 																					 // get set meal id
-				DataRowView selectedRow = setMealsDataView[selectedRowIndex];
-				setMealID = selectedRow.Row["setMealID"].ToString();
+				setMealID = setMealDataGridView.Rows[selectedRowIndex].Cells["setMealID"].Value.ToString();
+				DataRow selectedRow = setMealsDataTable.Select($"setMealID = '{setMealID}'")[0];
 				// fill in text boxes
-				setMealIDTextBox.Text = selectedRow.Row["setMealID"].ToString();
-				setMealNameTextBox.Text = selectedRow.Row["setMealName"].ToString();
-				setMealPriceTextBox.Text = selectedRow.Row["price"].ToString();
+				setMealIDTextBox.Text = selectedRow["setMealID"].ToString();
+				setMealNameTextBox.Text = selectedRow["setMealName"].ToString();
+				setMealPriceTextBox.Text = selectedRow["price"].ToString();
 				// get set meal from setmealfooditemtbl
 				SqlDataAdapter getSetMealFoodItems = new SqlDataAdapter("SELECT foodItemID, size, quantity FROM SetMealFoodItemTbl WHERE setMealID = @SMID ORDER BY foodItemID", con);
 				getSetMealFoodItems.SelectCommand.Parameters.AddWithValue("@SMID", setMealID);
@@ -290,17 +302,21 @@ namespace ordering_system
 		private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			con.Open();
+			foodItemsDataTableByCategory = new DataTable(); // clear prev
 			int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
 			SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
 			getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
-			DataSet foodItemsDataSet = new DataSet();
-			getFoodItemsByCategory.Fill(foodItemsDataSet);
-			foodItemsDataViewByCategory = new DataView(foodItemsDataSet.Tables[0]);
+			getFoodItemsByCategory.Fill(foodItemsDataTableByCategory);
+			DataView foodItemsDataViewByCategory = new DataView(foodItemsDataTableByCategory);
 			// fill in set meals datagridview
-			DataTable foodItemsDataTable = foodItemsDataViewByCategory.ToTable(true, "foodItemID", "foodName");
-			itemDataGridView.DataSource = foodItemsDataTable;
+			itemDataGridView.DataSource = foodItemsDataViewByCategory.ToTable(true, "foodItemID", "foodName");
 			itemDataGridView.ClearSelection();
 			con.Close();
+		}
+
+		private void setMealItemDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			updateItemQuantitySize();
 		}
 
 		private void deleteItemButton_Click(object sender, EventArgs e)
@@ -436,6 +452,7 @@ namespace ordering_system
 
 		private void clearSetMealScreen() // clears textboxes and setmealitemdatagridview
 		{
+			setMealDataGridView.ClearSelection();
 			setMealFoodItemsDataTable.Clear();
 			setMealIDTextBox.Text = string.Empty;
 			setMealNameTextBox.Text = string.Empty;

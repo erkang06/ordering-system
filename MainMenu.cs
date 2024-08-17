@@ -307,6 +307,43 @@ namespace ordering_system
 					ypos += 76;
 				}
 			}
+			// check if any food items/set meals r out of stock
+			if (itemType == "Food Item")
+			{
+				for (int i = 0; i < itemsDataView.Count && i < itemButtonArray.Length; i++) // cant be more than array length
+				{
+					if (Convert.ToBoolean(itemsDataView[i].Row["isOutOfStock"]))
+					{
+						itemButtonArray[i].Enabled = false; // disable out of stock buttons so u cant order them lmao
+					}
+				}
+			}
+			else // set meal
+			{
+				for (int i = 0; i < itemsDataView.Count && i < itemButtonArray.Length; i++) // cant be more than array length
+				{
+					// get food items in each set meal
+					SqlDataAdapter getSetMealFoodItems = new SqlDataAdapter("SELECT foodItemID FROM SetMealFoodItemTbl WHERE setMealID = @SMID", con);
+					getSetMealFoodItems.SelectCommand.Parameters.AddWithValue("@SMID", itemButtonArray[i].Tag);
+					DataTable setMealFoodItemsDataTable = new DataTable();
+					getSetMealFoodItems.Fill(setMealFoodItemsDataTable);
+					// check each food item
+					string setMealFoodItemID;
+					SqlCommand checkIfFoodItemIsOutOfStock = new SqlCommand("SELECT isOutOfStock FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+					checkIfFoodItemIsOutOfStock.Parameters.Add("@FIID", SqlDbType.NVarChar);
+					foreach (DataRow setMealFoodItemDataRow in setMealFoodItemsDataTable.Rows)
+					{
+						// get fooditemid and add it to sql query
+						setMealFoodItemID = setMealFoodItemDataRow["foodItemID"].ToString();
+						checkIfFoodItemIsOutOfStock.Parameters["@FIID"].Value = setMealFoodItemID;
+						if (Convert.ToBoolean(checkIfFoodItemIsOutOfStock.ExecuteScalar())) // if out of stock
+						{
+							itemButtonArray[i].Enabled = false; // disable out of stock buttons so u cant order them lmao
+							break;
+						}
+					}
+				}
+			}
 		}
 
 		public void itemButton_Click(object sender, MouseEventArgs e)
