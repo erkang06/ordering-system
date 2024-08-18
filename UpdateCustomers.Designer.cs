@@ -499,7 +499,6 @@
 			customerDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			customerDataGridView.BackgroundColor = Color.White;
 			customerDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			customerDataGridView.ColumnHeadersVisible = false;
 			customerDataGridView.Location = new Point(926, 104);
 			customerDataGridView.Name = "customerDataGridView";
 			customerDataGridView.ReadOnly = true;
@@ -536,8 +535,8 @@
 			Controls.Add(customerNameLabel);
 			Controls.Add(updateCustomersLabel);
 			Controls.Add(cancelButton);
-			Controls.Add(addressPanel);
 			Controls.Add(customerDataGridView);
+			Controls.Add(addressPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "UpdateCustomers";
 			Text = "UpdateCustomers";
