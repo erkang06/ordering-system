@@ -214,7 +214,7 @@ namespace ordering_system
 
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			// find clicked row of table in order to search through fooditemsdataview to find the full deets
+			// find clicked row of table in order to search through fooditemsdatatable to find the full deets
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
@@ -247,17 +247,28 @@ namespace ordering_system
 					int currentQuantity = Convert.ToInt32(setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"]);
 					currentQuantity++;
 					setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"] = currentQuantity;
-					//int newRowIndex = setMealItemDataGridView.index; // find index in datagridview by parameter - where row = setMealFoodItemsDataTable.Rows[foodItemIndex]
-					setMealItemDataGridView.Rows[selectedRowIndex].Selected = true;
+					setMealItemDataGridView.Rows[findDataGridViewIndex()].Selected = true;
 				}
 				updateItemQuantitySize();
 			}
 		}
 
+		private int findDataGridViewIndex() // find index of row in setmealfooditemdatagridview by fooditemid
+		{
+			for (int i = 0; i < setMealDataGridView.Rows.Count; i++)
+			{
+				if (setMealItemDataGridView.Rows[i].Cells["foodItemID"].Value.ToString() == foodItemID)
+				{
+					return i;
+				}
+			}
+			return -1;
+		}
+
 		private void setMealDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			con.Open();
-			// find clicked row of table in order to search through setmealdataview to find the full deets
+			// find clicked row of table in order to search through setmealdatatable to find the full deets
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
@@ -291,7 +302,7 @@ namespace ordering_system
 
 		private void setMealitemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			// find clicked row of table in order to search through setmealfooditemsdataview to find the full deets
+			// find clicked row of table in order to search through setmealfooditemsdatatable to find the full deets
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{

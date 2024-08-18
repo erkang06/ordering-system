@@ -24,8 +24,8 @@ namespace ordering_system
 		public CustomerDetailsCancelHandler CustomerDetailsCancel;
 
 		int customerID, addressID;
-		DataView addressesDataView; // allows an unfiltered address list to exist when filling in delivery the 
-																// the connection string to the database
+		DataTable addressesDataTable; // allows an unfiltered address list to exist when filling in delivery
+		// the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		public CustomerDetails(string orderType, int customerIDFromMainMenu)
 		{
@@ -177,14 +177,13 @@ namespace ordering_system
 
 		private void updateDataGridView()
 		{
+			addressesDataTable = new DataTable();
 			SqlDataAdapter getAddresses = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", con);
 			getAddresses.SelectCommand.Parameters.AddWithValue("@CID", customerID);
-			DataSet addressesDataSet = new DataSet();
-			getAddresses.Fill(addressesDataSet);
-			addressesDataView = new DataView(addressesDataSet.Tables[0]);
+			getAddresses.Fill(addressesDataTable);
+			DataView addressesDataView = new DataView(addressesDataTable);
 			// fill in address datagridview
-			DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
-			addressDataGridView.DataSource = addressesDataTable;
+			addressDataGridView.DataSource = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
 		}
 
 		private void acceptAddressButton_Click(object sender, EventArgs e)
@@ -395,15 +394,16 @@ namespace ordering_system
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
-				DataRowView selectedRow = addressesDataView[selectedRowIndex];
-				addressID = Convert.ToInt32(selectedRow.Row["addressID"]);
+				// get addressid
+				addressID = Convert.ToInt32(addressDataGridView.Rows[selectedRowIndex].Cells["addressID"].Value);
+				DataRow selectedRow = addressesDataTable.Select($"addressID = '{addressID}'")[0];
 				// update delivery address
-				deliveryHouseNumberTextBox.Text = selectedRow.Row["houseNumber"].ToString();
-				deliveryStreetNameTextBox.Text = selectedRow.Row["streetName"].ToString();
-				deliveryVillageTextBox.Text = selectedRow.Row["village"].ToString();
-				deliveryCityTextBox.Text = selectedRow.Row["city"].ToString();
-				deliveryPostcodeTextBox.Text = selectedRow.Row["postcode"].ToString();
-				deliveryDeliveryChargeTextBox.Text = selectedRow.Row["deliveryCharge"].ToString();
+				deliveryHouseNumberTextBox.Text = selectedRow["houseNumber"].ToString();
+				deliveryStreetNameTextBox.Text = selectedRow["streetName"].ToString();
+				deliveryVillageTextBox.Text = selectedRow["village"].ToString();
+				deliveryCityTextBox.Text = selectedRow["city"].ToString();
+				deliveryPostcodeTextBox.Text = selectedRow["postcode"].ToString();
+				deliveryDeliveryChargeTextBox.Text = selectedRow["deliveryCharge"].ToString();
 				addressDataGridView.ClearSelection(); // unselect row
 			}
 			else // unselect flop row

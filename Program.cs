@@ -14,8 +14,9 @@ namespace ordering_system
 			// To customize application configuration such as set high DPI settings or default font,
 			// see https://aka.ms/applicationconfiguration.
 			ApplicationConfiguration.Initialize();
-			var main_form = new MainLogin();
+			MainLogin main_form = new MainLogin();
 			main_form.Show();
+			main_form.TopMost = true;
 			Application.Run();
 		}
 	}

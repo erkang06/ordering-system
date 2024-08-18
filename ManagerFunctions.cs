@@ -48,7 +48,7 @@ namespace ordering_system
 		{
 			UpdateSetMeals obj = new UpdateSetMeals();
 			obj.Show();
-			//obj.TopMost = true;
+			obj.TopMost = true;
 		}
 
 		private void updateCustomersButton_Click(object sender, EventArgs e)
@@ -62,7 +62,7 @@ namespace ordering_system
 		{
 			OrderSummary obj = new OrderSummary();
 			obj.Show();
-			obj.TopMost = true;
+			//obj.TopMost = true;
 		}
 
 		private void changeLoginPasswordButton_Click(object sender, EventArgs e)

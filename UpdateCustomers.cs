@@ -16,7 +16,8 @@ namespace ordering_system
 	public partial class UpdateCustomers : Form
 	{
 		readonly SqlConnection con = new SqlConnection(Resources.con);
-		DataView customersDataView, addressesDataView; // full databases compared to whats shown in datagridview
+		DataTable customersDataTable; // full datatable compared to whats shown in datagridview
+		DataTable addressesDataTable;
 		int customerID = -1; // id of selected customer from datagridview
 		int addressID = -1; // id of selected address from datagridview
 		public UpdateCustomers()
@@ -89,13 +90,12 @@ namespace ordering_system
 
 		private void updateCustomerDataGridView()
 		{
+			customersDataTable = new DataTable();
 			SqlDataAdapter getCustomers = new SqlDataAdapter("SELECT * FROM CustomerTbl ORDER BY customerID", con);
-			DataSet customersDataSet = new DataSet();
-			getCustomers.Fill(customersDataSet);
-			customersDataView = new DataView(customersDataSet.Tables[0]);
+			getCustomers.Fill(customersDataTable);
+			DataView customersDataView = new DataView(customersDataTable);
 			// fill in category datagridview
-			DataTable customersDataTable = customersDataView.ToTable(true, "customerName", "phoneNumber", "houseNumber", "postcode");
-			customerDataGridView.DataSource = customersDataTable;
+			customerDataGridView.DataSource = customersDataView.ToTable(true, "customerName", "phoneNumber", "houseNumber", "postcode");
 			// hide deliveryaddress panel by default
 			addressPanel.Visible = false;
 			addressPanel.SendToBack();
@@ -103,14 +103,13 @@ namespace ordering_system
 
 		private void updateAddressDataGridView()
 		{
+			addressesDataTable = new DataTable();
 			SqlDataAdapter getAddressesForCustomer = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE customerID = @CID", con);
 			getAddressesForCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
-			DataSet addressesDataSet = new DataSet();
-			getAddressesForCustomer.Fill(addressesDataSet);
-			addressesDataView = new DataView(addressesDataSet.Tables[0]);
+			getAddressesForCustomer.Fill(addressesDataTable);
+			DataView addressesDataView = new DataView(addressesDataTable);
 			// fill in address datagridview
-			DataTable addressesDataTable = addressesDataView.ToTable(true, "houseNumber", "streetName", "postcode");
-			addressDataGridView.DataSource = addressesDataTable;
+			addressDataGridView.DataSource = addressesDataView.ToTable(true, "addressID", "houseNumber", "streetName", "postcode");
 		}
 
 		private void cancelButton_Click(object sender, EventArgs e)
@@ -121,21 +120,23 @@ namespace ordering_system
 		private void customerDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			con.Open();
-			// find clicked row of table in order to search through customerdataview to find the full deets
+			// find clicked row of table in order to search through customerdatatable to find the full deets
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
-				DataRowView selectedRow = customersDataView[selectedRowIndex];
-				customerID = Convert.ToInt32(selectedRow.Row["customerID"]);
+				// get customerid through phonenumber
+				string phoneNumber = customerDataGridView.Rows[selectedRowIndex].Cells["phoneNumber"].Value.ToString();
+				DataRow selectedRow = customersDataTable.Select($"phoneNumber = '{phoneNumber}'")[0];
+				customerID = Convert.ToInt32(selectedRow["customerID"]);
 				// update textboxes
-				customerNameTextBox.Text = selectedRow.Row["customerName"].ToString();
-				phoneNumberTextBox.Text = selectedRow.Row["phoneNumber"].ToString();
-				blacklistedCheckBox.Checked = Convert.ToBoolean(selectedRow.Row["isBlackListed"]);
-				billingHouseNumberTextBox.Text = selectedRow.Row["houseNumber"].ToString();
-				billingStreetNameTextBox.Text = selectedRow.Row["streetName"].ToString();
-				billingVillageTextBox.Text = selectedRow.Row["village"].ToString();
-				billingCityTextBox.Text = selectedRow.Row["city"].ToString();
-				billingPostcodeTextBox.Text = selectedRow.Row["postcode"].ToString();
+				customerNameTextBox.Text = selectedRow["customerName"].ToString();
+				phoneNumberTextBox.Text = selectedRow["phoneNumber"].ToString();
+				blacklistedCheckBox.Checked = Convert.ToBoolean(selectedRow["isBlackListed"]);
+				billingHouseNumberTextBox.Text = selectedRow["houseNumber"].ToString();
+				billingStreetNameTextBox.Text = selectedRow["streetName"].ToString();
+				billingVillageTextBox.Text = selectedRow["village"].ToString();
+				billingCityTextBox.Text = selectedRow["city"].ToString();
+				billingPostcodeTextBox.Text = selectedRow["postcode"].ToString();
 				if (hasDeliveryAddresses()) // show delivery addresses if there are any
 				{
 					addressPanel.BringToFront();
@@ -153,18 +154,20 @@ namespace ordering_system
 		private void addressDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			con.Open();
-			// find clicked row of table in order to search through addressesdataview to find the full deets
+			// find clicked row of table in order to search through addressesdatatable to find the full deets
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
-				DataRowView selectedRow = addressesDataView[selectedRowIndex];
-				addressID = Convert.ToInt32(selectedRow.Row["addressID"]);
-				deliveryHouseNumberTextBox.Text = selectedRow.Row["houseNumber"].ToString();
-				deliveryStreetNameTextBox.Text = selectedRow.Row["streetName"].ToString();
-				deliveryVillageTextBox.Text = selectedRow.Row["village"].ToString();
-				deliveryCityTextBox.Text = selectedRow.Row["city"].ToString();
-				deliveryPostcodeTextBox.Text = selectedRow.Row["postcode"].ToString();
-				deliveryDeliveryChargeTextBox.Text = selectedRow.Row["deliveryCharge"].ToString();
+				// get addressid
+				addressID = Convert.ToInt32(addressDataGridView.Rows[selectedRowIndex].Cells["addressID"].Value);
+				DataRow selectedRow = addressesDataTable.Select($"addressID = '{addressID}'")[0];
+				// fill in textboxes
+				deliveryHouseNumberTextBox.Text = selectedRow["houseNumber"].ToString();
+				deliveryStreetNameTextBox.Text = selectedRow["streetName"].ToString();
+				deliveryVillageTextBox.Text = selectedRow["village"].ToString();
+				deliveryCityTextBox.Text = selectedRow["city"].ToString();
+				deliveryPostcodeTextBox.Text = selectedRow["postcode"].ToString();
+				deliveryDeliveryChargeTextBox.Text = selectedRow["deliveryCharge"].ToString();
 			}
 			else // unselect flop row
 			{
@@ -182,7 +185,15 @@ namespace ordering_system
 		private void updateCustomerButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (areAllCustomerFieldsFilled() == true && customerID != -1) // update just in case details have changed
+			if (areAllCustomerFieldsFilled() == false) // not all fields filled in
+			{
+				MessageBox.Show("Not all required customer fields filled in", "Ordering System");
+			}
+			else if (customerID > 0) // customer not selected
+			{
+				MessageBox.Show("Customer not selected", "Ordering System");
+			}
+			else // update just in case details have changed
 			{
 				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, phoneNumber = @PN, isBlackListed = @IBL, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
 				updateCustomerDetails.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
@@ -198,14 +209,6 @@ namespace ordering_system
 				MessageBox.Show("Customer updated", "Ordering System");
 				clearCustomerScreen();
 				updateCustomerDataGridView();
-			}
-			else if (customerID != -1) // cant continue w/out all fields filled in
-			{
-				MessageBox.Show("Not all required customer fields filled in", "Ordering System");
-			}
-			else
-			{
-				MessageBox.Show("Customer not selected", "Ordering System");
 			}
 			con.Close();
 		}

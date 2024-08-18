@@ -82,7 +82,7 @@ namespace ordering_system
 
 		private void categoryDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			// find clicked row of table in order to search through categoriesdatagridview to find the full deets
+			// find clicked row of table in order to search through categoriesdatatable to find the full deets
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
