@@ -21,10 +21,9 @@ namespace ordering_system
 		// the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataRow customerDataRow; // data row for customer
-		DataRow addressDataRow;
-		DataView ordersDataView = new DataView();
-		DataView categoriesDataView;
-		DataView itemsDataView;
+		DataTable ordersDataTable;
+		DataTable categoriesDataTable;
+		DataTable itemsDataTable;
 		Button[] categoryButtonArray = new Button[24]; // cant have any more since its hardcoded
 		Button[] itemButtonArray = new Button[40];
 		int viewOrdersSelectedOrderID = -1;
@@ -38,21 +37,22 @@ namespace ordering_system
 			con.Open();
 			SqlDataAdapter getCustomer = new SqlDataAdapter("SELECT * FROM CustomerTbl WHERE customerID = @CID", con);
 			getCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
-			DataSet customerDataSet = new DataSet();
-			getCustomer.Fill(customerDataSet);
-			customerDataRow = customerDataSet.Tables[0].Rows[0];
+			DataTable customerDataTable = new DataTable();
+			getCustomer.Fill(customerDataTable);
+			customerDataRow = customerDataTable.Rows[0];
 			con.Close();
 		}
 
-		private void getAddress(int addressID) // get customer details from customerid
+		private DataRow getAddress(int addressID) // get customer details from customerid
 		{
 			con.Open();
 			SqlDataAdapter getAddress = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE addressID = @AID", con);
 			getAddress.SelectCommand.Parameters.AddWithValue("@AID", addressID);
-			DataSet addressDataSet = new DataSet();
-			getAddress.Fill(addressDataSet);
-			addressDataRow = addressDataSet.Tables[0].Rows[0];
+			DataTable addressDataTable = new DataTable();
+			getAddress.Fill(addressDataTable);
+			DataRow addressDataRow = addressDataTable.Rows[0];
 			con.Close();
+			return addressDataRow;
 		}
 
 		private int doesItemExist(string itemID, string size) // returns index of food item in running order if exists, else returns -1
@@ -92,23 +92,22 @@ namespace ordering_system
 		private void getCategories()
 		{
 			// get category table to fill in category combobox
+			categoriesDataTable = new DataTable();
 			SqlDataAdapter getCategories = new SqlDataAdapter("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
-			DataSet categoriesDataSet = new DataSet();
-			getCategories.Fill(categoriesDataSet);
-			categoriesDataView = new DataView(categoriesDataSet.Tables[0]);
+			getCategories.Fill(categoriesDataTable);
 		}
 
 		private void loadCategoryButtons() // fill in categorypanel w/ buttons
 		{
 			// fill in category buttons
 			int xpos = 0, ypos = 0;
-			for (int i = 0; i < categoriesDataView.Count && i < categoryButtonArray.Length; i++) // cant be more than array length
+			for (int i = 0; i < categoriesDataTable.Rows.Count && i < categoryButtonArray.Length; i++) // cant be more than array length
 			{
 				// create each category button
 				categoryButtonArray[i] = new Button();
 				categoryButtonArray[i].UseMnemonic = false; // allows for &
-				categoryButtonArray[i].Tag = categoriesDataView[i]["categoryID"].ToString();
-				categoryButtonArray[i].Text = categoriesDataView[i]["categoryName"].ToString();
+				categoryButtonArray[i].Tag = categoriesDataTable.Rows[i]["categoryID"].ToString();
+				categoryButtonArray[i].Text = categoriesDataTable.Rows[i]["categoryName"].ToString();
 				categoryButtonArray[i].Width = 130;
 				categoryButtonArray[i].Height = 80;
 				categoryButtonArray[i].Left = xpos;
@@ -199,7 +198,7 @@ namespace ordering_system
 			{
 				currentOrder.addressID = e.addressID;
 				deliveryButton_Click(sender, e);
-				getAddress(e.addressID);
+				DataRow addressDataRow = getAddress(e.addressID);
 				string houseNumber = addressDataRow["houseNumber"].ToString();
 				string streetName = addressDataRow["streetName"].ToString();
 				string postcode = addressDataRow["postcode"].ToString();
@@ -249,23 +248,22 @@ namespace ordering_system
 			Button categoryButton = (Button)sender;
 			int categoryID = Convert.ToInt32(categoryButton.Tag);
 			string categoryName = categoryButton.Text.ToString();
-			DataSet itemDataSet = new DataSet();
+			itemsDataTable = new DataTable();
 			string itemType;
 			if (categoryName != "Set Meals") // set meals come from their own tbl
 			{
 				// get all items in category
 				SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
 				getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
-				getFoodItemsByCategory.Fill(itemDataSet);
+				getFoodItemsByCategory.Fill(itemsDataTable);
 				itemType = "Food Item";
 			}
 			else // get set meals
 			{
 				SqlDataAdapter getSetMeals = new SqlDataAdapter("SELECT * FROM SetMealTbl", con);
-				getSetMeals.Fill(itemDataSet);
+				getSetMeals.Fill(itemsDataTable);
 				itemType = "Set Meal";
 			}
-			itemsDataView = new DataView(itemDataSet.Tables[0]);
 			loadItemButtons(itemType);
 			con.Close();
 		}
@@ -286,13 +284,13 @@ namespace ordering_system
 			}
 			// fill in food buttons
 			int xpos = 0, ypos = 0;
-			for (int i = 0; i < itemsDataView.Count && i < itemButtonArray.Length; i++) // cant be more than array length
+			for (int i = 0; i < itemsDataTable.Rows.Count && i < itemButtonArray.Length; i++) // cant be more than array length
 			{
 				// create each food button
 				itemButtonArray[i] = new Button();
 				itemButtonArray[i].UseMnemonic = false; // allows for &
-				itemButtonArray[i].Tag = itemsDataView[i].Row[itemID].ToString();
-				itemButtonArray[i].Text = itemsDataView[i].Row[itemName].ToString();
+				itemButtonArray[i].Tag = itemsDataTable.Rows[i][itemID].ToString();
+				itemButtonArray[i].Text = itemsDataTable.Rows[i][itemName].ToString();
 				itemButtonArray[i].Width = 260;
 				itemButtonArray[i].Height = 76;
 				itemButtonArray[i].Left = xpos;
@@ -310,9 +308,9 @@ namespace ordering_system
 			// check if any food items/set meals r out of stock
 			if (itemType == "Food Item")
 			{
-				for (int i = 0; i < itemsDataView.Count && i < itemButtonArray.Length; i++) // cant be more than array length
+				for (int i = 0; i < itemsDataTable.Rows.Count && i < itemButtonArray.Length; i++) // cant be more than array length
 				{
-					if (Convert.ToBoolean(itemsDataView[i].Row["isOutOfStock"]))
+					if (Convert.ToBoolean(itemsDataTable.Rows[i]["isOutOfStock"]))
 					{
 						itemButtonArray[i].Enabled = false; // disable out of stock buttons so u cant order them lmao
 					}
@@ -320,7 +318,7 @@ namespace ordering_system
 			}
 			else // set meal
 			{
-				for (int i = 0; i < itemsDataView.Count && i < itemButtonArray.Length; i++) // cant be more than array length
+				for (int i = 0; i < itemsDataTable.Rows.Count && i < itemButtonArray.Length; i++) // cant be more than array length
 				{
 					// get food items in each set meal
 					SqlDataAdapter getSetMealFoodItems = new SqlDataAdapter("SELECT foodItemID FROM SetMealFoodItemTbl WHERE setMealID = @SMID", con);
@@ -338,7 +336,8 @@ namespace ordering_system
 						checkIfFoodItemIsOutOfStock.Parameters["@FIID"].Value = setMealFoodItemID;
 						if (Convert.ToBoolean(checkIfFoodItemIsOutOfStock.ExecuteScalar())) // if out of stock
 						{
-							itemButtonArray[i].Enabled = false; // disable out of stock buttons so u cant order them lmao
+							// make out of stock items red and get a popup showing whats out of stock
+							itemButtonArray[i].ForeColor = Color.Red;
 							break;
 						}
 					}
@@ -352,7 +351,7 @@ namespace ordering_system
 			string itemID = categoryButton.Tag.ToString();
 			string itemName = categoryButton.Text.ToString();
 			string size = "Large";
-			int itemIndex = doesItemExist(itemID, size); // find index of item and size in running order datatable if exists
+			int itemIndex = doesItemExist(itemID, size); // find index of item w/ size in running order datatable if exists
 			if (itemIndex < 0) // item doesnt alr exist in running order
 			{
 				DataRow runningOrderNewRow = runningOrderDataTable.NewRow();
@@ -446,13 +445,12 @@ namespace ordering_system
 			viewOrdersCounterButton.BackColor = Color.Yellow;
 			viewOrdersCollectionButton.BackColor = Color.Transparent;
 			// orderid, ordertime, price
+			ordersDataTable = new DataTable();
 			SqlDataAdapter getOrders = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderType = @OT", con);
 			getOrders.SelectCommand.Parameters.AddWithValue("@OT", "Counter");
-			DataSet ordersDataSet = new DataSet();
-			getOrders.Fill(ordersDataSet);
-			ordersDataView = new DataView(ordersDataSet.Tables[0]);
-			DataTable ordersDataTable = ordersDataView.ToTable(true, "orderID", "orderTime");
-			viewOrdersDataGridView.DataSource = ordersDataTable;
+			getOrders.Fill(ordersDataTable);
+			DataView ordersDataView = new DataView(ordersDataTable);
+			viewOrdersDataGridView.DataSource = ordersDataView.ToTable(true, "orderID", "orderTime");
 			con.Close();
 		}
 
@@ -469,8 +467,8 @@ namespace ordering_system
 		{
 			// find clicked row of table in order to search through ordersdatagridview to find the full deets
 			int selectedRowIndex = viewOrdersDataGridView.SelectedCells[0].RowIndex;
-			DataRowView selectedRow = ordersDataView[selectedRowIndex];
-			viewOrdersSelectedOrderID = Convert.ToInt32(selectedRow.Row["orderID"]);
+			DataRow selectedRow = ordersDataTable.Rows[selectedRowIndex];
+			viewOrdersSelectedOrderID = Convert.ToInt32(selectedRow["orderID"]);
 			viewOrdersDataGridView.ClearSelection(); // unselect row
 		}
 

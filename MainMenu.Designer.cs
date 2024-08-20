@@ -70,11 +70,6 @@
 			viewOrdersCounterButton = new Button();
 			viewOrdersDeliveryButton = new Button();
 			timer = new System.Windows.Forms.Timer(components);
-			Column1 = new DataGridViewTextBoxColumn();
-			Column2 = new DataGridViewTextBoxColumn();
-			Column3 = new DataGridViewTextBoxColumn();
-			Column4 = new DataGridViewTextBoxColumn();
-			Column5 = new DataGridViewTextBoxColumn();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -332,7 +327,6 @@
 			runningOrderDataGridView.BackgroundColor = Color.Maroon;
 			runningOrderDataGridView.BorderStyle = BorderStyle.None;
 			runningOrderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			runningOrderDataGridView.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5 });
 			runningOrderDataGridView.Location = new Point(0, 0);
 			runningOrderDataGridView.Name = "runningOrderDataGridView";
 			runningOrderDataGridView.RowHeadersVisible = false;
@@ -570,46 +564,6 @@
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
 			// 
-			// Column1
-			// 
-			Column1.FillWeight = 48.0769234F;
-			Column1.HeaderText = "itemID";
-			Column1.MinimumWidth = 10;
-			Column1.Name = "Column1";
-			Column1.SortMode = DataGridViewColumnSortMode.NotSortable;
-			// 
-			// Column2
-			// 
-			Column2.FillWeight = 280.206116F;
-			Column2.HeaderText = "itemName";
-			Column2.MinimumWidth = 10;
-			Column2.Name = "Column2";
-			Column2.SortMode = DataGridViewColumnSortMode.NotSortable;
-			// 
-			// Column3
-			// 
-			Column3.FillWeight = 65.7434845F;
-			Column3.HeaderText = "size";
-			Column3.MinimumWidth = 10;
-			Column3.Name = "Column3";
-			Column3.SortMode = DataGridViewColumnSortMode.NotSortable;
-			// 
-			// Column4
-			// 
-			Column4.FillWeight = 51.0542679F;
-			Column4.HeaderText = "quantity";
-			Column4.MinimumWidth = 10;
-			Column4.Name = "Column4";
-			Column4.SortMode = DataGridViewColumnSortMode.NotSortable;
-			// 
-			// Column5
-			// 
-			Column5.FillWeight = 54.9192F;
-			Column5.HeaderText = "price";
-			Column5.MinimumWidth = 10;
-			Column5.Name = "Column5";
-			Column5.SortMode = DataGridViewColumnSortMode.NotSortable;
-			// 
 			// MainMenu
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
@@ -685,10 +639,5 @@
 		private Button viewOrdersDeliveryButton;
 		private Button printCustomerTicketButton;
 		private Button printKitchenTicketButton;
-		private DataGridViewTextBoxColumn Column1;
-		private DataGridViewTextBoxColumn Column2;
-		private DataGridViewTextBoxColumn Column3;
-		private DataGridViewTextBoxColumn Column4;
-		private DataGridViewTextBoxColumn Column5;
 	}
 }
