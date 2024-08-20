@@ -68,15 +68,29 @@ namespace ordering_system
 		private void changeLoginPasswordButton_Click(object sender, EventArgs e)
 		{
 			string loginPassword = Interaction.InputBox("Enter the new login password:", "Manager Functions");
-			File.WriteAllText(@"./LoginPassword.txt", loginPassword);
-			MessageBox.Show("Login password has been changed successfully", "Ordering System");
+			if (loginPassword.Length > 0)
+			{
+				File.WriteAllText(@"./LoginPassword.txt", loginPassword);
+				MessageBox.Show("Login password has been changed successfully", "Ordering System");
+			}
+			else
+			{
+				MessageBox.Show("Password left blank, so hasn't been saved", "Ordering System");
+			}
 		}
 
 		private void changeManagerPasswordButton_Click(object sender, EventArgs e)
 		{
 			string managerPassword = Interaction.InputBox("Enter the new manager password:", "Manager Functions");
-			File.WriteAllText(@"./ManagerPassword.txt", managerPassword);
-			MessageBox.Show("Manager password has been changed successfully", "Ordering System");
+			if (managerPassword.Length > 0)
+			{
+				File.WriteAllText(@"./ManagerPassword.txt", managerPassword);
+				MessageBox.Show("Manager password has been changed successfully", "Ordering System");
+			}
+			else
+			{
+				MessageBox.Show("Password left blank, so hasn't been saved", "Ordering System");
+			}
 		}
 	}
 }

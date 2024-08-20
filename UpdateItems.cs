@@ -359,5 +359,20 @@ namespace ordering_system
 				largePriceTextBox.Focus();
 			}
 		}
+
+		private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			// check if max # of items per category reached
+			int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
+			DataRow[] foodItemsByCategory = foodItemsDataTable.Select($"categoryID = '{categoryID}'");
+			if (categoriesDataTable.Rows.Count >= 40)
+			{
+				//addCategoryButton.Enabled = false;
+			}
+			else
+			{
+				//addCategoryButton.Enabled = true;
+			}
+		}
 	}
 }

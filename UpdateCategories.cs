@@ -75,6 +75,15 @@ namespace ordering_system
 			{
 				maxCategoryIndex = 0;
 			}
+			// check if max # of categories reached
+			if (categoriesDataTable.Rows.Count >= 24)
+			{
+				addCategoryButton.Enabled = false;
+			}
+			else
+			{
+				addCategoryButton.Enabled = true;
+			}
 			categoryIndexTextBox.Text = (maxCategoryIndex + 1).ToString();
 			categoryNameTextBox.Text = string.Empty;
 			categoryDataGridView.ClearSelection();
