@@ -38,7 +38,7 @@
 			categoryIndexTextBox = new TextBox();
 			categoryIndexLabel = new Label();
 			deleteCategoryButton = new Button();
-			label1 = new Label();
+			maxCategoriesLabel = new Label();
 			((System.ComponentModel.ISupportInitialize)categoryDataGridView).BeginInit();
 			SuspendLayout();
 			// 
@@ -168,17 +168,17 @@
 			deleteCategoryButton.UseVisualStyleBackColor = false;
 			deleteCategoryButton.Click += deleteCategoryButton_Click;
 			// 
-			// label1
+			// maxCategoriesLabel
 			// 
-			label1.BackColor = Color.Transparent;
-			label1.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.ForeColor = Color.Black;
-			label1.Location = new Point(12, 350);
-			label1.Margin = new Padding(3, 5, 3, 5);
-			label1.Name = "label1";
-			label1.Size = new Size(550, 120);
-			label1.TabIndex = 52;
-			label1.Text = "The maximum number of categories allowed is 24";
+			maxCategoriesLabel.BackColor = Color.Transparent;
+			maxCategoriesLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			maxCategoriesLabel.ForeColor = Color.Black;
+			maxCategoriesLabel.Location = new Point(12, 350);
+			maxCategoriesLabel.Margin = new Padding(3, 5, 3, 5);
+			maxCategoriesLabel.Name = "maxCategoriesLabel";
+			maxCategoriesLabel.Size = new Size(550, 120);
+			maxCategoriesLabel.TabIndex = 52;
+			maxCategoriesLabel.Text = "The maximum number of categories allowed is 24";
 			// 
 			// UpdateCategories
 			// 
@@ -186,7 +186,7 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
-			Controls.Add(label1);
+			Controls.Add(maxCategoriesLabel);
 			Controls.Add(categoryIndexTextBox);
 			Controls.Add(categoryIndexLabel);
 			Controls.Add(deleteCategoryButton);
@@ -218,6 +218,6 @@
 		private TextBox categoryIndexTextBox;
 		private Label categoryIndexLabel;
 		private Button deleteCategoryButton;
-		private Label label1;
+		private Label maxCategoriesLabel;
 	}
 }

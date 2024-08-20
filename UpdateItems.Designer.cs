@@ -47,7 +47,7 @@
 			isOutOfStockCheckBox = new CheckBox();
 			categoryLabel = new Label();
 			categoryComboBox = new ComboBox();
-			label1 = new Label();
+			maxItemsLabel = new Label();
 			((System.ComponentModel.ISupportInitialize)itemDataGridView).BeginInit();
 			SuspendLayout();
 			// 
@@ -281,17 +281,17 @@
 			categoryComboBox.TabIndex = 8;
 			categoryComboBox.SelectedIndexChanged += categoryComboBox_SelectedIndexChanged;
 			// 
-			// label1
+			// maxItemsLabel
 			// 
-			label1.BackColor = Color.Transparent;
-			label1.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.ForeColor = Color.Black;
-			label1.Location = new Point(12, 590);
-			label1.Margin = new Padding(3, 5, 3, 5);
-			label1.Name = "label1";
-			label1.Size = new Size(600, 110);
-			label1.TabIndex = 71;
-			label1.Text = "The maximum number of items allowed per category is 40\r\n\r\n\r\n";
+			maxItemsLabel.BackColor = Color.Transparent;
+			maxItemsLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			maxItemsLabel.ForeColor = Color.Black;
+			maxItemsLabel.Location = new Point(12, 590);
+			maxItemsLabel.Margin = new Padding(3, 5, 3, 5);
+			maxItemsLabel.Name = "maxItemsLabel";
+			maxItemsLabel.Size = new Size(600, 110);
+			maxItemsLabel.TabIndex = 71;
+			maxItemsLabel.Text = "The maximum number of items allowed per category is 40\r\n\r\n\r\n";
 			// 
 			// UpdateItems
 			// 
@@ -299,7 +299,7 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
-			Controls.Add(label1);
+			Controls.Add(maxItemsLabel);
 			Controls.Add(categoryComboBox);
 			Controls.Add(categoryLabel);
 			Controls.Add(isOutOfStockCheckBox);
@@ -348,6 +348,6 @@
 		private CheckBox isOutOfStockCheckBox;
 		private Label categoryLabel;
 		private ComboBox categoryComboBox;
-		private Label label1;
+		private Label maxItemsLabel;
 	}
 }

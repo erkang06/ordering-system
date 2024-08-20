@@ -160,6 +160,18 @@ namespace ordering_system
 			DataView setMealsDataView = new DataView(setMealsDataTable);
 			// fill in set meals datagridview
 			setMealDataGridView.DataSource = setMealsDataView.ToTable(true, "setMealID", "setMealName", "price");
+			// check if max # of set meals reached
+			if (setMealsDataTable.Rows.Count >= 24)
+			{
+				addSetMealButton.Enabled = false;
+			}
+			else
+			{
+				addSetMealButton.Enabled = true;
+			}
+			setMealIDTextBox.Text = string.Empty;
+			setMealNameTextBox.Text = string.Empty;
+			setMealPriceTextBox.Text = string.Empty;
 			setMealDataGridView.ClearSelection();
 		}
 

@@ -52,6 +52,7 @@
 			decreaseQuantityButton = new Button();
 			deleteItemButton = new Button();
 			clearSetMealButton = new Button();
+			maxSetMealsLabel = new Label();
 			((System.ComponentModel.ISupportInitialize)setMealItemDataGridView).BeginInit();
 			((System.ComponentModel.ISupportInitialize)setMealDataGridView).BeginInit();
 			((System.ComponentModel.ISupportInitialize)itemDataGridView).BeginInit();
@@ -377,12 +378,25 @@
 			clearSetMealButton.UseVisualStyleBackColor = false;
 			clearSetMealButton.Click += clearSetMealButton_Click;
 			// 
+			// maxSetMealsLabel
+			// 
+			maxSetMealsLabel.BackColor = Color.Transparent;
+			maxSetMealsLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			maxSetMealsLabel.ForeColor = Color.Black;
+			maxSetMealsLabel.Location = new Point(912, 30);
+			maxSetMealsLabel.Margin = new Padding(3, 5, 3, 5);
+			maxSetMealsLabel.Name = "maxSetMealsLabel";
+			maxSetMealsLabel.Size = new Size(900, 50);
+			maxSetMealsLabel.TabIndex = 104;
+			maxSetMealsLabel.Text = "The maximum number of set meals allowed is 40\r\n\r\n\r\n";
+			// 
 			// UpdateSetMeals
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(maxSetMealsLabel);
 			Controls.Add(clearSetMealButton);
 			Controls.Add(deleteItemButton);
 			Controls.Add(increaseQuantityButton);
@@ -443,5 +457,6 @@
 		private Button decreaseQuantityButton;
 		private Button deleteItemButton;
 		private Button clearSetMealButton;
+		private Label maxSetMealsLabel;
 	}
 }
