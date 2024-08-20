@@ -367,11 +367,11 @@ namespace ordering_system
 			DataRow[] foodItemsByCategory = foodItemsDataTable.Select($"categoryID = '{categoryID}'");
 			if (categoriesDataTable.Rows.Count >= 40)
 			{
-				//addCategoryButton.Enabled = false;
+				addItemButton.Enabled = false;
 			}
 			else
 			{
-				//addCategoryButton.Enabled = true;
+				addItemButton.Enabled = true;
 			}
 		}
 	}
