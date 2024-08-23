@@ -172,7 +172,7 @@ namespace ordering_system
 		private void updateDataGridView()
 		{
 			DataView runningOrderDataView = new DataView(runningOrderDataTable);
-			runningOrderDataGridView.DataSource = runningOrderDataView.ToTable(false, "itemID", "quantity", "itemName", "price");
+			runningOrderDataGridView.DataSource = runningOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "price");
 		}
 
 		private void deliveryButton_Click(object sender, EventArgs e)
@@ -433,12 +433,15 @@ namespace ordering_system
 				}
 				runningOrderNewRow["price"] = runningOrderNewRow["regPrice"];
 				runningOrderDataTable.Rows.Add(runningOrderNewRow);
-				updateDataGridView();
+				// select new row in datagridview
+				int newRowIndex = runningOrderDataTable.Rows.IndexOf(runningOrderNewRow);
+				runningOrderDataGridView.Rows[newRowIndex].Selected = true;
 			}
 			else // alr exists
 			{
 
-			}
+			}	
+			updateDataGridView();
 			con.Close();
 		}
 

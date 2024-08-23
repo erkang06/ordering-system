@@ -240,7 +240,7 @@ namespace ordering_system
 					setMealFoodItemNewRow["quantity"] = 1; // default to 1
 					setMealFoodItemsDataTable.Rows.Add(setMealFoodItemNewRow);
 					setMealItemDataGridView.ClearSelection();
-					// select new row in datatable
+					// select new row in datagridview
 					int newRowIndex = setMealFoodItemsDataTable.Rows.IndexOf(setMealFoodItemNewRow);
 					setMealItemDataGridView.Rows[newRowIndex].Selected = true;
 				}
