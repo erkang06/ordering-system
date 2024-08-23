@@ -26,16 +26,6 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
-		private string getCategoryNameFromCategoryID(int categoryID)
-		{
-			DataRow selectedRow = categoriesDataTable.Select($"categoryID = '{categoryID}'")[0];
-			if (selectedRow != null) // if category exists lmao
-			{
-				return selectedRow["categoryName"].ToString();
-			}
-			return null;
-		}
-
 		private int getCategoryIDFromSelectedIndex()
 		{
 			int selectedIndex = categoryComboBox.SelectedIndex;
@@ -285,7 +275,7 @@ namespace ordering_system
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				setMealFoodItemsDataTable.Clear(); // clear prev set meal
-																					 // get set meal id
+				// get set meal id
 				setMealID = setMealDataGridView.Rows[selectedRowIndex].Cells["setMealID"].Value.ToString();
 				DataRow selectedRow = setMealsDataTable.Select($"setMealID = '{setMealID}'")[0];
 				// fill in text boxes

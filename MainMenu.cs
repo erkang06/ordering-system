@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using ordering_system.Properties;
+using System.Security.Policy;
 
 namespace ordering_system
 {
@@ -18,12 +19,13 @@ namespace ordering_system
 	{
 		Order currentOrder = new Order();
 		DataTable runningOrderDataTable = new DataTable(); // running order
-		// the connection string to the database
+																											 // the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataRow customerDataRow; // data row for customer
 		DataTable ordersDataTable;
 		DataTable categoriesDataTable;
 		DataTable itemsDataTable;
+		string categoryName; // name of currently selected category
 		Button[] categoryButtonArray = new Button[24]; // cant have any more since its hardcoded
 		Button[] itemButtonArray = new Button[40];
 		int viewOrdersSelectedOrderID = -1;
@@ -34,24 +36,20 @@ namespace ordering_system
 
 		private void getCustomer(int customerID) // get customer details from customerid
 		{
-			con.Open();
 			SqlDataAdapter getCustomer = new SqlDataAdapter("SELECT * FROM CustomerTbl WHERE customerID = @CID", con);
 			getCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
 			DataTable customerDataTable = new DataTable();
 			getCustomer.Fill(customerDataTable);
 			customerDataRow = customerDataTable.Rows[0];
-			con.Close();
 		}
 
-		private DataRow getAddress(int addressID) // get customer details from customerid
+		private DataRow getAddress(int addressID) // get address from addressid
 		{
-			con.Open();
 			SqlDataAdapter getAddress = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE addressID = @AID", con);
 			getAddress.SelectCommand.Parameters.AddWithValue("@AID", addressID);
 			DataTable addressDataTable = new DataTable();
 			getAddress.Fill(addressDataTable);
 			DataRow addressDataRow = addressDataTable.Rows[0];
-			con.Close();
 			return addressDataRow;
 		}
 
@@ -65,6 +63,54 @@ namespace ordering_system
 			}
 			return -1;
 		}
+
+		private DataTable getSetMealFoodItems(string setMealID)
+		{
+			SqlDataAdapter getSetMealFoodItems = new SqlDataAdapter("SELECT foodItemID, size, quantity FROM SetMealFoodItemTbl WHERE setMealID = @SMID ORDER BY foodItemID", con);
+			getSetMealFoodItems.SelectCommand.Parameters.AddWithValue("@SMID", setMealID);
+			DataTable setMealFoodItemsDataTable = new DataTable();
+			getSetMealFoodItems.Fill(setMealFoodItemsDataTable);
+			return setMealFoodItemsDataTable;
+		}
+
+		private string getDefaultItemSize(string foodItemID)
+		{
+			SqlCommand getDefaultItemSize = new SqlCommand("SELECT defaultToLargePrice FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+			getDefaultItemSize.Parameters.AddWithValue("@FIID", foodItemID);
+			bool defaultToLargePrice = Convert.ToBoolean(getDefaultItemSize.ExecuteScalar());
+			if (defaultToLargePrice)
+			{
+				return "Large";
+			}
+			return "Small";
+		}
+
+		private decimal getSetMealPrice(string setMealID)
+		{
+			SqlCommand getSetMealPrice = new SqlCommand("SELECT price FROM SetMealTbl WHERE setMealID = @SMID", con);
+			getSetMealPrice.Parameters.AddWithValue("@SMID", setMealID);
+			decimal setMealPrice = Convert.ToDecimal(getSetMealPrice.ExecuteScalar());
+			return setMealPrice;
+		}
+
+		
+		private decimal getFoodItemPrice(string foodItemID, string size)
+		{
+			SqlCommand getFoodItemPrice = new SqlCommand();
+			if (size == "Large")
+			{
+				getFoodItemPrice = new SqlCommand("SELECT largeItemPrice FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+			}
+			else // small
+			{
+				getFoodItemPrice = new SqlCommand("SELECT smallItemPrice FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+			}
+			getFoodItemPrice.Parameters.AddWithValue("@FIID", foodItemID);
+			decimal foodItemPrice = Convert.ToDecimal(getFoodItemPrice.ExecuteScalar());
+			return foodItemPrice;
+		}
+
+
 
 		private void MainMenu_Load(object sender, EventArgs e)
 		{
@@ -84,8 +130,7 @@ namespace ordering_system
 			runningOrderDataTable.Columns.Add("regPrice");
 			runningOrderDataTable.Columns.Add("discount");
 			runningOrderDataTable.Columns.Add("price");
-			runningOrderDataGridView.AutoGenerateColumns = false;
-			runningOrderDataGridView.DataSource = runningOrderDataTable.Columns["itemID"];
+			updateDataGridView();
 			con.Close();
 		}
 
@@ -122,6 +167,12 @@ namespace ordering_system
 					ypos += 80;
 				}
 			}
+		}
+
+		private void updateDataGridView()
+		{
+			DataView runningOrderDataView = new DataView(runningOrderDataTable);
+			runningOrderDataGridView.DataSource = runningOrderDataView.ToTable(false, "itemID", "quantity", "itemName", "price");
 		}
 
 		private void deliveryButton_Click(object sender, EventArgs e)
@@ -190,6 +241,7 @@ namespace ordering_system
 
 		private void customerDetailsChanged(object sender, CustomerDetailsUpdateEventArgs e) // when stuff gets updated in the customer details panel
 		{
+			con.Open();
 			currentOrder.customerID = e.customerID;
 			currentOrder.orderType = e.orderType;
 			getCustomer(e.customerID);
@@ -214,6 +266,7 @@ namespace ordering_system
 				string customerName = customerDataRow["customerName"].ToString();
 				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
 			}
+			con.Close();
 		}
 
 		private void customerDetailsCancelled() // if you press cancel in customer details panel youve revert to prior order type
@@ -247,7 +300,7 @@ namespace ordering_system
 			// create new buttons
 			Button categoryButton = (Button)sender;
 			int categoryID = Convert.ToInt32(categoryButton.Tag);
-			string categoryName = categoryButton.Text.ToString();
+			categoryName = categoryButton.Text.ToString();
 			itemsDataTable = new DataTable();
 			string itemType;
 			if (categoryName != "Set Meals") // set meals come from their own tbl
@@ -347,23 +400,68 @@ namespace ordering_system
 
 		public void itemButton_Click(object sender, MouseEventArgs e)
 		{
-			Button categoryButton = (Button)sender;
-			string itemID = categoryButton.Tag.ToString();
-			string itemName = categoryButton.Text.ToString();
+			con.Open();
+			Button itemButton = (Button)sender;
+			string itemID = itemButton.Tag.ToString();
+			string itemName = itemButton.Text.ToString();
+			if (itemButton.ForeColor == Color.Red) // set meal with items unavailable - create msgbox w/ unavailable items
+			{
+				outOfStockMessageBox(itemID);
+			}
 			string size = "Large";
 			int itemIndex = doesItemExist(itemID, size); // find index of item w/ size in running order datatable if exists
 			if (itemIndex < 0) // item doesnt alr exist in running order
 			{
 				DataRow runningOrderNewRow = runningOrderDataTable.NewRow();
-				DataRow itemDataRow = itemsDataTable.Rows[itemIndex];
 				runningOrderNewRow["itemID"] = itemID;
 				runningOrderNewRow["itemName"] = itemName;
 				// get item size
+				if (categoryName != "Set Meals")
+				{
+					size = getDefaultItemSize(itemID);
+				}
+				runningOrderNewRow["size"] = size;
+				runningOrderNewRow["quantity"] = 1;
+				// get regular price
+				if (categoryName == "Set Meals")
+				{
+					runningOrderNewRow["regPrice"] = getSetMealPrice(itemID);
+				}
+				else // food items
+				{
+					runningOrderNewRow["regPrice"] = getFoodItemPrice(itemID, size);
+				}
+				runningOrderNewRow["price"] = runningOrderNewRow["regPrice"];
+				runningOrderDataTable.Rows.Add(runningOrderNewRow);
+				updateDataGridView();
 			}
-			else
+			else // alr exists
 			{
 
 			}
+			con.Close();
+		}
+
+		private void outOfStockMessageBox(string setMealID)
+		{
+			// check which items w/in set meal are out of stock 
+			List<string> outOfStockItems = new List<string>();
+			DataTable setMealFoodItemsDataTable = getSetMealFoodItems(setMealID);
+			// sort out sql bf foreach
+			SqlCommand checkIfItemIsOutOfStock = new SqlCommand("SELECT isOutOfStock FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+			bool isitemOutOfStock;
+			foreach (DataRow setmealFoodItem in setMealFoodItemsDataTable.Rows)
+			{
+				string foodItemID = setmealFoodItem["foodItemID"].ToString();
+				checkIfItemIsOutOfStock.Parameters.AddWithValue("@FIID", foodItemID);
+				isitemOutOfStock = Convert.ToBoolean(checkIfItemIsOutOfStock.ExecuteScalar());
+				if (isitemOutOfStock) // add to list if out of stock
+				{
+					outOfStockItems.Add(setmealFoodItem["foodName"].ToString());
+				}
+			}
+			string outOfStockItemsString = string.Join("\n", outOfStockItems);
+			MessageBox.Show("The Following items are out of stock in this set meal:\n" + outOfStockItemsString, "Ordering System");
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
