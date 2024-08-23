@@ -193,6 +193,10 @@ namespace ordering_system
 			{
 				MessageBox.Show("Customer not selected", "Ordering System");
 			}
+			else if (doesCustomerExist()) // if new phone number has already been used in tbl
+			{
+				MessageBox.Show("Customer already exists with the same phone number", "Ordering System");
+			}
 			else // update just in case details have changed
 			{
 				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, phoneNumber = @PN, isBlackListed = @IBL, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);

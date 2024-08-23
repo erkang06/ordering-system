@@ -223,7 +223,19 @@ namespace ordering_system
 		private void updateItemButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (areAllFieldsFilled() == true && getCategoryIDFromCategoryName(categoryComboBox.Text) != -1 && foodItemID != null) // if all fields filled in
+			if (areAllFieldsFilled() == false) // not all textboxes filled in
+			{
+				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			else if (foodItemID == null) // item not selected
+			{
+				MessageBox.Show("Item not selected", "Ordering System");
+			}
+			else if (doesItemExist()) // if new item name has already been used in tbl
+			{
+				MessageBox.Show("Item already exists with the same name", "Ordering System");
+			}
+			else // if item doesnt alr exist and all textboxes filled in
 			{
 				int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
 				SqlCommand updateFoodItem = new SqlCommand();
@@ -247,14 +259,6 @@ namespace ordering_system
 				MessageBox.Show("Item updated", "Ordering System");
 				clearItemScreen(sender, e);
 				updateDataGridView();
-			}
-			else if (foodItemID != null) // incomplete form
-			{
-				MessageBox.Show("Not all fields filled in", "Ordering System");
-			}
-			else // item not selected
-			{
-				MessageBox.Show("Item not selected", "Ordering System");
 			}
 			con.Close();
 		}

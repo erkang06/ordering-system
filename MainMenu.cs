@@ -355,8 +355,10 @@ namespace ordering_system
 			if (itemIndex < 0) // item doesnt alr exist in running order
 			{
 				DataRow runningOrderNewRow = runningOrderDataTable.NewRow();
+				DataRow itemDataRow = itemsDataTable.Rows[itemIndex];
 				runningOrderNewRow["itemID"] = itemID;
 				runningOrderNewRow["itemName"] = itemName;
+				// get item size
 			}
 			else
 			{

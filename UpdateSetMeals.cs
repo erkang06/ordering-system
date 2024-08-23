@@ -395,7 +395,19 @@ namespace ordering_system
 		private void updateSetMealButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (areAllFieldsFilled() == true && setMealID != null) // if all fields filled in
+			if (areAllFieldsFilled() == false) // not all textboxes filled in
+			{
+				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			else if (setMealID == null) // set meal not selected
+			{
+				MessageBox.Show("Set meal not selected", "Ordering System");
+			}
+			else if (doesSetMealExist()) // if new set meal name has already been used in tbl
+			{
+				MessageBox.Show("Set meal already exists with the same name", "Ordering System");
+			}
+			else // if all works fine
 			{
 				// update set meal
 				SqlCommand updateSetMeal = new SqlCommand("UPDATE SetMealTbl SET setMealID = @SMID, setMealName = @SMN, price = @PR", con);
@@ -403,7 +415,6 @@ namespace ordering_system
 				updateSetMeal.Parameters.AddWithValue("@SMN", setMealNameTextBox.Text);
 				updateSetMeal.Parameters.AddWithValue("@PR", setMealPriceTextBox.Text);
 				updateSetMeal.ExecuteNonQuery();
-				// update food items
 				// remove existing fooditems
 				deleteSetMealFoodItems();
 				// add new fooditems
@@ -411,14 +422,6 @@ namespace ordering_system
 				MessageBox.Show("Set meal updated", "Ordering System");
 				clearSetMealScreen();
 				updateDataGridView();
-			}
-			else if (setMealID != null) // incomplete form
-			{
-				MessageBox.Show("Not all fields filled in", "Ordering System");
-			}
-			else // item not selected
-			{
-				MessageBox.Show("Set meal not selected", "Ordering System");
 			}
 			con.Close();
 		}

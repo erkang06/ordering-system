@@ -108,7 +108,15 @@ namespace ordering_system
 		private void addCategoryButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (doesCategoryExist() == false && areAllFieldsFilled() == true) // if category doesnt alr exist and all textboxes filled in
+			if (areAllFieldsFilled() == false) // not all textboxes filled in
+			{
+				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			else if (doesCategoryExist()) // if category exists
+			{
+				MessageBox.Show("Category already exists with same name", "Ordering System");
+			}
+			else // if category doesnt alr exist and all textboxes filled in
 			{
 				SqlCommand addCategoryToDatabase = new SqlCommand("INSERT INTO CategoryTbl(categoryName, categoryIndex) VALUES(@CN, @CI)", con);
 				addCategoryToDatabase.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
@@ -118,21 +126,25 @@ namespace ordering_system
 				clearCategoryScreen();
 				updateDataGridView();
 			}
-			else if (areAllFieldsFilled() == true) // if category exists
-			{
-				MessageBox.Show("Category already exists with same name", "Ordering System");
-			}
-			else // if not all fields filled in
-			{
-				MessageBox.Show("Not all fields filled in", "Ordering System");
-			}
 			con.Close();
 		}
 
 		private void updateCategoryButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (areAllFieldsFilled() == true && categoryID != -1) // if all fields filled in
+			if (areAllFieldsFilled() == false) // not all textboxes filled in
+			{
+				MessageBox.Show("Not all fields filled in", "Ordering System");
+			}
+			else if (categoryID == -1) // category not selected
+			{
+				MessageBox.Show("Category not selected", "Ordering System");
+			}
+			else if (doesCategoryExist()) // if new category name has already been used in tbl
+			{
+				MessageBox.Show("Category already exists with the same name", "Ordering System");
+			}
+			else // if category doesnt alr exist and all textboxes filled in
 			{
 				SqlCommand updateCategory = new SqlCommand("UPDATE CategoryTbl SET categoryName = @CN, categoryIndex = @CI WHERE categoryID = @CID", con);
 				updateCategory.Parameters.AddWithValue("@CN", categoryNameTextBox.Text);
@@ -142,14 +154,6 @@ namespace ordering_system
 				MessageBox.Show("Category updated", "Ordering System");
 				clearCategoryScreen();
 				updateDataGridView();
-			}
-			else if (areAllFieldsFilled() == true) // category not selected
-			{
-				MessageBox.Show("Category not selected", "Ordering System");
-			}
-			else // incomplete form
-			{
-				MessageBox.Show("Not all fields filled in", "Ordering System");
 			}
 			con.Close();
 		}
