@@ -78,12 +78,12 @@ namespace ordering_system
 			return null;
 		}
 
-		private int getCategoryIDFromCategoryName(string categoryName)
+		private int getCategoryIDFromSelectedIndex()
 		{
-			DataRow selectedRow = categoriesDataTable.Select($"categoryName = '{categoryName}'")[0];
-			if (selectedRow != null) // if category exists lmao
+			int selectedIndex = categoryComboBox.SelectedIndex;
+			if (selectedIndex > -1) // if category exists lmao
 			{
-				return Convert.ToInt32(selectedRow["categoryID"]);
+				return Convert.ToInt32(categoriesDataTable.Rows[selectedIndex]["categoryID"]);
 			}
 			return -1;
 		}
@@ -194,7 +194,7 @@ namespace ordering_system
 			}
 			else // acc works
 			{
-				int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
+				int categoryID = getCategoryIDFromSelectedIndex();
 				SqlCommand addFoodItemToDatabase = new SqlCommand();
 				addFoodItemToDatabase.Connection = con;
 				addFoodItemToDatabase.Parameters.AddWithValue("@FIID", itemIDTextBox.Text);
@@ -237,7 +237,7 @@ namespace ordering_system
 			}
 			else // if item doesnt alr exist and all textboxes filled in
 			{
-				int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
+				int categoryID = getCategoryIDFromSelectedIndex();
 				SqlCommand updateFoodItem = new SqlCommand();
 				updateFoodItem.Connection = con;
 				updateFoodItem.Parameters.AddWithValue("@FN", itemNameTextBox.Text);
@@ -367,9 +367,9 @@ namespace ordering_system
 		private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			// check if max # of items per category reached
-			int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
+			int categoryID = getCategoryIDFromSelectedIndex();
 			DataRow[] foodItemsByCategory = foodItemsDataTable.Select($"categoryID = '{categoryID}'");
-			if (categoriesDataTable.Rows.Count >= 40)
+			if (foodItemsByCategory.Length >= 40)
 			{
 				addItemButton.Enabled = false;
 			}

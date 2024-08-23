@@ -36,12 +36,12 @@ namespace ordering_system
 			return null;
 		}
 
-		private int getCategoryIDFromCategoryName(string categoryName)
+		private int getCategoryIDFromSelectedIndex()
 		{
-			DataRow selectedRow = categoriesDataTable.Select($"categoryName = '{categoryName}'")[0];
-			if (selectedRow != null) // if category exists lmao
+			int selectedIndex = categoryComboBox.SelectedIndex;
+			if (selectedIndex > -1) // if category exists lmao
 			{
-				return Convert.ToInt32(selectedRow["categoryID"]);
+				return Convert.ToInt32(categoriesDataTable.Rows[selectedIndex]["categoryID"]);
 			}
 			return -1;
 		}
@@ -326,7 +326,7 @@ namespace ordering_system
 		{
 			con.Open();
 			foodItemsDataTableByCategory = new DataTable(); // clear prev
-			int categoryID = getCategoryIDFromCategoryName(categoryComboBox.Text);
+			int categoryID = getCategoryIDFromSelectedIndex();
 			SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
 			getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
 			getFoodItemsByCategory.Fill(foodItemsDataTableByCategory);
