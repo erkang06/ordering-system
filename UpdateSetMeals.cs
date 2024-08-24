@@ -218,9 +218,9 @@ namespace ordering_system
 		{
 			// find clicked row of table in order to search through fooditemsdatatable to find the full deets
 			int selectedRowIndex = e.RowIndex;
+			setMealItemDataGridView.ClearSelection();
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
-				setMealItemDataGridView.ClearSelection();
 				// find food item id to search through tbl
 				foodItemID = itemDataGridView.Rows[selectedRowIndex].Cells["foodItemID"].Value.ToString();
 				DataRow selectedRow = foodItemsDataTableByCategory.Select($"foodItemID = '{foodItemID}'")[0];

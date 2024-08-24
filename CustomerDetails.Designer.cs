@@ -390,6 +390,7 @@
 			addressDataGridView.BackgroundColor = Color.White;
 			addressDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			addressDataGridView.Location = new Point(1000, 12);
+			addressDataGridView.MultiSelect = false;
 			addressDataGridView.Name = "addressDataGridView";
 			addressDataGridView.ReadOnly = true;
 			addressDataGridView.RowHeadersVisible = false;

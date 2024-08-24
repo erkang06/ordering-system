@@ -327,11 +327,15 @@
 			runningOrderDataGridView.BackgroundColor = Color.Maroon;
 			runningOrderDataGridView.BorderStyle = BorderStyle.None;
 			runningOrderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			runningOrderDataGridView.ColumnHeadersVisible = false;
 			runningOrderDataGridView.Location = new Point(0, 0);
+			runningOrderDataGridView.MultiSelect = false;
 			runningOrderDataGridView.Name = "runningOrderDataGridView";
+			runningOrderDataGridView.ReadOnly = true;
 			runningOrderDataGridView.RowHeadersVisible = false;
 			runningOrderDataGridView.RowHeadersWidth = 82;
 			runningOrderDataGridView.ScrollBars = ScrollBars.Vertical;
+			runningOrderDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			runningOrderDataGridView.Size = new Size(700, 580);
 			runningOrderDataGridView.TabIndex = 9;
 			// 

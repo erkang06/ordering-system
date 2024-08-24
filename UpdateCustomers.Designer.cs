@@ -254,6 +254,7 @@
 			addressDataGridView.BackgroundColor = Color.White;
 			addressDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			addressDataGridView.Location = new Point(3, 0);
+			addressDataGridView.MultiSelect = false;
 			addressDataGridView.Name = "addressDataGridView";
 			addressDataGridView.ReadOnly = true;
 			addressDataGridView.RowHeadersVisible = false;
@@ -500,6 +501,7 @@
 			customerDataGridView.BackgroundColor = Color.White;
 			customerDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			customerDataGridView.Location = new Point(926, 104);
+			customerDataGridView.MultiSelect = false;
 			customerDataGridView.Name = "customerDataGridView";
 			customerDataGridView.ReadOnly = true;
 			customerDataGridView.RowHeadersVisible = false;

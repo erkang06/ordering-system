@@ -55,7 +55,7 @@ namespace ordering_system
 
 		private int doesItemExist(string itemID, string size) // returns index of food item in running order if exists, else returns -1
 		{
-			DataRow[] item = runningOrderDataTable.Select($"itemID = '{itemID}' AND size = '{size}' AND memo = ''"); // blank memo cuz its difficult to deal w/
+			DataRow[] item = runningOrderDataTable.Select($"itemID = '{itemID}' AND size = '{size}' AND memo is null"); // blank memo cuz its difficult to deal w/
 			if (item.Length > 0) // theres only 1 cuz its a primary key innit
 			{
 				int index = runningOrderDataTable.Rows.IndexOf(item[0]);
@@ -410,6 +410,7 @@ namespace ordering_system
 			}
 			string size = "Large";
 			int itemIndex = doesItemExist(itemID, size); // find index of item w/ size in running order datatable if exists
+			runningOrderDataGridView.ClearSelection();
 			if (itemIndex < 0) // item doesnt alr exist in running order
 			{
 				DataRow runningOrderNewRow = runningOrderDataTable.NewRow();
@@ -433,15 +434,20 @@ namespace ordering_system
 				}
 				runningOrderNewRow["price"] = runningOrderNewRow["regPrice"];
 				runningOrderDataTable.Rows.Add(runningOrderNewRow);
+				updateDataGridView();
 				// select new row in datagridview
 				int newRowIndex = runningOrderDataTable.Rows.IndexOf(runningOrderNewRow);
 				runningOrderDataGridView.Rows[newRowIndex].Selected = true;
 			}
-			else // alr exists
+			else // if exists, add 1 to quantity instead
 			{
-
-			}	
-			updateDataGridView();
+				int currentQuantity = Convert.ToInt32(runningOrderDataTable.Rows[itemIndex]["quantity"]);
+				currentQuantity++;
+				runningOrderDataTable.Rows[itemIndex]["quantity"] = currentQuantity;
+				updateDataGridView();
+				// this works here but not in set meals since u cant reorder columns here lmao
+				runningOrderDataGridView.Rows[itemIndex].Selected = true;
+			}
 			con.Close();
 		}
 

@@ -192,6 +192,7 @@
 			setMealItemDataGridView.BackgroundColor = Color.White;
 			setMealItemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			setMealItemDataGridView.Location = new Point(774, 464);
+			setMealItemDataGridView.MultiSelect = false;
 			setMealItemDataGridView.Name = "setMealItemDataGridView";
 			setMealItemDataGridView.ReadOnly = true;
 			setMealItemDataGridView.RowHeadersVisible = false;
@@ -212,6 +213,7 @@
 			setMealDataGridView.BackgroundColor = Color.White;
 			setMealDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			setMealDataGridView.Location = new Point(774, 98);
+			setMealDataGridView.MultiSelect = false;
 			setMealDataGridView.Name = "setMealDataGridView";
 			setMealDataGridView.ReadOnly = true;
 			setMealDataGridView.RowHeadersVisible = false;
@@ -255,6 +257,7 @@
 			itemDataGridView.BackgroundColor = Color.White;
 			itemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			itemDataGridView.Location = new Point(12, 162);
+			itemDataGridView.MultiSelect = false;
 			itemDataGridView.Name = "itemDataGridView";
 			itemDataGridView.ReadOnly = true;
 			itemDataGridView.RowHeadersVisible = false;

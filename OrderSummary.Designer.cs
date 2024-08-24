@@ -61,6 +61,7 @@
 			allOrdersDataGridView.BackgroundColor = Color.Gainsboro;
 			allOrdersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			allOrdersDataGridView.Location = new Point(12, 102);
+			allOrdersDataGridView.MultiSelect = false;
 			allOrdersDataGridView.Name = "allOrdersDataGridView";
 			allOrdersDataGridView.ReadOnly = true;
 			allOrdersDataGridView.RowHeadersWidth = 82;
@@ -177,6 +178,7 @@
 			singleOrderDataGridView.BackgroundColor = Color.White;
 			singleOrderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			singleOrderDataGridView.Location = new Point(1320, 0);
+			singleOrderDataGridView.MultiSelect = false;
 			singleOrderDataGridView.Name = "singleOrderDataGridView";
 			singleOrderDataGridView.ReadOnly = true;
 			singleOrderDataGridView.RowHeadersWidth = 82;

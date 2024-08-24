@@ -51,6 +51,7 @@
 			categoryDataGridView.BackgroundColor = Color.White;
 			categoryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			categoryDataGridView.Location = new Point(969, 98);
+			categoryDataGridView.MultiSelect = false;
 			categoryDataGridView.Name = "categoryDataGridView";
 			categoryDataGridView.ReadOnly = true;
 			categoryDataGridView.RowHeadersVisible = false;
