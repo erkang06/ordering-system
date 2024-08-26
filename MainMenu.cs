@@ -584,8 +584,10 @@ namespace ordering_system
 						decimal smallPrice = Convert.ToDecimal(getSmallPrice.ExecuteScalar());
 						selectedRow["regPrice"] = smallPrice;
 						selectedRow["price"] = updateTotalItemPrice(selectedRow);
+						// make it all look nice
 						updateDataGridView();
 						updatePriceLabels();
+						runningOrderDataGridView.Rows[selectedIndex].Selected = true;
 					}
 					else
 					{
@@ -602,24 +604,33 @@ namespace ordering_system
 
 		private void largePriceButton_Click(object sender, EventArgs e)
 		{
+			con.Open();
 			if (runningOrderDataTable.Rows.Count > 0)
 			{
 				// check if its a food item
 				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
 				DataRow selectedRow = runningOrderDataTable.Rows[selectedIndex];
 				string itemType = selectedRow["itemType"].ToString();
-				if (itemType == "foodItem")
+				if (itemType == "foodItem") // dont need to check if large price exists as its default
 				{
 					string foodItemID = selectedRow["itemID"].ToString();
-					SqlCommand getSmallPrice = new SqlCommand("SELECT smallItemPrice FROM FoodItemTbl WHERE foodItemID = @FIID", con);
-					getSmallPrice.Parameters.AddWithValue("@FIID", foodItemID);
-					decimal smallPrice = Convert.ToDecimal(getSmallPrice.ExecuteScalar());
+					selectedRow["size"] = "L";
+					SqlCommand getLargePrice = new SqlCommand("SELECT largeItemPrice FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+					getLargePrice.Parameters.AddWithValue("@FIID", foodItemID);
+					decimal largePrice = Convert.ToDecimal(getLargePrice.ExecuteScalar());
+					selectedRow["regPrice"] = largePrice;
+					selectedRow["price"] = updateTotalItemPrice(selectedRow);
+					// make it all look nice
+					updateDataGridView();
+					updatePriceLabels();
+					runningOrderDataGridView.Rows[selectedIndex].Selected = true;
 				}
 				else
 				{
 					MessageBox.Show("Large/Small functions can't be used on set meals", "Ordering system");
 				}
 			}
+			con.Close();
 		}
 
 		private void priceEditButton_Click(object sender, EventArgs e)
