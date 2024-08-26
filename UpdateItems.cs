@@ -121,6 +121,10 @@ namespace ordering_system
 			DataView foodItemsDataView = new DataView(foodItemsDataTable);
 			// fill in item datagridview
 			itemDataGridView.DataSource = foodItemsDataView.ToTable(true, "foodItemID", "foodName", "smallItemPrice", "largeItemPrice");
+			// sort out widths
+			itemDataGridView.Columns["foodItemID"].Width = 100;
+			itemDataGridView.Columns["smallItemPrice"].Width = 100;
+			itemDataGridView.Columns["largeItemPrice"].Width = 150;
 			itemDataGridView.ClearSelection();
 		}
 

@@ -96,6 +96,8 @@ namespace ordering_system
 			DataView customersDataView = new DataView(customersDataTable);
 			// fill in category datagridview
 			customerDataGridView.DataSource = customersDataView.ToTable(true, "customerName", "phoneNumber", "houseNumber", "postcode");
+			customerDataGridView.Columns["houseNumber"].Width = 100;
+			customerDataGridView.Columns["postcode"].Width = 150;
 			// hide deliveryaddress panel by default
 			addressPanel.Visible = false;
 			addressPanel.SendToBack();
@@ -110,6 +112,8 @@ namespace ordering_system
 			DataView addressesDataView = new DataView(addressesDataTable);
 			// fill in address datagridview
 			addressDataGridView.DataSource = addressesDataView.ToTable(true, "addressID", "houseNumber", "streetName", "postcode");
+			addressDataGridView.Columns["addressID"].Width = 50;
+			addressDataGridView.Columns["postcode"].Width = 150;
 		}
 
 		private void cancelButton_Click(object sender, EventArgs e)

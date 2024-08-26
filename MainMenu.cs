@@ -118,6 +118,22 @@ namespace ordering_system
 			runningOrderDataGridView.DataSource = runningOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "price");
 		}
 
+		private void updatePriceLabels()
+		{
+			// https://stackoverflow.com/questions/3779729/how-i-can-show-the-sum-of-in-a-datagridview-column
+			decimal subTotal = runningOrderDataGridView.Rows.Cast<DataGridViewRow>()
+								.Sum(t => Convert.ToDecimal(t.Cells["price"].Value));
+			if (subTotal > 0)
+			{
+				subtotalPriceLabel.Text = Convert.ToString(subTotal);
+			}
+			else // looks nicer lmao
+			{
+				subtotalPriceLabel.Text = "0.00";
+			}
+			totalPriceLabel.Text = (subTotal + Convert.ToDecimal(deliveryChargePriceLabel.Text)).ToString();
+		}
+
 		// startup
 
 		private void MainMenu_Load(object sender, EventArgs e)
@@ -138,7 +154,11 @@ namespace ordering_system
 			runningOrderDataTable.Columns.Add("regPrice");
 			runningOrderDataTable.Columns.Add("discount");
 			runningOrderDataTable.Columns.Add("price");
+			// resize runningorderdatagridview
 			updateDataGridView();
+			runningOrderDataGridView.Columns["itemID"].Width = 40;
+			runningOrderDataGridView.Columns["quantity"].Width = 40;
+			runningOrderDataGridView.Columns["price"].Width = 100;
 			con.Close();
 		}
 
@@ -479,6 +499,8 @@ namespace ordering_system
 			MessageBox.Show("The Following items are out of stock in this set meal:\n" + outOfStockItemsString, "Ordering System");
 		}
 
+		// editing items
+
 		private void increaseQuantityButton_Click(object sender, EventArgs e)
 		{
 			if (runningOrderDataTable.Rows.Count > 0)
@@ -558,28 +580,14 @@ namespace ordering_system
 
 		}
 
+		// playing abt w/ orders
+
 		private void cancelOrderButton_Click(object sender, EventArgs e)
 		{
 			currentOrder = new Order();
 			deliveryButton.BackColor = Color.Transparent;
 			counterButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
-		}
-
-		private void updatePriceLabels()
-		{
-			// https://stackoverflow.com/questions/3779729/how-i-can-show-the-sum-of-in-a-datagridview-column
-			decimal subTotal = runningOrderDataGridView.Rows.Cast<DataGridViewRow>()
-								.Sum(t => Convert.ToDecimal(t.Cells["price"].Value));
-			if (subTotal > 0)
-			{
-				subtotalPriceLabel.Text = Convert.ToString(subTotal);
-			}
-			else // looks nicer lmao
-			{
-				subtotalPriceLabel.Text = "0.00";
-			}
-			totalPriceLabel.Text = (subTotal + Convert.ToDecimal(deliveryChargePriceLabel.Text)).ToString();
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
@@ -605,6 +613,8 @@ namespace ordering_system
 				}
 			}
 		}
+
+		// view orders
 
 		private void viewOrdersButton_Click(object sender, EventArgs e)
 		{
@@ -693,6 +703,8 @@ namespace ordering_system
 				MessageBox.Show("Order hasn't been selected", "Ordering System");
 			}
 		}
+
+		// cool bottom stuff
 
 		private void managerFunctionsButton_Click(object sender, EventArgs e)
 		{

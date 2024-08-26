@@ -138,6 +138,10 @@ namespace ordering_system
 			setMealFoodItemsDataTable.Columns.Add("size");
 			setMealFoodItemsDataTable.Columns.Add("quantity");
 			setMealItemDataGridView.DataSource = setMealFoodItemsDataTable;
+			// sort out widths
+			setMealItemDataGridView.Columns["foodItemID"].Width = 50;
+			setMealItemDataGridView.Columns["size"].Width = 50;
+			setMealItemDataGridView.Columns["quantity"].Width = 100;
 			updateDataGridView();
 			con.Close();
 		}
@@ -150,6 +154,9 @@ namespace ordering_system
 			DataView setMealsDataView = new DataView(setMealsDataTable);
 			// fill in set meals datagridview
 			setMealDataGridView.DataSource = setMealsDataView.ToTable(true, "setMealID", "setMealName", "price");
+			// sort out widths
+			setMealDataGridView.Columns["setMealID"].Width = 50;
+			setMealDataGridView.Columns["price"].Width = 100;
 			// check if max # of set meals reached
 			if (setMealsDataTable.Rows.Count >= 24)
 			{
@@ -323,6 +330,7 @@ namespace ordering_system
 			DataView foodItemsDataViewByCategory = new DataView(foodItemsDataTableByCategory);
 			// fill in set meals datagridview
 			itemDataGridView.DataSource = foodItemsDataViewByCategory.ToTable(true, "foodItemID", "foodName");
+			itemDataGridView.Columns["foodItemID"].Width = 100;
 			itemDataGridView.ClearSelection();
 			con.Close();
 		}

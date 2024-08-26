@@ -96,9 +96,9 @@
 			// itemIDTextBox
 			// 
 			itemIDTextBox.Font = new Font("Segoe UI", 14F);
-			itemIDTextBox.Location = new Point(413, 104);
+			itemIDTextBox.Location = new Point(268, 104);
 			itemIDTextBox.Name = "itemIDTextBox";
-			itemIDTextBox.Size = new Size(550, 57);
+			itemIDTextBox.Size = new Size(600, 57);
 			itemIDTextBox.TabIndex = 1;
 			itemIDTextBox.Leave += itemIDTextBox_Leave;
 			// 
@@ -110,7 +110,7 @@
 			itemIDLabel.Location = new Point(12, 104);
 			itemIDLabel.Margin = new Padding(3, 5, 3, 5);
 			itemIDLabel.Name = "itemIDLabel";
-			itemIDLabel.Size = new Size(395, 50);
+			itemIDLabel.Size = new Size(250, 50);
 			itemIDLabel.TabIndex = 56;
 			itemIDLabel.Text = "*Item ID:";
 			// 
@@ -145,14 +145,14 @@
 			itemDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			itemDataGridView.BackgroundColor = Color.White;
 			itemDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			itemDataGridView.Location = new Point(969, 98);
+			itemDataGridView.Location = new Point(874, 98);
 			itemDataGridView.MultiSelect = false;
 			itemDataGridView.Name = "itemDataGridView";
 			itemDataGridView.ReadOnly = true;
 			itemDataGridView.RowHeadersVisible = false;
 			itemDataGridView.RowHeadersWidth = 82;
 			itemDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			itemDataGridView.Size = new Size(939, 970);
+			itemDataGridView.Size = new Size(1034, 970);
 			itemDataGridView.TabIndex = 52;
 			itemDataGridView.TabStop = false;
 			itemDataGridView.CellClick += itemDataGridView_CellClick;
@@ -160,9 +160,9 @@
 			// itemNameTextBox
 			// 
 			itemNameTextBox.Font = new Font("Segoe UI", 14F);
-			itemNameTextBox.Location = new Point(413, 164);
+			itemNameTextBox.Location = new Point(268, 164);
 			itemNameTextBox.Name = "itemNameTextBox";
-			itemNameTextBox.Size = new Size(550, 57);
+			itemNameTextBox.Size = new Size(600, 57);
 			itemNameTextBox.TabIndex = 2;
 			itemNameTextBox.Leave += itemNameTextBox_Leave;
 			// 
@@ -174,16 +174,16 @@
 			itemNameLabel.Location = new Point(12, 164);
 			itemNameLabel.Margin = new Padding(3, 5, 3, 5);
 			itemNameLabel.Name = "itemNameLabel";
-			itemNameLabel.Size = new Size(395, 50);
+			itemNameLabel.Size = new Size(250, 50);
 			itemNameLabel.TabIndex = 61;
 			itemNameLabel.Text = "*Item Name:";
 			// 
 			// smallPriceTextBox
 			// 
 			smallPriceTextBox.Font = new Font("Segoe UI", 14F);
-			smallPriceTextBox.Location = new Point(413, 284);
+			smallPriceTextBox.Location = new Point(268, 284);
 			smallPriceTextBox.Name = "smallPriceTextBox";
-			smallPriceTextBox.Size = new Size(550, 57);
+			smallPriceTextBox.Size = new Size(600, 57);
 			smallPriceTextBox.TabIndex = 4;
 			smallPriceTextBox.Leave += smallPriceTextBox_Leave;
 			// 
@@ -195,16 +195,16 @@
 			smallPriceLabel.Location = new Point(12, 284);
 			smallPriceLabel.Margin = new Padding(3, 5, 3, 5);
 			smallPriceLabel.Name = "smallPriceLabel";
-			smallPriceLabel.Size = new Size(395, 50);
+			smallPriceLabel.Size = new Size(250, 50);
 			smallPriceLabel.TabIndex = 63;
 			smallPriceLabel.Text = "Small Price:";
 			// 
 			// largePriceTextBox
 			// 
 			largePriceTextBox.Font = new Font("Segoe UI", 14F);
-			largePriceTextBox.Location = new Point(413, 344);
+			largePriceTextBox.Location = new Point(268, 344);
 			largePriceTextBox.Name = "largePriceTextBox";
-			largePriceTextBox.Size = new Size(550, 57);
+			largePriceTextBox.Size = new Size(600, 57);
 			largePriceTextBox.TabIndex = 5;
 			largePriceTextBox.Leave += largePriceTextBox_Leave;
 			// 
@@ -217,7 +217,7 @@
 			largePriceLabel.Margin = new Padding(3, 5, 3, 5);
 			largePriceLabel.Name = "largePriceLabel";
 			largePriceLabel.RightToLeft = RightToLeft.No;
-			largePriceLabel.Size = new Size(395, 50);
+			largePriceLabel.Size = new Size(250, 50);
 			largePriceLabel.TabIndex = 65;
 			largePriceLabel.Text = "*Large Price:";
 			// 
@@ -267,7 +267,7 @@
 			categoryLabel.Margin = new Padding(3, 5, 3, 5);
 			categoryLabel.Name = "categoryLabel";
 			categoryLabel.RightToLeft = RightToLeft.No;
-			categoryLabel.Size = new Size(395, 50);
+			categoryLabel.Size = new Size(250, 50);
 			categoryLabel.TabIndex = 70;
 			categoryLabel.Text = "*Category:";
 			// 
@@ -276,9 +276,9 @@
 			categoryComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 			categoryComboBox.Font = new Font("Segoe UI", 14F);
 			categoryComboBox.FormattingEnabled = true;
-			categoryComboBox.Location = new Point(413, 524);
+			categoryComboBox.Location = new Point(268, 524);
 			categoryComboBox.Name = "categoryComboBox";
-			categoryComboBox.Size = new Size(550, 58);
+			categoryComboBox.Size = new Size(600, 58);
 			categoryComboBox.TabIndex = 8;
 			categoryComboBox.SelectedIndexChanged += categoryComboBox_SelectedIndexChanged;
 			// 

@@ -64,6 +64,7 @@ namespace ordering_system
 			DataView categoriesDataView = new DataView(categoriesDataTable);
 			// fill in category datagridview
 			categoryDataGridView.DataSource = categoriesDataView.ToTable(true, "categoryName", "categoryIndex");
+			categoryDataGridView.Columns["categoryIndex"].Width = 300;
 			// fill in default for category index
 			SqlCommand findMaxCategoryIndex = new SqlCommand("SELECT MAX(categoryIndex) FROM CategoryTbl", con);
 			int maxCategoryIndex;

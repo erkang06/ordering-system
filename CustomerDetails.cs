@@ -25,7 +25,7 @@ namespace ordering_system
 
 		int customerID, addressID;
 		DataTable addressesDataTable; // allows an unfiltered address list to exist when filling in delivery
-		// the connection string to the database
+																	// the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		public CustomerDetails(string orderType, int customerIDFromMainMenu)
 		{
@@ -183,7 +183,10 @@ namespace ordering_system
 			getAddresses.Fill(addressesDataTable);
 			DataView addressesDataView = new DataView(addressesDataTable);
 			// fill in address datagridview
-			addressDataGridView.DataSource = addressesDataView.ToTable(true, "houseNumber", "streetName", "postCode");
+			addressDataGridView.DataSource = addressesDataView.ToTable(true, "houseNumber", "streetName", "postcode");
+			// sort out column widths
+			addressDataGridView.Columns["houseNumber"].Width = 100;
+			addressDataGridView.Columns["postcode"].Width = 200;
 		}
 
 		private void acceptAddressButton_Click(object sender, EventArgs e)
