@@ -246,6 +246,7 @@
 			smallPriceButton.Size = new Size(100, 80);
 			smallPriceButton.TabIndex = 6;
 			smallPriceButton.UseVisualStyleBackColor = true;
+			smallPriceButton.Click += smallPriceButton_Click;
 			// 
 			// largePriceButton
 			// 
@@ -255,6 +256,7 @@
 			largePriceButton.Size = new Size(100, 80);
 			largePriceButton.TabIndex = 5;
 			largePriceButton.UseVisualStyleBackColor = true;
+			largePriceButton.Click += largePriceButton_Click;
 			// 
 			// cancelOrderButton
 			// 
@@ -274,6 +276,7 @@
 			increaseQuantityButton.Size = new Size(100, 80);
 			increaseQuantityButton.TabIndex = 3;
 			increaseQuantityButton.UseVisualStyleBackColor = true;
+			increaseQuantityButton.Click += increaseQuantityButton_Click;
 			// 
 			// decreaseQuantityButton
 			// 
@@ -283,6 +286,7 @@
 			decreaseQuantityButton.Size = new Size(100, 80);
 			decreaseQuantityButton.TabIndex = 2;
 			decreaseQuantityButton.UseVisualStyleBackColor = true;
+			decreaseQuantityButton.Click += decreaseQuantityButton_Click;
 			// 
 			// priceEditButton
 			// 
@@ -292,6 +296,7 @@
 			priceEditButton.Size = new Size(100, 80);
 			priceEditButton.TabIndex = 1;
 			priceEditButton.UseVisualStyleBackColor = true;
+			priceEditButton.Click += priceEditButton_Click;
 			// 
 			// memoButton
 			// 
@@ -301,6 +306,7 @@
 			memoButton.Size = new Size(100, 80);
 			memoButton.TabIndex = 0;
 			memoButton.UseVisualStyleBackColor = true;
+			memoButton.Click += memoButton_Click;
 			// 
 			// runningOrderPanel
 			// 
@@ -619,7 +625,6 @@
 		private Button memoButton;
 		private Button smallPriceButton;
 		private Button largePriceButton;
-		private Button cancelOrderButton;
 		private Button increaseQuantityButton;
 		private Button decreaseQuantityButton;
 		private Button priceEditButton;
@@ -643,5 +648,6 @@
 		private Button viewOrdersDeliveryButton;
 		private Button printCustomerTicketButton;
 		private Button printKitchenTicketButton;
+		private Button cancelOrderButton;
 	}
 }

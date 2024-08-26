@@ -193,9 +193,9 @@ namespace ordering_system
 			if (setMealFoodItemsDataTable.Rows.Count > 0) // if not empty
 			{
 				int currentQuantity = Convert.ToInt32(itemQuantityValueLabel.Text);
-				currentQuantity--;
-				if (currentQuantity > 0) // quantity cant go below 1
+				if (currentQuantity > 1) // quantity cant go below 1
 				{
+					currentQuantity--;
 					int selectedRowIndex = setMealItemDataGridView.SelectedRows[0].Index;
 					foodItemID = setMealItemDataGridView.Rows[selectedRowIndex].Cells["foodItemID"].Value.ToString();
 					int foodItemIndex = doesFoodItemExist(foodItemID); // find index of food in set meal datatable

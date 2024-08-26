@@ -395,7 +395,7 @@ namespace ordering_system
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				// get addressid
-				addressID = Convert.ToInt32(addressDataGridView.Rows[selectedRowIndex].Cells["addressID"].Value);
+				addressID = Convert.ToInt32(addressesDataTable.Rows[selectedRowIndex]["addressID"]);
 				DataRow selectedRow = addressesDataTable.Select($"addressID = '{addressID}'")[0];
 				// update delivery address
 				deliveryHouseNumberTextBox.Text = selectedRow["houseNumber"].ToString();

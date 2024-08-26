@@ -34,6 +34,8 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
+		// weird functions that rnt in 1 specific section
+
 		private void getCustomer(int customerID) // get customer details from customerid
 		{
 			SqlDataAdapter getCustomer = new SqlDataAdapter("SELECT * FROM CustomerTbl WHERE customerID = @CID", con);
@@ -93,7 +95,7 @@ namespace ordering_system
 			return setMealPrice;
 		}
 
-		
+
 		private decimal getFoodItemPrice(string foodItemID, string size)
 		{
 			SqlCommand getFoodItemPrice = new SqlCommand();
@@ -110,7 +112,13 @@ namespace ordering_system
 			return foodItemPrice;
 		}
 
+		private void updateDataGridView()
+		{
+			DataView runningOrderDataView = new DataView(runningOrderDataTable);
+			runningOrderDataGridView.DataSource = runningOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "price");
+		}
 
+		// startup
 
 		private void MainMenu_Load(object sender, EventArgs e)
 		{
@@ -169,11 +177,7 @@ namespace ordering_system
 			}
 		}
 
-		private void updateDataGridView()
-		{
-			DataView runningOrderDataView = new DataView(runningOrderDataTable);
-			runningOrderDataGridView.DataSource = runningOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "price");
-		}
+		// ordertype
 
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
@@ -189,9 +193,9 @@ namespace ordering_system
 
 		private void counterButton_Click(object sender, EventArgs e)
 		{
-			deliveryChargePriceLabel.Text = "0.00";
-			totalPriceLabel.Text = subtotalPriceLabel.Text;
+			deliveryChargePriceLabel.Text = "0.00"; // edit delivery charge
 			deliveryChargePriceLabel.Enabled = false; // disables delivery charge
+			updatePriceLabels();
 			counterButton.BackColor = Color.Yellow; // select counter, unselect rest
 			deliveryButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
@@ -204,8 +208,6 @@ namespace ordering_system
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
-			deliveryChargePriceLabel.Text = "0.00";
-			totalPriceLabel.Text = subtotalPriceLabel.Text;
 			deliveryChargePriceLabel.Enabled = false; // disables delivery charge
 			collectionButton.BackColor = Color.Yellow; // select collection, unselect rest
 			counterButton.BackColor = Color.Transparent;
@@ -250,22 +252,27 @@ namespace ordering_system
 			{
 				currentOrder.addressID = e.addressID;
 				deliveryButton_Click(sender, e);
+				// get data for customerdetailslabel
 				DataRow addressDataRow = getAddress(e.addressID);
 				string houseNumber = addressDataRow["houseNumber"].ToString();
 				string streetName = addressDataRow["streetName"].ToString();
 				string postcode = addressDataRow["postcode"].ToString();
 				decimal deliveryCharge = Convert.ToDecimal(addressDataRow["deliveryCharge"]);
 				customerDetailsLabel.Text = $"{phoneNumber} - {houseNumber} {streetName} {postcode}";
+				// sort out delivery charge price label
+				deliveryChargePriceLabel.Enabled = true;
 				deliveryChargePriceLabel.Text = deliveryCharge.ToString(); // edit delivery charge
-				// add subtotal and delivery charge together
-				totalPriceLabel.Text = (deliveryCharge + Convert.ToDecimal(subtotalPriceLabel.Text)).ToString();
 			}
-			else if (e.orderType == "Collection")
+			else // order type is collection
 			{
 				collectionButton_Click(sender, e);
 				string customerName = customerDataRow["customerName"].ToString();
 				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
+				// sort out delivery charge price label
+				deliveryChargePriceLabel.Text = "0.00"; // edit delivery charge
+				deliveryChargePriceLabel.Enabled = false;
 			}
+			updatePriceLabels();
 			con.Close();
 		}
 
@@ -287,6 +294,8 @@ namespace ordering_system
 				collectionButton.BackColor = Color.Yellow;
 			}
 		}
+
+		// acc ordering items
 
 		public void categoryButton_Click(object sender, MouseEventArgs e)
 		{
@@ -409,6 +418,11 @@ namespace ordering_system
 				outOfStockMessageBox(itemID);
 			}
 			string size = "Large";
+			// get item size bf u shove it into the function thingy
+			if (categoryName != "Set Meals")
+			{
+				size = getDefaultItemSize(itemID);
+			}
 			int itemIndex = doesItemExist(itemID, size); // find index of item w/ size in running order datatable if exists
 			runningOrderDataGridView.ClearSelection();
 			if (itemIndex < 0) // item doesnt alr exist in running order
@@ -416,11 +430,6 @@ namespace ordering_system
 				DataRow runningOrderNewRow = runningOrderDataTable.NewRow();
 				runningOrderNewRow["itemID"] = itemID;
 				runningOrderNewRow["itemName"] = itemName;
-				// get item size
-				if (categoryName != "Set Meals")
-				{
-					size = getDefaultItemSize(itemID);
-				}
 				runningOrderNewRow["size"] = size;
 				runningOrderNewRow["quantity"] = 1;
 				// get regular price
@@ -432,21 +441,18 @@ namespace ordering_system
 				{
 					runningOrderNewRow["regPrice"] = getFoodItemPrice(itemID, size);
 				}
+				// you can assume theres no discounts by default so price = regprice
 				runningOrderNewRow["price"] = runningOrderNewRow["regPrice"];
 				runningOrderDataTable.Rows.Add(runningOrderNewRow);
 				updateDataGridView();
+				updatePriceLabels();
 				// select new row in datagridview
 				int newRowIndex = runningOrderDataTable.Rows.IndexOf(runningOrderNewRow);
 				runningOrderDataGridView.Rows[newRowIndex].Selected = true;
 			}
-			else // if exists, add 1 to quantity instead
+			else // if exists, add 1 to quantity and redo price instead
 			{
-				int currentQuantity = Convert.ToInt32(runningOrderDataTable.Rows[itemIndex]["quantity"]);
-				currentQuantity++;
-				runningOrderDataTable.Rows[itemIndex]["quantity"] = currentQuantity;
-				updateDataGridView();
-				// this works here but not in set meals since u cant reorder columns here lmao
-				runningOrderDataGridView.Rows[itemIndex].Selected = true;
+				increaseQuantity(itemIndex);
 			}
 			con.Close();
 		}
@@ -471,6 +477,109 @@ namespace ordering_system
 			}
 			string outOfStockItemsString = string.Join("\n", outOfStockItems);
 			MessageBox.Show("The Following items are out of stock in this set meal:\n" + outOfStockItemsString, "Ordering System");
+		}
+
+		private void increaseQuantityButton_Click(object sender, EventArgs e)
+		{
+			if (runningOrderDataTable.Rows.Count > 0)
+			{
+				// get index of item in datagridview
+				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
+				increaseQuantity(selectedIndex);
+			}
+		}
+
+		private void increaseQuantity(int selectedIndex) // both incrementing by pressing the + button and the same item button works exactly the same
+		{
+			int currentQuantity = Convert.ToInt32(runningOrderDataTable.Rows[selectedIndex]["quantity"]);
+			currentQuantity++;
+			runningOrderDataTable.Rows[selectedIndex]["quantity"] = currentQuantity;
+			// update price
+
+			runningOrderDataTable.Rows[selectedIndex]["price"] = updateTotalItemPrice(runningOrderDataTable.Rows[selectedIndex]);
+			updateDataGridView();
+			updatePriceLabels();
+			// this works here but not in set meals since u cant reorder columns here lmao
+			runningOrderDataGridView.Rows[selectedIndex].Selected = true;
+		}
+
+		private void decreaseQuantityButton_Click(object sender, EventArgs e)
+		{
+			if (runningOrderDataTable.Rows.Count > 0)
+			{
+				// get index of item in datagridview
+				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
+				DataGridViewRow selectedRow = runningOrderDataGridView.Rows[selectedIndex];
+				// get current quantity to increment
+				int currentQuantity = Convert.ToInt32(selectedRow.Cells["quantity"].Value);
+				if (currentQuantity > 1) // knock one off if theres at least 2
+				{
+					currentQuantity--;
+					runningOrderDataTable.Rows[selectedIndex]["quantity"] = currentQuantity;
+					runningOrderDataTable.Rows[selectedIndex]["price"] = updateTotalItemPrice(runningOrderDataTable.Rows[selectedIndex]);
+					updateDataGridView();
+					runningOrderDataGridView.Rows[selectedIndex].Selected = true;
+				}
+				else // if theres one left - get rid of the item
+				{
+					runningOrderDataTable.Rows.RemoveAt(selectedIndex);
+					updateDataGridView();
+				}
+				updatePriceLabels();
+			}
+		}
+
+		private void smallPriceButton_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void largePriceButton_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void priceEditButton_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private decimal updateTotalItemPrice(DataRow runningOrderDataRow)
+		{
+			decimal regPrice = Convert.ToDecimal(runningOrderDataRow["regPrice"]);
+			decimal discount = Convert.ToDecimal(runningOrderDataRow["discount"]);
+			int quantity = Convert.ToInt32(runningOrderDataRow["quantity"]);
+			decimal totalItemPrice = (regPrice + discount) * quantity;
+			return totalItemPrice;
+		}
+
+		private void memoButton_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cancelOrderButton_Click(object sender, EventArgs e)
+		{
+			currentOrder = new Order();
+			deliveryButton.BackColor = Color.Transparent;
+			counterButton.BackColor = Color.Transparent;
+			collectionButton.BackColor = Color.Transparent;
+		}
+
+		private void updatePriceLabels()
+		{
+			// https://stackoverflow.com/questions/3779729/how-i-can-show-the-sum-of-in-a-datagridview-column
+			decimal subTotal = runningOrderDataGridView.Rows.Cast<DataGridViewRow>()
+								.Sum(t => Convert.ToDecimal(t.Cells["price"].Value));
+			if (subTotal > 0)
+			{
+				subtotalPriceLabel.Text = Convert.ToString(subTotal);
+			}
+			else // looks nicer lmao
+			{
+				subtotalPriceLabel.Text = "0.00";
+			}
+			totalPriceLabel.Text = (subTotal + Convert.ToDecimal(deliveryChargePriceLabel.Text)).ToString();
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
@@ -516,26 +625,6 @@ namespace ordering_system
 			}
 		}
 
-		private void timer_Tick(object sender, EventArgs e) // the little time bit in the bottom right
-		{
-			timeLabel.Text = DateTime.Now.ToString("dd/mm/yy HH:mm:ss");
-		}
-
-		private void managerFunctionsButton_Click(object sender, EventArgs e)
-		{
-			ManagerFunctionsLogin obj = new ManagerFunctionsLogin();
-			obj.Show();
-			obj.TopMost = true;
-		}
-
-		private void cancelOrderButton_Click(object sender, EventArgs e)
-		{
-			currentOrder = new Order();
-			deliveryButton.BackColor = Color.Transparent;
-			counterButton.BackColor = Color.Transparent;
-			collectionButton.BackColor = Color.Transparent;
-		}
-
 		private void viewOrdersDeliveryButton_Click(object sender, EventArgs e)
 		{
 			// selects delivery, unselects rest
@@ -575,8 +664,8 @@ namespace ordering_system
 		private void viewOrdersDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through ordersdatagridview to find the full deets
-			int selectedRowIndex = viewOrdersDataGridView.SelectedCells[0].RowIndex;
-			DataRow selectedRow = ordersDataTable.Rows[selectedRowIndex];
+			int selectedIndex = viewOrdersDataGridView.SelectedCells[0].RowIndex;
+			DataRow selectedRow = ordersDataTable.Rows[selectedIndex];
 			viewOrdersSelectedOrderID = Convert.ToInt32(selectedRow["orderID"]);
 			viewOrdersDataGridView.ClearSelection(); // unselect row
 		}
@@ -603,6 +692,18 @@ namespace ordering_system
 			{
 				MessageBox.Show("Order hasn't been selected", "Ordering System");
 			}
+		}
+
+		private void managerFunctionsButton_Click(object sender, EventArgs e)
+		{
+			ManagerFunctionsLogin obj = new ManagerFunctionsLogin();
+			obj.Show();
+			obj.TopMost = true;
+		}
+
+		private void timer_Tick(object sender, EventArgs e) // the little time bit in the bottom right
+		{
+			timeLabel.Text = DateTime.Now.ToString("dd/mm/yy HH:mm:ss");
 		}
 	}
 }
