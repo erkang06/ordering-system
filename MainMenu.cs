@@ -19,7 +19,7 @@ namespace ordering_system
 	{
 		Order currentOrder = new Order();
 		DataTable runningOrderDataTable = new DataTable(); // running order
-																											 // the connection string to the database
+		// the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataRow customerDataRow; // data row for customer
 		DataTable ordersDataTable;
@@ -29,6 +29,7 @@ namespace ordering_system
 		Button[] categoryButtonArray = new Button[24]; // cant have any more since its hardcoded
 		Button[] itemButtonArray = new Button[40];
 		int viewOrdersSelectedOrderID = -1;
+		int runningOrderItemID = 0; // datatables will collate identical rows which isnt slay
 		public MainMenu()
 		{
 			InitializeComponent();
@@ -75,16 +76,16 @@ namespace ordering_system
 			return setMealFoodItemsDataTable;
 		}
 
-		private string getDefaultItemSize(string foodItemID)
+		private string getDefaultItemSize(string foodItemID) // L or S cuz it looks better in the datagridview
 		{
 			SqlCommand getDefaultItemSize = new SqlCommand("SELECT defaultToLargePrice FROM FoodItemTbl WHERE foodItemID = @FIID", con);
 			getDefaultItemSize.Parameters.AddWithValue("@FIID", foodItemID);
 			bool defaultToLargePrice = Convert.ToBoolean(getDefaultItemSize.ExecuteScalar());
 			if (defaultToLargePrice)
 			{
-				return "Large";
+				return "L";
 			}
-			return "Small";
+			return "S";
 		}
 
 		private decimal getSetMealPrice(string setMealID)
@@ -99,7 +100,7 @@ namespace ordering_system
 		private decimal getFoodItemPrice(string foodItemID, string size)
 		{
 			SqlCommand getFoodItemPrice = new SqlCommand();
-			if (size == "Large")
+			if (size == "L")
 			{
 				getFoodItemPrice = new SqlCommand("SELECT largeItemPrice FROM FoodItemTbl WHERE foodItemID = @FIID", con);
 			}
@@ -115,7 +116,7 @@ namespace ordering_system
 		private void updateDataGridView()
 		{
 			DataView runningOrderDataView = new DataView(runningOrderDataTable);
-			runningOrderDataGridView.DataSource = runningOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "price");
+			runningOrderDataGridView.DataSource = runningOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "size", "price", "runningOrderItemID");
 		}
 
 		private void updatePriceLabels()
@@ -148,17 +149,21 @@ namespace ordering_system
 			// create columns for runningorderdatatable
 			runningOrderDataTable.Columns.Add("itemID");
 			runningOrderDataTable.Columns.Add("itemName");
+			runningOrderDataTable.Columns.Add("itemType");
 			runningOrderDataTable.Columns.Add("size");
 			runningOrderDataTable.Columns.Add("quantity");
 			runningOrderDataTable.Columns.Add("memo");
 			runningOrderDataTable.Columns.Add("regPrice");
 			runningOrderDataTable.Columns.Add("discount");
 			runningOrderDataTable.Columns.Add("price");
+			runningOrderDataTable.Columns.Add("runningOrderItemID");
 			// resize runningorderdatagridview
 			updateDataGridView();
 			runningOrderDataGridView.Columns["itemID"].Width = 40;
 			runningOrderDataGridView.Columns["quantity"].Width = 40;
+			runningOrderDataGridView.Columns["size"].Width = 20;
 			runningOrderDataGridView.Columns["price"].Width = 100;
+			runningOrderDataGridView.Columns["runningOrderItemID"].Visible = false;
 			con.Close();
 		}
 
@@ -338,13 +343,13 @@ namespace ordering_system
 				SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
 				getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
 				getFoodItemsByCategory.Fill(itemsDataTable);
-				itemType = "Food Item";
+				itemType = "foodItem";
 			}
 			else // get set meals
 			{
 				SqlDataAdapter getSetMeals = new SqlDataAdapter("SELECT * FROM SetMealTbl", con);
 				getSetMeals.Fill(itemsDataTable);
-				itemType = "Set Meal";
+				itemType = "setMeal";
 			}
 			loadItemButtons(itemType);
 			con.Close();
@@ -354,7 +359,7 @@ namespace ordering_system
 		{
 			string itemID, itemName;
 			// get right field names
-			if (itemType == "Food Item")
+			if (itemType == "foodItem")
 			{
 				itemID = "foodItemID";
 				itemName = "foodName";
@@ -388,7 +393,7 @@ namespace ordering_system
 				}
 			}
 			// check if any food items/set meals r out of stock
-			if (itemType == "Food Item")
+			if (itemType == "foodItem")
 			{
 				for (int i = 0; i < itemsDataTable.Rows.Count && i < itemButtonArray.Length; i++) // cant be more than array length
 				{
@@ -437,7 +442,7 @@ namespace ordering_system
 			{
 				outOfStockMessageBox(itemID);
 			}
-			string size = "Large";
+			string size = "L"; // L or S looks better in datagridview
 			// get item size bf u shove it into the function thingy
 			if (categoryName != "Set Meals")
 			{
@@ -445,35 +450,34 @@ namespace ordering_system
 			}
 			int itemIndex = doesItemExist(itemID, size); // find index of item w/ size in running order datatable if exists
 			runningOrderDataGridView.ClearSelection();
-			if (itemIndex < 0) // item doesnt alr exist in running order
+			DataRow runningOrderNewRow = runningOrderDataTable.NewRow();
+			runningOrderNewRow["itemID"] = itemID;
+			runningOrderNewRow["itemName"] = itemName;
+			runningOrderNewRow["size"] = size;
+			runningOrderNewRow["quantity"] = 1;
+			// makes sure identical rows dont collate
+			runningOrderNewRow["runningOrderItemID"] = runningOrderItemID;
+			runningOrderItemID++;
+			// get regular price
+			if (categoryName == "Set Meals")
 			{
-				DataRow runningOrderNewRow = runningOrderDataTable.NewRow();
-				runningOrderNewRow["itemID"] = itemID;
-				runningOrderNewRow["itemName"] = itemName;
-				runningOrderNewRow["size"] = size;
-				runningOrderNewRow["quantity"] = 1;
-				// get regular price
-				if (categoryName == "Set Meals")
-				{
-					runningOrderNewRow["regPrice"] = getSetMealPrice(itemID);
-				}
-				else // food items
-				{
-					runningOrderNewRow["regPrice"] = getFoodItemPrice(itemID, size);
-				}
-				// you can assume theres no discounts by default so price = regprice
-				runningOrderNewRow["price"] = runningOrderNewRow["regPrice"];
-				runningOrderDataTable.Rows.Add(runningOrderNewRow);
-				updateDataGridView();
-				updatePriceLabels();
-				// select new row in datagridview
-				int newRowIndex = runningOrderDataTable.Rows.IndexOf(runningOrderNewRow);
-				runningOrderDataGridView.Rows[newRowIndex].Selected = true;
+				runningOrderNewRow["regPrice"] = getSetMealPrice(itemID);
+				runningOrderNewRow["itemType"] = "setMeal";
 			}
-			else // if exists, add 1 to quantity and redo price instead
+			else // food items
 			{
-				increaseQuantity(itemIndex);
+				runningOrderNewRow["regPrice"] = getFoodItemPrice(itemID, size);
+				runningOrderNewRow["itemType"] = "foodItem";
 			}
+			runningOrderNewRow["discount"] = 0;
+			// you can assume theres no discounts by default so price = regprice
+			runningOrderNewRow["price"] = runningOrderNewRow["regPrice"];
+			runningOrderDataTable.Rows.Add(runningOrderNewRow);
+			updateDataGridView();
+			updatePriceLabels();
+			// select new row in datagridview
+			int newRowIndex = runningOrderDataTable.Rows.IndexOf(runningOrderNewRow);
+			runningOrderDataGridView.Rows[newRowIndex].Selected = true;
 			con.Close();
 		}
 
@@ -507,22 +511,18 @@ namespace ordering_system
 			{
 				// get index of item in datagridview
 				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
-				increaseQuantity(selectedIndex);
+				// get current quantity to increment
+				int currentQuantity = Convert.ToInt32(runningOrderDataTable.Rows[selectedIndex]["quantity"]);
+				currentQuantity++;
+				runningOrderDataTable.Rows[selectedIndex]["quantity"] = currentQuantity;
+				// update price
+
+				runningOrderDataTable.Rows[selectedIndex]["price"] = updateTotalItemPrice(runningOrderDataTable.Rows[selectedIndex]);
+				updateDataGridView();
+				updatePriceLabels();
+				// this works here but not in set meals since u cant reorder columns here lmao
+				runningOrderDataGridView.Rows[selectedIndex].Selected = true;
 			}
-		}
-
-		private void increaseQuantity(int selectedIndex) // both incrementing by pressing the + button and the same item button works exactly the same
-		{
-			int currentQuantity = Convert.ToInt32(runningOrderDataTable.Rows[selectedIndex]["quantity"]);
-			currentQuantity++;
-			runningOrderDataTable.Rows[selectedIndex]["quantity"] = currentQuantity;
-			// update price
-
-			runningOrderDataTable.Rows[selectedIndex]["price"] = updateTotalItemPrice(runningOrderDataTable.Rows[selectedIndex]);
-			updateDataGridView();
-			updatePriceLabels();
-			// this works here but not in set meals since u cant reorder columns here lmao
-			runningOrderDataGridView.Rows[selectedIndex].Selected = true;
 		}
 
 		private void decreaseQuantityButton_Click(object sender, EventArgs e)
@@ -531,9 +531,8 @@ namespace ordering_system
 			{
 				// get index of item in datagridview
 				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
-				DataGridViewRow selectedRow = runningOrderDataGridView.Rows[selectedIndex];
 				// get current quantity to increment
-				int currentQuantity = Convert.ToInt32(selectedRow.Cells["quantity"].Value);
+				int currentQuantity = Convert.ToInt32(runningOrderDataTable.Rows[selectedIndex]["quantity"]);
 				if (currentQuantity > 1) // knock one off if theres at least 2
 				{
 					currentQuantity--;
@@ -546,6 +545,17 @@ namespace ordering_system
 				{
 					runningOrderDataTable.Rows.RemoveAt(selectedIndex);
 					updateDataGridView();
+					// select one in old place, or above one
+					if (runningOrderDataTable.Rows.Count > selectedIndex && runningOrderDataTable.Rows.Count > 0) // if it wasnt in last place and theres still rows remaining
+					{
+						// select one in old place
+						runningOrderDataGridView.Rows[selectedIndex].Selected = true;
+					}
+					else if (runningOrderDataTable.Rows.Count > 0)
+					{
+						// select prev row
+						runningOrderDataGridView.Rows[selectedIndex - 1].Selected = true;
+					}
 				}
 				updatePriceLabels();
 			}
@@ -553,12 +563,63 @@ namespace ordering_system
 
 		private void smallPriceButton_Click(object sender, EventArgs e)
 		{
-
+			con.Open();
+			if (runningOrderDataTable.Rows.Count > 0)
+			{
+				// check if its a food item
+				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
+				DataRow selectedRow = runningOrderDataTable.Rows[selectedIndex];
+				string itemType = selectedRow["itemType"].ToString();
+				if (itemType == "foodItem")
+				{
+					// check if small option exists
+					string foodItemID = selectedRow["itemID"].ToString();
+					SqlCommand hasSmallPrice = new SqlCommand("SELECT hasSmallOption FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+					hasSmallPrice.Parameters.AddWithValue("@FIID", foodItemID);
+					if (Convert.ToBoolean(hasSmallPrice.ExecuteScalar())) // if small price exists
+					{
+						selectedRow["size"] = "S";
+						SqlCommand getSmallPrice = new SqlCommand("SELECT smallItemPrice FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+						getSmallPrice.Parameters.AddWithValue("@FIID", foodItemID);
+						decimal smallPrice = Convert.ToDecimal(getSmallPrice.ExecuteScalar());
+						selectedRow["regPrice"] = smallPrice;
+						selectedRow["price"] = updateTotalItemPrice(selectedRow);
+						updateDataGridView();
+						updatePriceLabels();
+					}
+					else
+					{
+						MessageBox.Show("Item doesn't have small price", "Ordering system");
+					}
+				}
+				else
+				{
+					MessageBox.Show("Large/Small functions can't be used on set meals", "Ordering system");
+				}
+			}
+			con.Close();
 		}
 
 		private void largePriceButton_Click(object sender, EventArgs e)
 		{
-
+			if (runningOrderDataTable.Rows.Count > 0)
+			{
+				// check if its a food item
+				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
+				DataRow selectedRow = runningOrderDataTable.Rows[selectedIndex];
+				string itemType = selectedRow["itemType"].ToString();
+				if (itemType == "foodItem")
+				{
+					string foodItemID = selectedRow["itemID"].ToString();
+					SqlCommand getSmallPrice = new SqlCommand("SELECT smallItemPrice FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+					getSmallPrice.Parameters.AddWithValue("@FIID", foodItemID);
+					decimal smallPrice = Convert.ToDecimal(getSmallPrice.ExecuteScalar());
+				}
+				else
+				{
+					MessageBox.Show("Large/Small functions can't be used on set meals", "Ordering system");
+				}
+			}
 		}
 
 		private void priceEditButton_Click(object sender, EventArgs e)
