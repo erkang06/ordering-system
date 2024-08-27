@@ -673,7 +673,14 @@ namespace ordering_system
 
 		private void memoButton_Click(object sender, EventArgs e)
 		{
-
+			if (runningOrderDataTable.Rows.Count > 0)
+			{
+				// get index of item in datagridview
+				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
+				// get memo
+				string memo = Interaction.InputBox("Enter the memo for this item:", "Ordering System");
+				runningOrderDataTable.Rows[selectedIndex]["memo"] = memo;
+			}
 		}
 
 		// playing abt w/ orders
