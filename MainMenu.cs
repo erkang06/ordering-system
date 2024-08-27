@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using ordering_system.Properties;
 using System.Security.Policy;
+using Microsoft.VisualBasic;
 
 namespace ordering_system
 {
@@ -144,6 +145,7 @@ namespace ordering_system
 			paymentPanel.Visible = false;
 			viewOrdersPanel.SendToBack();
 			viewOrdersPanel.Visible = false;
+			deliveryChargePriceLabel.Enabled = false;
 			getCategories();
 			loadCategoryButtons();
 			// create columns for runningorderdatatable
@@ -206,7 +208,6 @@ namespace ordering_system
 
 		private void deliveryButton_Click(object sender, EventArgs e)
 		{
-			deliveryChargePriceLabel.Enabled = true;
 			deliveryButton.BackColor = Color.Yellow; // select delivery, unselect rest
 			counterButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
@@ -233,6 +234,7 @@ namespace ordering_system
 
 		private void collectionButton_Click(object sender, EventArgs e)
 		{
+			deliveryChargePriceLabel.Text = "0.00"; // edit delivery charge
 			deliveryChargePriceLabel.Enabled = false; // disables delivery charge
 			collectionButton.BackColor = Color.Yellow; // select collection, unselect rest
 			counterButton.BackColor = Color.Transparent;
@@ -635,7 +637,29 @@ namespace ordering_system
 
 		private void priceEditButton_Click(object sender, EventArgs e)
 		{
-
+			if (runningOrderDataTable.Rows.Count > 0)
+			{
+				// get index of item in datagridview
+				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
+				// get current quantity to increment
+				decimal currentPrice = Convert.ToDecimal(runningOrderDataTable.Rows[selectedIndex]["price"]);
+				string newPriceString = Interaction.InputBox("Enter the new price for a single item:", "Ordering System", currentPrice.ToString());
+				try // change the price if u acc can
+				{
+					decimal newPrice = Convert.ToDecimal(newPriceString);
+					decimal regPrice = Convert.ToDecimal(runningOrderDataTable.Rows[selectedIndex]["regPrice"]);
+					decimal discount = newPrice - regPrice;
+					runningOrderDataTable.Rows[selectedIndex]["discount"] = discount;
+					runningOrderDataTable.Rows[selectedIndex]["price"] = newPrice.ToString("F");
+					updateDataGridView();
+					updatePriceLabels();
+					runningOrderDataGridView.Rows[selectedIndex].Selected = true;
+				}
+				catch // cant
+				{
+					MessageBox.Show("Input was invalid", "Ordering system");
+				}
+			}
 		}
 
 		private decimal updateTotalItemPrice(DataRow runningOrderDataRow)

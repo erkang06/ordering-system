@@ -477,12 +477,12 @@
 			// viewOrdersPanel
 			// 
 			viewOrdersPanel.BackColor = Color.HotPink;
-			viewOrdersPanel.Controls.Add(viewOrdersDataGridView);
 			viewOrdersPanel.Controls.Add(printCustomerTicketButton);
 			viewOrdersPanel.Controls.Add(printKitchenTicketButton);
 			viewOrdersPanel.Controls.Add(viewOrdersCollectionButton);
 			viewOrdersPanel.Controls.Add(viewOrdersCounterButton);
 			viewOrdersPanel.Controls.Add(viewOrdersDeliveryButton);
+			viewOrdersPanel.Controls.Add(viewOrdersDataGridView);
 			viewOrdersPanel.Location = new Point(700, 80);
 			viewOrdersPanel.Margin = new Padding(0);
 			viewOrdersPanel.Name = "viewOrdersPanel";
