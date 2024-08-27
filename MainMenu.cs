@@ -688,9 +688,13 @@ namespace ordering_system
 		private void cancelOrderButton_Click(object sender, EventArgs e)
 		{
 			currentOrder = new Order();
+			runningOrderDataTable.Clear();
 			deliveryButton.BackColor = Color.Transparent;
 			counterButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
+			runningOrderItemID = 0;
+			updateDataGridView();
+			updatePriceLabels();
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
