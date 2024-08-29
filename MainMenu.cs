@@ -687,14 +687,20 @@ namespace ordering_system
 
 		private void cancelOrderButton_Click(object sender, EventArgs e)
 		{
-			currentOrder = new Order();
-			runningOrderDataTable.Clear();
-			deliveryButton.BackColor = Color.Transparent;
-			counterButton.BackColor = Color.Transparent;
-			collectionButton.BackColor = Color.Transparent;
-			runningOrderItemID = 0;
-			updateDataGridView();
-			updatePriceLabels();
+			// just in case u click it by accident
+			MessageBoxButtons cancelOrderMessageBoxButtons = MessageBoxButtons.YesNo;
+			DialogResult cancelOrder = MessageBox.Show("Do you want to cancel this order?", "Ordering System", cancelOrderMessageBoxButtons);
+			if (cancelOrder == DialogResult.Yes) // yes
+			{
+				currentOrder = new Order();
+				runningOrderDataTable.Clear();
+				deliveryButton.BackColor = Color.Transparent;
+				counterButton.BackColor = Color.Transparent;
+				collectionButton.BackColor = Color.Transparent;
+				runningOrderItemID = 0;
+				updateDataGridView();
+				updatePriceLabels();
+			}
 		}
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
@@ -823,6 +829,8 @@ namespace ordering_system
 		private void timer_Tick(object sender, EventArgs e) // the little time bit in the bottom right
 		{
 			timeLabel.Text = DateTime.Now.ToString("dd/mm/yy HH:mm:ss");
+			DateTime currentTime = DateTime.Now;
+			estimatedTimePicker.Value = currentTime.AddMinutes(60); // should be editable from manager functions
 		}
 	}
 }
