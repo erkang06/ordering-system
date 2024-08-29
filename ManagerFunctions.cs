@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ordering_system
 {
@@ -67,30 +68,26 @@ namespace ordering_system
 
 		private void changeLoginPasswordButton_Click(object sender, EventArgs e)
 		{
-			string loginPassword = Interaction.InputBox("Enter the new login password:", "Manager Functions");
-			if (loginPassword.Length > 0)
+			UpdatePassword obj = new UpdatePassword("main");
+			if (obj.ShowDialog(this) == DialogResult.OK) // if accept button clicked
 			{
-				File.WriteAllText(@"./LoginPassword.txt", loginPassword);
+				File.WriteAllText(@"./LoginPassword.txt", obj.getPassword());
 				MessageBox.Show("Login password has been changed successfully", "Ordering System");
+				obj.Close();
 			}
-			else
-			{
-				MessageBox.Show("Password left blank, so hasn't been saved", "Ordering System");
-			}
+			obj.Dispose();
 		}
 
 		private void changeManagerPasswordButton_Click(object sender, EventArgs e)
 		{
-			string managerPassword = Interaction.InputBox("Enter the new manager password:", "Manager Functions");
-			if (managerPassword.Length > 0)
+			UpdatePassword obj = new UpdatePassword("manager");
+			if (obj.ShowDialog(this) == DialogResult.OK) // if accept button clicked
 			{
-				File.WriteAllText(@"./ManagerPassword.txt", managerPassword);
+				File.WriteAllText(@"./ManagerPassword.txt", obj.getPassword());
 				MessageBox.Show("Manager password has been changed successfully", "Ordering System");
+				obj.Close();
 			}
-			else
-			{
-				MessageBox.Show("Password left blank, so hasn't been saved", "Ordering System");
-			}
+			obj.Dispose();
 		}
 	}
 }

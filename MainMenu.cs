@@ -687,9 +687,8 @@ namespace ordering_system
 
 		private void cancelOrderButton_Click(object sender, EventArgs e)
 		{
-			// just in case u click it by accident
-			MessageBoxButtons cancelOrderMessageBoxButtons = MessageBoxButtons.YesNo;
-			DialogResult cancelOrder = MessageBox.Show("Do you want to cancel this order?", "Ordering System", cancelOrderMessageBoxButtons);
+			// just in case u click it by accident - yes no
+			DialogResult cancelOrder = MessageBox.Show("Do you want to cancel this order?", "Ordering System", MessageBoxButtons.YesNo);
 			if (cancelOrder == DialogResult.Yes) // yes
 			{
 				currentOrder = new Order();

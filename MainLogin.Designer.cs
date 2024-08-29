@@ -107,7 +107,7 @@
 			Controls.Add(passwordLabel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "MainLogin";
-			Text = "Please enter the manager password:";
+			Text = "Please enter the password:";
 			Load += MainLogin_Load;
 			ResumeLayout(false);
 			PerformLayout();
