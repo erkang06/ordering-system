@@ -52,11 +52,18 @@ namespace ordering_system
 			obj.TopMost = true;
 		}
 
+		private void updateCommonItemsButton_Click(object sender, EventArgs e)
+		{
+			UpdateCommonItems obj = new UpdateCommonItems();
+			obj.Show();
+			//obj.TopMost = true;
+		}
+
 		private void updateCustomersButton_Click(object sender, EventArgs e)
 		{
 			UpdateCustomers obj = new UpdateCustomers();
 			obj.Show();
-			//obj.TopMost = true;
+			obj.TopMost = true;
 		}
 
 		private void orderSummaryButton_Click(object sender, EventArgs e)

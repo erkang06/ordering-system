@@ -211,10 +211,7 @@ namespace ordering_system
 			deliveryButton.BackColor = Color.Yellow; // select delivery, unselect rest
 			counterButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
-			if (currentOrder.orderType != "Delivery") // if there hasnt been an address set
-			{
-				customerDetailsFormCreate("Delivery", currentOrder.customerID);
-			}
+			customerDetailsFormCreate("Delivery", currentOrder.customerID);
 		}
 
 		private void counterButton_Click(object sender, EventArgs e)
@@ -247,7 +244,7 @@ namespace ordering_system
 				currentOrder.orderType = "Collection";
 				currentOrder.addressID = -1;
 			}
-			else if (currentOrder.orderType != "Collection") // if there hasnt been a name set
+			else // if there hasnt been a name set
 			{
 				customerDetailsFormCreate("Collection", currentOrder.customerID);
 			}
@@ -278,7 +275,9 @@ namespace ordering_system
 			if (e.orderType == "Delivery")
 			{
 				currentOrder.addressID = e.addressID;
-				deliveryButton_Click(sender, e);
+				// i was gonna just shove deliverybutton_click here but its such a faff yk
+				deliveryButton.BackColor = Color.Yellow; // select delivery, unselect rest
+				collectionButton.BackColor = Color.Transparent;
 				// get data for customerdetailslabel
 				DataRow addressDataRow = getAddress(e.addressID);
 				string houseNumber = addressDataRow["houseNumber"].ToString();
@@ -292,13 +291,16 @@ namespace ordering_system
 			}
 			else // order type is collection
 			{
-				collectionButton_Click(sender, e);
+				// i was gonna just shove deliverybutton_click here but its such a faff yk
+				collectionButton.BackColor = Color.Yellow; // select collection, unselect rest
+				deliveryButton.BackColor = Color.Transparent;
 				string customerName = customerDataRow["customerName"].ToString();
 				customerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
 				// sort out delivery charge price label
 				deliveryChargePriceLabel.Text = "0.00"; // edit delivery charge
 				deliveryChargePriceLabel.Enabled = false;
 			}
+			counterButton.BackColor = Color.Transparent;
 			updatePriceLabels();
 			con.Close();
 		}

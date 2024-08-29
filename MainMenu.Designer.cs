@@ -63,12 +63,12 @@
 			categoriesPanel = new Panel();
 			paymentPanel = new Panel();
 			viewOrdersPanel = new Panel();
-			viewOrdersDataGridView = new DataGridView();
 			printCustomerTicketButton = new Button();
 			printKitchenTicketButton = new Button();
 			viewOrdersCollectionButton = new Button();
 			viewOrdersCounterButton = new Button();
 			viewOrdersDeliveryButton = new Button();
+			viewOrdersDataGridView = new DataGridView();
 			timer = new System.Windows.Forms.Timer(components);
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
@@ -490,20 +490,6 @@
 			viewOrdersPanel.TabIndex = 1;
 			viewOrdersPanel.Visible = false;
 			// 
-			// viewOrdersDataGridView
-			// 
-			viewOrdersDataGridView.BackgroundColor = Color.HotPink;
-			viewOrdersDataGridView.BorderStyle = BorderStyle.None;
-			viewOrdersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			viewOrdersDataGridView.Location = new Point(0, 0);
-			viewOrdersDataGridView.Name = "viewOrdersDataGridView";
-			viewOrdersDataGridView.RightToLeft = RightToLeft.No;
-			viewOrdersDataGridView.RowHeadersWidth = 82;
-			viewOrdersDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			viewOrdersDataGridView.Size = new Size(1040, 900);
-			viewOrdersDataGridView.TabIndex = 0;
-			viewOrdersDataGridView.CellClick += viewOrdersDataGridView_CellClick;
-			// 
 			// printCustomerTicketButton
 			// 
 			printCustomerTicketButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -567,6 +553,20 @@
 			viewOrdersDeliveryButton.Text = "Delivery";
 			viewOrdersDeliveryButton.UseVisualStyleBackColor = false;
 			viewOrdersDeliveryButton.Click += viewOrdersDeliveryButton_Click;
+			// 
+			// viewOrdersDataGridView
+			// 
+			viewOrdersDataGridView.BackgroundColor = Color.HotPink;
+			viewOrdersDataGridView.BorderStyle = BorderStyle.None;
+			viewOrdersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			viewOrdersDataGridView.Location = new Point(0, 0);
+			viewOrdersDataGridView.Name = "viewOrdersDataGridView";
+			viewOrdersDataGridView.RightToLeft = RightToLeft.No;
+			viewOrdersDataGridView.RowHeadersWidth = 82;
+			viewOrdersDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			viewOrdersDataGridView.Size = new Size(1040, 900);
+			viewOrdersDataGridView.TabIndex = 0;
+			viewOrdersDataGridView.CellClick += viewOrdersDataGridView_CellClick;
 			// 
 			// timer
 			// 
