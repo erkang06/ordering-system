@@ -48,7 +48,7 @@
 			cancelButton.Location = new Point(522, 12);
 			cancelButton.Name = "cancelButton";
 			cancelButton.Size = new Size(90, 80);
-			cancelButton.TabIndex = 9;
+			cancelButton.TabIndex = 10;
 			cancelButton.UseVisualStyleBackColor = true;
 			cancelButton.Click += cancelButton_Click;
 			// 
@@ -73,7 +73,7 @@
 			exitProgramButton.Location = new Point(312, 968);
 			exitProgramButton.Name = "exitProgramButton";
 			exitProgramButton.Size = new Size(300, 100);
-			exitProgramButton.TabIndex = 8;
+			exitProgramButton.TabIndex = 9;
 			exitProgramButton.Text = "Exit Program";
 			exitProgramButton.UseVisualStyleBackColor = false;
 			exitProgramButton.Click += exitProgramButton_Click;
@@ -112,7 +112,7 @@
 			updateCustomersButton.Location = new Point(12, 494);
 			updateCustomersButton.Name = "updateCustomersButton";
 			updateCustomersButton.Size = new Size(600, 80);
-			updateCustomersButton.TabIndex = 4;
+			updateCustomersButton.TabIndex = 5;
 			updateCustomersButton.Text = "Update Customers";
 			updateCustomersButton.UseVisualStyleBackColor = false;
 			updateCustomersButton.Click += updateCustomersButton_Click;
@@ -125,7 +125,7 @@
 			orderSummaryButton.Location = new Point(12, 580);
 			orderSummaryButton.Name = "orderSummaryButton";
 			orderSummaryButton.Size = new Size(600, 80);
-			orderSummaryButton.TabIndex = 5;
+			orderSummaryButton.TabIndex = 6;
 			orderSummaryButton.Text = "Order Summary";
 			orderSummaryButton.UseVisualStyleBackColor = false;
 			orderSummaryButton.Click += orderSummaryButton_Click;
@@ -138,7 +138,7 @@
 			changeLoginPasswordButton.Location = new Point(12, 666);
 			changeLoginPasswordButton.Name = "changeLoginPasswordButton";
 			changeLoginPasswordButton.Size = new Size(600, 80);
-			changeLoginPasswordButton.TabIndex = 6;
+			changeLoginPasswordButton.TabIndex = 7;
 			changeLoginPasswordButton.Text = "Change Login Password";
 			changeLoginPasswordButton.UseVisualStyleBackColor = false;
 			changeLoginPasswordButton.Click += changeLoginPasswordButton_Click;
@@ -151,7 +151,7 @@
 			changeManagerPasswordButton.Location = new Point(12, 752);
 			changeManagerPasswordButton.Name = "changeManagerPasswordButton";
 			changeManagerPasswordButton.Size = new Size(600, 80);
-			changeManagerPasswordButton.TabIndex = 7;
+			changeManagerPasswordButton.TabIndex = 8;
 			changeManagerPasswordButton.Text = "Change Manager Password";
 			changeManagerPasswordButton.UseVisualStyleBackColor = false;
 			changeManagerPasswordButton.Click += changeManagerPasswordButton_Click;
@@ -177,7 +177,7 @@
 			updateCommonItemsButton.Location = new Point(12, 408);
 			updateCommonItemsButton.Name = "updateCommonItemsButton";
 			updateCommonItemsButton.Size = new Size(600, 80);
-			updateCommonItemsButton.TabIndex = 43;
+			updateCommonItemsButton.TabIndex = 4;
 			updateCommonItemsButton.Text = "Update Common Items";
 			updateCommonItemsButton.UseVisualStyleBackColor = false;
 			updateCommonItemsButton.Click += updateCommonItemsButton_Click;

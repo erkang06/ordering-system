@@ -35,7 +35,6 @@
 			cancelButton = new Button();
 			commonItemsPanel = new Panel();
 			deleteItemButton = new Button();
-			acceptButton = new Button();
 			maxSetMealsLabel = new Label();
 			((System.ComponentModel.ISupportInitialize)itemDataGridView).BeginInit();
 			SuspendLayout();
@@ -105,6 +104,7 @@
 			cancelButton.Size = new Size(90, 80);
 			cancelButton.TabIndex = 106;
 			cancelButton.UseVisualStyleBackColor = true;
+			cancelButton.Click += cancelButton_Click;
 			// 
 			// commonItemsPanel
 			// 
@@ -120,25 +120,12 @@
 			deleteItemButton.BackColor = SystemColors.Control;
 			deleteItemButton.FlatStyle = FlatStyle.Flat;
 			deleteItemButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			deleteItemButton.Location = new Point(1508, 568);
+			deleteItemButton.Location = new Point(1408, 988);
 			deleteItemButton.Name = "deleteItemButton";
-			deleteItemButton.Size = new Size(400, 80);
+			deleteItemButton.Size = new Size(500, 80);
 			deleteItemButton.TabIndex = 113;
-			deleteItemButton.Text = "Delete Item";
+			deleteItemButton.Text = "Delete Common Item";
 			deleteItemButton.UseVisualStyleBackColor = false;
-			// 
-			// acceptButton
-			// 
-			acceptButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			acceptButton.BackColor = Color.Gold;
-			acceptButton.FlatStyle = FlatStyle.Flat;
-			acceptButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			acceptButton.Location = new Point(1658, 938);
-			acceptButton.Name = "acceptButton";
-			acceptButton.Size = new Size(250, 130);
-			acceptButton.TabIndex = 114;
-			acceptButton.Text = "Save Layout";
-			acceptButton.UseVisualStyleBackColor = false;
 			// 
 			// maxSetMealsLabel
 			// 
@@ -158,7 +145,6 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
-			Controls.Add(acceptButton);
 			Controls.Add(deleteItemButton);
 			Controls.Add(commonItemsPanel);
 			Controls.Add(maxSetMealsLabel);
@@ -183,7 +169,6 @@
 		private Button cancelButton;
 		private Panel commonItemsPanel;
 		private Button deleteItemButton;
-		private Button acceptButton;
 		private Label maxSetMealsLabel;
 	}
 }

@@ -19,7 +19,8 @@ namespace ordering_system
 		DataTable commonItemsDataTable = new DataTable();
 		DataTable itemsDataTableByCategory;
 		Button[] commonItemButtonArray = new Button[20];
-		string itemID; // id of currently selected item/setmeal from datagridview
+		string itemID, itemType; // id + itemtype of currently selected item/setmeal from datagridview
+		int commonItemID = -1; // which space its gonna take in the commonitemarray
 		public UpdateCommonItems()
 		{
 			InitializeComponent();
@@ -33,6 +34,22 @@ namespace ordering_system
 				return Convert.ToInt32(categoriesDataTable.Rows[selectedIndex]["categoryID"]);
 			}
 			return -1;
+		}
+
+		private string getFoodItemName(string foodItemID)
+		{
+			SqlCommand getFoodItemName = new SqlCommand("SELECT foodName FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+			getFoodItemName.Parameters.AddWithValue("@FIID", foodItemID);
+			string foodItemName = getFoodItemName.ExecuteScalar().ToString();
+			return foodItemName;
+		}
+
+		private string getSetMealName(string setMealID)
+		{
+			SqlCommand getSetMealName = new SqlCommand("SELECT setMealName FROM SetMealTbl WHERE setMealID = @SMID", con);
+			getSetMealName.Parameters.AddWithValue("@SMID", setMealID);
+			string setMealName = getSetMealName.ExecuteScalar().ToString();
+			return setMealName;
 		}
 
 		private void UpdateCommonItems_Load(object sender, EventArgs e)
@@ -61,28 +78,59 @@ namespace ordering_system
 
 		private void loadCommonItemButtons() // fill in commonitemspanel w/ buttons
 		{
+			// sort out sql
+			DataRow[] commonItemDataRow;
 			// fill in food buttons
 			int xpos = 0, ypos = 0;
 			for (int i = 0; i < commonItemButtonArray.Length; i++) // cant be more than array length
 			{
+				// sort out sql
+				commonItemDataRow = commonItemsDataTable.Select($"commonItemID = '{i}'");
 				// create each food button
 				commonItemButtonArray[i] = new Button();
 				commonItemButtonArray[i].UseMnemonic = false; // allows for &
-				commonItemButtonArray[i].Tag = commonItemsDataTable.Rows[i][0].ToString(); // get id
-				commonItemButtonArray[i].Text = commonItemsDataTable.Rows[i][1].ToString(); // get name
+				if (commonItemDataRow.Length > 0) // if theres any item in that space
+				{ // u can do 0 cuz its a primary key so theres only gonna be max 1 row
+					commonItemButtonArray[i].Tag = commonItemDataRow[0]["itemID"].ToString(); // get id
+					if (commonItemDataRow[0]["itemType"].ToString() == "foodItem")
+					{
+						commonItemButtonArray[i].Text = getFoodItemName(commonItemDataRow[0]["itemID"].ToString());
+					}
+					else // set meal
+					{
+						commonItemButtonArray[i].Text = getSetMealName(commonItemDataRow[0]["itemID"].ToString());
+					}
+				}
 				commonItemButtonArray[i].Width = 250;
-				commonItemButtonArray[i].Height = 100;
+				commonItemButtonArray[i].Height = 80;
 				commonItemButtonArray[i].Left = xpos;
 				commonItemButtonArray[i].Top = ypos;
-				commonItemButtonArray[i].BackColor = Color.AntiqueWhite;
-				//commonItemButtonArray[i].MouseClick += new MouseEventHandler(itemButton_Click);
+				commonItemButtonArray[i].BackColor = Color.Transparent;
+				commonItemButtonArray[i].MouseClick += new MouseEventHandler(commonItemButton_Click);
 				commonItemsPanel.Controls.Add(commonItemButtonArray[i]);
 				xpos += 250;
 				if ((i + 1) % 4 == 0) // new row
 				{
 					xpos = 0;
-					ypos += 100;
+					ypos += 80;
 				}
+			}
+		}
+
+		private void commonItemButton_Click(object sender, MouseEventArgs e)
+		{
+			// unselect prev button
+			if (commonItemID > -1)
+			{
+				commonItemButtonArray[commonItemID].BackColor = Color.Transparent;
+			}
+			Button commonItemButton = (Button)sender;
+			commonItemButton.BackColor = Color.Gold;
+			commonItemID = (commonItemButton.Location.Y / 80) * 4 + (commonItemButton.Location.X / 250);
+			// u can link item to common item space // if a buttons been selected
+			if (itemID != "" && itemType != "")
+			{
+				addCommonItem();
 			}
 		}
 
@@ -114,7 +162,65 @@ namespace ordering_system
 
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
+			// hold 
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
+			{
+				if (categoryComboBox.Text == "Set Meals")
+				{
+					itemID = itemDataGridView.Rows[selectedRowIndex].Cells["setMealID"].Value.ToString();
+					itemType = "setMeal";
+				}
+				else // reg food items
+				{
+					itemID = itemDataGridView.Rows[selectedRowIndex].Cells["foodItemID"].Value.ToString();
+					itemType = "foodItem";
+				}
+				// u can link item to common item space // if a buttons been selected
+				if (commonItemID > -1)
+				{
+					addCommonItem();
+				}
+			}
+		}
 
+		private void addCommonItem()
+		{
+			con.Open();
+			// remove prev space if existed
+			if (commonItemButtonArray[commonItemID].Tag != "")
+			{
+				SqlCommand removeCommonItemFromDatabase = new SqlCommand("DELETE FROM CommonItemTbl WHERE commonItemID = @CIID", con);
+				removeCommonItemFromDatabase.Parameters.AddWithValue("@CIID", commonItemID);
+				removeCommonItemFromDatabase.ExecuteNonQuery();
+			}
+			// add to database
+			SqlCommand addCommonItemToDatabase = new SqlCommand("INSERT INTO CommonItemTbl(commonItemID, itemID, itemType) VALUES(@CIID, @IID, @IT)", con);
+			addCommonItemToDatabase.Parameters.AddWithValue("@CIID", commonItemID);
+			addCommonItemToDatabase.Parameters.AddWithValue("@IID", itemID);
+			addCommonItemToDatabase.Parameters.AddWithValue("@IT", itemType);
+			addCommonItemToDatabase.ExecuteNonQuery();
+			// add to buttons
+			commonItemButtonArray[commonItemID].Tag = itemID;
+			// get item name
+			if (itemType == "foodItem")
+			{
+				commonItemButtonArray[commonItemID].Text = getFoodItemName(itemID);
+			}
+			else // set meal
+			{
+				commonItemButtonArray[commonItemID].Text = getSetMealName(itemID);
+			}
+			// clear values
+			commonItemID = -1;
+			itemID = string.Empty;
+			itemType = string.Empty;
+			con.Close();
+		}
+
+		private void cancelButton_Click(object sender, EventArgs e)
+		{
+			Close();
 		}
 	}
 }
