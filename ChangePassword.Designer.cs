@@ -1,6 +1,6 @@
 ﻿namespace ordering_system
 {
-	partial class UpdatePassword
+	partial class ChangePassword
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -93,7 +93,7 @@
 			helpLabel.TabIndex = 41;
 			helpLabel.Text = "Please enter the new password:";
 			// 
-			// UpdatePassword
+			// ChangePassword
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
@@ -105,7 +105,7 @@
 			Controls.Add(passwordTypeLabel);
 			Controls.Add(helpLabel);
 			FormBorderStyle = FormBorderStyle.None;
-			Name = "UpdatePassword";
+			Name = "ChangePassword";
 			Text = "UpdatePassword";
 			ResumeLayout(false);
 			PerformLayout();

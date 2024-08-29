@@ -10,12 +10,12 @@ using System.Windows.Forms;
 
 namespace ordering_system
 {
-	public partial class UpdatePassword : Form
+	public partial class ChangePassword : Form
 	{
-		public UpdatePassword(string passwordType)
+		public ChangePassword(string passwordType)
 		{
 			InitializeComponent();
-			if (passwordType == "main")
+			if (passwordType == "Login")
 			{
 				passwordTypeLabel.Text = "Login Password";
 				helpLabel.Text = "Please enter the new login password:";

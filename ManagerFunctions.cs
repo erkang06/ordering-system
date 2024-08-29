@@ -68,23 +68,21 @@ namespace ordering_system
 
 		private void changeLoginPasswordButton_Click(object sender, EventArgs e)
 		{
-			UpdatePassword obj = new UpdatePassword("main");
-			if (obj.ShowDialog(this) == DialogResult.OK) // if accept button clicked
-			{
-				File.WriteAllText(@"./LoginPassword.txt", obj.getPassword());
-				MessageBox.Show("Login password has been changed successfully", "Ordering System");
-				obj.Close();
-			}
-			obj.Dispose();
+			changePassword("Login");
 		}
 
 		private void changeManagerPasswordButton_Click(object sender, EventArgs e)
 		{
-			UpdatePassword obj = new UpdatePassword("manager");
+			changePassword("Manager");
+		}
+
+		private void changePassword(string passwordType) // theyre literally the same so like might as well
+		{
+			ChangePassword obj = new ChangePassword(passwordType);
 			if (obj.ShowDialog(this) == DialogResult.OK) // if accept button clicked
 			{
-				File.WriteAllText(@"./ManagerPassword.txt", obj.getPassword());
-				MessageBox.Show("Manager password has been changed successfully", "Ordering System");
+				File.WriteAllText(@$"./{passwordType}Password.txt", obj.getPassword());
+				MessageBox.Show($"{passwordType} password has been changed successfully", "Ordering System");
 				obj.Close();
 			}
 			obj.Dispose();
