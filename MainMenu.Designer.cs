@@ -70,6 +70,7 @@
 			viewOrdersDeliveryButton = new Button();
 			viewOrdersDataGridView = new DataGridView();
 			timer = new System.Windows.Forms.Timer(components);
+			updateCategoriesButton = new Button();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -166,6 +167,7 @@
 			// 
 			managerFunctionsPanel.Anchor = AnchorStyles.Right;
 			managerFunctionsPanel.BackColor = Color.Gold;
+			managerFunctionsPanel.Controls.Add(updateCategoriesButton);
 			managerFunctionsPanel.Controls.Add(timeLabel);
 			managerFunctionsPanel.Controls.Add(viewOrdersButton);
 			managerFunctionsPanel.Controls.Add(acceptOrderButton);
@@ -574,6 +576,18 @@
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
 			// 
+			// updateCategoriesButton
+			// 
+			updateCategoriesButton.BackColor = Color.Transparent;
+			updateCategoriesButton.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+			updateCategoriesButton.Location = new Point(0, 200);
+			updateCategoriesButton.Name = "updateCategoriesButton";
+			updateCategoriesButton.Size = new Size(180, 100);
+			updateCategoriesButton.TabIndex = 7;
+			updateCategoriesButton.Text = "Update Categories";
+			updateCategoriesButton.UseVisualStyleBackColor = false;
+			updateCategoriesButton.Click += updateCategoriesButton_Click;
+			// 
 			// MainMenu
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
@@ -649,5 +663,6 @@
 		private Button printCustomerTicketButton;
 		private Button printKitchenTicketButton;
 		private Button cancelOrderButton;
+		private Button updateCategoriesButton;
 	}
 }
