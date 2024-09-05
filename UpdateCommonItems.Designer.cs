@@ -126,6 +126,7 @@
 			deleteItemButton.TabIndex = 113;
 			deleteItemButton.Text = "Delete Common Item";
 			deleteItemButton.UseVisualStyleBackColor = false;
+			deleteItemButton.Click += deleteItemButton_Click;
 			// 
 			// maxSetMealsLabel
 			// 

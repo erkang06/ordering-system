@@ -19,7 +19,7 @@ namespace ordering_system
 		DataTable commonItemsDataTable = new DataTable();
 		DataTable itemsDataTableByCategory;
 		Button[] commonItemButtonArray = new Button[20];
-		string itemID, itemType; // id + itemtype of currently selected item/setmeal from datagridview
+		string itemID = "", itemType = ""; // id + itemtype of currently selected item/setmeal from datagridview
 		int commonItemID = -1; // which space its gonna take in the commonitemarray
 		public UpdateCommonItems()
 		{
@@ -52,6 +52,24 @@ namespace ordering_system
 			return setMealName;
 		}
 
+		private int doesItemExistInCommonItems(string itemID) // returns index of food item in set meal if exists, else returns -1
+		{
+			DataRow[] item = commonItemsDataTable.Select($"itemID = '{itemID}'");
+			if (item.Length > 0) // theres only max 1 instance of an each item in the common items grid
+			{
+				int index = Convert.ToInt32(item[0]["commonItemID"]);
+				return index;
+			}
+			return -1;
+		}
+
+		private void removeCommonItemFromDatabase()
+		{
+			SqlCommand removeCommonItemFromDatabase = new SqlCommand("DELETE FROM CommonItemTbl WHERE commonItemID = @CIID", con);
+			removeCommonItemFromDatabase.Parameters.AddWithValue("@CIID", commonItemID);
+			removeCommonItemFromDatabase.ExecuteNonQuery();
+		}
+
 		private void UpdateCommonItems_Load(object sender, EventArgs e)
 		{
 			con.Open();
@@ -69,11 +87,16 @@ namespace ordering_system
 			{
 				categoryComboBox.Items.Add(categoryName);
 			}
-			// get common items
-			SqlDataAdapter getCommonItems = new SqlDataAdapter("SELECT * FROM CommonItemTbl", con);
-			getCommonItems.Fill(commonItemsDataTable);
+			updateCommonItemsDataTable();
 			loadCommonItemButtons();
 			con.Close();
+		}
+
+		private void updateCommonItemsDataTable() // get common items
+		{
+			commonItemsDataTable = new DataTable(); // clear prev
+			SqlDataAdapter getCommonItems = new SqlDataAdapter("SELECT * FROM CommonItemTbl", con);
+			getCommonItems.Fill(commonItemsDataTable);
 		}
 
 		private void loadCommonItemButtons() // fill in commonitemspanel w/ buttons
@@ -162,7 +185,6 @@ namespace ordering_system
 
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			// hold 
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
@@ -187,12 +209,20 @@ namespace ordering_system
 		private void addCommonItem()
 		{
 			con.Open();
-			// remove prev space if existed
-			if (commonItemButtonArray[commonItemID].Tag != "")
+			int commonItemIndex = doesItemExistInCommonItems(itemID);
+			if (commonItemIndex > -1) // if item alr existed in common item tbl
 			{
-				SqlCommand removeCommonItemFromDatabase = new SqlCommand("DELETE FROM CommonItemTbl WHERE commonItemID = @CIID", con);
-				removeCommonItemFromDatabase.Parameters.AddWithValue("@CIID", commonItemID);
-				removeCommonItemFromDatabase.ExecuteNonQuery();
+				SqlCommand removeExistingItemFromDatabase = new SqlCommand("DELETE FROM CommonItemTbl WHERE itemID = @IID", con);
+				removeExistingItemFromDatabase.Parameters.AddWithValue("@IID", itemID);
+				removeExistingItemFromDatabase.ExecuteNonQuery();
+				// clear that button
+				commonItemButtonArray[commonItemIndex].Tag = null;
+				commonItemButtonArray[commonItemIndex].Text = string.Empty;
+			}
+			// remove prev space if existed
+			if (commonItemButtonArray[commonItemID].Tag != null)
+			{
+				removeCommonItemFromDatabase();
 			}
 			// add to database
 			SqlCommand addCommonItemToDatabase = new SqlCommand("INSERT INTO CommonItemTbl(commonItemID, itemID, itemType) VALUES(@CIID, @IID, @IT)", con);
@@ -211,10 +241,34 @@ namespace ordering_system
 			{
 				commonItemButtonArray[commonItemID].Text = getSetMealName(itemID);
 			}
-			// clear values
+			// clear values and unselect
+			commonItemButtonArray[commonItemID].BackColor = Color.Transparent;
 			commonItemID = -1;
 			itemID = string.Empty;
 			itemType = string.Empty;
+			itemDataGridView.ClearSelection();
+			// update datatable
+			updateCommonItemsDataTable();
+			con.Close();
+		}
+
+		private void deleteItemButton_Click(object sender, EventArgs e) // delete common item
+		{
+			con.Open();
+			if (commonItemID > -1) // if item selected
+			{
+				removeCommonItemFromDatabase();
+				// clear common item values and unselect
+				commonItemButtonArray[commonItemID].Text = string.Empty;
+				commonItemButtonArray[commonItemID].BackColor = Color.Transparent;
+				commonItemID = -1;
+				// update datatable
+				updateCommonItemsDataTable();
+			}
+			else
+			{
+				MessageBox.Show("Item not selected from common items", "Ordering System");
+			}
 			con.Close();
 		}
 
