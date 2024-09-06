@@ -189,6 +189,17 @@ namespace ordering_system
 		private void updateCustomerButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
+			// get if phone number has been changed - for checkeing if phone number exists w/ same name
+			bool hasPhoneNumberChanged = true;
+			DataRow[] selectedRow = customersDataTable.Select($"customerID = '{customerID}'");
+			if (selectedRow.Length > 0) // therell only be one since its a primary key
+			{
+				string currentFoodName = selectedRow[0]["phoneNumber"].ToString();
+				if (currentFoodName == phoneNumberTextBox.Text)
+				{
+					hasPhoneNumberChanged = false;
+				}
+			}
 			if (areAllCustomerFieldsFilled() == false) // not all fields filled in
 			{
 				MessageBox.Show("Not all required customer fields filled in", "Ordering System");
@@ -197,7 +208,7 @@ namespace ordering_system
 			{
 				MessageBox.Show("Customer not selected", "Ordering System");
 			}
-			else if (doesCustomerExist()) // if new phone number has already been used in tbl
+			else if (hasPhoneNumberChanged && doesCustomerExist()) // if new phone number has already been used in tbl
 			{
 				MessageBox.Show("Customer already exists with the same phone number", "Ordering System");
 			}
