@@ -110,6 +110,10 @@ namespace ordering_system
 			}
 			hasSmallPriceCheckBox_CheckedChanged(sender, e); // sorts out weird bits w/ checkboxes
 			updateDataGridView();
+			// sort out widths
+			itemDataGridView.Columns["foodItemID"].Width = 100;
+			itemDataGridView.Columns["smallItemPrice"].Width = 100;
+			itemDataGridView.Columns["largeItemPrice"].Width = 150;
 			con.Close();
 		}
 
@@ -121,10 +125,6 @@ namespace ordering_system
 			DataView foodItemsDataView = new DataView(foodItemsDataTable);
 			// fill in item datagridview
 			itemDataGridView.DataSource = foodItemsDataView.ToTable(true, "foodItemID", "foodName", "smallItemPrice", "largeItemPrice");
-			// sort out widths
-			itemDataGridView.Columns["foodItemID"].Width = 100;
-			itemDataGridView.Columns["smallItemPrice"].Width = 100;
-			itemDataGridView.Columns["largeItemPrice"].Width = 150;
 			itemDataGridView.ClearSelection();
 		}
 
@@ -227,6 +227,17 @@ namespace ordering_system
 		private void updateItemButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
+			// get if item name has been changed - for checkeing if item exists w/ same name
+			bool hasFoodItemNameChanged = true;
+			DataRow[] selectedRow = foodItemsDataTable.Select($"foodItemID = '{foodItemID}'");
+			if (selectedRow.Length > 0) // therell only be one since its a primary key
+			{
+				string currentFoodName = selectedRow[0]["foodName"].ToString();
+				if (currentFoodName == itemNameTextBox.Text)
+				{
+					hasFoodItemNameChanged = false;
+				}
+			}
 			if (areAllFieldsFilled() == false) // not all textboxes filled in
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");
@@ -235,7 +246,7 @@ namespace ordering_system
 			{
 				MessageBox.Show("Item not selected", "Ordering System");
 			}
-			else if (doesItemExist()) // if new item name has already been used in tbl
+			else if (foodItemID != itemIDTextBox.Text && hasFoodItemNameChanged && doesItemExist()) // if both id and name have been changed but item exists in table
 			{
 				MessageBox.Show("Item already exists with the same name", "Ordering System");
 			}
@@ -244,6 +255,7 @@ namespace ordering_system
 				int categoryID = getCategoryIDFromSelectedIndex();
 				SqlCommand updateFoodItem = new SqlCommand();
 				updateFoodItem.Connection = con;
+				updateFoodItem.Parameters.AddWithValue("@NCID", itemIDTextBox.Text);
 				updateFoodItem.Parameters.AddWithValue("@FN", itemNameTextBox.Text);
 				updateFoodItem.Parameters.AddWithValue("@DLP", defaultToLargePriceCheckBox.Checked);
 				updateFoodItem.Parameters.AddWithValue("@LIP", largePriceTextBox.Text);
@@ -252,12 +264,12 @@ namespace ordering_system
 				updateFoodItem.Parameters.AddWithValue("@FIID", foodItemID);
 				if (hasSmallPriceCheckBox.Checked) // has small price
 				{
-					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 1, smallItemPrice = @SIP, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
+					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodItemID = @NCID, foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 1, smallItemPrice = @SIP, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
 					updateFoodItem.Parameters.AddWithValue("@SIP", smallPriceTextBox.Text);
 				}
 				else // no small price
 				{
-					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 0, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
+					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodItemID = @NCID, foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 0, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
 				}
 				updateFoodItem.ExecuteNonQuery();
 				MessageBox.Show("Item updated", "Ordering System");
