@@ -56,7 +56,7 @@ namespace ordering_system
 			return false;
 		}
 
-		private bool doesSetMealExist() // checks if set meal exists in database w/ same name
+		private bool doesSetMealExist() // checks if set meal exists in database w/ same name or id
 		{
 			SqlCommand checkIfSetMealExists = new SqlCommand("SELECT COUNT(*) FROM SetMealTbl WHERE setMealName = @SMN OR setMealID = @SMID", con);
 			checkIfSetMealExists.Parameters.AddWithValue("@SMN", setMealNameTextBox.Text);
@@ -138,11 +138,14 @@ namespace ordering_system
 			setMealFoodItemsDataTable.Columns.Add("size");
 			setMealFoodItemsDataTable.Columns.Add("quantity");
 			setMealItemDataGridView.DataSource = setMealFoodItemsDataTable;
-			// sort out widths
+			// sort out setmealitem widths
 			setMealItemDataGridView.Columns["foodItemID"].Width = 50;
 			setMealItemDataGridView.Columns["size"].Width = 50;
 			setMealItemDataGridView.Columns["quantity"].Width = 100;
 			updateDataGridView();
+			// sort out setmeal widths
+			setMealDataGridView.Columns["setMealID"].Width = 50;
+			setMealDataGridView.Columns["price"].Width = 100;
 			con.Close();
 		}
 
@@ -154,9 +157,6 @@ namespace ordering_system
 			DataView setMealsDataView = new DataView(setMealsDataTable);
 			// fill in set meals datagridview
 			setMealDataGridView.DataSource = setMealsDataView.ToTable(true, "setMealID", "setMealName", "price");
-			// sort out widths
-			setMealDataGridView.Columns["setMealID"].Width = 50;
-			setMealDataGridView.Columns["price"].Width = 100;
 			// check if max # of set meals reached
 			if (setMealsDataTable.Rows.Count >= 24)
 			{
@@ -393,6 +393,18 @@ namespace ordering_system
 		private void updateSetMealButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
+			// get if set meal name has been changed - for checking if set meal exists w/ same name
+			bool hasSetMealNameChanged = true;
+			DataRow[] selectedRow = setMealsDataTable.Select($"setMealID = '{setMealID}'");
+			if (selectedRow.Length > 0) // therell only be one since its a primary key
+			{
+				string currentSetMealName = selectedRow[0]["setMealName"].ToString();
+				if (currentSetMealName == setMealNameTextBox.Text)
+				{
+					hasSetMealNameChanged = false;
+				}
+			}
+			// acc validation
 			if (areAllFieldsFilled() == false) // not all textboxes filled in
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");
@@ -401,7 +413,7 @@ namespace ordering_system
 			{
 				MessageBox.Show("Set meal not selected", "Ordering System");
 			}
-			else if (doesSetMealExist()) // if new set meal name has already been used in tbl
+			else if (setMealID != setMealIDTextBox.Text && hasSetMealNameChanged && doesSetMealExist()) // if new set meal name/id has already been used in tbl
 			{
 				MessageBox.Show("Set meal already exists with the same name", "Ordering System");
 			}

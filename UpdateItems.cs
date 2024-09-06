@@ -238,6 +238,7 @@ namespace ordering_system
 					hasFoodItemNameChanged = false;
 				}
 			}
+			// acc validating data
 			if (areAllFieldsFilled() == false) // not all textboxes filled in
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");

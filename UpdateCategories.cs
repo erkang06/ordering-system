@@ -133,6 +133,18 @@ namespace ordering_system
 		private void updateCategoryButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
+			// get if category name has been changed - for checking if item exists w/ same name
+			bool hasCategoryNameChanged = true;
+			DataRow[] selectedRow = categoriesDataTable.Select($"categoryID = '{categoryID}'");
+			if (selectedRow.Length > 0) // therell only be one since its a primary key
+			{
+				string currentCategoryName = selectedRow[0]["categoryName"].ToString();
+				if (currentCategoryName == categoryNameTextBox.Text)
+				{
+					hasCategoryNameChanged = false;
+				}
+			}
+			// acc validating data
 			if (areAllFieldsFilled() == false) // not all textboxes filled in
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");
@@ -141,7 +153,7 @@ namespace ordering_system
 			{
 				MessageBox.Show("Category not selected", "Ordering System");
 			}
-			else if (doesCategoryExist()) // if new category name has already been used in tbl
+			else if (hasCategoryNameChanged && doesCategoryExist()) // if new category name has already been used in tbl
 			{
 				MessageBox.Show("Category already exists with the same name", "Ordering System");
 			}

@@ -42,7 +42,7 @@ namespace ordering_system
 		{
 			UpdateItems obj = new UpdateItems();
 			obj.Show();
-			//obj.TopMost = true;
+			obj.TopMost = true;
 		}
 
 		private void updateSetMealsButton_Click(object sender, EventArgs e)
