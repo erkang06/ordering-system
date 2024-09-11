@@ -37,6 +37,7 @@
 			counterButton = new Button();
 			deliveryButton = new Button();
 			managerFunctionsPanel = new Panel();
+			updateCategoriesButton = new Button();
 			timeLabel = new Label();
 			viewOrdersButton = new Button();
 			acceptOrderButton = new Button();
@@ -70,7 +71,6 @@
 			viewOrdersDeliveryButton = new Button();
 			viewOrdersDataGridView = new DataGridView();
 			timer = new System.Windows.Forms.Timer(components);
-			updateCategoriesButton = new Button();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -95,11 +95,11 @@
 			// customerDetailsLabel
 			// 
 			customerDetailsLabel.BackColor = Color.Transparent;
-			customerDetailsLabel.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			customerDetailsLabel.Font = new Font("Segoe UI", 12F);
 			customerDetailsLabel.ForeColor = Color.White;
-			customerDetailsLabel.Location = new Point(90, 21);
+			customerDetailsLabel.Location = new Point(90, 15);
 			customerDetailsLabel.Name = "customerDetailsLabel";
-			customerDetailsLabel.Size = new Size(1010, 45);
+			customerDetailsLabel.Size = new Size(1010, 50);
 			customerDetailsLabel.TabIndex = 1;
 			customerDetailsLabel.Click += customerDetails_Click;
 			// 
@@ -177,6 +177,18 @@
 			managerFunctionsPanel.Name = "managerFunctionsPanel";
 			managerFunctionsPanel.Size = new Size(180, 1080);
 			managerFunctionsPanel.TabIndex = 2;
+			// 
+			// updateCategoriesButton
+			// 
+			updateCategoriesButton.BackColor = Color.Transparent;
+			updateCategoriesButton.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+			updateCategoriesButton.Location = new Point(0, 200);
+			updateCategoriesButton.Name = "updateCategoriesButton";
+			updateCategoriesButton.Size = new Size(180, 100);
+			updateCategoriesButton.TabIndex = 7;
+			updateCategoriesButton.Text = "Update Categories";
+			updateCategoriesButton.UseVisualStyleBackColor = false;
+			updateCategoriesButton.Click += updateCategoriesButton_Click;
 			// 
 			// timeLabel
 			// 
@@ -575,18 +587,6 @@
 			timer.Enabled = true;
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
-			// 
-			// updateCategoriesButton
-			// 
-			updateCategoriesButton.BackColor = Color.Transparent;
-			updateCategoriesButton.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-			updateCategoriesButton.Location = new Point(0, 200);
-			updateCategoriesButton.Name = "updateCategoriesButton";
-			updateCategoriesButton.Size = new Size(180, 100);
-			updateCategoriesButton.TabIndex = 7;
-			updateCategoriesButton.Text = "Update Categories";
-			updateCategoriesButton.UseVisualStyleBackColor = false;
-			updateCategoriesButton.Click += updateCategoriesButton_Click;
 			// 
 			// MainMenu
 			// 

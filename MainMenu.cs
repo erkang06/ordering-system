@@ -227,8 +227,8 @@ namespace ordering_system
 			runningOrderDataTable.Columns.Add("runningOrderItemID");
 			// resize runningorderdatagridview
 			updateDataGridView();
-			runningOrderDataGridView.Columns["itemID"].Width = 40;
-			runningOrderDataGridView.Columns["quantity"].Width = 40;
+			runningOrderDataGridView.Columns["itemID"].Width = 30;
+			runningOrderDataGridView.Columns["quantity"].Width = 30;
 			runningOrderDataGridView.Columns["size"].Width = 20;
 			runningOrderDataGridView.Columns["price"].Width = 100;
 			runningOrderDataGridView.Columns["runningOrderItemID"].Visible = false;
@@ -329,11 +329,12 @@ namespace ordering_system
 					bool itemOutOfStock = isItemOutOfStock(itemID, itemType);
 					if (itemOutOfStock && itemType == "foodItem")
 					{
+						commonItemButtonArray[i].BackColor = Color.LightSalmon;
 						commonItemButtonArray[i].Enabled = false;
 					}
 					else if (itemOutOfStock && itemType == "setMeal")
 					{
-						commonItemButtonArray[i].BackColor = Color.Red;
+						commonItemButtonArray[i].BackColor = Color.LightSalmon;
 					}
 				}
 				else // disable if theres no item there
@@ -542,11 +543,12 @@ namespace ordering_system
 				bool itemOutOfStock = isItemOutOfStock(itemID, itemType);
 				if (itemOutOfStock && itemType == "foodItem")
 				{
+					itemButtonArray[i].BackColor = Color.LightSalmon;
 					itemButtonArray[i].Enabled = false;
 				}
 				else if (itemOutOfStock && itemType == "setMeal")
 				{
-					itemButtonArray[i].BackColor = Color.Red;
+					itemButtonArray[i].BackColor = Color.LightSalmon;
 				}
 			}
 		}
@@ -558,12 +560,12 @@ namespace ordering_system
 			string itemID = itemButton.Tag.ToString();
 			string itemName = itemButton.Text.ToString();
 			bool isSetMeal = isItemASetMeal(itemID);
-			if (itemButton.ForeColor == Color.Red) // set meal with items unavailable - create msgbox w/ unavailable items
+			if (itemButton.BackColor == Color.LightSalmon) // set meal with items unavailable - create msgbox w/ unavailable items
 			{
 				outOfStockMessageBox(itemID);
 			}
 			string size = "L"; // L or S looks better in datagridview
-			// get item size bf u shove it into the function thingy
+												 // get item size bf u shove it into the function thingy
 			if (isSetMeal == false)
 			{
 				size = getDefaultItemSize(itemID);
@@ -608,15 +610,16 @@ namespace ordering_system
 			DataTable setMealFoodItemsDataTable = getSetMealFoodItems(setMealID);
 			// sort out sql bf foreach
 			SqlCommand checkIfFoodItemIsOutOfStock = new SqlCommand("SELECT isOutOfStock FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+			checkIfFoodItemIsOutOfStock.Parameters.Add("@FIID", SqlDbType.NVarChar);
 			bool isFoodItemOutOfStock;
 			foreach (DataRow setmealFoodItem in setMealFoodItemsDataTable.Rows)
 			{
 				string foodItemID = setmealFoodItem["foodItemID"].ToString();
-				checkIfFoodItemIsOutOfStock.Parameters.AddWithValue("@FIID", foodItemID);
+				checkIfFoodItemIsOutOfStock.Parameters["@FIID"].Value = foodItemID;
 				isFoodItemOutOfStock = Convert.ToBoolean(checkIfFoodItemIsOutOfStock.ExecuteScalar());
 				if (isFoodItemOutOfStock) // add to list if out of stock
 				{
-					outOfStockItems.Add(setmealFoodItem["foodName"].ToString());
+					outOfStockItems.Add(getFoodItemName(foodItemID).ToString());
 				}
 			}
 			string outOfStockItemsString = string.Join("\n", outOfStockItems);

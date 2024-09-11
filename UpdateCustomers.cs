@@ -85,6 +85,9 @@ namespace ordering_system
 		{
 			con.Open();
 			updateCustomerDataGridView();
+			// sort out widths once
+			customerDataGridView.Columns["houseNumber"].Width = 100;
+			customerDataGridView.Columns["postcode"].Width = 150;
 			con.Close();
 		}
 
@@ -96,8 +99,6 @@ namespace ordering_system
 			DataView customersDataView = new DataView(customersDataTable);
 			// fill in category datagridview
 			customerDataGridView.DataSource = customersDataView.ToTable(true, "customerName", "phoneNumber", "houseNumber", "postcode");
-			customerDataGridView.Columns["houseNumber"].Width = 100;
-			customerDataGridView.Columns["postcode"].Width = 150;
 			// hide deliveryaddress panel by default
 			addressPanel.Visible = false;
 			addressPanel.SendToBack();

@@ -497,6 +497,7 @@
 			deleteCustomerButton.BackColor = SystemColors.Control;
 			deleteCustomerButton.FlatStyle = FlatStyle.Flat;
 			deleteCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteCustomerButton.ForeColor = Color.Red;
 			deleteCustomerButton.Location = new Point(520, 660);
 			deleteCustomerButton.Name = "deleteCustomerButton";
 			deleteCustomerButton.Size = new Size(400, 80);

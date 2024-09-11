@@ -403,6 +403,7 @@
 			deleteAddressButton.BackColor = SystemColors.Control;
 			deleteAddressButton.FlatStyle = FlatStyle.Flat;
 			deleteAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteAddressButton.ForeColor = Color.Red;
 			deleteAddressButton.Location = new Point(369, 885);
 			deleteAddressButton.Name = "deleteAddressButton";
 			deleteAddressButton.Size = new Size(360, 80);
@@ -431,6 +432,7 @@
 			deleteCustomerButton.BackColor = SystemColors.Control;
 			deleteCustomerButton.FlatStyle = FlatStyle.Flat;
 			deleteCustomerButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteCustomerButton.ForeColor = Color.Red;
 			deleteCustomerButton.Location = new Point(12, 988);
 			deleteCustomerButton.Name = "deleteCustomerButton";
 			deleteCustomerButton.Size = new Size(450, 80);
@@ -537,8 +539,8 @@
 			Controls.Add(customerNameLabel);
 			Controls.Add(updateCustomersLabel);
 			Controls.Add(cancelButton);
-			Controls.Add(customerDataGridView);
 			Controls.Add(addressPanel);
+			Controls.Add(customerDataGridView);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "UpdateCustomers";
 			Text = "UpdateCustomers";

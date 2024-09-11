@@ -67,9 +67,10 @@
 			// exitProgramButton
 			// 
 			exitProgramButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			exitProgramButton.BackColor = Color.Gold;
+			exitProgramButton.BackColor = SystemColors.Control;
 			exitProgramButton.FlatStyle = FlatStyle.Flat;
 			exitProgramButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			exitProgramButton.ForeColor = Color.Red;
 			exitProgramButton.Location = new Point(312, 968);
 			exitProgramButton.Name = "exitProgramButton";
 			exitProgramButton.Size = new Size(300, 100);

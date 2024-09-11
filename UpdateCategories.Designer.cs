@@ -161,6 +161,7 @@
 			deleteCategoryButton.BackColor = SystemColors.Control;
 			deleteCategoryButton.FlatStyle = FlatStyle.Flat;
 			deleteCategoryButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteCategoryButton.ForeColor = Color.Red;
 			deleteCategoryButton.Location = new Point(12, 988);
 			deleteCategoryButton.Name = "deleteCategoryButton";
 			deleteCategoryButton.Size = new Size(400, 80);

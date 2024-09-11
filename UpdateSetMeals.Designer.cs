@@ -101,6 +101,7 @@
 			deleteSetMealButton.BackColor = SystemColors.Control;
 			deleteSetMealButton.FlatStyle = FlatStyle.Flat;
 			deleteSetMealButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			deleteSetMealButton.ForeColor = Color.Red;
 			deleteSetMealButton.Location = new Point(1608, 342);
 			deleteSetMealButton.Name = "deleteSetMealButton";
 			deleteSetMealButton.Size = new Size(300, 116);
@@ -359,6 +360,7 @@
 			deleteItemButton.BackColor = SystemColors.Control;
 			deleteItemButton.FlatStyle = FlatStyle.Flat;
 			deleteItemButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteItemButton.ForeColor = Color.Red;
 			deleteItemButton.Location = new Point(1358, 951);
 			deleteItemButton.Name = "deleteItemButton";
 			deleteItemButton.Size = new Size(272, 121);
@@ -373,6 +375,7 @@
 			clearSetMealButton.BackColor = SystemColors.Control;
 			clearSetMealButton.FlatStyle = FlatStyle.Flat;
 			clearSetMealButton.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+			clearSetMealButton.ForeColor = Color.Red;
 			clearSetMealButton.Location = new Point(1636, 951);
 			clearSetMealButton.Name = "clearSetMealButton";
 			clearSetMealButton.Size = new Size(272, 121);

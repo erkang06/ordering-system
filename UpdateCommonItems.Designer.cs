@@ -120,6 +120,7 @@
 			deleteItemButton.BackColor = SystemColors.Control;
 			deleteItemButton.FlatStyle = FlatStyle.Flat;
 			deleteItemButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			deleteItemButton.ForeColor = Color.Red;
 			deleteItemButton.Location = new Point(1408, 988);
 			deleteItemButton.Name = "deleteItemButton";
 			deleteItemButton.Size = new Size(500, 80);
