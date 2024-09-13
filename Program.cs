@@ -21,7 +21,7 @@ namespace ordering_system
 			{
 				MainMenu objMenu = new MainMenu();
 				objMenu.Show();
-				objMenu.TopMost = true;
+				//objMenu.TopMost = true;
 				obj.Close();
 			}
 			else

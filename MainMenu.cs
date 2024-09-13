@@ -941,9 +941,15 @@ namespace ordering_system
 
 		private void managerFunctionsButton_Click(object sender, EventArgs e)
 		{
-			ManagerFunctionsLogin obj = new ManagerFunctionsLogin();
-			obj.Show();
-			obj.TopMost = true;
+			MainLogin obj = new MainLogin("Manager");
+			if (obj.ShowDialog() == DialogResult.OK) // if password is correct
+			{
+				ManagerFunctions objManFunc = new ManagerFunctions();
+				objManFunc.Show();
+				//objManFunc.TopMost = true;
+				obj.Close();
+			}
+			obj.Dispose();
 		}
 
 		private void timer_Tick(object sender, EventArgs e) // the little time bit in the bottom right
