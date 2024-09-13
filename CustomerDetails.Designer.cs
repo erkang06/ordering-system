@@ -428,7 +428,7 @@
 			// acceptAddressButton
 			// 
 			acceptAddressButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			acceptAddressButton.BackColor = Color.Teal;
+			acceptAddressButton.BackColor = Color.Gold;
 			acceptAddressButton.FlatStyle = FlatStyle.Flat;
 			acceptAddressButton.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
 			acceptAddressButton.Location = new Point(12, 967);

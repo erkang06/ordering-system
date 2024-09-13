@@ -20,7 +20,7 @@ namespace ordering_system
 	{
 		Order currentOrder = new Order();
 		DataTable runningOrderDataTable = new DataTable(); // running order
-																											 // the connection string to the database
+		// the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataRow customerDataRow; // data row for customer
 		DataTable ordersDataTable;
@@ -306,7 +306,7 @@ namespace ordering_system
 				commonItemButtonArray[i].Height = 52;
 				commonItemButtonArray[i].Left = xpos;
 				commonItemButtonArray[i].Top = ypos;
-				commonItemButtonArray[i].Font = new Font("Segoe UI", 6); // will change later
+				commonItemButtonArray[i].Font = new Font("Segoe UI", 6); // will be able to change later
 				commonItemButtonArray[i].BackColor = Color.Gainsboro;
 				commonItemButtonArray[i].MouseClick += new MouseEventHandler(itemButton_Click);
 				commonItemsPanel.Controls.Add(commonItemButtonArray[i]);

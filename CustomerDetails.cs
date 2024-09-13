@@ -45,6 +45,7 @@ namespace ordering_system
 			}
 		}
 
+		// common use functions
 		private int findCustomerID() // find customerid from phonenumber
 		{
 			SqlCommand findcustomerID = new SqlCommand("SELECT CustomerID FROM CustomerTbl WHERE phoneNumber = @PN", con);
@@ -188,6 +189,8 @@ namespace ordering_system
 			addressDataGridView.Columns["houseNumber"].Width = 100;
 			addressDataGridView.Columns["postcode"].Width = 200;
 		}
+
+		// form related
 
 		private void acceptAddressButton_Click(object sender, EventArgs e)
 		{

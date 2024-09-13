@@ -14,9 +14,21 @@ namespace ordering_system
 			// To customize application configuration such as set high DPI settings or default font,
 			// see https://aka.ms/applicationconfiguration.
 			ApplicationConfiguration.Initialize();
-			MainLogin main_form = new MainLogin();
-			main_form.Show();
-			main_form.TopMost = true;
+			
+			// creates login as a dialog box
+			MainLogin obj = new MainLogin("Login");
+			if (obj.ShowDialog() == DialogResult.OK) // if password is correct
+			{
+				MainMenu objMenu = new MainMenu();
+				objMenu.Show();
+				objMenu.TopMost = true;
+				obj.Close();
+			}
+			else
+			{
+				Application.Exit();
+			}
+			obj.Dispose();
 			Application.Run();
 		}
 	}
