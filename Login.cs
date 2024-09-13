@@ -1,38 +1,38 @@
-﻿using System;
+﻿using ordering_system.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Extensions.Configuration;
-using System.Security.Cryptography;
-using System.IO;
 
 namespace ordering_system
 {
-	public partial class MainLogin : Form
+	public partial class Login : Form
 	{
 		string password;
 		// different if for login or for manager funcions
 		string entropyFile, cipherFile;
-		public MainLogin(string passwordType)
+		public Login(string passwordType)
 		{
 			InitializeComponent();
+
 			// different if for login or for manager funcions
 			if (passwordType == "Login")
 			{
 				loginLabel.Text = "Ordering System";
-				entropyFile = "loginEntropy.txt";
-				cipherFile = "loginCipher.txt";
+				entropyFile = Resources.loginEntropy;
+				cipherFile = Resources.loginCipher;
 			}
 			else // manager
 			{
 				loginLabel.Text = "Manager Password";
-				entropyFile = "managerEntropy.txt";
-				cipherFile = "managerCipher.txt";
+				entropyFile = Resources.managerEntropy;
+				cipherFile = Resources.managerCipher;
 			}
 		}
 
@@ -62,7 +62,7 @@ namespace ordering_system
 			}
 		}
 
-		private void MainLogin_Load(object sender, EventArgs e) // get the login password
+		private void Login_Load(object sender, EventArgs e) // get the login password
 		{
 			try
 			{

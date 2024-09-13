@@ -941,7 +941,7 @@ namespace ordering_system
 
 		private void managerFunctionsButton_Click(object sender, EventArgs e)
 		{
-			MainLogin obj = new MainLogin("Manager");
+			Login obj = new Login("Manager");
 			if (obj.ShowDialog() == DialogResult.OK) // if password is correct
 			{
 				ManagerFunctions objManFunc = new ManagerFunctions();

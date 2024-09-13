@@ -4,11 +4,13 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
+using ordering_system.Properties;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ordering_system
@@ -88,7 +90,40 @@ namespace ordering_system
 			ChangePassword obj = new ChangePassword(passwordType);
 			if (obj.ShowDialog(this) == DialogResult.OK) // if accept button clicked
 			{
-				File.WriteAllText(@$"./{passwordType}Password.txt", obj.getPassword());
+				// different if for login or for manager funcions
+				string entropyFile, cipherFile;
+				if (passwordType == "Login")
+				{
+					entropyFile = Resources.loginEntropy;
+					cipherFile = Resources.loginCipher;
+				}
+				else // manager
+				{
+					entropyFile = Resources.managerEntropy;
+					cipherFile = Resources.managerCipher;
+				}
+				// https://stackoverflow.com/a/12657970
+				// Data to protect. Convert a string to a byte[] using Encoding.UTF8.GetBytes()
+				byte[] plaintext = UnicodeEncoding.ASCII.GetBytes(obj.getPassword());
+
+				// Generate additional entropy (will be used as the Initialization vector)
+				byte[] entropy = new byte[20];
+				// https://stackoverflow.com/a/72419989
+				using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+				{
+					rng.GetBytes(entropy);
+				}
+
+				byte[] ciphertext = ProtectedData.Protect(plaintext, entropy, DataProtectionScope.CurrentUser);
+				try
+				{
+					File.WriteAllBytes(entropyFile, entropy);
+					File.WriteAllBytes(cipherFile, ciphertext);
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.ToString());
+				}
 				MessageBox.Show($"{passwordType} password has been changed successfully", "Ordering System");
 				obj.Close();
 			}

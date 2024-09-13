@@ -100,6 +100,42 @@ namespace ordering_system.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to loginCipher.txt.
+        /// </summary>
+        internal static string loginCipher {
+            get {
+                return ResourceManager.GetString("loginCipher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to loginEntropy.txt.
+        /// </summary>
+        internal static string loginEntropy {
+            get {
+                return ResourceManager.GetString("loginEntropy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to managerCipher.txt.
+        /// </summary>
+        internal static string managerCipher {
+            get {
+                return ResourceManager.GetString("managerCipher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to managerEntropy.txt.
+        /// </summary>
+        internal static string managerEntropy {
+            get {
+                return ResourceManager.GetString("managerEntropy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap memo {

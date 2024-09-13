@@ -16,7 +16,7 @@ namespace ordering_system
 			ApplicationConfiguration.Initialize();
 			
 			// creates login as a dialog box
-			MainLogin obj = new MainLogin("Login");
+			Login obj = new Login("Login");
 			if (obj.ShowDialog() == DialogResult.OK) // if password is correct
 			{
 				MainMenu objMenu = new MainMenu();
