@@ -1,6 +1,3 @@
-using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-
 namespace ordering_system
 {
 	internal static class Program
@@ -14,7 +11,7 @@ namespace ordering_system
 			// To customize application configuration such as set high DPI settings or default font,
 			// see https://aka.ms/applicationconfiguration.
 			ApplicationConfiguration.Initialize();
-			
+
 			// creates login as a dialog box
 			Login obj = new Login("Login");
 			if (obj.ShowDialog() == DialogResult.OK) // if password is correct

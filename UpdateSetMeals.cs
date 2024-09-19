@@ -1,14 +1,6 @@
 ﻿using ordering_system.Properties;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ordering_system
 {
@@ -282,7 +274,7 @@ namespace ordering_system
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				setMealFoodItemsDataTable.Clear(); // clear prev set meal
-				// get set meal id
+																					 // get set meal id
 				setMealID = setMealDataGridView.Rows[selectedRowIndex].Cells["setMealID"].Value.ToString();
 				DataRow selectedRow = setMealsDataTable.Select($"setMealID = '{setMealID}'")[0];
 				// fill in text boxes

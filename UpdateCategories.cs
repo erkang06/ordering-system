@@ -1,14 +1,6 @@
 ﻿using ordering_system.Properties;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ordering_system
 {
@@ -58,7 +50,7 @@ namespace ordering_system
 		private void updateDataGridView()
 		{
 			categoriesDataTable = new DataTable(); // clear prev
-			// get categories from categorytbl
+																						 // get categories from categorytbl
 			SqlDataAdapter getCategories = new SqlDataAdapter("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
 			getCategories.Fill(categoriesDataTable);
 			DataView categoriesDataView = new DataView(categoriesDataTable);

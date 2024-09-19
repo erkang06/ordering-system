@@ -1,14 +1,6 @@
 ﻿using ordering_system.Properties;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ordering_system
 {
@@ -91,7 +83,7 @@ namespace ordering_system
 					File.WriteAllBytes(entropyFile, entropy);
 					File.WriteAllBytes(cipherFile, ciphertext);
 				}
-				catch (Exception f)
+				catch (Exception f) // if doesnt work for any reason
 				{
 					Console.WriteLine(f.ToString());
 				}

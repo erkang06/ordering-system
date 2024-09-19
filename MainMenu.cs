@@ -1,18 +1,7 @@
-using System.Data.SqlClient;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using ordering_system.Properties;
-using System.Security.Policy;
 using Microsoft.VisualBasic;
+using ordering_system.Properties;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace ordering_system
 {
@@ -20,7 +9,7 @@ namespace ordering_system
 	{
 		Order currentOrder = new Order();
 		DataTable runningOrderDataTable = new DataTable(); // running order
-		// the connection string to the database
+																											 // the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataRow customerDataRow; // data row for customer
 		DataTable ordersDataTable;
@@ -32,6 +21,7 @@ namespace ordering_system
 		Button[] commonItemButtonArray = new Button[20];
 		int viewOrdersSelectedOrderID = -1;
 		int runningOrderItemID = 0; // datatables will collate identical rows which isnt slay
+		bool paymentPanelButtonMode = true; // true if using buttons, false if typing value in
 		public MainMenu()
 		{
 			InitializeComponent();
@@ -119,6 +109,8 @@ namespace ordering_system
 		{
 			DataView runningOrderDataView = new DataView(runningOrderDataTable);
 			runningOrderDataGridView.DataSource = runningOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "size", "price", "runningOrderItemID");
+			DateTime currentTime = DateTime.Now;
+			estimatedTimePicker.Value = currentTime.AddMinutes(60); // should be editable from manager functions
 		}
 
 		private void updatePriceLabels()
@@ -228,9 +220,9 @@ namespace ordering_system
 			// resize runningorderdatagridview
 			updateDataGridView();
 			runningOrderDataGridView.Columns["itemID"].Width = 30;
-			runningOrderDataGridView.Columns["quantity"].Width = 30;
-			runningOrderDataGridView.Columns["size"].Width = 20;
-			runningOrderDataGridView.Columns["price"].Width = 100;
+			runningOrderDataGridView.Columns["quantity"].Width = 15;
+			runningOrderDataGridView.Columns["size"].Width = 15;
+			runningOrderDataGridView.Columns["price"].Width = 40;
 			runningOrderDataGridView.Columns["runningOrderItemID"].Visible = false;
 			con.Close();
 		}
@@ -825,46 +817,155 @@ namespace ordering_system
 
 		private void acceptOrderButton_Click(object sender, EventArgs e)
 		{
-			if (currentOrder.orderType != "Delivery")
+			if (acceptOrderButton.Text == "Cancel Order") // payment cancelled
 			{
-				if (acceptOrderButton.Text == "Accept Order" && viewOrdersButton.Text == "View Orders") // cant open both panels at once lmao
-				{
-					acceptOrderButton.Text = "Accept Payment";
-					paymentPanel.BringToFront();
-					paymentPanel.Visible = true;
-				}
-				else if (acceptOrderButton.Text == "Accept Payment") // order accepted
-				{
-					currentOrder.orderType = string.Empty; // unselect all order type buttons
-					deliveryButton.BackColor = Color.Transparent;
-					counterButton.BackColor = Color.Transparent;
-					collectionButton.BackColor = Color.Transparent;
-					acceptOrderButton.Text = "Accept Order";
-					paymentPanel.SendToBack();
-					paymentPanel.Visible = false;
-					orderNumberLabel.Text = (Convert.ToInt32(orderNumberLabel.Text) + 1).ToString(); // increment order number
-				}
+				currentOrder.orderType = string.Empty; // unselect all order type buttons
+				deliveryButton.BackColor = Color.Transparent;
+				counterButton.BackColor = Color.Transparent;
+				collectionButton.BackColor = Color.Transparent;
+				acceptOrderButton.Text = "Accept Order";
+				paymentPanel.SendToBack();
+				paymentPanel.Visible = false;
+				// enable viewOrdersButton
+				viewOrdersButton.Enabled = true;
+				return;
 			}
+			else if (currentOrder.orderType == "Counter") // bring up payment panel
+			{
+				acceptOrderButton.Text = "Cancel Order";
+				paymentPanel.BringToFront();
+				paymentPanel.Visible = true;
+				paymentPaidTextbox.Text = "0.00";
+				paymentPanelButtonMode = true;
+				// disable viewOrdersButton
+				viewOrdersButton.Enabled = false;
+			}
+			else if (currentOrder.orderType == "Delivery" || currentOrder.orderType == "Collection")// deliveries and collections can print a kitchen ticket straight
+			{
+
+			}
+			else // no ordertype selected
+			{
+				MessageBox.Show("No order type selected", "Ordering System");
+			}
+
+			orderNumberLabel.Text = (Convert.ToInt32(orderNumberLabel.Text) + 1).ToString(); // increment order number
+		}
+
+		// paying for orders
+
+		private void paymentButton_Click(object sender, EventArgs e)
+		{
+			Button paymentButton = (Button)sender;
+			// get value of button
+			string buttonValueString = paymentButton.Text.Substring(1);
+			decimal buttonValue = Convert.ToDecimal(buttonValueString);
+			if (paymentPanelButtonMode == false) // if using text; clear before using buttons
+			{
+				paymentPaidTextbox.Text = "0.00";
+			}
+			decimal paidValue = Convert.ToDecimal(paymentPaidTextbox.Text) + buttonValue;
+			paymentPaidTextbox.Text = paidValue.ToString();
+			changeChecker(paidValue);
+			paymentPanelButtonMode = true;
+		}
+
+		private void paymentPaidTextbox_TextChanged(object sender, EventArgs e)
+		{
+			string paidValueString = paymentPaidTextbox.Text;
+			if (paidValueString != "") // if theres smt in the textbox
+			{
+				char lastChar = paidValueString.Last();
+				paidValueString = paidValueString.Remove(paidValueString.Length - 1); // remove last char since thats the new one we have to test
+				if (paidValueString.Length == 0) // if theres nothing be 0
+				{
+					paidValueString = "0";
+				}
+				decimal paidValue = Convert.ToDecimal(paidValueString);
+				if (char.IsNumber(lastChar) || lastChar == '.') // if chars allowed
+				{
+					// if number is typed when decimal places is w/in 1 dp or a decimal point when there hasnt alr been one
+					if ((char.IsNumber(lastChar) && decimal.Round(paidValue, 1) == paidValue) || paidValueString.Contains('.') == false)
+					{
+						paidValueString += lastChar;
+					}
+					else // get rid of new char
+					{
+						paymentPaidTextbox.Text = paidValueString;
+						paymentPaidTextbox.SelectionStart = paidValueString.Length;
+					}
+					paidValue = Convert.ToDecimal(paidValueString);
+					paymentPanelButtonMode = false;
+				}
+				changeChecker(paidValue);
+			}
+		}
+
+		private void paymentPaidTextbox_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			
+		}
+
+		private void changeChecker(decimal paidValue) // check if paid > price
+		{
+			decimal totalPrice = Convert.ToDecimal(totalPriceLabel.Text);
+			if (paidValue > totalPrice)
+			{
+				decimal change = paidValue - totalPrice;
+				paymentChangeValueLabel.Text = change.ToString();
+			}
+			else
+			{
+				paymentChangeValueLabel.Text = "0.00";
+			}
+		}
+
+		private void paymentExactButton_Click(object sender, EventArgs e)
+		{
+			paymentPaidTextbox.Text = totalPriceLabel.Text;
+			paymentPanelButtonMode = true;
+		}
+
+		private void paymentClearButton_Click(object sender, EventArgs e)
+		{
+			paymentPaidTextbox.Text = "0.00";
+			paymentPanelButtonMode = true;
+		}
+
+		private void paymentPaidTextbox_Click(object sender, EventArgs e)
+		{
+			if (paymentPanelButtonMode) // if prev using buttons; clear
+			{
+				paymentPaidTextbox.Text = string.Empty;
+			}
+			paymentPanelButtonMode = false;
 		}
 
 		// view orders
 
 		private void viewOrdersButton_Click(object sender, EventArgs e)
 		{
-			viewOrdersDeliveryButton.BackColor = Color.Transparent;
-			viewOrdersCounterButton.BackColor = Color.Transparent;
-			viewOrdersCollectionButton.BackColor = Color.Transparent;
-			if (viewOrdersButton.Text == "View Orders" && acceptOrderButton.Text == "Accept Order") // cant open both panels at once lmao
+			if (viewOrdersButton.Text == "View Orders")
 			{
+				// disable all view order buttons
+				viewOrdersDeliveryButton.BackColor = Color.Transparent;
+				viewOrdersCounterButton.BackColor = Color.Transparent;
+				viewOrdersCollectionButton.BackColor = Color.Transparent;
+				// get the panel out
 				viewOrdersButton.Text = "Cancel";
 				viewOrdersPanel.BringToFront();
 				viewOrdersPanel.Visible = true;
+				// disable accept order; cant open both at once lmao
+				acceptOrderButton.Enabled = false;
 			}
-			else if (viewOrdersButton.Text == "Cancel") // exit view orders mode
+			else // exit view orders mode
 			{
+				// get rid of the panel
 				viewOrdersButton.Text = "View Orders";
 				viewOrdersPanel.SendToBack();
 				viewOrdersPanel.Visible = false;
+				// enable accept order
+				acceptOrderButton.Enabled = true;
 			}
 		}
 
@@ -955,8 +1056,6 @@ namespace ordering_system
 		private void timer_Tick(object sender, EventArgs e) // the little time bit in the bottom right
 		{
 			timeLabel.Text = DateTime.Now.ToString("dd/mm/yy HH:mm:ss");
-			DateTime currentTime = DateTime.Now;
-			estimatedTimePicker.Value = currentTime.AddMinutes(60); // should be editable from manager functions
 		}
 
 		private void updateCategoriesButton_Click(object sender, EventArgs e) // updates both categories and common items but the buttons too small to fit it all lmao

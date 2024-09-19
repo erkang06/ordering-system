@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+﻿using ordering_system.Properties;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.Extensions.Configuration;
-using Microsoft.VisualBasic;
-using ordering_system.Properties;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ordering_system
 {
@@ -119,12 +108,12 @@ namespace ordering_system
 				{
 					File.WriteAllBytes(entropyFile, entropy);
 					File.WriteAllBytes(cipherFile, ciphertext);
+					MessageBox.Show($"{passwordType} password has been changed successfully", "Ordering System");
 				}
-				catch (Exception e)
+				catch
 				{
-					Console.WriteLine(e.ToString());
+					MessageBox.Show($"{passwordType} password hasn't been changed", "Ordering System");
 				}
-				MessageBox.Show($"{passwordType} password has been changed successfully", "Ordering System");
 				obj.Close();
 			}
 			obj.Dispose();

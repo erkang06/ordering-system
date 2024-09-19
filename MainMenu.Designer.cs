@@ -63,6 +63,17 @@
 			itemsPanel = new Panel();
 			categoriesPanel = new Panel();
 			paymentPanel = new Panel();
+			paymentAcceptButton = new Button();
+			paymentChangeTextLabel = new Label();
+			paymentPaidLabel = new Label();
+			paymentClearButton = new Button();
+			paymentExactButton = new Button();
+			payment50Button = new Button();
+			paymentChangeValueLabel = new Label();
+			paymentPaidTextbox = new TextBox();
+			payment20Button = new Button();
+			payment10Button = new Button();
+			payment5Button = new Button();
 			viewOrdersPanel = new Panel();
 			printCustomerTicketButton = new Button();
 			printKitchenTicketButton = new Button();
@@ -77,6 +88,7 @@
 			itemEditFunctionsPanel.SuspendLayout();
 			runningOrderPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)runningOrderDataGridView).BeginInit();
+			paymentPanel.SuspendLayout();
 			viewOrdersPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)viewOrdersDataGridView).BeginInit();
 			SuspendLayout();
@@ -481,12 +493,137 @@
 			// 
 			paymentPanel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			paymentPanel.BackColor = Color.DarkOrange;
+			paymentPanel.Controls.Add(paymentAcceptButton);
+			paymentPanel.Controls.Add(paymentChangeTextLabel);
+			paymentPanel.Controls.Add(paymentPaidLabel);
+			paymentPanel.Controls.Add(paymentClearButton);
+			paymentPanel.Controls.Add(paymentExactButton);
+			paymentPanel.Controls.Add(payment50Button);
+			paymentPanel.Controls.Add(paymentChangeValueLabel);
+			paymentPanel.Controls.Add(paymentPaidTextbox);
+			paymentPanel.Controls.Add(payment20Button);
+			paymentPanel.Controls.Add(payment10Button);
+			paymentPanel.Controls.Add(payment5Button);
 			paymentPanel.Location = new Point(0, 820);
 			paymentPanel.Margin = new Padding(0);
 			paymentPanel.Name = "paymentPanel";
 			paymentPanel.Size = new Size(700, 260);
 			paymentPanel.TabIndex = 4;
 			paymentPanel.Visible = false;
+			// 
+			// paymentAcceptButton
+			// 
+			paymentAcceptButton.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+			paymentAcceptButton.Location = new Point(520, 0);
+			paymentAcceptButton.Name = "paymentAcceptButton";
+			paymentAcceptButton.Size = new Size(180, 130);
+			paymentAcceptButton.TabIndex = 10;
+			paymentAcceptButton.Text = "ACCEPT";
+			paymentAcceptButton.UseVisualStyleBackColor = true;
+			// 
+			// paymentChangeTextLabel
+			// 
+			paymentChangeTextLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			paymentChangeTextLabel.Location = new Point(230, 196);
+			paymentChangeTextLabel.Name = "paymentChangeTextLabel";
+			paymentChangeTextLabel.Size = new Size(210, 64);
+			paymentChangeTextLabel.TabIndex = 9;
+			paymentChangeTextLabel.Text = "Change:";
+			// 
+			// paymentPaidLabel
+			// 
+			paymentPaidLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			paymentPaidLabel.Location = new Point(230, 131);
+			paymentPaidLabel.Name = "paymentPaidLabel";
+			paymentPaidLabel.Size = new Size(210, 64);
+			paymentPaidLabel.TabIndex = 8;
+			paymentPaidLabel.Text = "Paid:";
+			// 
+			// paymentClearButton
+			// 
+			paymentClearButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+			paymentClearButton.Location = new Point(0, 195);
+			paymentClearButton.Name = "paymentClearButton";
+			paymentClearButton.Size = new Size(225, 65);
+			paymentClearButton.TabIndex = 7;
+			paymentClearButton.Text = "CLEAR";
+			paymentClearButton.UseVisualStyleBackColor = true;
+			paymentClearButton.Click += paymentClearButton_Click;
+			// 
+			// paymentExactButton
+			// 
+			paymentExactButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+			paymentExactButton.Location = new Point(0, 130);
+			paymentExactButton.Name = "paymentExactButton";
+			paymentExactButton.Size = new Size(225, 65);
+			paymentExactButton.TabIndex = 6;
+			paymentExactButton.Text = "EXACT";
+			paymentExactButton.UseVisualStyleBackColor = true;
+			paymentExactButton.Click += paymentExactButton_Click;
+			// 
+			// payment50Button
+			// 
+			payment50Button.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+			payment50Button.Location = new Point(390, 0);
+			payment50Button.Name = "payment50Button";
+			payment50Button.Size = new Size(130, 130);
+			payment50Button.TabIndex = 5;
+			payment50Button.Text = "£50";
+			payment50Button.UseVisualStyleBackColor = true;
+			payment50Button.Click += paymentButton_Click;
+			// 
+			// paymentChangeValueLabel
+			// 
+			paymentChangeValueLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			paymentChangeValueLabel.Location = new Point(450, 196);
+			paymentChangeValueLabel.Name = "paymentChangeValueLabel";
+			paymentChangeValueLabel.Size = new Size(250, 64);
+			paymentChangeValueLabel.TabIndex = 4;
+			paymentChangeValueLabel.Text = "0.00";
+			// 
+			// paymentPaidTextbox
+			// 
+			paymentPaidTextbox.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+			paymentPaidTextbox.Location = new Point(450, 132);
+			paymentPaidTextbox.Name = "paymentPaidTextbox";
+			paymentPaidTextbox.Size = new Size(250, 64);
+			paymentPaidTextbox.TabIndex = 3;
+			paymentPaidTextbox.Text = "0.00";
+			paymentPaidTextbox.Click += paymentPaidTextbox_Click;
+			paymentPaidTextbox.TextChanged += paymentPaidTextbox_TextChanged;
+			// 
+			// payment20Button
+			// 
+			payment20Button.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+			payment20Button.Location = new Point(260, 0);
+			payment20Button.Name = "payment20Button";
+			payment20Button.Size = new Size(130, 130);
+			payment20Button.TabIndex = 2;
+			payment20Button.Text = "£20";
+			payment20Button.UseVisualStyleBackColor = true;
+			payment20Button.Click += paymentButton_Click;
+			// 
+			// payment10Button
+			// 
+			payment10Button.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+			payment10Button.Location = new Point(130, 0);
+			payment10Button.Name = "payment10Button";
+			payment10Button.Size = new Size(130, 130);
+			payment10Button.TabIndex = 1;
+			payment10Button.Text = "£10";
+			payment10Button.UseVisualStyleBackColor = true;
+			payment10Button.Click += paymentButton_Click;
+			// 
+			// payment5Button
+			// 
+			payment5Button.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+			payment5Button.Location = new Point(0, 0);
+			payment5Button.Name = "payment5Button";
+			payment5Button.Size = new Size(130, 130);
+			payment5Button.TabIndex = 0;
+			payment5Button.Text = "£5";
+			payment5Button.UseVisualStyleBackColor = true;
+			payment5Button.Click += paymentButton_Click;
 			// 
 			// viewOrdersPanel
 			// 
@@ -599,11 +736,11 @@
 			Controls.Add(managerFunctionsPanel);
 			Controls.Add(orderTypePanel);
 			Controls.Add(customerDetailsPanel);
-			Controls.Add(commonItemsPanel);
 			Controls.Add(paymentPanel);
 			Controls.Add(itemsPanel);
 			Controls.Add(categoriesPanel);
 			Controls.Add(viewOrdersPanel);
+			Controls.Add(commonItemsPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "MainMenu";
 			StartPosition = FormStartPosition.CenterScreen;
@@ -615,6 +752,8 @@
 			itemEditFunctionsPanel.ResumeLayout(false);
 			runningOrderPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)runningOrderDataGridView).EndInit();
+			paymentPanel.ResumeLayout(false);
+			paymentPanel.PerformLayout();
 			viewOrdersPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)viewOrdersDataGridView).EndInit();
 			ResumeLayout(false);
@@ -664,5 +803,16 @@
 		private Button printKitchenTicketButton;
 		private Button cancelOrderButton;
 		private Button updateCategoriesButton;
+		private Label paymentChangeValueLabel;
+		private TextBox paymentPaidTextbox;
+		private Button payment20Button;
+		private Button payment10Button;
+		private Button payment5Button;
+		private Button payment50Button;
+		private Label paymentChangeTextLabel;
+		private Label paymentPaidLabel;
+		private Button paymentClearButton;
+		private Button paymentExactButton;
+		private Button paymentAcceptButton;
 	}
 }
