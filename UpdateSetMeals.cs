@@ -461,7 +461,7 @@ namespace ordering_system
 			addSetMealFoodItemToDatabase.Parameters.AddWithValue("@SMID", setMealIDTextBox.Text);
 			addSetMealFoodItemToDatabase.Parameters.Add("@FIID", SqlDbType.NVarChar);
 			addSetMealFoodItemToDatabase.Parameters.Add("@SZ", SqlDbType.NChar);
-			addSetMealFoodItemToDatabase.Parameters.Add("@QTT", SqlDbType.Int);
+			addSetMealFoodItemToDatabase.Parameters.Add("@QTT", SqlDbType.Decimal);
 			foreach (DataRow row in setMealFoodItemsDataTable.Rows) // each item just needs parameters to be changed
 			{
 				addSetMealFoodItemToDatabase.Parameters["@FIID"].Value = row[0];

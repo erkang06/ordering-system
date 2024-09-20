@@ -20,13 +20,13 @@ namespace ordering_system
 				objMenu.Show();
 				//objMenu.TopMost = true;
 				obj.Close();
+				Application.Run();
 			}
 			else
 			{
 				Application.Exit();
 			}
 			obj.Dispose();
-			Application.Run();
 		}
 	}
 
@@ -35,9 +35,7 @@ namespace ordering_system
 		public string orderType;
 		public int customerID;
 		public int addressID;
-		public DateOnly orderDate;
-		public TimeOnly orderTime;
-		public TimeOnly estimatedTime;
+		public bool hasPaid;
 	}
 
 	// class that lets customer details be sent from customer details to main menu

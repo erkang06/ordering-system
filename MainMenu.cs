@@ -192,6 +192,21 @@ namespace ordering_system
 			return true;
 		}
 
+		private void clearMenu()
+		{
+			currentOrder = new Order();
+			currentOrder.hasPaid = false;
+			runningOrderDataTable.Clear();
+			paymentPanel.SendToBack();
+			paymentPanel.Visible = false;
+			deliveryButton.BackColor = Color.Transparent;
+			counterButton.BackColor = Color.Transparent;
+			collectionButton.BackColor = Color.Transparent;
+			runningOrderItemID = 0;
+			updateDataGridView();
+			updatePriceLabels();
+		}
+
 		// startup
 
 		private void MainMenu_Load(object sender, EventArgs e)
@@ -219,11 +234,12 @@ namespace ordering_system
 			runningOrderDataTable.Columns.Add("runningOrderItemID");
 			// resize runningorderdatagridview
 			updateDataGridView();
-			runningOrderDataGridView.Columns["itemID"].Width = 30;
-			runningOrderDataGridView.Columns["quantity"].Width = 15;
-			runningOrderDataGridView.Columns["size"].Width = 15;
-			runningOrderDataGridView.Columns["price"].Width = 40;
+			runningOrderDataGridView.Columns["itemID"].Width = 25;
+			runningOrderDataGridView.Columns["quantity"].Width = 20;
+			runningOrderDataGridView.Columns["size"].Width = 12;
+			runningOrderDataGridView.Columns["price"].Width = 30;
 			runningOrderDataGridView.Columns["runningOrderItemID"].Visible = false;
+			currentOrder.hasPaid = false;
 			con.Close();
 		}
 
@@ -754,24 +770,29 @@ namespace ordering_system
 			{
 				// get index of item in datagridview
 				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
-				// get current quantity to increment
-				decimal currentPrice = Convert.ToDecimal(runningOrderDataTable.Rows[selectedIndex]["price"]);
+				DataRow selectedRow = runningOrderDataTable.Rows[selectedIndex];
+				// get current values to change
+				int quantity = Convert.ToInt32(selectedRow["quantity"]);
+				decimal currentPrice = Convert.ToDecimal(selectedRow["price"]) / quantity;
 				string newPriceString = Interaction.InputBox("Enter the new price for a single item:", "Ordering System", currentPrice.ToString());
+				decimal newPrice;
 				try // change the price if u acc can
 				{
-					decimal newPrice = Convert.ToDecimal(newPriceString);
-					decimal regPrice = Convert.ToDecimal(runningOrderDataTable.Rows[selectedIndex]["regPrice"]);
-					decimal discount = newPrice - regPrice;
-					runningOrderDataTable.Rows[selectedIndex]["discount"] = discount;
-					runningOrderDataTable.Rows[selectedIndex]["price"] = newPrice.ToString("F");
-					updateDataGridView();
-					updatePriceLabels();
-					runningOrderDataGridView.Rows[selectedIndex].Selected = true;
+					newPrice = Convert.ToDecimal(newPriceString);
 				}
-				catch // cant
+				catch // cant make input a decimal
 				{
 					MessageBox.Show("Input was invalid", "Ordering system");
+					return;
 				}
+				decimal regPrice = Convert.ToDecimal(selectedRow["regPrice"]);
+				decimal discount = newPrice - regPrice;
+				selectedRow["discount"] = discount;
+				// replace new price in datatable
+				selectedRow["price"] = updateTotalItemPrice(selectedRow);
+				updateDataGridView();
+				updatePriceLabels();
+				runningOrderDataGridView.Rows[selectedIndex].Selected = true;
 			}
 		}
 
@@ -790,9 +811,13 @@ namespace ordering_system
 			{
 				// get index of item in datagridview
 				int selectedIndex = runningOrderDataGridView.SelectedRows[0].Index;
+				DataRow selectedRow = runningOrderDataTable.Rows[selectedIndex];
 				// get memo
 				string memo = Interaction.InputBox("Enter the memo for this item:", "Ordering System");
-				runningOrderDataTable.Rows[selectedIndex]["memo"] = memo;
+				if (memo != null)
+				{
+					selectedRow["memo"] = memo;
+				}
 			}
 		}
 
@@ -804,14 +829,7 @@ namespace ordering_system
 			DialogResult cancelOrder = MessageBox.Show("Do you want to cancel this order?", "Ordering System", MessageBoxButtons.YesNo);
 			if (cancelOrder == DialogResult.Yes) // yes
 			{
-				currentOrder = new Order();
-				runningOrderDataTable.Clear();
-				deliveryButton.BackColor = Color.Transparent;
-				counterButton.BackColor = Color.Transparent;
-				collectionButton.BackColor = Color.Transparent;
-				runningOrderItemID = 0;
-				updateDataGridView();
-				updatePriceLabels();
+				clearMenu();
 			}
 		}
 
@@ -819,7 +837,8 @@ namespace ordering_system
 		{
 			if (acceptOrderButton.Text == "Cancel Order") // payment cancelled
 			{
-				currentOrder.orderType = string.Empty; // unselect all order type buttons
+				// unselect all order type buttons
+				currentOrder.orderType = string.Empty;
 				deliveryButton.BackColor = Color.Transparent;
 				counterButton.BackColor = Color.Transparent;
 				collectionButton.BackColor = Color.Transparent;
@@ -840,16 +859,82 @@ namespace ordering_system
 				// disable viewOrdersButton
 				viewOrdersButton.Enabled = false;
 			}
-			else if (currentOrder.orderType == "Delivery" || currentOrder.orderType == "Collection")// deliveries and collections can print a kitchen ticket straight
+			else if (currentOrder.orderType == "Delivery" || currentOrder.orderType == "Collection")
 			{
-
+				acceptOrder(currentOrder.orderType);
 			}
 			else // no ordertype selected
 			{
 				MessageBox.Show("No order type selected", "Ordering System");
 			}
+		}
 
+		private void acceptOrder(string orderType)
+		{
+			con.Open();
+			addOrderToOrderTbl(orderType);
+			int orderID = getOrderID();
+			addOrderItems(orderID);
+			clearMenu();
 			orderNumberLabel.Text = (Convert.ToInt32(orderNumberLabel.Text) + 1).ToString(); // increment order number
+			con.Close();
+		}
+
+		private void addOrderToOrderTbl(string orderType)
+		{
+			SqlCommand addOrderToDatabase = new SqlCommand();
+			addOrderToDatabase.Connection = con;
+			addOrderToDatabase.Parameters.AddWithValue("@OT", orderType);
+			addOrderToDatabase.Parameters.AddWithValue("@OD", DateTime.Now.Date);
+			addOrderToDatabase.Parameters.AddWithValue("@OTM", DateTime.Now.ToLocalTime());
+			addOrderToDatabase.Parameters.AddWithValue("@ETM", estimatedTimePicker.Value.ToLocalTime());
+			addOrderToDatabase.Parameters.AddWithValue("@HP", currentOrder.hasPaid);
+			switch (orderType)
+			{
+				case "Counter":
+					addOrderToDatabase.CommandText = "INSERT INTO OrderTbl(orderType, orderDate, orderTime, estimatedTime, hasPaid) VALUES(@OT, @OD, @OTM, @ETM, @HP)";
+					break;
+				case "Collection":
+					addOrderToDatabase.CommandText = "INSERT INTO OrderTbl(orderType, customerID, orderDate, orderTime, estimatedTime, hasPaid) VALUES(@OT, @CID, @OD, @OTM, @ETM, @HP)";
+					addOrderToDatabase.Parameters.AddWithValue("@CID", currentOrder.customerID);
+					break;
+				case "Delivery":
+					addOrderToDatabase.CommandText = "INSERT INTO OrderTbl(orderType, customerID, addressID, orderDate, orderTime, estimatedTime, hasPaid) VALUES(@OT, @CID, @AID, @OD, @OTM, @ETM, @HP)";
+					addOrderToDatabase.Parameters.AddWithValue("@CID", currentOrder.customerID);
+					addOrderToDatabase.Parameters.AddWithValue("@AID", currentOrder.addressID);
+					break;
+			}
+			addOrderToDatabase.ExecuteNonQuery();
+		}
+
+		private int getOrderID() // get id of order that was just created
+		{
+			SqlCommand getOrderID = new SqlCommand("SELECT MAX(orderID) FROM OrderTbl", con);
+			int orderID = Convert.ToInt32(getOrderID.ExecuteScalar());
+			return orderID;
+		}
+
+		private void addOrderItems(int orderID)
+		{
+			// sort it sqlcommand bfhand
+			SqlCommand addOrderItemToDatabase = new SqlCommand("INSERT INTO OrderItemTBL(orderID, itemID, itemType, quantity, size, memo, discount) VALUES(@OID, @IID, @IT, @QTT, @SZ, @MMO, @DSC)", con);
+			addOrderItemToDatabase.Parameters.AddWithValue("@OID", orderID);
+			addOrderItemToDatabase.Parameters.Add("@IID", SqlDbType.NVarChar);
+			addOrderItemToDatabase.Parameters.Add("@IT", SqlDbType.NVarChar);
+			addOrderItemToDatabase.Parameters.Add("@QTT", SqlDbType.Int);
+			addOrderItemToDatabase.Parameters.Add("@SZ", SqlDbType.NChar);
+			addOrderItemToDatabase.Parameters.Add("@MMO", SqlDbType.NVarChar);
+			addOrderItemToDatabase.Parameters.Add("@DSC", SqlDbType.NChar);
+			foreach (DataRow runningOrderRow in runningOrderDataTable.Rows)
+			{
+				addOrderItemToDatabase.Parameters["@IID"].Value = runningOrderRow["itemID"];
+				addOrderItemToDatabase.Parameters["@IT"].Value = runningOrderRow["itemType"];
+				addOrderItemToDatabase.Parameters["@QTT"].Value = runningOrderRow["quantity"];
+				addOrderItemToDatabase.Parameters["@SZ"].Value = runningOrderRow["size"];
+				addOrderItemToDatabase.Parameters["@MMO"].Value = runningOrderRow["memo"];
+				addOrderItemToDatabase.Parameters["@DSC"].Value = runningOrderRow["discount"];
+				addOrderItemToDatabase.ExecuteNonQuery();
+			}
 		}
 
 		// paying for orders
@@ -901,11 +986,6 @@ namespace ordering_system
 			}
 		}
 
-		private void paymentPaidTextbox_KeyPress(object sender, KeyPressEventArgs e)
-		{
-			
-		}
-
 		private void changeChecker(decimal paidValue) // check if paid > price
 		{
 			decimal totalPrice = Convert.ToDecimal(totalPriceLabel.Text);
@@ -939,6 +1019,26 @@ namespace ordering_system
 				paymentPaidTextbox.Text = string.Empty;
 			}
 			paymentPanelButtonMode = false;
+		}
+
+		private void paymentAcceptButton_Click(object sender, EventArgs e)
+		{
+			decimal paidValue = Convert.ToDecimal(paymentPaidTextbox.Text);
+			decimal totalPrice = Convert.ToDecimal(totalPriceLabel.Text);
+			if (paidValue < totalPrice) // if not paid enough
+			{
+				MessageBox.Show("Insufficient payment", "Ordering System");
+			}
+			else if (viewOrdersButton.Text == "View Orders") // if accepting a counter
+			{
+				currentOrder.hasPaid = true;
+				acceptOrder("Counter");
+			}
+			else // getting payment for a collection
+			{
+				int orderID = getOrderID();
+				SqlCommand acceptPayment = new SqlCommand();
+			}
 		}
 
 		// view orders

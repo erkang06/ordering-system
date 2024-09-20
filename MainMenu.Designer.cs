@@ -109,7 +109,8 @@
 			customerDetailsLabel.BackColor = Color.Transparent;
 			customerDetailsLabel.Font = new Font("Segoe UI", 12F);
 			customerDetailsLabel.ForeColor = Color.White;
-			customerDetailsLabel.Location = new Point(90, 15);
+			customerDetailsLabel.Location = new Point(89, 15);
+			customerDetailsLabel.Margin = new Padding(4, 0, 4, 0);
 			customerDetailsLabel.Name = "customerDetailsLabel";
 			customerDetailsLabel.Size = new Size(1010, 50);
 			customerDetailsLabel.TabIndex = 1;
@@ -120,7 +121,8 @@
 			orderNumberLabel.BackColor = Color.Transparent;
 			orderNumberLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			orderNumberLabel.ForeColor = Color.White;
-			orderNumberLabel.Location = new Point(10, 15);
+			orderNumberLabel.Location = new Point(9, 15);
+			orderNumberLabel.Margin = new Padding(4, 0, 4, 0);
 			orderNumberLabel.Name = "orderNumberLabel";
 			orderNumberLabel.Size = new Size(84, 45);
 			orderNumberLabel.TabIndex = 0;
@@ -144,8 +146,9 @@
 			collectionButton.BackColor = Color.Transparent;
 			collectionButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
 			collectionButton.Location = new Point(420, 0);
+			collectionButton.Margin = new Padding(4, 2, 4, 2);
 			collectionButton.Name = "collectionButton";
-			collectionButton.Size = new Size(210, 80);
+			collectionButton.Size = new Size(210, 81);
 			collectionButton.TabIndex = 2;
 			collectionButton.Text = "Collection";
 			collectionButton.UseVisualStyleBackColor = false;
@@ -156,8 +159,9 @@
 			counterButton.BackColor = Color.Transparent;
 			counterButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
 			counterButton.Location = new Point(210, 0);
+			counterButton.Margin = new Padding(4, 2, 4, 2);
 			counterButton.Name = "counterButton";
-			counterButton.Size = new Size(210, 80);
+			counterButton.Size = new Size(210, 81);
 			counterButton.TabIndex = 1;
 			counterButton.Text = "Counter";
 			counterButton.UseVisualStyleBackColor = false;
@@ -168,8 +172,9 @@
 			deliveryButton.BackColor = Color.Transparent;
 			deliveryButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
 			deliveryButton.Location = new Point(0, 0);
+			deliveryButton.Margin = new Padding(4, 2, 4, 2);
 			deliveryButton.Name = "deliveryButton";
-			deliveryButton.Size = new Size(210, 80);
+			deliveryButton.Size = new Size(210, 81);
 			deliveryButton.TabIndex = 0;
 			deliveryButton.Text = "Delivery";
 			deliveryButton.UseVisualStyleBackColor = false;
@@ -194,7 +199,8 @@
 			// 
 			updateCategoriesButton.BackColor = Color.Transparent;
 			updateCategoriesButton.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-			updateCategoriesButton.Location = new Point(0, 200);
+			updateCategoriesButton.Location = new Point(0, 201);
+			updateCategoriesButton.Margin = new Padding(4, 2, 4, 2);
 			updateCategoriesButton.Name = "updateCategoriesButton";
 			updateCategoriesButton.Size = new Size(180, 100);
 			updateCategoriesButton.TabIndex = 7;
@@ -206,8 +212,9 @@
 			// 
 			timeLabel.Font = new Font("Segoe UI", 12F);
 			timeLabel.Location = new Point(0, 890);
+			timeLabel.Margin = new Padding(4, 0, 4, 0);
 			timeLabel.Name = "timeLabel";
-			timeLabel.Size = new Size(170, 90);
+			timeLabel.Size = new Size(171, 90);
 			timeLabel.TabIndex = 6;
 			timeLabel.Text = "00/00/00 00:00:00";
 			timeLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -217,6 +224,7 @@
 			viewOrdersButton.BackColor = Color.Transparent;
 			viewOrdersButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			viewOrdersButton.Location = new Point(0, 100);
+			viewOrdersButton.Margin = new Padding(4, 2, 4, 2);
 			viewOrdersButton.Name = "viewOrdersButton";
 			viewOrdersButton.Size = new Size(180, 100);
 			viewOrdersButton.TabIndex = 5;
@@ -229,6 +237,7 @@
 			acceptOrderButton.BackColor = Color.Transparent;
 			acceptOrderButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			acceptOrderButton.Location = new Point(0, 0);
+			acceptOrderButton.Margin = new Padding(4, 2, 4, 2);
 			acceptOrderButton.Name = "acceptOrderButton";
 			acceptOrderButton.Size = new Size(180, 100);
 			acceptOrderButton.TabIndex = 4;
@@ -240,7 +249,8 @@
 			// 
 			managerFunctionsButton.BackColor = Color.Transparent;
 			managerFunctionsButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			managerFunctionsButton.Location = new Point(0, 980);
+			managerFunctionsButton.Location = new Point(0, 979);
+			managerFunctionsButton.Margin = new Padding(4, 2, 4, 2);
 			managerFunctionsButton.Name = "managerFunctionsButton";
 			managerFunctionsButton.Size = new Size(180, 100);
 			managerFunctionsButton.TabIndex = 3;
@@ -258,18 +268,19 @@
 			itemEditFunctionsPanel.Controls.Add(decreaseQuantityButton);
 			itemEditFunctionsPanel.Controls.Add(priceEditButton);
 			itemEditFunctionsPanel.Controls.Add(memoButton);
-			itemEditFunctionsPanel.Location = new Point(0, 80);
+			itemEditFunctionsPanel.Location = new Point(0, 81);
 			itemEditFunctionsPanel.Margin = new Padding(0);
 			itemEditFunctionsPanel.Name = "itemEditFunctionsPanel";
-			itemEditFunctionsPanel.Size = new Size(700, 80);
+			itemEditFunctionsPanel.Size = new Size(700, 81);
 			itemEditFunctionsPanel.TabIndex = 2;
 			// 
 			// smallPriceButton
 			// 
 			smallPriceButton.Image = Properties.Resources.smallPrice;
-			smallPriceButton.Location = new Point(400, 0);
+			smallPriceButton.Location = new Point(399, 0);
+			smallPriceButton.Margin = new Padding(4, 2, 4, 2);
 			smallPriceButton.Name = "smallPriceButton";
-			smallPriceButton.Size = new Size(100, 80);
+			smallPriceButton.Size = new Size(100, 81);
 			smallPriceButton.TabIndex = 6;
 			smallPriceButton.UseVisualStyleBackColor = true;
 			smallPriceButton.Click += smallPriceButton_Click;
@@ -278,8 +289,9 @@
 			// 
 			largePriceButton.Image = Properties.Resources.largePrice;
 			largePriceButton.Location = new Point(500, 0);
+			largePriceButton.Margin = new Padding(4, 2, 4, 2);
 			largePriceButton.Name = "largePriceButton";
-			largePriceButton.Size = new Size(100, 80);
+			largePriceButton.Size = new Size(100, 81);
 			largePriceButton.TabIndex = 5;
 			largePriceButton.UseVisualStyleBackColor = true;
 			largePriceButton.Click += largePriceButton_Click;
@@ -288,8 +300,9 @@
 			// 
 			cancelOrderButton.Image = Properties.Resources.redCancelOrder;
 			cancelOrderButton.Location = new Point(600, 0);
+			cancelOrderButton.Margin = new Padding(4, 2, 4, 2);
 			cancelOrderButton.Name = "cancelOrderButton";
-			cancelOrderButton.Size = new Size(100, 80);
+			cancelOrderButton.Size = new Size(100, 81);
 			cancelOrderButton.TabIndex = 4;
 			cancelOrderButton.UseVisualStyleBackColor = true;
 			cancelOrderButton.Click += cancelOrderButton_Click;
@@ -297,9 +310,10 @@
 			// increaseQuantityButton
 			// 
 			increaseQuantityButton.Image = Properties.Resources.increaseQuantity;
-			increaseQuantityButton.Location = new Point(300, 0);
+			increaseQuantityButton.Location = new Point(301, 0);
+			increaseQuantityButton.Margin = new Padding(4, 2, 4, 2);
 			increaseQuantityButton.Name = "increaseQuantityButton";
-			increaseQuantityButton.Size = new Size(100, 80);
+			increaseQuantityButton.Size = new Size(100, 81);
 			increaseQuantityButton.TabIndex = 3;
 			increaseQuantityButton.UseVisualStyleBackColor = true;
 			increaseQuantityButton.Click += increaseQuantityButton_Click;
@@ -307,9 +321,10 @@
 			// decreaseQuantityButton
 			// 
 			decreaseQuantityButton.Image = Properties.Resources.decreaseQuantity;
-			decreaseQuantityButton.Location = new Point(200, 0);
+			decreaseQuantityButton.Location = new Point(201, 0);
+			decreaseQuantityButton.Margin = new Padding(4, 2, 4, 2);
 			decreaseQuantityButton.Name = "decreaseQuantityButton";
-			decreaseQuantityButton.Size = new Size(100, 80);
+			decreaseQuantityButton.Size = new Size(100, 81);
 			decreaseQuantityButton.TabIndex = 2;
 			decreaseQuantityButton.UseVisualStyleBackColor = true;
 			decreaseQuantityButton.Click += decreaseQuantityButton_Click;
@@ -318,8 +333,9 @@
 			// 
 			priceEditButton.Image = Properties.Resources.priceEdit;
 			priceEditButton.Location = new Point(100, 0);
+			priceEditButton.Margin = new Padding(4, 2, 4, 2);
 			priceEditButton.Name = "priceEditButton";
-			priceEditButton.Size = new Size(100, 80);
+			priceEditButton.Size = new Size(100, 81);
 			priceEditButton.TabIndex = 1;
 			priceEditButton.UseVisualStyleBackColor = true;
 			priceEditButton.Click += priceEditButton_Click;
@@ -328,8 +344,9 @@
 			// 
 			memoButton.Image = Properties.Resources.memo;
 			memoButton.Location = new Point(0, 0);
+			memoButton.Margin = new Padding(4, 2, 4, 2);
 			memoButton.Name = "memoButton";
-			memoButton.Size = new Size(100, 80);
+			memoButton.Size = new Size(100, 81);
 			memoButton.TabIndex = 0;
 			memoButton.UseVisualStyleBackColor = true;
 			memoButton.Click += memoButton_Click;
@@ -361,6 +378,7 @@
 			runningOrderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			runningOrderDataGridView.ColumnHeadersVisible = false;
 			runningOrderDataGridView.Location = new Point(0, 0);
+			runningOrderDataGridView.Margin = new Padding(4, 2, 4, 2);
 			runningOrderDataGridView.MultiSelect = false;
 			runningOrderDataGridView.Name = "runningOrderDataGridView";
 			runningOrderDataGridView.ReadOnly = true;
@@ -377,7 +395,8 @@
 			estimatedTimeLabel.BackColor = Color.Transparent;
 			estimatedTimeLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			estimatedTimeLabel.ForeColor = Color.White;
-			estimatedTimeLabel.Location = new Point(285, 575);
+			estimatedTimeLabel.Location = new Point(285, 577);
+			estimatedTimeLabel.Margin = new Padding(4, 0, 4, 0);
 			estimatedTimeLabel.Name = "estimatedTimeLabel";
 			estimatedTimeLabel.Size = new Size(140, 40);
 			estimatedTimeLabel.TabIndex = 8;
@@ -391,6 +410,7 @@
 			estimatedTimePicker.Font = new Font("Segoe UI", 9F);
 			estimatedTimePicker.Format = DateTimePickerFormat.Custom;
 			estimatedTimePicker.Location = new Point(285, 621);
+			estimatedTimePicker.Margin = new Padding(4, 2, 4, 2);
 			estimatedTimePicker.Name = "estimatedTimePicker";
 			estimatedTimePicker.ShowUpDown = true;
 			estimatedTimePicker.Size = new Size(140, 39);
@@ -403,6 +423,7 @@
 			totalPriceLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			totalPriceLabel.ForeColor = Color.DodgerBlue;
 			totalPriceLabel.Location = new Point(430, 580);
+			totalPriceLabel.Margin = new Padding(4, 0, 4, 0);
 			totalPriceLabel.Name = "totalPriceLabel";
 			totalPriceLabel.RightToLeft = RightToLeft.No;
 			totalPriceLabel.Size = new Size(270, 80);
@@ -417,6 +438,7 @@
 			deliveryChargePriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryChargePriceLabel.ForeColor = Color.Black;
 			deliveryChargePriceLabel.Location = new Point(150, 620);
+			deliveryChargePriceLabel.Margin = new Padding(4, 0, 4, 0);
 			deliveryChargePriceLabel.Name = "deliveryChargePriceLabel";
 			deliveryChargePriceLabel.RightToLeft = RightToLeft.Yes;
 			deliveryChargePriceLabel.Size = new Size(130, 40);
@@ -430,6 +452,7 @@
 			subtotalPriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			subtotalPriceLabel.ForeColor = Color.Black;
 			subtotalPriceLabel.Location = new Point(150, 580);
+			subtotalPriceLabel.Margin = new Padding(4, 0, 4, 0);
 			subtotalPriceLabel.Name = "subtotalPriceLabel";
 			subtotalPriceLabel.RightToLeft = RightToLeft.Yes;
 			subtotalPriceLabel.Size = new Size(130, 40);
@@ -442,9 +465,10 @@
 			deliveryChargeTextLabel.BackColor = Color.Transparent;
 			deliveryChargeTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryChargeTextLabel.ForeColor = Color.White;
-			deliveryChargeTextLabel.Location = new Point(3, 615);
+			deliveryChargeTextLabel.Location = new Point(4, 615);
+			deliveryChargeTextLabel.Margin = new Padding(4, 0, 4, 0);
 			deliveryChargeTextLabel.Name = "deliveryChargeTextLabel";
-			deliveryChargeTextLabel.Size = new Size(141, 40);
+			deliveryChargeTextLabel.Size = new Size(140, 40);
 			deliveryChargeTextLabel.TabIndex = 1;
 			deliveryChargeTextLabel.Text = "Delivery:";
 			// 
@@ -454,9 +478,10 @@
 			subtotalTextLabel.BackColor = Color.Transparent;
 			subtotalTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			subtotalTextLabel.ForeColor = Color.White;
-			subtotalTextLabel.Location = new Point(3, 575);
+			subtotalTextLabel.Location = new Point(4, 577);
+			subtotalTextLabel.Margin = new Padding(4, 0, 4, 0);
 			subtotalTextLabel.Name = "subtotalTextLabel";
-			subtotalTextLabel.Size = new Size(141, 40);
+			subtotalTextLabel.Size = new Size(140, 40);
 			subtotalTextLabel.TabIndex = 0;
 			subtotalTextLabel.Text = "Subtotal:";
 			// 
@@ -515,16 +540,19 @@
 			// 
 			paymentAcceptButton.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
 			paymentAcceptButton.Location = new Point(520, 0);
+			paymentAcceptButton.Margin = new Padding(4, 2, 4, 2);
 			paymentAcceptButton.Name = "paymentAcceptButton";
 			paymentAcceptButton.Size = new Size(180, 130);
 			paymentAcceptButton.TabIndex = 10;
 			paymentAcceptButton.Text = "ACCEPT";
 			paymentAcceptButton.UseVisualStyleBackColor = true;
+			paymentAcceptButton.Click += paymentAcceptButton_Click;
 			// 
 			// paymentChangeTextLabel
 			// 
 			paymentChangeTextLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
 			paymentChangeTextLabel.Location = new Point(230, 196);
+			paymentChangeTextLabel.Margin = new Padding(4, 0, 4, 0);
 			paymentChangeTextLabel.Name = "paymentChangeTextLabel";
 			paymentChangeTextLabel.Size = new Size(210, 64);
 			paymentChangeTextLabel.TabIndex = 9;
@@ -533,7 +561,8 @@
 			// paymentPaidLabel
 			// 
 			paymentPaidLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			paymentPaidLabel.Location = new Point(230, 131);
+			paymentPaidLabel.Location = new Point(230, 130);
+			paymentPaidLabel.Margin = new Padding(4, 0, 4, 0);
 			paymentPaidLabel.Name = "paymentPaidLabel";
 			paymentPaidLabel.Size = new Size(210, 64);
 			paymentPaidLabel.TabIndex = 8;
@@ -542,9 +571,10 @@
 			// paymentClearButton
 			// 
 			paymentClearButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-			paymentClearButton.Location = new Point(0, 195);
+			paymentClearButton.Location = new Point(0, 194);
+			paymentClearButton.Margin = new Padding(4, 2, 4, 2);
 			paymentClearButton.Name = "paymentClearButton";
-			paymentClearButton.Size = new Size(225, 65);
+			paymentClearButton.Size = new Size(225, 64);
 			paymentClearButton.TabIndex = 7;
 			paymentClearButton.Text = "CLEAR";
 			paymentClearButton.UseVisualStyleBackColor = true;
@@ -554,8 +584,9 @@
 			// 
 			paymentExactButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
 			paymentExactButton.Location = new Point(0, 130);
+			paymentExactButton.Margin = new Padding(4, 2, 4, 2);
 			paymentExactButton.Name = "paymentExactButton";
-			paymentExactButton.Size = new Size(225, 65);
+			paymentExactButton.Size = new Size(225, 64);
 			paymentExactButton.TabIndex = 6;
 			paymentExactButton.Text = "EXACT";
 			paymentExactButton.UseVisualStyleBackColor = true;
@@ -565,6 +596,7 @@
 			// 
 			payment50Button.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
 			payment50Button.Location = new Point(390, 0);
+			payment50Button.Margin = new Padding(4, 2, 4, 2);
 			payment50Button.Name = "payment50Button";
 			payment50Button.Size = new Size(130, 130);
 			payment50Button.TabIndex = 5;
@@ -575,18 +607,20 @@
 			// paymentChangeValueLabel
 			// 
 			paymentChangeValueLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			paymentChangeValueLabel.Location = new Point(450, 196);
+			paymentChangeValueLabel.Location = new Point(449, 196);
+			paymentChangeValueLabel.Margin = new Padding(4, 0, 4, 0);
 			paymentChangeValueLabel.Name = "paymentChangeValueLabel";
-			paymentChangeValueLabel.Size = new Size(250, 64);
+			paymentChangeValueLabel.Size = new Size(251, 64);
 			paymentChangeValueLabel.TabIndex = 4;
 			paymentChangeValueLabel.Text = "0.00";
 			// 
 			// paymentPaidTextbox
 			// 
 			paymentPaidTextbox.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-			paymentPaidTextbox.Location = new Point(450, 132);
+			paymentPaidTextbox.Location = new Point(449, 132);
+			paymentPaidTextbox.Margin = new Padding(4, 2, 4, 2);
 			paymentPaidTextbox.Name = "paymentPaidTextbox";
-			paymentPaidTextbox.Size = new Size(250, 64);
+			paymentPaidTextbox.Size = new Size(249, 64);
 			paymentPaidTextbox.TabIndex = 3;
 			paymentPaidTextbox.Text = "0.00";
 			paymentPaidTextbox.Click += paymentPaidTextbox_Click;
@@ -596,6 +630,7 @@
 			// 
 			payment20Button.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
 			payment20Button.Location = new Point(260, 0);
+			payment20Button.Margin = new Padding(4, 2, 4, 2);
 			payment20Button.Name = "payment20Button";
 			payment20Button.Size = new Size(130, 130);
 			payment20Button.TabIndex = 2;
@@ -607,6 +642,7 @@
 			// 
 			payment10Button.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
 			payment10Button.Location = new Point(130, 0);
+			payment10Button.Margin = new Padding(4, 2, 4, 2);
 			payment10Button.Name = "payment10Button";
 			payment10Button.Size = new Size(130, 130);
 			payment10Button.TabIndex = 1;
@@ -618,6 +654,7 @@
 			// 
 			payment5Button.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
 			payment5Button.Location = new Point(0, 0);
+			payment5Button.Margin = new Padding(4, 2, 4, 2);
 			payment5Button.Name = "payment5Button";
 			payment5Button.Size = new Size(130, 130);
 			payment5Button.TabIndex = 0;
@@ -634,10 +671,10 @@
 			viewOrdersPanel.Controls.Add(viewOrdersCounterButton);
 			viewOrdersPanel.Controls.Add(viewOrdersDeliveryButton);
 			viewOrdersPanel.Controls.Add(viewOrdersDataGridView);
-			viewOrdersPanel.Location = new Point(700, 80);
+			viewOrdersPanel.Location = new Point(700, 81);
 			viewOrdersPanel.Margin = new Padding(0);
 			viewOrdersPanel.Name = "viewOrdersPanel";
-			viewOrdersPanel.Size = new Size(1040, 1000);
+			viewOrdersPanel.Size = new Size(1040, 1001);
 			viewOrdersPanel.TabIndex = 1;
 			viewOrdersPanel.Visible = false;
 			// 
@@ -647,9 +684,10 @@
 			printCustomerTicketButton.BackColor = Color.Transparent;
 			printCustomerTicketButton.FlatAppearance.BorderSize = 0;
 			printCustomerTicketButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-			printCustomerTicketButton.Location = new Point(790, 900);
+			printCustomerTicketButton.Location = new Point(789, 900);
+			printCustomerTicketButton.Margin = new Padding(4, 2, 4, 2);
 			printCustomerTicketButton.Name = "printCustomerTicketButton";
-			printCustomerTicketButton.Size = new Size(250, 100);
+			printCustomerTicketButton.Size = new Size(251, 100);
 			printCustomerTicketButton.TabIndex = 56;
 			printCustomerTicketButton.Text = "Print Customer Ticket";
 			printCustomerTicketButton.UseVisualStyleBackColor = false;
@@ -662,8 +700,9 @@
 			printKitchenTicketButton.FlatAppearance.BorderSize = 0;
 			printKitchenTicketButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 			printKitchenTicketButton.Location = new Point(540, 900);
+			printKitchenTicketButton.Margin = new Padding(4, 2, 4, 2);
 			printKitchenTicketButton.Name = "printKitchenTicketButton";
-			printKitchenTicketButton.Size = new Size(250, 100);
+			printKitchenTicketButton.Size = new Size(251, 100);
 			printKitchenTicketButton.TabIndex = 55;
 			printKitchenTicketButton.Text = "Print Kitchen Ticket";
 			printKitchenTicketButton.UseVisualStyleBackColor = false;
@@ -674,6 +713,7 @@
 			viewOrdersCollectionButton.BackColor = Color.Transparent;
 			viewOrdersCollectionButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			viewOrdersCollectionButton.Location = new Point(360, 900);
+			viewOrdersCollectionButton.Margin = new Padding(4, 2, 4, 2);
 			viewOrdersCollectionButton.Name = "viewOrdersCollectionButton";
 			viewOrdersCollectionButton.Size = new Size(180, 100);
 			viewOrdersCollectionButton.TabIndex = 5;
@@ -686,6 +726,7 @@
 			viewOrdersCounterButton.BackColor = Color.Transparent;
 			viewOrdersCounterButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			viewOrdersCounterButton.Location = new Point(180, 900);
+			viewOrdersCounterButton.Margin = new Padding(4, 2, 4, 2);
 			viewOrdersCounterButton.Name = "viewOrdersCounterButton";
 			viewOrdersCounterButton.Size = new Size(180, 100);
 			viewOrdersCounterButton.TabIndex = 4;
@@ -698,6 +739,7 @@
 			viewOrdersDeliveryButton.BackColor = Color.Transparent;
 			viewOrdersDeliveryButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 			viewOrdersDeliveryButton.Location = new Point(0, 900);
+			viewOrdersDeliveryButton.Margin = new Padding(4, 2, 4, 2);
 			viewOrdersDeliveryButton.Name = "viewOrdersDeliveryButton";
 			viewOrdersDeliveryButton.Size = new Size(180, 100);
 			viewOrdersDeliveryButton.TabIndex = 3;
@@ -711,6 +753,7 @@
 			viewOrdersDataGridView.BorderStyle = BorderStyle.None;
 			viewOrdersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			viewOrdersDataGridView.Location = new Point(0, 0);
+			viewOrdersDataGridView.Margin = new Padding(4, 2, 4, 2);
 			viewOrdersDataGridView.Name = "viewOrdersDataGridView";
 			viewOrdersDataGridView.RightToLeft = RightToLeft.No;
 			viewOrdersDataGridView.RowHeadersWidth = 82;
@@ -727,8 +770,8 @@
 			// 
 			// MainMenu
 			// 
-			AutoScaleDimensions = new SizeF(13F, 32F);
-			AutoScaleMode = AutoScaleMode.Font;
+			AutoScaleDimensions = new SizeF(192F, 192F);
+			AutoScaleMode = AutoScaleMode.Dpi;
 			BackColor = Color.White;
 			ClientSize = new Size(1920, 1080);
 			Controls.Add(runningOrderPanel);
@@ -742,6 +785,7 @@
 			Controls.Add(viewOrdersPanel);
 			Controls.Add(commonItemsPanel);
 			FormBorderStyle = FormBorderStyle.None;
+			Margin = new Padding(4, 2, 4, 2);
 			Name = "MainMenu";
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "Main Menu";
