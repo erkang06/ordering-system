@@ -2,6 +2,7 @@ using Microsoft.VisualBasic;
 using ordering_system.Properties;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing.Printing;
 
 namespace ordering_system
 {
@@ -22,6 +23,11 @@ namespace ordering_system
 		int viewOrdersSelectedOrderID = -1;
 		int runningOrderItemID = 0; // datatables will collate identical rows which isnt slay
 		bool paymentPanelButtonMode = true; // true if using buttons, false if typing value in
+		// fonts for printing the ticket out
+		Font ticketHeaderFont = new Font("Arial", 18);
+		Font ticketItemFont = new Font("Arial", 16);
+		Font ticketSetMealFoodItemFont = new Font("Arial", 14);
+		Font ticketSmallFont = new Font("Arial", 12);
 		public MainMenu()
 		{
 			InitializeComponent();
@@ -46,6 +52,16 @@ namespace ordering_system
 			getAddress.Fill(addressDataTable);
 			DataRow addressDataRow = addressDataTable.Rows[0];
 			return addressDataRow;
+		}
+
+		private DataRow getOrder(int orderID) // get order from orderid
+		{
+			SqlDataAdapter getOrder = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderID = @OID", con);
+			getOrder.SelectCommand.Parameters.AddWithValue("@OID", orderID);
+			DataTable orderDataTable = new DataTable();
+			getOrder.Fill(orderDataTable);
+			DataRow orderDataRow = orderDataTable.Rows[0];
+			return orderDataRow;
 		}
 
 		private int doesItemExist(string itemID, string size) // returns index of food item in running order if exists, else returns -1
@@ -202,9 +218,15 @@ namespace ordering_system
 			deliveryButton.BackColor = Color.Transparent;
 			counterButton.BackColor = Color.Transparent;
 			collectionButton.BackColor = Color.Transparent;
+			customerDetailsLabel.Text = string.Empty;
 			runningOrderItemID = 0;
 			updateDataGridView();
 			updatePriceLabels();
+		}
+
+		private void getOrder()
+		{
+
 		}
 
 		// startup
@@ -872,34 +894,151 @@ namespace ordering_system
 		private void acceptOrder(string orderType)
 		{
 			con.Open();
-			addOrderToOrderTbl(orderType);
+			/*addOrderToOrderTbl(orderType);
 			int orderID = getOrderID();
-			addOrderItems(orderID);
+			addOrderItems(orderID);*/
+			// create ticket
+			printPreviewDialog1.Document = printDocument1;
+			printDocument1.DefaultPageSettings.PaperSize = new PaperSize("till", 400, 1000);
+			if (printPreviewDialog1.ShowDialog() == DialogResult.OK)
+			{
+				printDocument1.Print();
+			}
 			clearMenu();
 			orderNumberLabel.Text = (Convert.ToInt32(orderNumberLabel.Text) + 1).ToString(); // increment order number
 			con.Close();
+		}
+
+		private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
+		{
+			int ypos = 10;
+			int orderID = getOrderID();
+			DataRow orderDataRow = getOrder(orderID);
+			// get phone number and order type
+			// align ordertype to right, https://stackoverflow.com/q/50299682
+			int orderTypeWidth = (int)e.Graphics.MeasureString(currentOrder.orderType, ticketSmallFont).Width;
+			e.Graphics.DrawString(currentOrder.orderType, ticketSmallFont, Brushes.Black, new Point(400 - orderTypeWidth, ypos));
+			if (currentOrder.orderType != "Counter")
+			{
+				e.Graphics.DrawString(customerDataRow["phoneNumber"].ToString(), ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+				ypos += (int)ticketHeaderFont.Size + 10;
+			}
+			// get name or address
+			if (currentOrder.orderType == "Collection")
+			{
+				string customerName = customerDataRow["customerName"].ToString();
+				e.Graphics.DrawString(customerName, ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+				ypos += (int)ticketHeaderFont.Size + 10;
+			}
+			else if (currentOrder.orderType == "Delivery")
+			{
+				DataRow addressDataRow = getAddress(currentOrder.addressID);
+				for (int i = 2; i < 7; i++) // from house number to postcode
+				{
+					if (addressDataRow[i].ToString() != "")
+					{
+						e.Graphics.DrawString(addressDataRow[i].ToString(), ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+						ypos += (int)ticketHeaderFont.Size + 10;
+					}
+				}
+			}
+			// get order date and time
+			string orderDateTimeString = Convert.ToDateTime(orderDataRow["orderDate"]).ToString("dd/MM/yyyy") + " " + orderDataRow["orderTime"].ToString();
+			e.Graphics.DrawString(orderDateTimeString, ticketSmallFont, Brushes.Black, new Point(10, ypos));
+			ypos += (int)ticketSmallFont.Size + 5;
+			// break
+			e.Graphics.DrawString("*************************************", new Font("Arial", 14), Brushes.Black, new Point(10, ypos));
+			ypos += 20;
+			foreach (DataRow runningOrderRow in runningOrderDataTable.Rows) // items
+			{
+				e.Graphics.DrawString(runningOrderRow["quantity"].ToString(), ticketItemFont, Brushes.Black, new Point(10, ypos));
+				// item name
+				string itemNameSize = runningOrderRow["itemName"].ToString();
+				if (runningOrderRow["size"].ToString() != "") // if item has size add to end of item name
+				{
+					itemNameSize += " (" + runningOrderRow["size"].ToString()[0] + ")";
+				}
+				// fit within rectangle in case of overflow
+				SizeF itemNameSizeSizeF = e.Graphics.MeasureString(itemNameSize, ticketItemFont, 300);
+				e.Graphics.DrawString(itemNameSize, ticketItemFont, Brushes.Black, new RectangleF(new Point(30, ypos), itemNameSizeSizeF));
+				// price
+				int priceWidth = (int)e.Graphics.MeasureString(runningOrderRow["price"].ToString(), ticketSmallFont).Width;
+				e.Graphics.DrawString(runningOrderRow["price"].ToString(), ticketSmallFont, Brushes.Black, new Point(400 - priceWidth, ypos));
+				ypos += (int)itemNameSizeSizeF.Height + 5;
+				if (runningOrderRow["memo"].ToString() != "") // if theres a memo
+				{
+					string memo = runningOrderRow["memo"].ToString();
+					SizeF memoSizeF = e.Graphics.MeasureString(memo, ticketSmallFont, 250);
+					e.Graphics.DrawString(memo, ticketSmallFont, Brushes.Black, new RectangleF(new Point(80, ypos), memoSizeF));
+					ypos += (int)memoSizeF.Height + 5;
+				}
+
+				if (runningOrderRow["itemType"].ToString() == "setMeal") // set meal needs all items shown
+				{
+					DataTable setMealFoodItemsDataTable = getSetMealFoodItems(runningOrderRow["itemID"].ToString());
+					foreach (DataRow setmealFoodItem in setMealFoodItemsDataTable.Rows)
+					{
+						e.Graphics.DrawString(setmealFoodItem["quantity"].ToString(), ticketItemFont, Brushes.Black, new Point(50, ypos));
+						// get item name from id
+						string setMealFoodItemName = getFoodItemName(setmealFoodItem["foodItemID"].ToString());
+						// combine name and size
+						string setMealFoodItemItemNameSize = setMealFoodItemName + " (" + setmealFoodItem["size"].ToString()[0] + ")";
+						// fit within rectangle in case of overflow
+						SizeF setMealFoodItemItemNameSizeSizeF = e.Graphics.MeasureString(setMealFoodItemItemNameSize, ticketSetMealFoodItemFont, 250);
+						e.Graphics.DrawString(setMealFoodItemItemNameSize, ticketSetMealFoodItemFont, Brushes.Black, new RectangleF(new Point(70, ypos), setMealFoodItemItemNameSizeSizeF));
+						ypos += (int)setMealFoodItemItemNameSizeSizeF.Height + 5;
+					}
+				}
+			}
+			// break
+			e.Graphics.DrawString("*************************************", new Font("Arial", 14), Brushes.Black, new Point(10, ypos));
+			ypos += 20;
+			// subtotal
+			e.Graphics.DrawString("Subtotal:", ticketSmallFont, Brushes.Black, new Point(10, ypos));
+			int subtotalWidth = (int)e.Graphics.MeasureString(subtotalPriceLabel.Text, ticketSmallFont).Width;
+			e.Graphics.DrawString(subtotalPriceLabel.Text, ticketSmallFont, Brushes.Black, new Point(400 - subtotalWidth, ypos));
+			ypos += (int)ticketHeaderFont.Size + 5;
+			// delivery charge if delivery
+			if (currentOrder.orderType == "Delivery")
+			{
+				e.Graphics.DrawString("Delivery:", ticketSmallFont, Brushes.Black, new Point(10, ypos));
+				int deliveryWidth = (int)e.Graphics.MeasureString(deliveryChargePriceLabel.Text, ticketSmallFont).Width;
+				e.Graphics.DrawString(deliveryChargePriceLabel.Text, ticketHeaderFont, Brushes.Black, new Point(400 - deliveryWidth, ypos));
+				ypos += (int)ticketHeaderFont.Size + 5;
+			}
+			// total
+			e.Graphics.DrawString("Total:", ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+			int totalWidth = (int)e.Graphics.MeasureString(totalPriceLabel.Text, ticketHeaderFont).Width;
+			e.Graphics.DrawString(totalPriceLabel.Text, ticketHeaderFont, Brushes.Black, new Point(400 - totalWidth, ypos));
+			ypos += (int)ticketHeaderFont.Size + 20;
+			// get estimated time
+			e.Graphics.DrawString("Estimated Time:", ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+			string estimatedTime = Convert.ToDateTime(orderDataRow["estimatedTime"]).ToString("HH:mm");
+			int estimatedTimeWidth = (int)e.Graphics.MeasureString(estimatedTime, ticketHeaderFont).Width;
+			e.Graphics.DrawString(estimatedTime, ticketHeaderFont, Brushes.Black, new Point(400 - estimatedTimeWidth, ypos));
 		}
 
 		private void addOrderToOrderTbl(string orderType)
 		{
 			SqlCommand addOrderToDatabase = new SqlCommand();
 			addOrderToDatabase.Connection = con;
+			addOrderToDatabase.Parameters.AddWithValue("@DOID", orderNumberLabel.Text);
 			addOrderToDatabase.Parameters.AddWithValue("@OT", orderType);
 			addOrderToDatabase.Parameters.AddWithValue("@OD", DateTime.Now.Date);
 			addOrderToDatabase.Parameters.AddWithValue("@OTM", DateTime.Now.ToLocalTime());
-			addOrderToDatabase.Parameters.AddWithValue("@ETM", estimatedTimePicker.Value.ToLocalTime());
+			addOrderToDatabase.Parameters.AddWithValue("@ETM", estimatedTimePicker.Value.AddSeconds(-estimatedTimePicker.Value.Second)); //https://stackoverflow.com/a/11107508
 			addOrderToDatabase.Parameters.AddWithValue("@HP", currentOrder.hasPaid);
 			switch (orderType)
 			{
 				case "Counter":
-					addOrderToDatabase.CommandText = "INSERT INTO OrderTbl(orderType, orderDate, orderTime, estimatedTime, hasPaid) VALUES(@OT, @OD, @OTM, @ETM, @HP)";
+					addOrderToDatabase.CommandText = "INSERT INTO OrderTbl(dailyOrderID, orderType, orderDate, orderTime, estimatedTime, hasPaid) VALUES(@DOID, @OT, @OD, @OTM, @ETM, @HP)";
 					break;
 				case "Collection":
-					addOrderToDatabase.CommandText = "INSERT INTO OrderTbl(orderType, customerID, orderDate, orderTime, estimatedTime, hasPaid) VALUES(@OT, @CID, @OD, @OTM, @ETM, @HP)";
+					addOrderToDatabase.CommandText = "INSERT INTO OrderTbl(dailyOrderID, orderType, customerID, orderDate, orderTime, estimatedTime, hasPaid) VALUES(@DOID, @OT, @CID, @OD, @OTM, @ETM, @HP)";
 					addOrderToDatabase.Parameters.AddWithValue("@CID", currentOrder.customerID);
 					break;
 				case "Delivery":
-					addOrderToDatabase.CommandText = "INSERT INTO OrderTbl(orderType, customerID, addressID, orderDate, orderTime, estimatedTime, hasPaid) VALUES(@OT, @CID, @AID, @OD, @OTM, @ETM, @HP)";
+					addOrderToDatabase.CommandText = "INSERT INTO OrderTbl(dailyOrderID, orderType, customerID, addressID, orderDate, orderTime, estimatedTime, hasPaid) VALUES(@DOID, @OT, @CID, @AID, @OD, @OTM, @ETM, @HP)";
 					addOrderToDatabase.Parameters.AddWithValue("@CID", currentOrder.customerID);
 					addOrderToDatabase.Parameters.AddWithValue("@AID", currentOrder.addressID);
 					break;

@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
 			customerDetailsPanel = new Panel();
 			customerDetailsLabel = new Label();
 			orderNumberLabel = new Label();
@@ -82,6 +83,8 @@
 			viewOrdersDeliveryButton = new Button();
 			viewOrdersDataGridView = new DataGridView();
 			timer = new System.Windows.Forms.Timer(components);
+			printDocument1 = new System.Drawing.Printing.PrintDocument();
+			printPreviewDialog1 = new PrintPreviewDialog();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -768,6 +771,20 @@
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
 			// 
+			// printDocument1
+			// 
+			printDocument1.PrintPage += printDocument1_PrintPage;
+			// 
+			// printPreviewDialog1
+			// 
+			printPreviewDialog1.AutoScrollMargin = new Size(0, 0);
+			printPreviewDialog1.AutoScrollMinSize = new Size(0, 0);
+			printPreviewDialog1.ClientSize = new Size(400, 300);
+			printPreviewDialog1.Enabled = true;
+			printPreviewDialog1.Icon = (Icon)resources.GetObject("printPreviewDialog1.Icon");
+			printPreviewDialog1.Name = "printPreviewDialog1";
+			printPreviewDialog1.Visible = false;
+			// 
 			// MainMenu
 			// 
 			AutoScaleDimensions = new SizeF(192F, 192F);
@@ -858,5 +875,7 @@
 		private Button paymentClearButton;
 		private Button paymentExactButton;
 		private Button paymentAcceptButton;
+		private System.Drawing.Printing.PrintDocument printDocument1;
+		private PrintPreviewDialog printPreviewDialog1;
 	}
 }
