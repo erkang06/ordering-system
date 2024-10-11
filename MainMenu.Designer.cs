@@ -796,11 +796,11 @@
 			Controls.Add(managerFunctionsPanel);
 			Controls.Add(orderTypePanel);
 			Controls.Add(customerDetailsPanel);
-			Controls.Add(paymentPanel);
 			Controls.Add(itemsPanel);
 			Controls.Add(categoriesPanel);
 			Controls.Add(viewOrdersPanel);
 			Controls.Add(commonItemsPanel);
+			Controls.Add(paymentPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Margin = new Padding(4, 2, 4, 2);
 			Name = "MainMenu";

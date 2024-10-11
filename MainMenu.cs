@@ -271,8 +271,15 @@ namespace ordering_system
 		{
 			SqlCommand getMaxOrderNumber = new SqlCommand("SELECT MAX(dailyOrderNumber) FROM OrderTbl WHERE orderDate = @OD", con);
 			getMaxOrderNumber.Parameters.AddWithValue("@OD", DateTime.Now.Date.ToString("dd/MM/yyyy"));
-			int maxOrderNumber = Convert.ToInt32(getMaxOrderNumber.ExecuteScalar());
-			orderNumberLabel.Text = (maxOrderNumber + 1).ToString();
+			try
+			{
+				int maxOrderNumber = Convert.ToInt32(getMaxOrderNumber.ExecuteScalar());
+				orderNumberLabel.Text = (maxOrderNumber + 1).ToString();
+			}
+			catch // no orders lmao
+			{
+				orderNumberLabel.Text = "1";
+			}
 		}
 
 		private void getCategories()
