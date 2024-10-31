@@ -33,12 +33,28 @@ namespace ordering_system
 			return price;
 		}
 
-		private decimal getPriceOfSetMeal(string itemID)
+		private string getNameOfFoodItem(string foodItemID)
+		{
+			SqlCommand getNameOfFoodItem = new SqlCommand($"SELECT foodName FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+			getNameOfFoodItem.Parameters.AddWithValue("@FIID", foodItemID);
+			string itemName = getNameOfFoodItem.ExecuteScalar().ToString();
+			return itemName;
+		}
+
+		private decimal getPriceOfSetMeal(string setMealID)
 		{
 			SqlCommand getPriceOfSetMeal = new SqlCommand($"SELECT price FROM SetMealTbl WHERE setMealID = @SMID", con);
-			getPriceOfSetMeal.Parameters.AddWithValue("@SMID", itemID);
+			getPriceOfSetMeal.Parameters.AddWithValue("@SMID", setMealID);
 			decimal price = (decimal)getPriceOfSetMeal.ExecuteScalar();
 			return price;
+		}
+
+		private string getNameOfSetMeal(string setMealID)
+		{
+			SqlCommand getNameOfSetMeal = new SqlCommand($"SELECT setMealName FROM SetMealTbl WHERE setMealID = @SMID", con);
+			getNameOfSetMeal.Parameters.AddWithValue("@SMID", setMealID);
+			string setMealName = getNameOfSetMeal.ExecuteScalar().ToString();
+			return setMealName;
 		}
 
 		private decimal getDeliveryChargeOfAddress(int addressID)
@@ -47,6 +63,17 @@ namespace ordering_system
 			getDeliveryChargeOfAddress.Parameters.AddWithValue("@AID", addressID);
 			decimal deliveryCharge = (decimal)getDeliveryChargeOfAddress.ExecuteScalar();
 			return deliveryCharge;
+		}
+
+		private void clearDisplayedOrder() // remove shown order and reset to default
+		{
+			orderID = -1;
+			dailyOrderNumber = -1;
+			subtotalPriceLabel.Text = "0000.00";
+			deliveryChargePriceLabel.Text = "00.00";
+			deliveryChargePriceLabel.Enabled = true;
+			totalPriceLabel.Text = "0000.00";
+			singleOrderDataGridView.DataSource = null;
 		}
 
 		private void cancelButton_Click(object sender, EventArgs e)
@@ -62,14 +89,18 @@ namespace ordering_system
 		private void datePicker_ValueChanged(object sender, EventArgs e)
 		{
 			con.Open();
+			clearDisplayedOrder();
 			// get orders for the day
 			ordersDataTable = new DataTable(); // clear prev
 			DateTime date = datePicker.Value.Date;
 			SqlDataAdapter getOrdersByDate = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderDate = @OD ORDER BY orderTime", con);
 			getOrdersByDate.SelectCommand.Parameters.AddWithValue("@OD", date);
 			getOrdersByDate.Fill(ordersDataTable);
-			ordersDataTable.Columns.Add("totalPrice", typeof(decimal)); // add price onto table
-																														 // get order items for the day
+			// add subtotal and delivery and total into table
+			ordersDataTable.Columns.Add("subTotal", typeof(decimal));
+			ordersDataTable.Columns.Add("deliveryCharge", typeof(decimal));
+			ordersDataTable.Columns.Add("total", typeof(decimal));
+			// get order items for the day
 			dailyOrderItemsDictionary.Clear(); // clear prev
 			SqlDataAdapter getOrderItemsByDate = new SqlDataAdapter("SELECT * FROM OrderItemTbl WHERE orderID = @OID", con);
 			getOrderItemsByDate.SelectCommand.Parameters.Add("@OID", SqlDbType.Int);
@@ -83,40 +114,51 @@ namespace ordering_system
 				int dailyOrderNumber = Convert.ToInt32(order["dailyOrderNumber"]);
 				getOrderItemsByDate.SelectCommand.Parameters["@OID"].Value = orderID;
 				getOrderItemsByDate.Fill(orderItemsDataTable);
+				orderItemsDataTable.Columns.Add("itemName", typeof(string));
 				orderItemsDataTable.Columns.Add("price", typeof(decimal)); // add price onto table 
 				// get price of each item in order
-				decimal totalPrice = 0;
-				for (int j = 0; j < orderItemsDataTable.Rows.Count; j++) // get cost of each item
+				decimal subTotal = 0;
+				for (int j = 0; j < orderItemsDataTable.Rows.Count; j++) // get cost and name of each item
 				{
 					DataRow orderItem = orderItemsDataTable.Rows[j];
 					string itemID = orderItem["itemID"].ToString();
 					string itemType = orderItem["itemType"].ToString();
 					decimal price;
+					string itemName;
 					if (itemType == "foodItem")
 					{
-						price = getPriceOfFoodItem(itemID, orderItem["size"].ToString()) + Convert.ToDecimal(orderItem["discount"]);
+						price = (getPriceOfFoodItem(itemID, orderItem["size"].ToString()) + Convert.ToDecimal(orderItem["discount"])) * Convert.ToInt32(orderItem["quantity"]);
+						itemName = getNameOfFoodItem(itemID);
 					}
 					else // set meal
 					{
-						price = getPriceOfSetMeal(itemID) + Convert.ToDecimal(orderItem["discount"]);
+						price = (getPriceOfSetMeal(itemID) + Convert.ToDecimal(orderItem["discount"])) * Convert.ToInt32(orderItem["quantity"]);
+						itemName = getNameOfSetMeal(itemID);
 					}
-					orderItemsDataTable.Rows[j]["price"] = totalPrice;
-					totalPrice += price;
+					orderItemsDataTable.Rows[j]["price"] = price;
+					orderItemsDataTable.Rows[j]["itemName"] = itemName;
+					subTotal += price;
 				}
 				// add to dictionary and table
 				dailyOrderItemsDictionary.Add(dailyOrderNumber, orderItemsDataTable);
-				// add delivery charge if is a delivery
+				ordersDataTable.Rows[i]["subTotal"] = subTotal;
+				// get delivery charge if is a delivery and add it to total
 				if (order["orderType"].ToString() == "Delivery")
 				{
 					int addressID = Convert.ToInt32(order["addressID"]);
-					totalPrice += getDeliveryChargeOfAddress(addressID);
+					decimal deliveryCharge = getDeliveryChargeOfAddress(addressID);
+					ordersDataTable.Rows[i]["deliveryCharge"] = deliveryCharge;
+					ordersDataTable.Rows[i]["total"] = deliveryCharge + subTotal;
 				}
-				ordersDataTable.Rows[i]["totalPrice"] = totalPrice;
+				else // just make total the subtotal
+				{
+					ordersDataTable.Rows[i]["total"] = subTotal;
+				}
 			}
 			// fill in orders datagridview
 			DataView ordersDataViewByDate = new DataView(ordersDataTable);
-			orderDataGridView.DataSource = ordersDataViewByDate.ToTable(true, "dailyOrderNumber", "orderType", "orderTime", "hasPaid", "totalPrice");
-			orderDataGridView.Columns["dailyOrderNumber"].Width = 20;
+			orderDataGridView.DataSource = ordersDataViewByDate.ToTable(true, "dailyOrderNumber", "orderType", "orderTime", "hasPaid", "total");
+			orderDataGridView.Columns["dailyOrderNumber"].Width = 50;
 			orderDataGridView.ClearSelection();
 			con.Close();
 		}
@@ -129,8 +171,34 @@ namespace ordering_system
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				dailyOrderNumber = Convert.ToInt32(orderDataGridView.Rows[selectedRowIndex].Cells["dailyOrderNumber"].Value);
+				// theres always only 1 order since dailyordernumber is unique per day
+				DataRow order = ordersDataTable.Select($"dailyOrderNumber = '{dailyOrderNumber}'")[0];
+				orderID = Convert.ToInt32(order["orderID"]);
 				// fill in price fields
+				subtotalPriceLabel.Text = order["subTotal"].ToString();
+				// get delivery charge else set label to 0
+				if (order["orderType"].ToString() == "Delivery")
+				{
+					deliveryChargePriceLabel.Text = order["deliveryCharge"].ToString();
+					deliveryChargePriceLabel.Enabled = true;
+				}
+				else // just make total the subtotal
+				{
+					deliveryChargePriceLabel.Text = "0.00";
+					deliveryChargePriceLabel.Enabled = false;
+				}
+				totalPriceLabel.Text = order["total"].ToString();
 			}
+			// fill in single order datagridview
+			DataView singleOrderDataView = new DataView(dailyOrderItemsDictionary[dailyOrderNumber]);
+			// for some reason u have to clear bf refilling datagridview for the widths to work right lmao
+			singleOrderDataGridView.DataSource = null;
+			singleOrderDataGridView.DataSource = singleOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "size", "memo", "price", "orderItemID");
+			singleOrderDataGridView.Columns["itemID"].Width = 50;
+			singleOrderDataGridView.Columns["quantity"].Width = 50;
+			singleOrderDataGridView.Columns["size"].Width = 20;
+			singleOrderDataGridView.Columns["price"].Width = 50;
+			singleOrderDataGridView.Columns["orderItemID"].Visible = false;
 			con.Close();
 		}
 	}

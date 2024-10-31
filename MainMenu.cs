@@ -270,7 +270,7 @@ namespace ordering_system
 		private void getOrderNumber()
 		{
 			SqlCommand getMaxOrderNumber = new SqlCommand("SELECT MAX(dailyOrderNumber) FROM OrderTbl WHERE orderDate = @OD", con);
-			getMaxOrderNumber.Parameters.AddWithValue("@OD", DateTime.Now.Date.ToString("dd/MM/yyyy"));
+			getMaxOrderNumber.Parameters.AddWithValue("@OD", DateTime.Now.Date);
 			try
 			{
 				int maxOrderNumber = Convert.ToInt32(getMaxOrderNumber.ExecuteScalar());
@@ -916,7 +916,6 @@ namespace ordering_system
 			addOrderItems(orderID);
 			//create ticket
 			printPreviewDialog1.Document = printDocument1;
-			printPreviewDialog1.ShowDialog();
 			if (printPreviewDialog1.ShowDialog() == DialogResult.OK)
 			{
 				printDocument1.Print();

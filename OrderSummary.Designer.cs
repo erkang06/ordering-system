@@ -65,14 +65,15 @@
 			orderDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			orderDataGridView.BackgroundColor = Color.Gainsboro;
 			orderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			orderDataGridView.Location = new Point(12, 102);
+			orderDataGridView.Location = new Point(12, 98);
 			orderDataGridView.MultiSelect = false;
 			orderDataGridView.Name = "orderDataGridView";
 			orderDataGridView.ReadOnly = true;
+			orderDataGridView.RowHeadersVisible = false;
 			orderDataGridView.RowHeadersWidth = 82;
 			orderDataGridView.ScrollBars = ScrollBars.Vertical;
 			orderDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			orderDataGridView.Size = new Size(1302, 835);
+			orderDataGridView.Size = new Size(890, 840);
 			orderDataGridView.TabIndex = 44;
 			orderDataGridView.TabStop = false;
 			orderDataGridView.CellClick += ordersDataGridView_CellClick;
@@ -83,7 +84,7 @@
 			deliveryChargePriceLabel.BackColor = Color.White;
 			deliveryChargePriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryChargePriceLabel.ForeColor = Color.Black;
-			deliveryChargePriceLabel.Location = new Point(176, 985);
+			deliveryChargePriceLabel.Location = new Point(1758, 991);
 			deliveryChargePriceLabel.Name = "deliveryChargePriceLabel";
 			deliveryChargePriceLabel.RightToLeft = RightToLeft.Yes;
 			deliveryChargePriceLabel.Size = new Size(150, 40);
@@ -96,7 +97,7 @@
 			subtotalPriceLabel.BackColor = Color.White;
 			subtotalPriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			subtotalPriceLabel.ForeColor = Color.Black;
-			subtotalPriceLabel.Location = new Point(176, 945);
+			subtotalPriceLabel.Location = new Point(1758, 951);
 			subtotalPriceLabel.Name = "subtotalPriceLabel";
 			subtotalPriceLabel.RightToLeft = RightToLeft.Yes;
 			subtotalPriceLabel.Size = new Size(150, 40);
@@ -109,9 +110,9 @@
 			deliveryChargeTextLabel.BackColor = Color.Transparent;
 			deliveryChargeTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			deliveryChargeTextLabel.ForeColor = Color.DarkOliveGreen;
-			deliveryChargeTextLabel.Location = new Point(12, 980);
+			deliveryChargeTextLabel.Location = new Point(1609, 986);
 			deliveryChargeTextLabel.Name = "deliveryChargeTextLabel";
-			deliveryChargeTextLabel.Size = new Size(158, 40);
+			deliveryChargeTextLabel.Size = new Size(140, 40);
 			deliveryChargeTextLabel.TabIndex = 48;
 			deliveryChargeTextLabel.Text = "Delivery:";
 			// 
@@ -121,9 +122,9 @@
 			subtotalTextLabel.BackColor = Color.Transparent;
 			subtotalTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			subtotalTextLabel.ForeColor = Color.DarkOliveGreen;
-			subtotalTextLabel.Location = new Point(12, 940);
+			subtotalTextLabel.Location = new Point(1609, 946);
 			subtotalTextLabel.Name = "subtotalTextLabel";
-			subtotalTextLabel.Size = new Size(158, 40);
+			subtotalTextLabel.Size = new Size(140, 40);
 			subtotalTextLabel.TabIndex = 47;
 			subtotalTextLabel.Text = "Subtotal:";
 			// 
@@ -133,7 +134,7 @@
 			totalPriceLabel.BackColor = Color.White;
 			totalPriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			totalPriceLabel.ForeColor = Color.Black;
-			totalPriceLabel.Location = new Point(176, 1025);
+			totalPriceLabel.Location = new Point(1758, 1031);
 			totalPriceLabel.Name = "totalPriceLabel";
 			totalPriceLabel.RightToLeft = RightToLeft.Yes;
 			totalPriceLabel.Size = new Size(150, 40);
@@ -146,9 +147,9 @@
 			totalTextLabel.BackColor = Color.Transparent;
 			totalTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			totalTextLabel.ForeColor = Color.DarkOliveGreen;
-			totalTextLabel.Location = new Point(12, 1020);
+			totalTextLabel.Location = new Point(1609, 1026);
 			totalTextLabel.Name = "totalTextLabel";
-			totalTextLabel.Size = new Size(158, 40);
+			totalTextLabel.Size = new Size(140, 40);
 			totalTextLabel.TabIndex = 51;
 			totalTextLabel.Text = "Total:";
 			// 
@@ -158,9 +159,9 @@
 			printKitchenTicketButton.BackColor = SystemColors.Control;
 			printKitchenTicketButton.FlatStyle = FlatStyle.Flat;
 			printKitchenTicketButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-			printKitchenTicketButton.Location = new Point(608, 945);
+			printKitchenTicketButton.Location = new Point(276, 948);
 			printKitchenTicketButton.Name = "printKitchenTicketButton";
-			printKitchenTicketButton.Size = new Size(350, 123);
+			printKitchenTicketButton.Size = new Size(310, 123);
 			printKitchenTicketButton.TabIndex = 53;
 			printKitchenTicketButton.Text = "Print Kitchen Ticket";
 			printKitchenTicketButton.UseVisualStyleBackColor = false;
@@ -171,26 +172,31 @@
 			printCustomerTicketButton.BackColor = SystemColors.Control;
 			printCustomerTicketButton.FlatStyle = FlatStyle.Flat;
 			printCustomerTicketButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-			printCustomerTicketButton.Location = new Point(964, 945);
+			printCustomerTicketButton.Location = new Point(592, 948);
 			printCustomerTicketButton.Name = "printCustomerTicketButton";
-			printCustomerTicketButton.Size = new Size(350, 123);
+			printCustomerTicketButton.Size = new Size(310, 123);
 			printCustomerTicketButton.TabIndex = 54;
 			printCustomerTicketButton.Text = "Print Customer Ticket";
 			printCustomerTicketButton.UseVisualStyleBackColor = false;
 			// 
 			// singleOrderDataGridView
 			// 
+			singleOrderDataGridView.AllowUserToAddRows = false;
+			singleOrderDataGridView.AllowUserToDeleteRows = false;
 			singleOrderDataGridView.Anchor = AnchorStyles.Right;
+			singleOrderDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			singleOrderDataGridView.BackgroundColor = Color.White;
 			singleOrderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			singleOrderDataGridView.Location = new Point(1320, 0);
+			singleOrderDataGridView.ColumnHeadersVisible = false;
+			singleOrderDataGridView.Location = new Point(908, 98);
 			singleOrderDataGridView.MultiSelect = false;
 			singleOrderDataGridView.Name = "singleOrderDataGridView";
 			singleOrderDataGridView.ReadOnly = true;
+			singleOrderDataGridView.RowHeadersVisible = false;
 			singleOrderDataGridView.RowHeadersWidth = 82;
 			singleOrderDataGridView.ScrollBars = ScrollBars.Vertical;
 			singleOrderDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			singleOrderDataGridView.Size = new Size(600, 1080);
+			singleOrderDataGridView.Size = new Size(1000, 840);
 			singleOrderDataGridView.TabIndex = 55;
 			singleOrderDataGridView.TabStop = false;
 			// 
@@ -200,9 +206,9 @@
 			printOrderSummaryButton.BackColor = SystemColors.Control;
 			printOrderSummaryButton.FlatStyle = FlatStyle.Flat;
 			printOrderSummaryButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-			printOrderSummaryButton.Location = new Point(332, 945);
+			printOrderSummaryButton.Location = new Point(12, 948);
 			printOrderSummaryButton.Name = "printOrderSummaryButton";
-			printOrderSummaryButton.Size = new Size(270, 123);
+			printOrderSummaryButton.Size = new Size(258, 123);
 			printOrderSummaryButton.TabIndex = 56;
 			printOrderSummaryButton.Text = "Print Summary";
 			printOrderSummaryButton.UseVisualStyleBackColor = false;
@@ -211,7 +217,7 @@
 			// 
 			cancelButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			cancelButton.Image = Properties.Resources.redCancelOrder;
-			cancelButton.Location = new Point(1224, 12);
+			cancelButton.Location = new Point(1818, 12);
 			cancelButton.Name = "cancelButton";
 			cancelButton.Size = new Size(90, 80);
 			cancelButton.TabIndex = 57;
@@ -223,7 +229,7 @@
 			datePicker.CalendarFont = new Font("Segoe UI", 14F);
 			datePicker.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
 			datePicker.Format = DateTimePickerFormat.Short;
-			datePicker.Location = new Point(938, 12);
+			datePicker.Location = new Point(622, 12);
 			datePicker.MinimumSize = new Size(0, 80);
 			datePicker.Name = "datePicker";
 			datePicker.ShowUpDown = true;
