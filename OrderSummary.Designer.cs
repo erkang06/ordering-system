@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			orderSummaryLabel = new Label();
-			allOrdersDataGridView = new DataGridView();
+			orderDataGridView = new DataGridView();
 			deliveryChargePriceLabel = new Label();
 			subtotalPriceLabel = new Label();
 			deliveryChargeTextLabel = new Label();
@@ -40,7 +40,9 @@
 			printCustomerTicketButton = new Button();
 			singleOrderDataGridView = new DataGridView();
 			printOrderSummaryButton = new Button();
-			((System.ComponentModel.ISupportInitialize)allOrdersDataGridView).BeginInit();
+			cancelButton = new Button();
+			datePicker = new DateTimePicker();
+			((System.ComponentModel.ISupportInitialize)orderDataGridView).BeginInit();
 			((System.ComponentModel.ISupportInitialize)singleOrderDataGridView).BeginInit();
 			SuspendLayout();
 			// 
@@ -56,20 +58,24 @@
 			orderSummaryLabel.TabIndex = 43;
 			orderSummaryLabel.Text = "Order Summary";
 			// 
-			// allOrdersDataGridView
+			// orderDataGridView
 			// 
-			allOrdersDataGridView.BackgroundColor = Color.Gainsboro;
-			allOrdersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			allOrdersDataGridView.Location = new Point(12, 102);
-			allOrdersDataGridView.MultiSelect = false;
-			allOrdersDataGridView.Name = "allOrdersDataGridView";
-			allOrdersDataGridView.ReadOnly = true;
-			allOrdersDataGridView.RowHeadersWidth = 82;
-			allOrdersDataGridView.ScrollBars = ScrollBars.Vertical;
-			allOrdersDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			allOrdersDataGridView.Size = new Size(1302, 835);
-			allOrdersDataGridView.TabIndex = 44;
-			allOrdersDataGridView.TabStop = false;
+			orderDataGridView.AllowUserToAddRows = false;
+			orderDataGridView.AllowUserToDeleteRows = false;
+			orderDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+			orderDataGridView.BackgroundColor = Color.Gainsboro;
+			orderDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			orderDataGridView.Location = new Point(12, 102);
+			orderDataGridView.MultiSelect = false;
+			orderDataGridView.Name = "orderDataGridView";
+			orderDataGridView.ReadOnly = true;
+			orderDataGridView.RowHeadersWidth = 82;
+			orderDataGridView.ScrollBars = ScrollBars.Vertical;
+			orderDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			orderDataGridView.Size = new Size(1302, 835);
+			orderDataGridView.TabIndex = 44;
+			orderDataGridView.TabStop = false;
+			orderDataGridView.CellClick += ordersDataGridView_CellClick;
 			// 
 			// deliveryChargePriceLabel
 			// 
@@ -201,12 +207,39 @@
 			printOrderSummaryButton.Text = "Print Summary";
 			printOrderSummaryButton.UseVisualStyleBackColor = false;
 			// 
+			// cancelButton
+			// 
+			cancelButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			cancelButton.Image = Properties.Resources.redCancelOrder;
+			cancelButton.Location = new Point(1224, 12);
+			cancelButton.Name = "cancelButton";
+			cancelButton.Size = new Size(90, 80);
+			cancelButton.TabIndex = 57;
+			cancelButton.UseVisualStyleBackColor = true;
+			cancelButton.Click += cancelButton_Click;
+			// 
+			// datePicker
+			// 
+			datePicker.CalendarFont = new Font("Segoe UI", 14F);
+			datePicker.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+			datePicker.Format = DateTimePickerFormat.Short;
+			datePicker.Location = new Point(938, 12);
+			datePicker.MinimumSize = new Size(0, 80);
+			datePicker.Name = "datePicker";
+			datePicker.ShowUpDown = true;
+			datePicker.Size = new Size(280, 80);
+			datePicker.TabIndex = 58;
+			datePicker.Value = new DateTime(2024, 10, 18, 10, 18, 38, 0);
+			datePicker.ValueChanged += datePicker_ValueChanged;
+			// 
 			// OrderSummary
 			// 
 			AutoScaleDimensions = new SizeF(13F, 32F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.Gainsboro;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(datePicker);
+			Controls.Add(cancelButton);
 			Controls.Add(printOrderSummaryButton);
 			Controls.Add(singleOrderDataGridView);
 			Controls.Add(printCustomerTicketButton);
@@ -217,12 +250,13 @@
 			Controls.Add(subtotalPriceLabel);
 			Controls.Add(deliveryChargeTextLabel);
 			Controls.Add(subtotalTextLabel);
-			Controls.Add(allOrdersDataGridView);
+			Controls.Add(orderDataGridView);
 			Controls.Add(orderSummaryLabel);
 			FormBorderStyle = FormBorderStyle.None;
 			Name = "OrderSummary";
 			Text = "OrderSummary";
-			((System.ComponentModel.ISupportInitialize)allOrdersDataGridView).EndInit();
+			Load += OrderSummary_Load;
+			((System.ComponentModel.ISupportInitialize)orderDataGridView).EndInit();
 			((System.ComponentModel.ISupportInitialize)singleOrderDataGridView).EndInit();
 			ResumeLayout(false);
 		}
@@ -230,7 +264,7 @@
 		#endregion
 
 		private Label orderSummaryLabel;
-		private DataGridView allOrdersDataGridView;
+		private DataGridView orderDataGridView;
 		private Label deliveryChargePriceLabel;
 		private Label subtotalPriceLabel;
 		private Label deliveryChargeTextLabel;
@@ -241,5 +275,7 @@
 		private Button printCustomerTicketButton;
 		private DataGridView singleOrderDataGridView;
 		private Button printOrderSummaryButton;
+		private Button cancelButton;
+		private DateTimePicker datePicker;
 	}
 }

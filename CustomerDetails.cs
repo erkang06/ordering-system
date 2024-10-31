@@ -177,8 +177,8 @@ namespace ordering_system
 			// fill in address datagridview
 			addressDataGridView.DataSource = addressesDataView.ToTable(true, "houseNumber", "streetName", "postcode");
 			// sort out column widths
-			addressDataGridView.Columns["houseNumber"].Width = 100;
-			addressDataGridView.Columns["postcode"].Width = 200;
+			//addressDataGridView.Columns["houseNumber"].Width = 100;
+			//addressDataGridView.Columns["postcode"].Width = 200;
 		}
 
 		// form related
@@ -186,7 +186,13 @@ namespace ordering_system
 		private void acceptAddressButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (doesCustomerExist() == false && areAllCustomerFieldsFilled() == true) // if customer doesnt alr exist in database
+			if (areAllCustomerFieldsFilled() == false) // cant continue w/out all fields filled in
+			{
+				MessageBox.Show("Not all required customer fields filled in", "Ordering System");
+				con.Close();
+				return;
+			}
+			else if (doesCustomerExist() == false) // if customer doesnt alr exist in database
 			{
 				// add customer details to database
 				SqlCommand addCustomerToDatabase = new SqlCommand("INSERT INTO CustomerTbl(customerName, phoneNumber, isBlacklisted, houseNumber, streetName, village, city, postcode) VALUES(@CN, @PN, @IBL, @HN, @SN, @VL, @CT, @PC)", con);
@@ -201,7 +207,7 @@ namespace ordering_system
 				addCustomerToDatabase.ExecuteNonQuery();
 				customerID = findCustomerID();
 			}
-			else if (areAllCustomerFieldsFilled() == true) // update just in case details have changed
+			else // update just in case details have changed
 			{
 				customerID = findCustomerID();
 				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, isBlackListed = @IBL, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
@@ -215,17 +221,17 @@ namespace ordering_system
 				updateCustomerDetails.Parameters.AddWithValue("@CID", customerID);
 				updateCustomerDetails.ExecuteNonQuery();
 			}
-			else // cant continue w/out all fields filled in
-			{
-				MessageBox.Show("Not all required customer fields filled in", "Ordering System");
-				return;
-			}
 
 			string orderType = "Collection"; // set default ordertype to collection since theres nothing more that needs to be updated databasewise
 			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
 			{
-
-				if (doesAddressExist() == false && areAllAddressFieldsFilled() == true) // address doesnt exist in addresstbl
+				if (areAllAddressFieldsFilled() == false)// cant continue w/out all fields filled in
+				{
+					MessageBox.Show("Not all required address fields filled in", "Ordering System");
+					con.Close();
+					return;
+				}
+				else if (doesAddressExist() == false) // address doesnt exist in addresstbl
 				{
 					// add customer details to database
 					SqlCommand addAddressToDatabase = new SqlCommand("INSERT INTO AddressTbl(customerID, houseNumber, streetName, village, city, postcode, deliveryCharge) VALUES(@CID, @HN, @SN, @VL, @CT, @PC, @DC)", con);
@@ -239,7 +245,7 @@ namespace ordering_system
 					addAddressToDatabase.ExecuteNonQuery();
 					addressID = findAddressID();
 				}
-				else if (areAllAddressFieldsFilled() == true) // update just in case details have changed
+				else // update just in case details have changed
 				{
 					addressID = findAddressID();
 					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
@@ -252,19 +258,14 @@ namespace ordering_system
 					updateDeliveryAddress.Parameters.AddWithValue("@AID", addressID);
 					updateDeliveryAddress.ExecuteNonQuery();
 				}
-				else // cant continue w/out all fields filled in
-				{
-					MessageBox.Show("Not all required address fields filled in", "Ordering System");
-					return;
-				}
 				orderType = "Delivery";
 			}
-			else if (collectionButton.BackColor != Color.Yellow) // if collection button isnt selected
+			else if (collectionButton.BackColor != Color.Yellow) // if order type button isnt selected
 			{
 				MessageBox.Show("Order type not selected", "Ordering System");
+				con.Close();
 				return;
 			}
-
 			// send delivery details back to main menu
 			CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(customerID, orderType, addressID);
 			CustomerDetailsUpdate(this, args);

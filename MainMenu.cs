@@ -911,12 +911,16 @@ namespace ordering_system
 		private void acceptOrder(string orderType)
 		{
 			con.Open();
-			//addOrderToOrderTbl(orderType);
-			//int orderID = getOrderID();
-			//addOrderItems(orderID);
-			// create ticket
+			addOrderToOrderTbl(orderType);
+			int orderID = getOrderID();
+			addOrderItems(orderID);
+			//create ticket
 			printPreviewDialog1.Document = printDocument1;
-			printDocument1.Print();
+			printPreviewDialog1.ShowDialog();
+			if (printPreviewDialog1.ShowDialog() == DialogResult.OK)
+			{
+				printDocument1.Print();
+			}
 			clearMenu();
 			orderNumberLabel.Text = (Convert.ToInt32(orderNumberLabel.Text) + 1).ToString(); // increment order number
 			con.Close();

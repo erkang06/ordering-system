@@ -18,6 +18,8 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
+		// functions + cancel
+
 		private int getCategoryIDFromSelectedIndex()
 		{
 			int selectedIndex = categoryComboBox.SelectedIndex;
@@ -78,6 +80,8 @@ namespace ordering_system
 		{
 			Close();
 		}
+
+		// main
 
 		private void UpdateSetMeals_Load(object sender, EventArgs e)
 		{
@@ -143,7 +147,7 @@ namespace ordering_system
 
 		private void updateDataGridView()
 		{
-			setMealsDataTable = new DataTable(); // clear prev
+			setMealsDataTable.Clear(); // clear prev
 			SqlDataAdapter getSetMeals = new SqlDataAdapter("SELECT * FROM SetMealTbl ORDER BY SetMealID", con);
 			getSetMeals.Fill(setMealsDataTable);
 			DataView setMealsDataView = new DataView(setMealsDataTable);
@@ -314,7 +318,7 @@ namespace ordering_system
 		private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			con.Open();
-			foodItemsDataTableByCategory = new DataTable(); // clear prev
+			foodItemsDataTableByCategory.Clear(); // clear prev
 			int categoryID = getCategoryIDFromSelectedIndex();
 			SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
 			getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
