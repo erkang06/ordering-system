@@ -23,12 +23,7 @@ namespace ordering_system
 		int viewOrdersSelectedOrderID = -1;
 		int runningOrderItemID = 0; // datatables will collate identical rows which isnt slay
 		bool paymentPanelButtonMode = true; // true if using buttons, false if typing value in
-		// ticket and fonts for printing the ticket out
-		int ticketPaperSizeWidth = 400;
-		Font ticketHeaderFont = new Font("Arial", 18);
-		Font ticketItemFont = new Font("Arial", 16);
-		Font ticketSetMealFoodItemFont = new Font("Arial", 14);
-		Font ticketSmallFont = new Font("Arial", 12);
+																				// ticket and fonts for printing the ticket out
 		public MainMenu()
 		{
 			InitializeComponent();
@@ -132,7 +127,7 @@ namespace ordering_system
 
 		private void updatePriceLabels()
 		{
-			// https://stackoverflow.com/questions/3779729/how-i-can-show-the-sum-of-in-a-datagridview-column
+			// https://stackoverflow.com/a/24218840
 			decimal subTotal = runningOrderDataGridView.Rows.Cast<DataGridViewRow>()
 								.Sum(t => Convert.ToDecimal(t.Cells["price"].Value));
 			if (subTotal > 0)
@@ -915,21 +910,27 @@ namespace ordering_system
 			int orderID = getOrderID();
 			addOrderItems(orderID);
 			//create ticket
-			printPreviewDialog1.Document = printDocument1;
-			if (printPreviewDialog1.ShowDialog() == DialogResult.OK)
+			printPreviewDialog.Document = printCustomerTicket;
+			if (printPreviewDialog.ShowDialog() == DialogResult.OK)
 			{
-				printDocument1.Print();
+				printCustomerTicket.Print();
 			}
 			clearMenu();
 			orderNumberLabel.Text = (Convert.ToInt32(orderNumberLabel.Text) + 1).ToString(); // increment order number
 			con.Close();
 		}
 
-		private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
+		private void printCustomerTicket_PrintPage(object sender, PrintPageEventArgs e)
 		{
 			int ypos = 10;
 			int orderID = getOrderID();
+			int ticketPaperSizeWidth = Convert.ToInt32(Resources.ticketPaperSizeWidth);
 			DataRow orderDataRow = getOrder(orderID);
+			// get fonts and sizes
+			Font ticketHeaderFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketHeaderFontSize));
+			Font ticketItemFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketItemFontSize));
+			Font ticketSetMealFoodItemFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketSetMealFoodItemFontSize));
+			Font ticketSmallFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketSmallFontSize));
 			// get phone number and order type
 			// align ordertype to right, https://stackoverflow.com/q/50299682
 			int orderTypeWidth = (int)e.Graphics.MeasureString(currentOrder.orderType, ticketSmallFont).Width;
@@ -1033,7 +1034,7 @@ namespace ordering_system
 			int estimatedTimeWidth = (int)e.Graphics.MeasureString(estimatedTime, ticketHeaderFont).Width;
 			e.Graphics.DrawString(estimatedTime, ticketHeaderFont, Brushes.Black, new Point(ticketPaperSizeWidth - estimatedTimeWidth, ypos));
 			ypos += (int)ticketHeaderFont.Size + 20;
-			printDocument1.DefaultPageSettings.PaperSize = new PaperSize("till", ticketPaperSizeWidth, ypos);
+			printCustomerTicket.DefaultPageSettings.PaperSize = new PaperSize("till", ticketPaperSizeWidth, ypos);
 		}
 
 		private void addOrderToOrderTbl(string orderType)

@@ -1,6 +1,8 @@
 ﻿using ordering_system.Properties;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing.Printing;
+using System.Windows.Forms.VisualStyles;
 
 namespace ordering_system
 {
@@ -116,7 +118,7 @@ namespace ordering_system
 				getOrderItemsByDate.Fill(orderItemsDataTable);
 				orderItemsDataTable.Columns.Add("itemName", typeof(string));
 				orderItemsDataTable.Columns.Add("price", typeof(decimal)); // add price onto table 
-				// get price of each item in order
+																																	 // get price of each item in order
 				decimal subTotal = 0;
 				for (int j = 0; j < orderItemsDataTable.Rows.Count; j++) // get cost and name of each item
 				{
@@ -200,6 +202,90 @@ namespace ordering_system
 			singleOrderDataGridView.Columns["price"].Width = 50;
 			singleOrderDataGridView.Columns["orderItemID"].Visible = false;
 			con.Close();
+		}
+
+		private void printOrderSummaryButton_Click(object sender, EventArgs e)
+		{
+			con.Open();
+			printPreviewDialog.Document = printOrderSummary;
+			if (printPreviewDialog.ShowDialog() == DialogResult.OK)
+			{
+				printOrderSummary.Print();
+			}
+			con.Close();
+		}
+
+		private void printOrderSummary_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+		{
+			int ticketPaperSizeWidth = Convert.ToInt32(Resources.ticketPaperSizeWidth);
+			string subTotal, deliveryCharge, total;
+			int ypos = 10;
+			// get fonts
+			Font ticketHeaderFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketHeaderFontSize));
+			Font ticketItemFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketItemFontSize));
+			Font ticketSetMealFoodItemFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketSetMealFoodItemFontSize));
+			Font ticketSmallFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketSmallFontSize));
+			// get total number of orders
+			int numberOfCounters = ordersDataTable.Select(@"orderType = 'Counter'").Length;
+			int numberOfDeliveries = ordersDataTable.Select(@"orderType = 'Delivery'").Length;
+			int numberOfCollections = ordersDataTable.Select(@"orderType = 'Collection'").Length;
+			int numberOfOrders = ordersDataTable.Rows.Count;
+			// add up total profits
+			// https://stackoverflow.com/a/11989142
+			object subTotalObject;
+			subTotalObject = ordersDataTable.Compute("Sum(subTotal)", "");
+			subTotal = subTotalObject.ToString();
+			if (subTotal == "0")
+			{
+				subTotal = "0.00";
+			}
+			object deliveryChargeObject;
+			deliveryChargeObject = ordersDataTable.Compute("Sum(deliveryCharge)", "");
+			deliveryCharge = deliveryChargeObject.ToString();
+			if (deliveryCharge == "0")
+			{
+				deliveryCharge = "0.00";
+			}
+			object totalObject;
+			totalObject = ordersDataTable.Compute("Sum(total)", "");
+			total = totalObject.ToString();
+			if (total == "0")
+			{
+				total = "0.00";
+			}
+
+			// date
+			string dateString = datePicker.Value.Date.ToString();
+			e.Graphics.DrawString(dateString, ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+			ypos += (int)ticketHeaderFont.Size + 10;
+			// break
+			e.Graphics.DrawString("*************************************", new Font("Arial", 14), Brushes.Black, new Point(10, ypos));
+			ypos += 20;
+			// number of orders - each ordertype as well
+			e.Graphics.DrawString("Number of Orders: " + numberOfOrders.ToString(), ticketItemFont, Brushes.Black, new Point(10, ypos));
+			ypos += (int)ticketItemFont.Size + 10;
+			e.Graphics.DrawString("Number of Counters: " + numberOfCounters.ToString(), ticketSetMealFoodItemFont, Brushes.Black, new Point(30, ypos));
+			ypos += (int)ticketSetMealFoodItemFont.Size + 10;
+			e.Graphics.DrawString("Number of Deliveries: " + numberOfDeliveries.ToString(), ticketSetMealFoodItemFont, Brushes.Black, new Point(30, ypos));
+			ypos += (int)ticketSetMealFoodItemFont.Size + 10;
+			e.Graphics.DrawString("Number of Collections: " + numberOfCollections.ToString(), ticketSetMealFoodItemFont, Brushes.Black, new Point(30, ypos));
+			ypos += (int)ticketSetMealFoodItemFont.Size + 10;
+			// break
+			e.Graphics.DrawString("*************************************", new Font("Arial", 14), Brushes.Black, new Point(10, ypos));
+			ypos += 20;
+			// profits by type
+			e.Graphics.DrawString("Sub Total: " + subTotal, ticketItemFont, Brushes.Black, new Point(10, ypos));
+			ypos += (int)ticketItemFont.Size + 10;
+			e.Graphics.DrawString("Delivery Charge: " + deliveryCharge, ticketItemFont, Brushes.Black, new Point(10, ypos));
+			ypos += (int)ticketItemFont.Size + 10;
+			e.Graphics.DrawString("Total: " + total, ticketItemFont, Brushes.Black, new Point(10, ypos));
+			ypos += (int)ticketItemFont.Size + 10;
+			printOrderSummary.DefaultPageSettings.PaperSize = new PaperSize("till", ticketPaperSizeWidth, ypos);
+		}
+
+		private void phoneNumberTextBox_TextChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

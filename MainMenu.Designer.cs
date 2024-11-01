@@ -83,8 +83,8 @@
 			viewOrdersDeliveryButton = new Button();
 			viewOrdersDataGridView = new DataGridView();
 			timer = new System.Windows.Forms.Timer(components);
-			printDocument1 = new System.Drawing.Printing.PrintDocument();
-			printPreviewDialog1 = new PrintPreviewDialog();
+			printCustomerTicket = new System.Drawing.Printing.PrintDocument();
+			printPreviewDialog = new PrintPreviewDialog();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -771,19 +771,19 @@
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
 			// 
-			// printDocument1
+			// printCustomerTicket
 			// 
-			printDocument1.PrintPage += printDocument1_PrintPage;
+			printCustomerTicket.PrintPage += printCustomerTicket_PrintPage;
 			// 
-			// printPreviewDialog1
+			// printPreviewDialog
 			// 
-			printPreviewDialog1.AutoScrollMargin = new Size(0, 0);
-			printPreviewDialog1.AutoScrollMinSize = new Size(0, 0);
-			printPreviewDialog1.ClientSize = new Size(400, 300);
-			printPreviewDialog1.Enabled = true;
-			printPreviewDialog1.Icon = (Icon)resources.GetObject("printPreviewDialog1.Icon");
-			printPreviewDialog1.Name = "printPreviewDialog1";
-			printPreviewDialog1.Visible = false;
+			printPreviewDialog.AutoScrollMargin = new Size(0, 0);
+			printPreviewDialog.AutoScrollMinSize = new Size(0, 0);
+			printPreviewDialog.ClientSize = new Size(400, 300);
+			printPreviewDialog.Enabled = true;
+			printPreviewDialog.Icon = (Icon)resources.GetObject("printPreviewDialog.Icon");
+			printPreviewDialog.Name = "printPreviewDialog1";
+			printPreviewDialog.Visible = false;
 			// 
 			// MainMenu
 			// 
@@ -875,7 +875,7 @@
 		private Button paymentClearButton;
 		private Button paymentExactButton;
 		private Button paymentAcceptButton;
-		private System.Drawing.Printing.PrintDocument printDocument1;
-		private PrintPreviewDialog printPreviewDialog1;
+		private System.Drawing.Printing.PrintDocument printCustomerTicket;
+		private PrintPreviewDialog printPreviewDialog;
 	}
 }

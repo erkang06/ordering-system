@@ -157,4 +157,22 @@
   <data name="managerCipher" xml:space="preserve">
     <value>managerCipher.txt</value>
   </data>
+  <data name="ticketPaperSizeWidth" xml:space="preserve">
+    <value>400</value>
+  </data>
+  <data name="ticketFont" xml:space="preserve">
+    <value>Arial</value>
+  </data>
+  <data name="ticketHeaderFontSize" xml:space="preserve">
+    <value>18</value>
+  </data>
+  <data name="ticketItemFontSize" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="ticketSetMealFoodItemFontSize" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="ticketSmallFontSize" xml:space="preserve">
+    <value>12</value>
+  </data>
 </root>

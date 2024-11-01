@@ -176,6 +176,60 @@ namespace ordering_system.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Arial.
+        /// </summary>
+        internal static string ticketFont {
+            get {
+                return ResourceManager.GetString("ticketFont", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 18.
+        /// </summary>
+        internal static string ticketHeaderFontSize {
+            get {
+                return ResourceManager.GetString("ticketHeaderFontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 16.
+        /// </summary>
+        internal static string ticketItemFontSize {
+            get {
+                return ResourceManager.GetString("ticketItemFontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 400.
+        /// </summary>
+        internal static string ticketPaperSizeWidth {
+            get {
+                return ResourceManager.GetString("ticketPaperSizeWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 14.
+        /// </summary>
+        internal static string ticketSetMealFoodItemFontSize {
+            get {
+                return ResourceManager.GetString("ticketSetMealFoodItemFontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 12.
+        /// </summary>
+        internal static string ticketSmallFontSize {
+            get {
+                return ResourceManager.GetString("ticketSmallFontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap timeEdit {
