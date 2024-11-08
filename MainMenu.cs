@@ -3,6 +3,7 @@ using ordering_system.Properties;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing.Printing;
+using System.Windows.Forms.VisualStyles;
 
 namespace ordering_system
 {
@@ -13,17 +14,15 @@ namespace ordering_system
 																											 // the connection string to the database
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataRow customerDataRow; // data row for customer
-		DataTable ordersDataTable;
 		DataTable categoriesDataTable;
 		DataTable itemsDataTable;
 		DataTable commonItemsDataTable;
 		Button[] categoryButtonArray = new Button[24]; // cant have any more since its hardcoded
 		Button[] itemButtonArray = new Button[40];
 		Button[] commonItemButtonArray = new Button[20];
-		int viewOrdersSelectedOrderID = -1;
 		int runningOrderItemID = 0; // datatables will collate identical rows which isnt slay
 		bool paymentPanelButtonMode = true; // true if using buttons, false if typing value in
-																				// ticket and fonts for printing the ticket out
+
 		public MainMenu()
 		{
 			InitializeComponent();
@@ -31,13 +30,13 @@ namespace ordering_system
 
 		// weird functions that rnt in 1 specific section
 
-		private void getCustomer(int customerID) // get customer details from customerid
+		private DataRow getCustomer(int customerID) // get customer details from customerid
 		{
 			SqlDataAdapter getCustomer = new SqlDataAdapter("SELECT * FROM CustomerTbl WHERE customerID = @CID", con);
 			getCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
 			DataTable customerDataTable = new DataTable();
 			getCustomer.Fill(customerDataTable);
-			customerDataRow = customerDataTable.Rows[0];
+			return customerDataTable.Rows[0];
 		}
 
 		private DataRow getAddress(int addressID) // get address from addressid
@@ -220,11 +219,6 @@ namespace ordering_system
 			updatePriceLabels();
 		}
 
-		private void getOrder()
-		{
-
-		}
-
 		// startup
 
 		private void MainMenu_Load(object sender, EventArgs e)
@@ -235,6 +229,8 @@ namespace ordering_system
 			viewOrdersPanel.SendToBack();
 			viewOrdersPanel.Visible = false;
 			deliveryChargePriceLabel.Enabled = false;
+			viewOrdersCustomerDetailsPanel.SendToBack();
+			viewOrdersCustomerDetailsPanel.Visible = false;
 			getOrderNumber();
 			getCategories();
 			loadCategoryButtons();
@@ -452,7 +448,7 @@ namespace ordering_system
 			con.Open();
 			currentOrder.customerID = e.customerID;
 			currentOrder.orderType = e.orderType;
-			getCustomer(e.customerID);
+			customerDataRow = getCustomer(e.customerID);
 			string phoneNumber = customerDataRow["phoneNumber"].ToString();
 			if (e.orderType == "Delivery")
 			{
@@ -855,7 +851,7 @@ namespace ordering_system
 			}
 		}
 
-		// playing abt w/ orders
+		// acc doing stuff w/ orders
 
 		private void cancelOrderButton_Click(object sender, EventArgs e)
 		{
@@ -909,18 +905,21 @@ namespace ordering_system
 			addOrderToOrderTbl(orderType);
 			int orderID = getOrderID();
 			addOrderItems(orderID);
-			//create ticket
-			printPreviewDialog.Document = printCustomerTicket;
-			if (printPreviewDialog.ShowDialog() == DialogResult.OK)
-			{
-				printCustomerTicket.Print();
-			}
+			acceptOrderButton.Text = "Accept Order";
+			viewOrdersButton.Enabled = true;
+			//create both customer and kitchen ticket
+			printPreviewDialog.Document = printDocument;
+			printDocument.PrintPage += (sender, e) => printTicket_PrintPage(sender, e, "Customer");
+			printDocument.Print();
+			printPreviewDialog.Document = printDocument;
+			printDocument.PrintPage += (sender, e) => printTicket_PrintPage(sender, e, "Kitchen");
+			printDocument.Print();
 			clearMenu();
 			orderNumberLabel.Text = (Convert.ToInt32(orderNumberLabel.Text) + 1).ToString(); // increment order number
 			con.Close();
 		}
 
-		private void printCustomerTicket_PrintPage(object sender, PrintPageEventArgs e)
+		private void printTicket_PrintPage(object sender, PrintPageEventArgs e, string ticketType)
 		{
 			int ypos = 10;
 			int orderID = getOrderID();
@@ -935,30 +934,31 @@ namespace ordering_system
 			// align ordertype to right, https://stackoverflow.com/q/50299682
 			int orderTypeWidth = (int)e.Graphics.MeasureString(currentOrder.orderType, ticketSmallFont).Width;
 			e.Graphics.DrawString(currentOrder.orderType, ticketSmallFont, Brushes.Black, new Point(ticketPaperSizeWidth - orderTypeWidth, ypos));
-			if (currentOrder.orderType != "Counter")
+			if (currentOrder.orderType != "Counter" && ticketType == "Customer") // kitchen orders dont need addresses and customer names
 			{
 				e.Graphics.DrawString(customerDataRow["phoneNumber"].ToString(), ticketHeaderFont, Brushes.Black, new Point(10, ypos));
 				ypos += (int)ticketHeaderFont.Size + 10;
-			}
-			// get name or address
-			if (currentOrder.orderType == "Collection")
-			{
-				string customerName = customerDataRow["customerName"].ToString();
-				e.Graphics.DrawString(customerName, ticketHeaderFont, Brushes.Black, new Point(10, ypos));
-				ypos += (int)ticketHeaderFont.Size + 10;
-			}
-			else if (currentOrder.orderType == "Delivery")
-			{
-				DataRow addressDataRow = getAddress(currentOrder.addressID);
-				for (int i = 2; i < 7; i++) // from house number to postcode
+				// get name or address
+				if (currentOrder.orderType == "Collection")
 				{
-					if (addressDataRow[i].ToString() != "")
+					string customerName = customerDataRow["customerName"].ToString();
+					e.Graphics.DrawString(customerName, ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+					ypos += (int)ticketHeaderFont.Size + 10;
+				}
+				else // delivery
+				{
+					DataRow addressDataRow = getAddress(currentOrder.addressID);
+					for (int i = 2; i < 7; i++) // from house number to postcode
 					{
-						e.Graphics.DrawString(addressDataRow[i].ToString(), ticketHeaderFont, Brushes.Black, new Point(10, ypos));
-						ypos += (int)ticketHeaderFont.Size + 10;
+						if (addressDataRow[i].ToString() != "")
+						{
+							e.Graphics.DrawString(addressDataRow[i].ToString(), ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+							ypos += (int)ticketHeaderFont.Size + 10;
+						}
 					}
 				}
 			}
+
 			// get order date and time
 			string orderDateTimeString = Convert.ToDateTime(orderDataRow["orderDate"]).ToString("dd/MM/yyyy") + " " + orderDataRow["orderTime"].ToString();
 			e.Graphics.DrawString(orderDateTimeString, ticketSmallFont, Brushes.Black, new Point(10, ypos));
@@ -1030,11 +1030,11 @@ namespace ordering_system
 			ypos += (int)ticketHeaderFont.Size + 20;
 			// get estimated time
 			e.Graphics.DrawString("Estimated Time:", ticketHeaderFont, Brushes.Black, new Point(10, ypos));
-			string estimatedTime = TimeSpan.Parse(orderDataRow["estimatedTime"].ToString()).ToString(@"hh\.mm");
+			string estimatedTime = TimeSpan.Parse(orderDataRow["estimatedTime"].ToString()).ToString(@"hh\:mm");
 			int estimatedTimeWidth = (int)e.Graphics.MeasureString(estimatedTime, ticketHeaderFont).Width;
 			e.Graphics.DrawString(estimatedTime, ticketHeaderFont, Brushes.Black, new Point(ticketPaperSizeWidth - estimatedTimeWidth, ypos));
 			ypos += (int)ticketHeaderFont.Size + 20;
-			printCustomerTicket.DefaultPageSettings.PaperSize = new PaperSize("till", ticketPaperSizeWidth, ypos);
+			printDocument.DefaultPageSettings.PaperSize = new PaperSize("till", ticketPaperSizeWidth, ypos);
 		}
 
 		private void addOrderToOrderTbl(string orderType)
@@ -1111,6 +1111,7 @@ namespace ordering_system
 			paymentPaidTextbox.Text = paidValue.ToString();
 			changeChecker(paidValue);
 			paymentPanelButtonMode = true;
+
 		}
 
 		private void paymentPaidTextbox_TextChanged(object sender, EventArgs e)
@@ -1201,6 +1202,11 @@ namespace ordering_system
 
 		// view orders
 
+		DataTable viewOrdersDataTable;
+		Dictionary<int, DataTable> viewOrdersOrderItemsDictionary = new Dictionary<int, DataTable>(); // keeps all orders by viewOrdersDailyOrderNumber
+		DataTable viewOrdersSingleOrderDataTable = new DataTable();
+		int viewOrdersDailyOrderNumber = -1; // id of currently selected order in ordersdatagridview
+
 		private void viewOrdersButton_Click(object sender, EventArgs e)
 		{
 			if (viewOrdersButton.Text == "View Orders")
@@ -1209,12 +1215,15 @@ namespace ordering_system
 				viewOrdersDeliveryButton.BackColor = Color.Transparent;
 				viewOrdersCounterButton.BackColor = Color.Transparent;
 				viewOrdersCollectionButton.BackColor = Color.Transparent;
-				// get the panel out
+				// get the vieworders panel out
 				viewOrdersButton.Text = "Cancel";
 				viewOrdersPanel.BringToFront();
 				viewOrdersPanel.Visible = true;
 				// disable accept order; cant open both at once lmao
 				acceptOrderButton.Enabled = false;
+				// fill in viewordersdatagridview
+				viewOrdersDataGridView.DataSource = null;
+				updateViewOrdersDataGridView();
 			}
 			else // exit view orders mode
 			{
@@ -1222,9 +1231,135 @@ namespace ordering_system
 				viewOrdersButton.Text = "View Orders";
 				viewOrdersPanel.SendToBack();
 				viewOrdersPanel.Visible = false;
-				// enable accept order
+				viewOrdersCustomerDetailsPanel.SendToBack();
+				viewOrdersCustomerDetailsPanel.Visible = false;
+				// enable accept order and item edit functions panel
 				acceptOrderButton.Enabled = true;
+				itemEditFunctionsPanel.Enabled = true;
 			}
+		}
+
+		private decimal getPriceOfFoodItem(string foodItemID, string size) // get price from id and size
+		{
+			// get table parameter
+			string foodItemParameter = "largeItemPrice";
+			if (size == "S")
+			{
+				foodItemParameter = "smallItemPrice";
+			}
+
+			SqlCommand getPriceOfFoodItem = new SqlCommand($"SELECT {foodItemParameter} FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+			getPriceOfFoodItem.Parameters.AddWithValue("@FIID", foodItemID);
+			decimal price = (decimal)getPriceOfFoodItem.ExecuteScalar();
+			return price;
+		}
+
+		private string getNameOfFoodItem(string foodItemID)
+		{
+			SqlCommand getNameOfFoodItem = new SqlCommand($"SELECT foodName FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+			getNameOfFoodItem.Parameters.AddWithValue("@FIID", foodItemID);
+			string itemName = getNameOfFoodItem.ExecuteScalar().ToString();
+			return itemName;
+		}
+
+		private decimal getPriceOfSetMeal(string setMealID)
+		{
+			SqlCommand getPriceOfSetMeal = new SqlCommand($"SELECT price FROM SetMealTbl WHERE setMealID = @SMID", con);
+			getPriceOfSetMeal.Parameters.AddWithValue("@SMID", setMealID);
+			decimal price = (decimal)getPriceOfSetMeal.ExecuteScalar();
+			return price;
+		}
+
+		private string getNameOfSetMeal(string setMealID)
+		{
+			SqlCommand getNameOfSetMeal = new SqlCommand($"SELECT setMealName FROM SetMealTbl WHERE setMealID = @SMID", con);
+			getNameOfSetMeal.Parameters.AddWithValue("@SMID", setMealID);
+			string setMealName = getNameOfSetMeal.ExecuteScalar().ToString();
+			return setMealName;
+		}
+
+		private decimal getDeliveryChargeOfAddress(int addressID)
+		{
+			SqlCommand getDeliveryChargeOfAddress = new SqlCommand($"SELECT deliveryCharge FROM AddressTbl WHERE addressID = @AID", con);
+			getDeliveryChargeOfAddress.Parameters.AddWithValue("@AID", addressID);
+			decimal deliveryCharge = (decimal)getDeliveryChargeOfAddress.ExecuteScalar();
+			return deliveryCharge;
+		}
+
+		private void updateViewOrdersDataGridView()
+		{
+			con.Open();
+			// get orders for the day
+			viewOrdersDataTable = new DataTable(); // clear prev
+			DateTime date = DateTime.Now.Date;
+			SqlDataAdapter getOrdersByDate = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderDate = @OD ORDER BY orderTime", con);
+			getOrdersByDate.SelectCommand.Parameters.AddWithValue("@OD", date);
+			getOrdersByDate.Fill(viewOrdersDataTable);
+			// add subtotal and delivery and total into table
+			viewOrdersDataTable.Columns.Add("subTotal", typeof(decimal));
+			viewOrdersDataTable.Columns.Add("deliveryCharge", typeof(decimal));
+			viewOrdersDataTable.Columns.Add("total", typeof(decimal));
+			// get order items for the day
+			viewOrdersOrderItemsDictionary.Clear(); // clear prev
+			SqlDataAdapter getOrderItemsByDate = new SqlDataAdapter("SELECT * FROM OrderItemTbl WHERE orderID = @OID", con);
+			getOrderItemsByDate.SelectCommand.Parameters.Add("@OID", SqlDbType.Int);
+			DataTable orderItemsDataTable = new DataTable(); // only needs to be temp since im using a dictionary
+			for (int i = 0; i < viewOrdersDataTable.Rows.Count; i++) // get order items per order and get total cost
+			{
+				// get order items in an order
+				DataRow order = viewOrdersDataTable.Rows[i];
+				orderItemsDataTable = new DataTable();
+				int orderID = Convert.ToInt32(order["orderID"]);
+				int viewOrdersDailyOrderNumber = Convert.ToInt32(order["dailyOrderNumber"]);
+				getOrderItemsByDate.SelectCommand.Parameters["@OID"].Value = orderID;
+				getOrderItemsByDate.Fill(orderItemsDataTable);
+				orderItemsDataTable.Columns.Add("itemName", typeof(string));
+				orderItemsDataTable.Columns.Add("price", typeof(decimal)); // add price onto table 
+																																	 // get price of each item in order
+				decimal subTotal = 0;
+				for (int j = 0; j < orderItemsDataTable.Rows.Count; j++) // get cost and name of each item
+				{
+					DataRow orderItem = orderItemsDataTable.Rows[j];
+					string itemID = orderItem["itemID"].ToString();
+					string itemType = orderItem["itemType"].ToString();
+					decimal price;
+					string itemName;
+					if (itemType == "foodItem")
+					{
+						price = (getPriceOfFoodItem(itemID, orderItem["size"].ToString()) + Convert.ToDecimal(orderItem["discount"])) * Convert.ToInt32(orderItem["quantity"]);
+						itemName = getNameOfFoodItem(itemID);
+					}
+					else // set meal
+					{
+						price = (getPriceOfSetMeal(itemID) + Convert.ToDecimal(orderItem["discount"])) * Convert.ToInt32(orderItem["quantity"]);
+						itemName = getNameOfSetMeal(itemID);
+					}
+					orderItemsDataTable.Rows[j]["price"] = price;
+					orderItemsDataTable.Rows[j]["itemName"] = itemName;
+					subTotal += price;
+				}
+				// add to dictionary and table
+				viewOrdersOrderItemsDictionary.Add(viewOrdersDailyOrderNumber, orderItemsDataTable);
+				viewOrdersDataTable.Rows[i]["subTotal"] = subTotal;
+				// get delivery charge if is a delivery and add it to total
+				if (order["orderType"].ToString() == "Delivery")
+				{
+					int addressID = Convert.ToInt32(order["addressID"]);
+					decimal deliveryCharge = getDeliveryChargeOfAddress(addressID);
+					viewOrdersDataTable.Rows[i]["deliveryCharge"] = deliveryCharge;
+					viewOrdersDataTable.Rows[i]["total"] = deliveryCharge + subTotal;
+				}
+				else // just make total the subtotal
+				{
+					viewOrdersDataTable.Rows[i]["total"] = subTotal;
+				}
+			}
+			// fill in orders datagridview
+			DataView ordersDataViewByDate = new DataView(viewOrdersDataTable);
+			viewOrdersDataGridView.DataSource = ordersDataViewByDate.ToTable(true, "dailyOrderNumber", "orderType", "orderTime", "hasPaid", "total");
+			viewOrdersDataGridView.Columns["dailyOrderNumber"].Width = 50;
+			viewOrdersDataGridView.ClearSelection();
+			con.Close();
 		}
 
 		private void viewOrdersDeliveryButton_Click(object sender, EventArgs e)
@@ -1233,25 +1368,16 @@ namespace ordering_system
 			viewOrdersDeliveryButton.BackColor = Color.Yellow;
 			viewOrdersCounterButton.BackColor = Color.Transparent;
 			viewOrdersCollectionButton.BackColor = Color.Transparent;
-			// orderid, address, ordertime, price
+			viewOrdersByOrderType("Delivery");
 		}
 
 		private void viewOrdersCounterButton_Click(object sender, EventArgs e)
 		{
-			con.Open();
-			viewOrdersDataGridView.Rows.Clear();
 			// selects counter, unselects rest
 			viewOrdersDeliveryButton.BackColor = Color.Transparent;
 			viewOrdersCounterButton.BackColor = Color.Yellow;
 			viewOrdersCollectionButton.BackColor = Color.Transparent;
-			// orderid, ordertime, price
-			ordersDataTable = new DataTable();
-			SqlDataAdapter getOrders = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderType = @OT", con);
-			getOrders.SelectCommand.Parameters.AddWithValue("@OT", "Counter");
-			getOrders.Fill(ordersDataTable);
-			DataView ordersDataView = new DataView(ordersDataTable);
-			viewOrdersDataGridView.DataSource = ordersDataView.ToTable(true, "orderID", "orderTime");
-			con.Close();
+			viewOrdersByOrderType("Counter");
 		}
 
 		private void viewOrdersCollectionButton_Click(object sender, EventArgs e)
@@ -1260,21 +1386,94 @@ namespace ordering_system
 			viewOrdersDeliveryButton.BackColor = Color.Transparent;
 			viewOrdersCounterButton.BackColor = Color.Transparent;
 			viewOrdersCollectionButton.BackColor = Color.Yellow;
-			// orderid, customername, ordertime, price
+			viewOrdersByOrderType("Collection");
+		}
+
+		private void viewOrdersByOrderType(string orderType)
+		{
+			viewOrdersDataGridView.DataSource = null; // clear
+			DataRow[] ordersByOrderType = viewOrdersDataTable.Select($"orderType = '{orderType}'");
+			if (ordersByOrderType.Length > 0) // get the orders and show them
+			{
+				DataTable ordersByOrderTypeDataTable = ordersByOrderType.CopyToDataTable();
+				DataView ordersByOrderTypeDataView = new DataView(ordersByOrderTypeDataTable);
+				viewOrdersDataGridView.DataSource = ordersByOrderTypeDataView.ToTable(true, "dailyOrderNumber", "orderType", "orderTime", "hasPaid", "total");
+			}
+			else // get an empty datatable
+			{
+				DataTable emptyViewOrdersDataTable = viewOrdersDataTable.Clone();
+				DataView ordersDataViewByDate = new DataView(emptyViewOrdersDataTable);
+				viewOrdersDataGridView.DataSource = ordersDataViewByDate.ToTable(true, "dailyOrderNumber", "orderType", "orderTime", "hasPaid", "total");
+			}
+			viewOrdersDataGridView.Columns["dailyOrderNumber"].Width = 50; // make look nice
+			viewOrdersDataGridView.ClearSelection();
 		}
 
 		private void viewOrdersDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			// find clicked row of table in order to search through ordersdatagridview to find the full deets
-			int selectedIndex = viewOrdersDataGridView.SelectedCells[0].RowIndex;
-			DataRow selectedRow = ordersDataTable.Rows[selectedIndex];
-			viewOrdersSelectedOrderID = Convert.ToInt32(selectedRow["orderID"]);
-			viewOrdersDataGridView.ClearSelection(); // unselect row
+			con.Open();
+			// find clicked row of table in order to search through orderdictionary to find the full deets
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
+			{
+				viewOrdersCustomerDetailsPanel.BringToFront();
+				viewOrdersCustomerDetailsPanel.Visible = true;
+				itemEditFunctionsPanel.Enabled = false;
+				viewOrdersDailyOrderNumber = Convert.ToInt32(viewOrdersDataGridView.Rows[selectedRowIndex].Cells["dailyOrderNumber"].Value);
+				DataRow order = viewOrdersDataTable.Select($"dailyOrderNumber = '{viewOrdersDailyOrderNumber}'")[0];
+				// fill in order type
+				viewOrdersOrderTypeLabel.Text = order["orderType"].ToString();
+				// fill in top fields for collections and deliveries
+				if (order["orderType"].ToString() != "Counter")
+				{
+					DataRow customerDataRow = getCustomer(Convert.ToInt32(order["customerID"]));
+					string phoneNumber = customerDataRow["phoneNumber"].ToString();
+					// get name or address
+					if (order["orderType"].ToString() == "Collection")
+					{
+						string customerName = customerDataRow["customerName"].ToString();
+						viewOrdersCustomerDetailsLabel.Text = $"{phoneNumber} - {customerName}";
+					}
+					else // delivery
+					{
+						DataRow addressDataRow = getAddress(Convert.ToInt32(order["addressID"]));
+						string houseNumber = addressDataRow["houseNumber"].ToString();
+						string streetName = addressDataRow["streetName"].ToString();
+						string postcode = addressDataRow["postcode"].ToString();
+						viewOrdersCustomerDetailsLabel.Text = $"{phoneNumber} - {houseNumber} {streetName} {postcode}";
+					}
+				}
+				// fill in price fields
+				subtotalPriceLabel.Text = order["subTotal"].ToString();
+				// get delivery charge else set label to 0
+				if (order["orderType"].ToString() == "Delivery")
+				{
+					deliveryChargePriceLabel.Text = order["deliveryCharge"].ToString();
+					deliveryChargePriceLabel.Enabled = true;
+				}
+				else // just make total the subtotal
+				{
+					deliveryChargePriceLabel.Text = "0.00";
+					deliveryChargePriceLabel.Enabled = false;
+				}
+				totalPriceLabel.Text = order["total"].ToString();
+				// fill in single order datagridview
+				//DataView singleOrderDataView = new DataView(dailyOrderItemsDictionary[dailyOrderNumber]);
+				// for some reason u have to clear bf refilling datagridview for the widths to work right lmao
+				//singleOrderDataGridView.DataSource = null;
+				//singleOrderDataGridView.DataSource = singleOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "size", "memo", "price", "orderItemID");
+				//singleOrderDataGridView.Columns["itemID"].Width = 50;
+				//singleOrderDataGridView.Columns["quantity"].Width = 50;
+				//singleOrderDataGridView.Columns["size"].Width = 20;
+				//singleOrderDataGridView.Columns["price"].Width = 50;
+				//singleOrderDataGridView.Columns["orderItemID"].Visible = false;
+			}
+			con.Close();
 		}
 
 		private void printKitchenTicketButton_Click(object sender, EventArgs e)
 		{
-			if (viewOrdersSelectedOrderID != -1) // if theres a selected order
+			if (viewOrdersDailyOrderNumber != -1) // if theres a selected order
 			{
 
 			}
@@ -1286,7 +1485,7 @@ namespace ordering_system
 
 		private void printCustomerTicketButton_Click(object sender, EventArgs e)
 		{
-			if (viewOrdersSelectedOrderID != -1) // if theres a selected order
+			if (viewOrdersDailyOrderNumber != -1) // if theres a selected order
 			{
 
 			}
@@ -1296,7 +1495,7 @@ namespace ordering_system
 			}
 		}
 
-		// cool bottom stuff
+		// actual manager functions and timer_tick
 
 		private void managerFunctionsButton_Click(object sender, EventArgs e)
 		{

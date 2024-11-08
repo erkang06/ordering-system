@@ -9,7 +9,7 @@ namespace ordering_system
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataTable categoriesDataTable = new DataTable(); // full datatable compared to whats shown in datagridview
 		DataTable foodItemsDataTableByCategory;
-		DataTable setMealsDataTable;
+		DataTable setMealsDataTable = new DataTable();
 		DataTable setMealFoodItemsDataTable = new DataTable(); // separate table to work through the setmeal items while in progress; reduces number of edits to main table
 		string foodItemID, setMealID; // id of currently selected item/setmeal from datagridview
 

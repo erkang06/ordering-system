@@ -12,7 +12,7 @@ namespace ordering_system
 		DataTable ordersDataTable = new DataTable(); // full datatable compared to whats shown in datagridview
 		Dictionary<int, DataTable> dailyOrderItemsDictionary = new Dictionary<int, DataTable>(); // keeps all orders by dailyordernumber
 		DataTable singleOrderDataTable = new DataTable();
-		int orderID, dailyOrderNumber; // id of currently selected order in ordersdatagridview
+		int dailyOrderNumber = -1; // id of currently selected order in ordersdatagridview
 		public OrderSummary()
 		{
 			InitializeComponent();
@@ -67,14 +67,66 @@ namespace ordering_system
 			return deliveryCharge;
 		}
 
+		private DataRow getCustomer(int customerID) // get customer details from customerid
+		{
+			SqlDataAdapter getCustomer = new SqlDataAdapter("SELECT * FROM CustomerTbl WHERE customerID = @CID", con);
+			getCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
+			DataTable customerDataTable = new DataTable();
+			getCustomer.Fill(customerDataTable);
+			DataRow customerDataRow = customerDataTable.Rows[0];
+			return customerDataRow;
+		}
+
+		private DataRow getAddress(int addressID) // get address from addressid
+		{
+			SqlDataAdapter getAddress = new SqlDataAdapter("SELECT * FROM AddressTbl WHERE addressID = @AID", con);
+			getAddress.SelectCommand.Parameters.AddWithValue("@AID", addressID);
+			DataTable addressDataTable = new DataTable();
+			getAddress.Fill(addressDataTable);
+			DataRow addressDataRow = addressDataTable.Rows[0];
+			return addressDataRow;
+		}
+
+		private DataTable getSetMealFoodItems(string setMealID)
+		{
+			SqlDataAdapter getSetMealFoodItems = new SqlDataAdapter("SELECT foodItemID, size, quantity FROM SetMealFoodItemTbl WHERE setMealID = @SMID ORDER BY foodItemID", con);
+			getSetMealFoodItems.SelectCommand.Parameters.AddWithValue("@SMID", setMealID);
+			DataTable setMealFoodItemsDataTable = new DataTable();
+			getSetMealFoodItems.Fill(setMealFoodItemsDataTable);
+			return setMealFoodItemsDataTable;
+		}
+
+		private string getFoodItemName(string foodItemID)
+		{
+			SqlCommand getFoodItemName = new SqlCommand("SELECT foodName FROM FoodItemTbl WHERE foodItemID = @FIID", con);
+			getFoodItemName.Parameters.AddWithValue("@FIID", foodItemID);
+			string foodItemName = getFoodItemName.ExecuteScalar().ToString();
+			return foodItemName;
+		}
+
+		private string getSetMealName(string setMealID)
+		{
+			SqlCommand getSetMealName = new SqlCommand("SELECT setMealName FROM SetMealTbl WHERE setMealID = @SMID", con);
+			getSetMealName.Parameters.AddWithValue("@SMID", setMealID);
+			string setMealName = getSetMealName.ExecuteScalar().ToString();
+			return setMealName;
+		}
+
 		private void clearDisplayedOrder() // remove shown order and reset to default
 		{
-			orderID = -1;
 			dailyOrderNumber = -1;
 			subtotalPriceLabel.Text = "0000.00";
 			deliveryChargePriceLabel.Text = "00.00";
 			deliveryChargePriceLabel.Enabled = true;
 			totalPriceLabel.Text = "0000.00";
+			phoneNumberFieldLabel.Text = string.Empty;
+			customerNameFieldLabel.Text = string.Empty;
+			houseNumberFieldLabel.Text = string.Empty;
+			streetNameFieldLabel.Text = string.Empty;
+			villageFieldLabel.Text = string.Empty;
+			cityFieldLabel.Text = string.Empty;
+			postcodeFieldLabel.Text = string.Empty;
+			orderTypeFieldLabel.Text = string.Empty;
 			singleOrderDataGridView.DataSource = null;
 		}
 
@@ -165,17 +217,38 @@ namespace ordering_system
 			con.Close();
 		}
 
-		private void ordersDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+		private void orderDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			con.Open();
+			clearDisplayedOrder();
 			// find clicked row of table in order to search through orderdictionary to find the full deets
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
 				dailyOrderNumber = Convert.ToInt32(orderDataGridView.Rows[selectedRowIndex].Cells["dailyOrderNumber"].Value);
-				// theres always only 1 order since dailyordernumber is unique per day
 				DataRow order = ordersDataTable.Select($"dailyOrderNumber = '{dailyOrderNumber}'")[0];
-				orderID = Convert.ToInt32(order["orderID"]);
+				// fill in order type
+				orderTypeFieldLabel.Text = order["orderType"].ToString();
+				// fill in top fields for collections and deliveries
+				if (order["orderType"].ToString() != "Counter")
+				{
+					DataRow customerDataRow = getCustomer(Convert.ToInt32(order["customerID"]));
+					phoneNumberFieldLabel.Text = customerDataRow["phoneNumber"].ToString();
+					// get name or address
+					if (order["orderType"].ToString() == "Collection")
+					{
+						customerNameFieldLabel.Text = customerDataRow["customerName"].ToString();
+					}
+					else // delivery
+					{
+						DataRow addressDataRow = getAddress(Convert.ToInt32(order["addressID"]));
+						houseNumberFieldLabel.Text = addressDataRow["houseNumber"].ToString();
+						streetNameFieldLabel.Text = addressDataRow["streetName"].ToString();
+						villageFieldLabel.Text = addressDataRow["village"].ToString();
+						cityFieldLabel.Text = addressDataRow["city"].ToString();
+						postcodeFieldLabel.Text = addressDataRow["postcode"].ToString();
+					}
+				}
 				// fill in price fields
 				subtotalPriceLabel.Text = order["subTotal"].ToString();
 				// get delivery charge else set label to 0
@@ -190,32 +263,32 @@ namespace ordering_system
 					deliveryChargePriceLabel.Enabled = false;
 				}
 				totalPriceLabel.Text = order["total"].ToString();
+				// fill in single order datagridview
+				DataView singleOrderDataView = new DataView(dailyOrderItemsDictionary[dailyOrderNumber]);
+				// for some reason u have to clear bf refilling datagridview for the widths to work right lmao
+				singleOrderDataGridView.DataSource = null;
+				singleOrderDataGridView.DataSource = singleOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "size", "memo", "price", "orderItemID");
+				singleOrderDataGridView.Columns["itemID"].Width = 50;
+				singleOrderDataGridView.Columns["quantity"].Width = 50;
+				singleOrderDataGridView.Columns["size"].Width = 20;
+				singleOrderDataGridView.Columns["price"].Width = 50;
+				singleOrderDataGridView.Columns["orderItemID"].Visible = false;
 			}
-			// fill in single order datagridview
-			DataView singleOrderDataView = new DataView(dailyOrderItemsDictionary[dailyOrderNumber]);
-			// for some reason u have to clear bf refilling datagridview for the widths to work right lmao
-			singleOrderDataGridView.DataSource = null;
-			singleOrderDataGridView.DataSource = singleOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "size", "memo", "price", "orderItemID");
-			singleOrderDataGridView.Columns["itemID"].Width = 50;
-			singleOrderDataGridView.Columns["quantity"].Width = 50;
-			singleOrderDataGridView.Columns["size"].Width = 20;
-			singleOrderDataGridView.Columns["price"].Width = 50;
-			singleOrderDataGridView.Columns["orderItemID"].Visible = false;
 			con.Close();
 		}
 
 		private void printOrderSummaryButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			printPreviewDialog.Document = printOrderSummary;
+			printPreviewDialog.Document = printDocument;
 			if (printPreviewDialog.ShowDialog() == DialogResult.OK)
 			{
-				printOrderSummary.Print();
+				printDocument.Print();
 			}
 			con.Close();
 		}
 
-		private void printOrderSummary_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+		private void printDocument_PrintPage(object sender, PrintPageEventArgs e) // ORDER SUMMARY
 		{
 			int ticketPaperSizeWidth = Convert.ToInt32(Resources.ticketPaperSizeWidth);
 			string subTotal, deliveryCharge, total;
@@ -280,12 +353,151 @@ namespace ordering_system
 			ypos += (int)ticketItemFont.Size + 10;
 			e.Graphics.DrawString("Total: " + total, ticketItemFont, Brushes.Black, new Point(10, ypos));
 			ypos += (int)ticketItemFont.Size + 10;
-			printOrderSummary.DefaultPageSettings.PaperSize = new PaperSize("till", ticketPaperSizeWidth, ypos);
+			printDocument.DefaultPageSettings.PaperSize = new PaperSize("till", ticketPaperSizeWidth, ypos);
 		}
 
-		private void phoneNumberTextBox_TextChanged(object sender, EventArgs e)
+		private void printTicketButton_Click(object sender, EventArgs e)
 		{
+			con.Open();
+			Button ticketButton = (Button)sender;
+			if (dailyOrderNumber != -1) // if order acc selected
+			{
+				PrintDocument printTicket = new PrintDocument();
+				if (ticketButton.Text == "Print Kitchen Ticket")
+				{
+					printTicket.PrintPage += (sender, e) => printTicket_PrintPage(sender, e, "Kitchen");
+				}
+				else // print customer ticket
+				{
+					printTicket.PrintPage += (sender, e) => printTicket_PrintPage(sender, e, "Customer");
+				}
+				printPreviewDialog.Document = printTicket;
+				printTicket.Print();
+			}
+			else
+			{
+				MessageBox.Show("Order not selected");
+			}
+			con.Close();
+		}
 
+		private void printTicket_PrintPage(object sender, PrintPageEventArgs e, string ticketType)
+		{
+			// therell only be one daily order number is unique per day lmao
+			DataRow order = ordersDataTable.Select($"dailyOrderNumber = '{dailyOrderNumber}'")[0];
+			int ypos = 10;
+			// get fonts and sizes
+			Font ticketHeaderFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketHeaderFontSize));
+			Font ticketItemFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketItemFontSize));
+			Font ticketSetMealFoodItemFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketSetMealFoodItemFontSize));
+			Font ticketSmallFont = new Font(Resources.ticketFont, Convert.ToInt32(Resources.ticketSmallFontSize));
+			int ticketPaperSizeWidth = Convert.ToInt32(Resources.ticketPaperSizeWidth);
+			// get phone number and order type
+			// align ordertype to right, https://stackoverflow.com/q/50299682
+			int orderTypeWidth = (int)e.Graphics.MeasureString(order["orderType"].ToString(), ticketSmallFont).Width;
+			e.Graphics.DrawString(order["orderType"].ToString(), ticketSmallFont, Brushes.Black, new Point(ticketPaperSizeWidth - orderTypeWidth, ypos));
+			if (order["orderType"].ToString() != "Counter" && ticketType == "Customer") // kitchen orders dont need addresses and customer names
+			{
+				DataRow customerDataRow = getCustomer(Convert.ToInt32(order["customerID"]));
+				e.Graphics.DrawString(customerDataRow["phoneNumber"].ToString(), ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+				ypos += (int)ticketHeaderFont.Size + 10;
+				// get name or address
+				if (order["orderType"].ToString() == "Collection")
+				{
+					string customerName = customerDataRow["customerName"].ToString();
+					e.Graphics.DrawString(customerName, ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+					ypos += (int)ticketHeaderFont.Size + 10;
+				}
+				else if (order["orderType"].ToString() == "Delivery")
+				{
+					DataRow addressDataRow = getAddress(Convert.ToInt32(order["addressID"]));
+					for (int i = 2; i < 7; i++) // from house number to postcode
+					{
+						if (addressDataRow[i].ToString() != "")
+						{
+							e.Graphics.DrawString(addressDataRow[i].ToString(), ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+							ypos += (int)ticketHeaderFont.Size + 10;
+						}
+					}
+				}
+			}
+
+			// get order date and time
+			string orderDateTimeString = Convert.ToDateTime(order["orderDate"]).ToString("dd/MM/yyyy") + " " + order["orderTime"].ToString();
+			e.Graphics.DrawString(orderDateTimeString, ticketSmallFont, Brushes.Black, new Point(10, ypos));
+			ypos += (int)ticketSmallFont.Size + 5;
+			// break
+			e.Graphics.DrawString("*************************************", new Font("Arial", 7), Brushes.Black, new Point(10, ypos));
+			ypos += 20;
+			// get order items
+			foreach (DataRow runningOrderRow in dailyOrderItemsDictionary[dailyOrderNumber].Rows)
+			{
+				e.Graphics.DrawString(runningOrderRow["quantity"].ToString(), ticketItemFont, Brushes.Black, new Point(10, ypos));
+				// item name
+				string itemNameSize = runningOrderRow["itemName"].ToString();
+				if (runningOrderRow["size"].ToString() != "") // if item has size add to end of item name
+				{
+					itemNameSize += " (" + runningOrderRow["size"].ToString()[0] + ")";
+				}
+				// fit within rectangle in case of overflow
+				SizeF itemNameSizeSizeF = e.Graphics.MeasureString(itemNameSize, ticketItemFont, 300);
+				e.Graphics.DrawString(itemNameSize, ticketItemFont, Brushes.Black, new RectangleF(new Point(30, ypos), itemNameSizeSizeF));
+				// price
+				int priceWidth = (int)e.Graphics.MeasureString(runningOrderRow["price"].ToString(), ticketSmallFont).Width;
+				e.Graphics.DrawString(runningOrderRow["price"].ToString(), ticketSmallFont, Brushes.Black, new Point(ticketPaperSizeWidth - priceWidth, ypos));
+				ypos += (int)itemNameSizeSizeF.Height + 5;
+				if (runningOrderRow["memo"].ToString() != "") // if theres a memo
+				{
+					string memo = runningOrderRow["memo"].ToString();
+					SizeF memoSizeF = e.Graphics.MeasureString(memo, ticketSmallFont, 250);
+					e.Graphics.DrawString(memo, ticketSmallFont, Brushes.Black, new RectangleF(new Point(80, ypos), memoSizeF));
+					ypos += (int)memoSizeF.Height + 5;
+				}
+
+				if (runningOrderRow["itemType"].ToString() == "setMeal") // set meal needs all items shown
+				{
+					DataTable setMealFoodItemsDataTable = getSetMealFoodItems(runningOrderRow["itemID"].ToString());
+					foreach (DataRow setmealFoodItem in setMealFoodItemsDataTable.Rows)
+					{
+						e.Graphics.DrawString(setmealFoodItem["quantity"].ToString(), ticketItemFont, Brushes.Black, new Point(50, ypos));
+						// get item name from id
+						string setMealFoodItemName = getFoodItemName(setmealFoodItem["foodItemID"].ToString());
+						// combine name and size
+						string setMealFoodItemItemNameSize = setMealFoodItemName + " (" + setmealFoodItem["size"].ToString()[0] + ")";
+						// fit within rectangle in case of overflow
+						SizeF setMealFoodItemItemNameSizeSizeF = e.Graphics.MeasureString(setMealFoodItemItemNameSize, ticketSetMealFoodItemFont, 250);
+						e.Graphics.DrawString(setMealFoodItemItemNameSize, ticketSetMealFoodItemFont, Brushes.Black, new RectangleF(new Point(90, ypos), setMealFoodItemItemNameSizeSizeF));
+						ypos += (int)setMealFoodItemItemNameSizeSizeF.Height + 5;
+					}
+				}
+			}
+			// break
+			e.Graphics.DrawString("*************************************", new Font("Arial", 7), Brushes.Black, new Point(10, ypos));
+			ypos += 20;
+			// subtotal
+			e.Graphics.DrawString("Subtotal:", ticketSmallFont, Brushes.Black, new Point(10, ypos));
+			int subtotalWidth = (int)e.Graphics.MeasureString(subtotalPriceLabel.Text, ticketSmallFont).Width;
+			e.Graphics.DrawString(subtotalPriceLabel.Text, ticketSmallFont, Brushes.Black, new Point(ticketPaperSizeWidth - subtotalWidth, ypos));
+			ypos += (int)ticketHeaderFont.Size + 5;
+			// delivery charge if delivery
+			if (order["orderType"].ToString() == "Delivery")
+			{
+				e.Graphics.DrawString("Delivery:", ticketSmallFont, Brushes.Black, new Point(10, ypos));
+				int deliveryWidth = (int)e.Graphics.MeasureString(deliveryChargePriceLabel.Text, ticketSmallFont).Width;
+				e.Graphics.DrawString(deliveryChargePriceLabel.Text, ticketSmallFont, Brushes.Black, new Point(ticketPaperSizeWidth - deliveryWidth, ypos));
+				ypos += (int)ticketHeaderFont.Size + 5;
+			}
+			// total
+			e.Graphics.DrawString("Total:", ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+			int totalWidth = (int)e.Graphics.MeasureString(totalPriceLabel.Text, ticketHeaderFont).Width;
+			e.Graphics.DrawString(totalPriceLabel.Text, ticketHeaderFont, Brushes.Black, new Point(ticketPaperSizeWidth - totalWidth, ypos));
+			ypos += (int)ticketHeaderFont.Size + 20;
+			// get estimated time
+			e.Graphics.DrawString("Estimated Time:", ticketHeaderFont, Brushes.Black, new Point(10, ypos));
+			string estimatedTime = TimeSpan.Parse(order["estimatedTime"].ToString()).ToString(@"hh\:mm");
+			int estimatedTimeWidth = (int)e.Graphics.MeasureString(estimatedTime, ticketHeaderFont).Width;
+			e.Graphics.DrawString(estimatedTime, ticketHeaderFont, Brushes.Black, new Point(ticketPaperSizeWidth - estimatedTimeWidth, ypos));
+			ypos += (int)ticketHeaderFont.Size + 20;
 		}
 	}
 }

@@ -6,6 +6,8 @@ namespace ordering_system
 {
 	public partial class CustomerDetails : Form
 	{
+
+		// https://www.codeproject.com/Articles/17371/Passing-Data-between-Windows-Forms
 		public delegate void CustomerDetailsUpdateHandler(object sender, CustomerDetailsUpdateEventArgs e); // kinda how data links between here and the main form
 
 		public event CustomerDetailsUpdateHandler CustomerDetailsUpdate;
@@ -177,8 +179,11 @@ namespace ordering_system
 			// fill in address datagridview
 			addressDataGridView.DataSource = addressesDataView.ToTable(true, "houseNumber", "streetName", "postcode");
 			// sort out column widths
-			//addressDataGridView.Columns["houseNumber"].Width = 100;
-			//addressDataGridView.Columns["postcode"].Width = 200;
+			try
+			{
+				addressDataGridView.Columns["houseNumber"].Width = 100;
+				addressDataGridView.Columns["postcode"].Width = 200;
+			} catch { /*wont work when accessed on form creation since addressdatagridview doesnt physically exist so u cant do anything physical*/ }
 		}
 
 		// form related

@@ -83,8 +83,12 @@
 			viewOrdersDeliveryButton = new Button();
 			viewOrdersDataGridView = new DataGridView();
 			timer = new System.Windows.Forms.Timer(components);
-			printCustomerTicket = new System.Drawing.Printing.PrintDocument();
+			printDocument = new System.Drawing.Printing.PrintDocument();
 			printPreviewDialog = new PrintPreviewDialog();
+			viewOrdersCustomerDetailsPanel = new Panel();
+			viewOrdersCustomerDetailsLabel = new Label();
+			selectedOrderOrderNumberLabel = new Label();
+			viewOrdersOrderTypeLabel = new Label();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -94,6 +98,7 @@
 			paymentPanel.SuspendLayout();
 			viewOrdersPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)viewOrdersDataGridView).BeginInit();
+			viewOrdersCustomerDetailsPanel.SuspendLayout();
 			SuspendLayout();
 			// 
 			// customerDetailsPanel
@@ -752,6 +757,9 @@
 			// 
 			// viewOrdersDataGridView
 			// 
+			viewOrdersDataGridView.AllowUserToAddRows = false;
+			viewOrdersDataGridView.AllowUserToDeleteRows = false;
+			viewOrdersDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			viewOrdersDataGridView.BackgroundColor = Color.HotPink;
 			viewOrdersDataGridView.BorderStyle = BorderStyle.None;
 			viewOrdersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -759,6 +767,7 @@
 			viewOrdersDataGridView.Margin = new Padding(4, 2, 4, 2);
 			viewOrdersDataGridView.Name = "viewOrdersDataGridView";
 			viewOrdersDataGridView.RightToLeft = RightToLeft.No;
+			viewOrdersDataGridView.RowHeadersVisible = false;
 			viewOrdersDataGridView.RowHeadersWidth = 82;
 			viewOrdersDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			viewOrdersDataGridView.Size = new Size(1040, 900);
@@ -771,10 +780,6 @@
 			timer.Interval = 200;
 			timer.Tick += timer_Tick;
 			// 
-			// printCustomerTicket
-			// 
-			printCustomerTicket.PrintPage += printCustomerTicket_PrintPage;
-			// 
 			// printPreviewDialog
 			// 
 			printPreviewDialog.AutoScrollMargin = new Size(0, 0);
@@ -785,22 +790,69 @@
 			printPreviewDialog.Name = "printPreviewDialog1";
 			printPreviewDialog.Visible = false;
 			// 
+			// viewOrdersCustomerDetailsPanel
+			// 
+			viewOrdersCustomerDetailsPanel.BackColor = Color.DarkSlateGray;
+			viewOrdersCustomerDetailsPanel.Controls.Add(viewOrdersOrderTypeLabel);
+			viewOrdersCustomerDetailsPanel.Controls.Add(viewOrdersCustomerDetailsLabel);
+			viewOrdersCustomerDetailsPanel.Controls.Add(selectedOrderOrderNumberLabel);
+			viewOrdersCustomerDetailsPanel.Location = new Point(0, 0);
+			viewOrdersCustomerDetailsPanel.Margin = new Padding(0);
+			viewOrdersCustomerDetailsPanel.Name = "viewOrdersCustomerDetailsPanel";
+			viewOrdersCustomerDetailsPanel.Size = new Size(1740, 80);
+			viewOrdersCustomerDetailsPanel.TabIndex = 2;
+			// 
+			// viewOrdersCustomerDetailsLabel
+			// 
+			viewOrdersCustomerDetailsLabel.BackColor = Color.Transparent;
+			viewOrdersCustomerDetailsLabel.Font = new Font("Segoe UI", 12F);
+			viewOrdersCustomerDetailsLabel.ForeColor = Color.White;
+			viewOrdersCustomerDetailsLabel.Location = new Point(89, 15);
+			viewOrdersCustomerDetailsLabel.Margin = new Padding(4, 0, 4, 0);
+			viewOrdersCustomerDetailsLabel.Name = "viewOrdersCustomerDetailsLabel";
+			viewOrdersCustomerDetailsLabel.Size = new Size(1433, 50);
+			viewOrdersCustomerDetailsLabel.TabIndex = 1;
+			// 
+			// selectedOrderOrderNumberLabel
+			// 
+			selectedOrderOrderNumberLabel.BackColor = Color.Transparent;
+			selectedOrderOrderNumberLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			selectedOrderOrderNumberLabel.ForeColor = Color.White;
+			selectedOrderOrderNumberLabel.Location = new Point(9, 15);
+			selectedOrderOrderNumberLabel.Margin = new Padding(4, 0, 4, 0);
+			selectedOrderOrderNumberLabel.Name = "selectedOrderOrderNumberLabel";
+			selectedOrderOrderNumberLabel.Size = new Size(84, 45);
+			selectedOrderOrderNumberLabel.TabIndex = 0;
+			selectedOrderOrderNumberLabel.Text = "1";
+			// 
+			// viewOrdersOrderTypeLabel
+			// 
+			viewOrdersOrderTypeLabel.BackColor = SystemColors.ControlDark;
+			viewOrdersOrderTypeLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			viewOrdersOrderTypeLabel.Location = new Point(1530, 0);
+			viewOrdersOrderTypeLabel.Name = "viewOrdersOrderTypeLabel";
+			viewOrdersOrderTypeLabel.Size = new Size(210, 80);
+			viewOrdersOrderTypeLabel.TabIndex = 2;
+			viewOrdersOrderTypeLabel.Text = "Collection";
+			viewOrdersOrderTypeLabel.TextAlign = ContentAlignment.MiddleCenter;
+			// 
 			// MainMenu
 			// 
 			AutoScaleDimensions = new SizeF(192F, 192F);
 			AutoScaleMode = AutoScaleMode.Dpi;
 			BackColor = Color.White;
 			ClientSize = new Size(1920, 1080);
+			Controls.Add(viewOrdersCustomerDetailsPanel);
+			Controls.Add(viewOrdersPanel);
 			Controls.Add(runningOrderPanel);
 			Controls.Add(itemEditFunctionsPanel);
 			Controls.Add(managerFunctionsPanel);
 			Controls.Add(orderTypePanel);
-			Controls.Add(customerDetailsPanel);
 			Controls.Add(itemsPanel);
 			Controls.Add(categoriesPanel);
-			Controls.Add(viewOrdersPanel);
-			Controls.Add(commonItemsPanel);
 			Controls.Add(paymentPanel);
+			Controls.Add(commonItemsPanel);
+			Controls.Add(customerDetailsPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Margin = new Padding(4, 2, 4, 2);
 			Name = "MainMenu";
@@ -817,6 +869,7 @@
 			paymentPanel.PerformLayout();
 			viewOrdersPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)viewOrdersDataGridView).EndInit();
+			viewOrdersCustomerDetailsPanel.ResumeLayout(false);
 			ResumeLayout(false);
 		}
 
@@ -875,7 +928,11 @@
 		private Button paymentClearButton;
 		private Button paymentExactButton;
 		private Button paymentAcceptButton;
-		private System.Drawing.Printing.PrintDocument printCustomerTicket;
+		private System.Drawing.Printing.PrintDocument printDocument;
 		private PrintPreviewDialog printPreviewDialog;
+		private Panel viewOrdersCustomerDetailsPanel;
+		private Label viewOrdersCustomerDetailsLabel;
+		private Label selectedOrderOrderNumberLabel;
+		private Label viewOrdersOrderTypeLabel;
 	}
 }
