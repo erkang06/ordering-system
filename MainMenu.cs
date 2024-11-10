@@ -1111,6 +1111,22 @@ namespace ordering_system
 			paymentPanelButtonMode = true;
 		}
 
+		private decimal getTotalPrice()
+		{
+			// check if paying for counter or for collection/delivery
+			decimal totalPrice;
+			if (viewOrdersPricePanel.Enabled == false) // counter 
+			{
+				totalPrice = Convert.ToDecimal(totalPriceLabel.Text);
+
+			}
+			else // collection/delivery
+			{
+				totalPrice = Convert.ToDecimal(viewOrdersTotalPriceLabel.Text);
+			}
+			return totalPrice;
+		}
+
 		private void paymentButton_Click(object sender, EventArgs e)
 		{
 			Button paymentButton = (Button)sender;
@@ -1161,7 +1177,9 @@ namespace ordering_system
 
 		private void changeChecker(decimal paidValue) // check if paid > price
 		{
-			decimal totalPrice = Convert.ToDecimal(totalPriceLabel.Text);
+			// check if paying for counter or for collection/delivery
+			decimal totalPrice = getTotalPrice();
+			// acc do maths
 			if (paidValue > totalPrice)
 			{
 				decimal change = paidValue - totalPrice;
@@ -1175,7 +1193,7 @@ namespace ordering_system
 
 		private void paymentExactButton_Click(object sender, EventArgs e)
 		{
-			paymentPaidTextbox.Text = totalPriceLabel.Text;
+			paymentPaidTextbox.Text = getTotalPrice().ToString();
 			paymentPanelButtonMode = true;
 		}
 
@@ -1197,7 +1215,8 @@ namespace ordering_system
 		private void paymentAcceptButton_Click(object sender, EventArgs e)
 		{
 			decimal paidValue = Convert.ToDecimal(paymentPaidTextbox.Text);
-			decimal totalPrice = Convert.ToDecimal(totalPriceLabel.Text);
+			// check if paying for counter or for collection/delivery
+			decimal totalPrice = getTotalPrice();
 			if (paidValue < totalPrice) // if not paid enough
 			{
 				MessageBox.Show("Insufficient payment", "Ordering System");
@@ -1210,10 +1229,10 @@ namespace ordering_system
 			else // getting payment for a collection/delivery
 			{
 				con.Open();
-				int orderID = getOrderID();
-				SqlCommand acceptPayment = new SqlCommand("UPDATE OrderTbl SET hasPaid = true WHERE dailyOrderNumber = @DON && orderDate = @OD");
+				SqlCommand acceptPayment = new SqlCommand("UPDATE OrderTbl SET hasPaid = 'True' WHERE dailyOrderNumber = @DON AND orderDate = @OD", con);
 				acceptPayment.Parameters.AddWithValue("@DON", viewOrdersDailyOrderNumber);
 				acceptPayment.Parameters.AddWithValue("@OD", DateTime.Now.Date);
+				acceptPayment.ExecuteNonQuery();
 				updateViewOrdersDataGridView();
 				paymentPanel.Enabled = false;
 				con.Close();
@@ -1231,6 +1250,7 @@ namespace ordering_system
 		{
 			if (viewOrdersButton.Text == "View Orders")
 			{
+				con.Open();
 				// disable all view order buttons
 				viewOrdersDeliveryButton.BackColor = Color.Transparent;
 				viewOrdersCounterButton.BackColor = Color.Transparent;
@@ -1244,6 +1264,7 @@ namespace ordering_system
 				// fill in viewordersdatagridview
 				viewOrdersDataGridView.DataSource = null;
 				updateViewOrdersDataGridView();
+				con.Close();
 			}
 			else // exit view orders mode
 			{
@@ -1255,8 +1276,11 @@ namespace ordering_system
 				viewOrdersCustomerDetailsPanel.Visible = false;
 				viewOrdersPricePanel.SendToBack();
 				viewOrdersPricePanel.Visible = false;
-				// enable accept order and item edit functions panel
+				paymentPanel.SendToBack();
+				paymentPanel.Visible = false;
+				// enable accept order, common items and item edit functions panel
 				acceptOrderButton.Enabled = true;
+				commonItemsPanel.Enabled = true;
 				itemEditFunctionsPanel.Enabled = true;
 				// show running order and resize again
 				runningOrderDataGridView.DataSource = null;
@@ -1314,7 +1338,6 @@ namespace ordering_system
 
 		private void updateViewOrdersDataGridView()
 		{
-			con.Open();
 			// get orders for the day
 			viewOrdersDataTable = new DataTable(); // clear prev
 			SqlDataAdapter getOrdersByDate = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderDate = @OD ORDER BY orderTime", con);
@@ -1384,7 +1407,6 @@ namespace ordering_system
 			viewOrdersDataGridView.DataSource = ordersDataViewByDate.ToTable(true, "dailyOrderNumber", "orderType", "orderTime", "hasPaid", "total");
 			viewOrdersDataGridView.Columns["dailyOrderNumber"].Width = 50;
 			viewOrdersDataGridView.ClearSelection();
-			con.Close();
 		}
 
 		private void viewOrdersDeliveryButton_Click(object sender, EventArgs e)
@@ -1493,7 +1515,13 @@ namespace ordering_system
 				// show payment panel if havent paid for
 				if (!Convert.ToBoolean(order["hasPaid"]))
 				{
+					commonItemsPanel.Enabled = false;
 					showPaymentPanel();
+				}
+				else
+				{
+					paymentPanel.SendToBack();
+					paymentPanel.Visible = false;
 				}
 			}
 			con.Close();
