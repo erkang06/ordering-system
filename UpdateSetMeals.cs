@@ -18,7 +18,7 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
-		// functions + cancel
+		// common use functions
 
 		private int getCategoryIDFromSelectedIndex()
 		{
@@ -76,12 +76,7 @@ namespace ordering_system
 			return true;
 		}
 
-		private void cancelButton_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
-
-		// main
+		// sorting out form
 
 		private void UpdateSetMeals_Load(object sender, EventArgs e)
 		{
@@ -168,6 +163,8 @@ namespace ordering_system
 			setMealDataGridView.ClearSelection();
 		}
 
+		// form related
+
 		private void updateItemQuantitySize() // update item quantity and size after adding/selecting fooditem
 		{
 			int selectedRowIndex = setMealItemDataGridView.SelectedRows[0].Index;
@@ -175,6 +172,18 @@ namespace ordering_system
 			int foodItemIndex = doesFoodItemExist(foodItemID); // find index of food in set meal datatable
 			itemQuantityValueLabel.Text = setMealFoodItemsDataTable.Rows[foodItemIndex]["quantity"].ToString();
 			itemSizeComboBox.Text = setMealFoodItemsDataTable.Rows[foodItemIndex]["size"].ToString();
+		}
+
+		private int findDataGridViewIndex() // find index of row in setmealfooditemdatagridview by fooditemid
+		{
+			for (int i = 0; i < setMealDataGridView.Rows.Count; i++)
+			{
+				if (setMealItemDataGridView.Rows[i].Cells["foodItemID"].Value.ToString() == foodItemID)
+				{
+					return i;
+				}
+			}
+			return -1;
 		}
 
 		private void increaseQuantityButton_Click(object sender, EventArgs e)
@@ -217,6 +226,22 @@ namespace ordering_system
 			}
 		}
 
+		private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			con.Open();
+			foodItemsDataTableByCategory.Clear(); // clear prev
+			int categoryID = getCategoryIDFromSelectedIndex();
+			SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
+			getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
+			getFoodItemsByCategory.Fill(foodItemsDataTableByCategory);
+			DataView foodItemsDataViewByCategory = new DataView(foodItemsDataTableByCategory);
+			// fill in set meals datagridview
+			itemDataGridView.DataSource = foodItemsDataViewByCategory.ToTable(true, "foodItemID", "foodName");
+			itemDataGridView.Columns["foodItemID"].Width = 100;
+			itemDataGridView.ClearSelection();
+			con.Close();
+		}
+
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through fooditemsdatatable to find the full deets
@@ -256,18 +281,6 @@ namespace ordering_system
 				}
 				updateItemQuantitySize();
 			}
-		}
-
-		private int findDataGridViewIndex() // find index of row in setmealfooditemdatagridview by fooditemid
-		{
-			for (int i = 0; i < setMealDataGridView.Rows.Count; i++)
-			{
-				if (setMealItemDataGridView.Rows[i].Cells["foodItemID"].Value.ToString() == foodItemID)
-				{
-					return i;
-				}
-			}
-			return -1;
 		}
 
 		private void setMealDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -315,26 +328,50 @@ namespace ordering_system
 			}
 		}
 
-		private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			con.Open();
-			foodItemsDataTableByCategory.Clear(); // clear prev
-			int categoryID = getCategoryIDFromSelectedIndex();
-			SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
-			getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);
-			getFoodItemsByCategory.Fill(foodItemsDataTableByCategory);
-			DataView foodItemsDataViewByCategory = new DataView(foodItemsDataTableByCategory);
-			// fill in set meals datagridview
-			itemDataGridView.DataSource = foodItemsDataViewByCategory.ToTable(true, "foodItemID", "foodName");
-			itemDataGridView.Columns["foodItemID"].Width = 100;
-			itemDataGridView.ClearSelection();
-			con.Close();
-		}
-
 		private void setMealItemDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			updateItemQuantitySize();
 		}
+
+		// data validation
+
+		private void setMealIDTextBox_Leave(object sender, EventArgs e)
+		{
+			if (setMealIDTextBox.Text.Length > 10) // if id too long for database
+			{
+				MessageBox.Show("Set meal ID too long", "Ordering System");
+				setMealIDTextBox.Focus();
+			}
+		}
+
+		private void setMealNameTextBox_Leave(object sender, EventArgs e)
+		{
+			if (setMealNameTextBox.Text.Length > 50) // if set meal name too long for database
+			{
+				MessageBox.Show("Set meal name too long", "Ordering System");
+				setMealNameTextBox.Focus();
+			}
+		}
+
+		private void setMealPriceTextBox_Leave(object sender, EventArgs e)
+		{
+			try
+			{
+				Convert.ToDecimal(setMealPriceTextBox.Text); // check if value is acc decimal
+				if (Convert.ToDecimal(setMealPriceTextBox.Text) < 0 || Convert.ToDecimal(setMealPriceTextBox.Text) >= 1000) // not within range
+				{
+					MessageBox.Show("Price not within range", "Ordering System");
+					setMealPriceTextBox.Focus();
+				}
+			}
+			catch // not decimal
+			{
+				MessageBox.Show("Price not a decimal", "Ordering System");
+				setMealPriceTextBox.Focus();
+			}
+		}
+
+		// sorting out setmeals bf sql
 
 		private void deleteItemButton_Click(object sender, EventArgs e)
 		{
@@ -353,6 +390,8 @@ namespace ordering_system
 		{
 			clearSetMealScreen();
 		}
+
+		// sql related functions
 
 		private void addSetMealButton_Click(object sender, EventArgs e)
 		{
@@ -491,40 +530,11 @@ namespace ordering_system
 			setMealPriceTextBox.Text = string.Empty;
 		}
 
-		private void setMealIDTextBox_Leave(object sender, EventArgs e)
-		{
-			if (setMealIDTextBox.Text.Length > 10) // if id too long for database
-			{
-				MessageBox.Show("Set meal ID too long", "Ordering System");
-				setMealIDTextBox.Focus();
-			}
-		}
+		// close
 
-		private void setMealNameTextBox_Leave(object sender, EventArgs e)
+		private void cancelButton_Click(object sender, EventArgs e)
 		{
-			if (setMealNameTextBox.Text.Length > 50) // if set meal name too long for database
-			{
-				MessageBox.Show("Set meal name too long", "Ordering System");
-				setMealNameTextBox.Focus();
-			}
-		}
-
-		private void setMealPriceTextBox_Leave(object sender, EventArgs e)
-		{
-			try
-			{
-				Convert.ToDecimal(setMealPriceTextBox.Text); // check if value is acc decimal
-				if (Convert.ToDecimal(setMealPriceTextBox.Text) < 0 || Convert.ToDecimal(setMealPriceTextBox.Text) >= 1000) // not within range
-				{
-					MessageBox.Show("Price not within range", "Ordering System");
-					setMealPriceTextBox.Focus();
-				}
-			}
-			catch // not decimal
-			{
-				MessageBox.Show("Price not a decimal", "Ordering System");
-				setMealPriceTextBox.Focus();
-			}
+			Close();
 		}
 	}
 }

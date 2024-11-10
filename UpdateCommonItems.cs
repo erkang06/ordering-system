@@ -18,6 +18,8 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
+		// common use functions
+
 		private int getCategoryIDFromSelectedIndex()
 		{
 			int selectedIndex = categoryComboBox.SelectedIndex;
@@ -61,6 +63,8 @@ namespace ordering_system
 			removeCommonItemFromDatabase.Parameters.AddWithValue("@CIID", commonItemID);
 			removeCommonItemFromDatabase.ExecuteNonQuery();
 		}
+
+		// sorting the form out
 
 		private void UpdateCommonItems_Load(object sender, EventArgs e)
 		{
@@ -131,6 +135,8 @@ namespace ordering_system
 				}
 			}
 		}
+
+		// all form functions + cancel lmao
 
 		private void commonItemButton_Click(object sender, MouseEventArgs e)
 		{

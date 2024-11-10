@@ -12,15 +12,7 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
-		private void cancelButton_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
-
-		private void exitProgramButton_Click(object sender, EventArgs e)
-		{
-			Application.Exit();
-		}
+		// buttons to another tab
 
 		private void updateCategoriesButton_Click(object sender, EventArgs e)
 		{
@@ -63,6 +55,8 @@ namespace ordering_system
 			obj.Show();
 			//obj.TopMost = true;
 		}
+
+		// password
 
 		private void changeLoginPasswordButton_Click(object sender, EventArgs e)
 		{
@@ -117,6 +111,18 @@ namespace ordering_system
 				obj.Close();
 			}
 			obj.Dispose();
+		}
+
+		// buttons to leave
+
+		private void cancelButton_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		private void exitProgramButton_Click(object sender, EventArgs e)
+		{
+			Application.Exit();
 		}
 	}
 }

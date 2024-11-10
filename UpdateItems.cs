@@ -15,6 +15,8 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
+		// common use functions
+
 		private bool doesItemExist() // checks if item exists in database w/ same name
 		{
 			SqlCommand checkIfItemExists = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE foodName = @FN OR foodItemID = @FIID", con);
@@ -74,6 +76,8 @@ namespace ordering_system
 			return -1;
 		}
 
+		// sort out form
+
 		private void UpdateItems_Load(object sender, EventArgs e)
 		{
 			con.Open();
@@ -114,6 +118,8 @@ namespace ordering_system
 			itemDataGridView.ClearSelection();
 		}
 
+		// form related functions
+
 		private void itemDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through fooditemsdatatable to find the full deets
@@ -141,11 +147,6 @@ namespace ordering_system
 			}
 		}
 
-		private void cancelButton_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
-
 		private void hasSmallPriceCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (hasSmallPriceCheckBox.Checked == false)
@@ -166,6 +167,79 @@ namespace ordering_system
 				defaultToLargePriceCheckBox.Enabled = true;
 			}
 		}
+
+		private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			// check if max # of items per category reached
+			int categoryID = getCategoryIDFromSelectedIndex();
+			DataRow[] foodItemsByCategory = foodItemsDataTable.Select($"categoryID = '{categoryID}'");
+			if (foodItemsByCategory.Length >= 40)
+			{
+				addItemButton.Enabled = false;
+			}
+			else
+			{
+				addItemButton.Enabled = true;
+			}
+		}
+
+		// data validation
+
+		private void itemIDTextBox_Leave(object sender, EventArgs e)
+		{
+			if (itemIDTextBox.Text.Length > 10) // if id too long for database
+			{
+				MessageBox.Show("Item ID too long", "Ordering System");
+				itemIDTextBox.Focus();
+			}
+		}
+
+		private void itemNameTextBox_Leave(object sender, EventArgs e)
+		{
+			if (itemNameTextBox.Text.Length > 50) // if item name too long for database
+			{
+				MessageBox.Show("Item name too long", "Ordering System");
+				itemNameTextBox.Focus();
+			}
+		}
+
+		private void smallPriceTextBox_Leave(object sender, EventArgs e)
+		{
+			try
+			{
+				Convert.ToDecimal(smallPriceTextBox.Text); // check if value is acc decimal
+				if (Convert.ToDecimal(smallPriceTextBox.Text) < 0 || Convert.ToDecimal(smallPriceTextBox.Text) >= 1000) // not within range
+				{
+					MessageBox.Show("Small price not within range", "Ordering System");
+					smallPriceTextBox.Focus();
+				}
+			}
+			catch // not decimal
+			{
+				MessageBox.Show("Small price not a decimal", "Ordering System");
+				smallPriceTextBox.Focus();
+			}
+		}
+
+		private void largePriceTextBox_Leave(object sender, EventArgs e)
+		{
+			try
+			{
+				Convert.ToDecimal(largePriceTextBox.Text); // check if value is acc decimal
+				if (Convert.ToDecimal(largePriceTextBox.Text) < 0 || Convert.ToDecimal(largePriceTextBox.Text) >= 1000) // not within range
+				{
+					MessageBox.Show("Large price not within range", "Ordering System");
+					largePriceTextBox.Focus();
+				}
+			}
+			catch // not decimal
+			{
+				MessageBox.Show("Large price not a decimal", "Ordering System");
+				largePriceTextBox.Focus();
+			}
+		}
+
+		// sql related functions
 
 		private void addItemButton_Click(object sender, EventArgs e)
 		{
@@ -313,73 +387,11 @@ namespace ordering_system
 			hasSmallPriceCheckBox_CheckedChanged(sender, e); // sorts out weird bits w/ checkboxes
 		}
 
-		private void itemIDTextBox_Leave(object sender, EventArgs e)
-		{
-			if (itemIDTextBox.Text.Length > 10) // if id too long for database
-			{
-				MessageBox.Show("Item ID too long", "Ordering System");
-				itemIDTextBox.Focus();
-			}
-		}
+		// cancel
 
-		private void itemNameTextBox_Leave(object sender, EventArgs e)
+		private void cancelButton_Click(object sender, EventArgs e)
 		{
-			if (itemNameTextBox.Text.Length > 50) // if item name too long for database
-			{
-				MessageBox.Show("Item name too long", "Ordering System");
-				itemNameTextBox.Focus();
-			}
-		}
-
-		private void smallPriceTextBox_Leave(object sender, EventArgs e)
-		{
-			try
-			{
-				Convert.ToDecimal(smallPriceTextBox.Text); // check if value is acc decimal
-				if (Convert.ToDecimal(smallPriceTextBox.Text) < 0 || Convert.ToDecimal(smallPriceTextBox.Text) >= 1000) // not within range
-				{
-					MessageBox.Show("Small price not within range", "Ordering System");
-					smallPriceTextBox.Focus();
-				}
-			}
-			catch // not decimal
-			{
-				MessageBox.Show("Small price not a decimal", "Ordering System");
-				smallPriceTextBox.Focus();
-			}
-		}
-
-		private void largePriceTextBox_Leave(object sender, EventArgs e)
-		{
-			try
-			{
-				Convert.ToDecimal(largePriceTextBox.Text); // check if value is acc decimal
-				if (Convert.ToDecimal(largePriceTextBox.Text) < 0 || Convert.ToDecimal(largePriceTextBox.Text) >= 1000) // not within range
-				{
-					MessageBox.Show("Large price not within range", "Ordering System");
-					largePriceTextBox.Focus();
-				}
-			}
-			catch // not decimal
-			{
-				MessageBox.Show("Large price not a decimal", "Ordering System");
-				largePriceTextBox.Focus();
-			}
-		}
-
-		private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			// check if max # of items per category reached
-			int categoryID = getCategoryIDFromSelectedIndex();
-			DataRow[] foodItemsByCategory = foodItemsDataTable.Select($"categoryID = '{categoryID}'");
-			if (foodItemsByCategory.Length >= 40)
-			{
-				addItemButton.Enabled = false;
-			}
-			else
-			{
-				addItemButton.Enabled = true;
-			}
+			Close();
 		}
 	}
 }

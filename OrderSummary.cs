@@ -431,7 +431,7 @@ namespace ordering_system
 			e.Graphics.DrawString(orderDateTimeString, ticketSmallFont, Brushes.Black, new Point(10, ypos));
 			ypos += (int)ticketSmallFont.Size + 5;
 			// break
-			e.Graphics.DrawString("*************************************", new Font("Arial", 7), Brushes.Black, new Point(10, ypos));
+			e.Graphics.DrawString("*************************************", new Font("Arial", 14), Brushes.Black, new Point(10, ypos));
 			ypos += 20;
 			// get order items
 			foreach (DataRow runningOrderRow in dailyOrderItemsDictionary[dailyOrderNumber].Rows)
@@ -476,7 +476,7 @@ namespace ordering_system
 				}
 			}
 			// break
-			e.Graphics.DrawString("*************************************", new Font("Arial", 7), Brushes.Black, new Point(10, ypos));
+			e.Graphics.DrawString("*************************************", new Font("Arial", 14), Brushes.Black, new Point(10, ypos));
 			ypos += 20;
 			// subtotal
 			e.Graphics.DrawString("Subtotal:", ticketSmallFont, Brushes.Black, new Point(10, ypos));

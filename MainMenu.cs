@@ -1007,7 +1007,7 @@ namespace ordering_system
 						string setMealFoodItemItemNameSize = setMealFoodItemName + " (" + setmealFoodItem["size"].ToString()[0] + ")";
 						// fit within rectangle in case of overflow
 						SizeF setMealFoodItemItemNameSizeSizeF = e.Graphics.MeasureString(setMealFoodItemItemNameSize, ticketSetMealFoodItemFont, 250);
-						e.Graphics.DrawString(setMealFoodItemItemNameSize, ticketSetMealFoodItemFont, Brushes.Black, new RectangleF(new Point(70, ypos), setMealFoodItemItemNameSizeSizeF));
+						e.Graphics.DrawString(setMealFoodItemItemNameSize, ticketSetMealFoodItemFont, Brushes.Black, new RectangleF(new Point(90, ypos), setMealFoodItemItemNameSizeSizeF));
 						ypos += (int)setMealFoodItemItemNameSizeSizeF.Height + 5;
 					}
 				}
@@ -1605,7 +1605,7 @@ namespace ordering_system
 			e.Graphics.DrawString(orderDateTimeString, ticketSmallFont, Brushes.Black, new Point(10, ypos));
 			ypos += (int)ticketSmallFont.Size + 5;
 			// break
-			e.Graphics.DrawString("*************************************", new Font("Arial", 7), Brushes.Black, new Point(10, ypos));
+			e.Graphics.DrawString("*************************************", new Font("Arial", 14), Brushes.Black, new Point(10, ypos));
 			ypos += 20;
 			// get order items
 			foreach (DataRow runningOrderRow in viewOrdersOrderItemsDictionary[viewOrdersSelectedOrderDailyOrderNumber].Rows)
@@ -1650,7 +1650,7 @@ namespace ordering_system
 				}
 			}
 			// break
-			e.Graphics.DrawString("*************************************", new Font("Arial", 7), Brushes.Black, new Point(10, ypos));
+			e.Graphics.DrawString("*************************************", new Font("Arial", 14), Brushes.Black, new Point(10, ypos));
 			ypos += 20;
 			// subtotal
 			e.Graphics.DrawString("Subtotal:", ticketSmallFont, Brushes.Black, new Point(10, ypos));

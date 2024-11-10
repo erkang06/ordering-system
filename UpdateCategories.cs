@@ -14,6 +14,8 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
+		// common use functions
+
 		private bool doesCategoryExist() // checks if category exists in database w/ same name
 		{
 			SqlCommand checkIfCategoryExists = new SqlCommand("SELECT COUNT(*) FROM CategoryTbl WHERE categoryName = @CN", con);
@@ -35,10 +37,14 @@ namespace ordering_system
 			return false;
 		}
 
-		private void cancelButton_Click(object sender, EventArgs e)
+		private void clearCategoryScreen() // clears textboxes and categoryid
 		{
-			Close();
+			categoryID = -1;
+			categoryNameTextBox.Text = string.Empty;
+			categoryIndexTextBox.Text = string.Empty;
 		}
+
+		// sorting the form out
 
 		private void UpdateCategories_Load(object sender, EventArgs e)
 		{
@@ -82,6 +88,8 @@ namespace ordering_system
 			categoryDataGridView.ClearSelection();
 		}
 
+		// form related + data validation
+
 		private void categoryDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// find clicked row of table in order to search through categoriesdatatable to find the full deets
@@ -97,6 +105,35 @@ namespace ordering_system
 				categoryIndexTextBox.Text = selectedRow["categoryIndex"].ToString();
 			}
 		}
+
+		private void categoryNameTextBox_Leave(object sender, EventArgs e)
+		{
+			if (categoryNameTextBox.Text.Length > 30) // if category too long for database
+			{
+				MessageBox.Show("Category name too long", "Ordering System");
+				categoryNameTextBox.Focus();
+			}
+		}
+
+		private void categoryIndexTextBox_Leave(object sender, EventArgs e)
+		{
+			try
+			{
+				Convert.ToInt32(categoryIndexTextBox.Text); // check if value is acc int
+				if (Convert.ToDecimal(categoryIndexTextBox.Text) < 0) // not within range
+				{
+					MessageBox.Show("Category index not within range", "Ordering System");
+					categoryIndexTextBox.Focus();
+				}
+			}
+			catch // not int
+			{
+				MessageBox.Show("Category index not an integer", "Ordering System");
+				categoryIndexTextBox.Focus();
+			}
+		}
+
+		// sql functions
 
 		private void addCategoryButton_Click(object sender, EventArgs e)
 		{
@@ -163,7 +200,7 @@ namespace ordering_system
 			con.Close();
 		}
 
-		private void deleteCategoryButton_Click(object sender, EventArgs e) // ADD DEFENSE AGAINST NONE CAT IDS
+		private void deleteCategoryButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
 			if (doesCategoryExist() == false) // category not found
@@ -197,38 +234,9 @@ namespace ordering_system
 			con.Close();
 		}
 
-		private void clearCategoryScreen() // clears textboxes and categoryid
+		private void cancelButton_Click(object sender, EventArgs e)
 		{
-			categoryID = -1;
-			categoryNameTextBox.Text = string.Empty;
-			categoryIndexTextBox.Text = string.Empty;
-		}
-
-		private void categoryNameTextBox_Leave(object sender, EventArgs e)
-		{
-			if (categoryNameTextBox.Text.Length > 30) // if category too long for database
-			{
-				MessageBox.Show("Category name too long", "Ordering System");
-				categoryNameTextBox.Focus();
-			}
-		}
-
-		private void categoryIndexTextBox_Leave(object sender, EventArgs e)
-		{
-			try
-			{
-				Convert.ToInt32(categoryIndexTextBox.Text); // check if value is acc int
-				if (Convert.ToDecimal(categoryIndexTextBox.Text) < 0) // not within range
-				{
-					MessageBox.Show("Category index not within range", "Ordering System");
-					categoryIndexTextBox.Focus();
-				}
-			}
-			catch // not int
-			{
-				MessageBox.Show("Category index not an integer", "Ordering System");
-				categoryIndexTextBox.Focus();
-			}
+			Close();
 		}
 	}
 }

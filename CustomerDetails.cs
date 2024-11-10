@@ -39,6 +39,7 @@ namespace ordering_system
 		}
 
 		// common use functions
+
 		private int findCustomerID() // find customerid from phonenumber
 		{
 			SqlCommand findcustomerID = new SqlCommand("SELECT CustomerID FROM CustomerTbl WHERE phoneNumber = @PN", con);
@@ -108,9 +109,8 @@ namespace ordering_system
 			return false;
 		}
 
-		private bool hasCustomerBeenUsedInAddress()
+		private bool hasCustomerBeenUsedInAddress() // check if customer used in addresstbl
 		{
-			// check if customer used in addresstbl
 			SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE customerID = @CID", con);
 			checkIfAddressUsed.Parameters.AddWithValue("@CID", customerID);
 			int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
@@ -121,9 +121,8 @@ namespace ordering_system
 			return false;
 		}
 
-		private bool hasCustomerBeenUsedInOrder()
+		private bool hasCustomerBeenUsedInOrder() // check if customer used in ordertbl
 		{
-			// check if customer used in ordertbl
 			SqlCommand checkIfCustomerUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE customerID = @CID", con);
 			checkIfCustomerUsed.Parameters.AddWithValue("@CID", customerID);
 			int instancesOfCustomerUsed = (int)checkIfCustomerUsed.ExecuteScalar();
@@ -134,9 +133,8 @@ namespace ordering_system
 			return false;
 		}
 
-		private bool hasAddressBeenUsedInOrder()
+		private bool hasAddressBeenUsedInOrder() // check if address used in ordertbl
 		{
-			// check if address used in ordertbl
 			SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE addressID = @AID", con);
 			checkIfAddressUsed.Parameters.AddWithValue("@AID", addressID);
 			int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
@@ -186,160 +184,7 @@ namespace ordering_system
 			} catch { /*wont work when accessed on form creation since addressdatagridview doesnt physically exist so u cant do anything physical*/ }
 		}
 
-		// form related
-
-		private void acceptAddressButton_Click(object sender, EventArgs e)
-		{
-			con.Open();
-			if (areAllCustomerFieldsFilled() == false) // cant continue w/out all fields filled in
-			{
-				MessageBox.Show("Not all required customer fields filled in", "Ordering System");
-				con.Close();
-				return;
-			}
-			else if (doesCustomerExist() == false) // if customer doesnt alr exist in database
-			{
-				// add customer details to database
-				SqlCommand addCustomerToDatabase = new SqlCommand("INSERT INTO CustomerTbl(customerName, phoneNumber, isBlacklisted, houseNumber, streetName, village, city, postcode) VALUES(@CN, @PN, @IBL, @HN, @SN, @VL, @CT, @PC)", con);
-				addCustomerToDatabase.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
-				addCustomerToDatabase.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
-				addCustomerToDatabase.Parameters.AddWithValue("@IBL", blacklistedCheckBox.Checked);
-				addCustomerToDatabase.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
-				addCustomerToDatabase.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
-				addCustomerToDatabase.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
-				addCustomerToDatabase.Parameters.AddWithValue("@CT", billingCityTextBox.Text);
-				addCustomerToDatabase.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
-				addCustomerToDatabase.ExecuteNonQuery();
-				customerID = findCustomerID();
-			}
-			else // update just in case details have changed
-			{
-				customerID = findCustomerID();
-				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, isBlackListed = @IBL, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
-				updateCustomerDetails.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
-				updateCustomerDetails.Parameters.AddWithValue("@IBL", blacklistedCheckBox.Checked);
-				updateCustomerDetails.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
-				updateCustomerDetails.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
-				updateCustomerDetails.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
-				updateCustomerDetails.Parameters.AddWithValue("@CT", billingCityTextBox.Text);
-				updateCustomerDetails.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
-				updateCustomerDetails.Parameters.AddWithValue("@CID", customerID);
-				updateCustomerDetails.ExecuteNonQuery();
-			}
-
-			string orderType = "Collection"; // set default ordertype to collection since theres nothing more that needs to be updated databasewise
-			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
-			{
-				if (areAllAddressFieldsFilled() == false)// cant continue w/out all fields filled in
-				{
-					MessageBox.Show("Not all required address fields filled in", "Ordering System");
-					con.Close();
-					return;
-				}
-				else if (doesAddressExist() == false) // address doesnt exist in addresstbl
-				{
-					// add customer details to database
-					SqlCommand addAddressToDatabase = new SqlCommand("INSERT INTO AddressTbl(customerID, houseNumber, streetName, village, city, postcode, deliveryCharge) VALUES(@CID, @HN, @SN, @VL, @CT, @PC, @DC)", con);
-					addAddressToDatabase.Parameters.AddWithValue("@CID", customerID);
-					addAddressToDatabase.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
-					addAddressToDatabase.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
-					addAddressToDatabase.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
-					addAddressToDatabase.Parameters.AddWithValue("@CT", deliveryCityTextBox.Text);
-					addAddressToDatabase.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
-					addAddressToDatabase.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
-					addAddressToDatabase.ExecuteNonQuery();
-					addressID = findAddressID();
-				}
-				else // update just in case details have changed
-				{
-					addressID = findAddressID();
-					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
-					updateDeliveryAddress.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
-					updateDeliveryAddress.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
-					updateDeliveryAddress.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
-					updateDeliveryAddress.Parameters.AddWithValue("@CT", deliveryCityTextBox.Text);
-					updateDeliveryAddress.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
-					updateDeliveryAddress.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
-					updateDeliveryAddress.Parameters.AddWithValue("@AID", addressID);
-					updateDeliveryAddress.ExecuteNonQuery();
-				}
-				orderType = "Delivery";
-			}
-			else if (collectionButton.BackColor != Color.Yellow) // if order type button isnt selected
-			{
-				MessageBox.Show("Order type not selected", "Ordering System");
-				con.Close();
-				return;
-			}
-			// send delivery details back to main menu
-			CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(customerID, orderType, addressID);
-			CustomerDetailsUpdate(this, args);
-			con.Close();
-			Close();
-		}
-
-		private void cancelAddressButton_Click(object sender, EventArgs e)
-		{
-			CustomerDetailsCancel();
-			Close();
-		}
-
-		private void deliveryButton_Click(object sender, EventArgs e)
-		{
-			// this is weird to allow deliveries passed through main menu to change customer details too
-			changeToDelivery();
-		}
-
-		private void changeToDelivery()
-		{
-			deliveryButton.BackColor = Color.Yellow;
-			collectionButton.BackColor = Color.Transparent;
-			deliveryHouseNumberTextBox.Enabled = true;
-			deliveryHouseNumberLabel.Text = "*House Number:";
-			deliveryStreetNameTextBox.Enabled = true;
-			deliveryStreetNameLabel.Text = "*Street Name:";
-			deliveryVillageTextBox.Enabled = true;
-			deliveryCityTextBox.Enabled = true;
-			deliveryCityLabel.Text = "*City:";
-			deliveryPostcodeTextBox.Enabled = true;
-			deliveryPostcodeLabel.Text = "*Postcode:";
-			deliveryDeliveryChargeTextBox.Enabled = true;
-			deliveryDeliveryChargeLabel.Text = "*Delivery Charge:";
-			addressDataGridView.Enabled = true;
-			billingAsDeliveryCheckBox.Enabled = true;
-		}
-
-		private void collectionButton_Click(object sender, EventArgs e)
-		{
-			// this is weird to allow collections passed through main menu to change customer details too
-			changeToCollection();
-		}
-
-		private void changeToCollection()
-		{
-			collectionButton.BackColor = Color.Yellow;
-			deliveryButton.BackColor = Color.Transparent;
-			deliveryHouseNumberTextBox.Enabled = false;
-			deliveryHouseNumberTextBox.Text = string.Empty;
-			deliveryHouseNumberLabel.Text = "House Number:";
-			deliveryStreetNameTextBox.Enabled = false;
-			deliveryStreetNameTextBox.Text = string.Empty;
-			deliveryStreetNameLabel.Text = "Street Name:";
-			deliveryVillageTextBox.Enabled = false;
-			deliveryVillageTextBox.Text = string.Empty;
-			deliveryCityTextBox.Enabled = false;
-			deliveryCityTextBox.Text = string.Empty;
-			deliveryCityLabel.Text = "City:";
-			deliveryPostcodeTextBox.Enabled = false;
-			deliveryPostcodeTextBox.Text = string.Empty;
-			deliveryPostcodeLabel.Text = "Postcode:";
-			deliveryDeliveryChargeTextBox.Enabled = false;
-			deliveryDeliveryChargeTextBox.Text = string.Empty;
-			deliveryDeliveryChargeLabel.Text = "Delivery Charge:";
-			addressDataGridView.Enabled = false;
-			billingAsDeliveryCheckBox.Enabled = false;
-			billingAsDeliveryCheckBox.Checked = false;
-		}
+		// form related functions
 
 		private void findCustomerButton_Click(object sender, EventArgs e)
 		{
@@ -355,27 +200,6 @@ namespace ordering_system
 				fillInCustomerDetails(true);
 			}
 			con.Close();
-		}
-
-		private void fillInCustomerDetails(bool phoneNumberAlreadyInputted) // fill in customer details and billing address
-		{
-			DataSet customer = getCustomer(customerID);
-			customerNameTextBox.Text = customer.Tables[0].Rows[0]["customerName"].ToString();
-			blacklistedCheckBox.Checked = Convert.ToBoolean(customer.Tables[0].Rows[0]["isBlackListed"]);
-			billingHouseNumberTextBox.Text = customer.Tables[0].Rows[0]["houseNumber"].ToString();
-			billingStreetNameTextBox.Text = customer.Tables[0].Rows[0]["streetName"].ToString();
-			billingVillageTextBox.Text = customer.Tables[0].Rows[0]["village"].ToString();
-			billingCityTextBox.Text = customer.Tables[0].Rows[0]["city"].ToString();
-			billingPostcodeTextBox.Text = customer.Tables[0].Rows[0]["postcode"].ToString();
-			if (phoneNumberAlreadyInputted == false)
-			{
-				phoneNumberTextBox.Text = customer.Tables[0].Rows[0]["phoneNumber"].ToString();
-			}
-
-			if (deliveryButton.BackColor == Color.Yellow) // deliveries need the address data grid view filling in
-			{
-				updateDataGridView();
-			}
 		}
 
 		private void billingAsDeliveryCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -415,62 +239,7 @@ namespace ordering_system
 			}
 		}
 
-		private void deleteCustomerButton_Click(object sender, EventArgs e)
-		{
-			con.Open();
-			if (doesCustomerExist() == false) // phone# not found
-			{
-				MessageBox.Show("Customer with phone number not found in database", "Ordering System");
-			}
-			else // phone# found
-			{
-				customerID = findCustomerID();
-				if (hasCustomerBeenUsedInAddress()) // customer exists in addresstbl
-				{
-					MessageBox.Show("There is at least one address that is associated with this customer. Remove them through manager functions before deleting this customer", "Ordering System");
-				}
-				else if (hasCustomerBeenUsedInOrder()) // customer exists in an order
-				{
-					MessageBox.Show("There is at least one order that has been placed by this customer. Remove them through manager functions before deleting this customer", "Ordering System");
-				}
-				else
-				{
-					SqlCommand deleteCustomer = new SqlCommand("DELETE FROM CustomerTbl WHERE customerID = @CID", con);
-					deleteCustomer.Parameters.AddWithValue("@CID", customerID);
-					deleteCustomer.ExecuteNonQuery();
-					MessageBox.Show("Customer deleted", "Ordering System");
-					clearCustomerScreen();
-				}
-			}
-			con.Close();
-		}
-
-		private void deleteDeliveryAddressButton_Click(object sender, EventArgs e)
-		{
-			con.Open();
-			if (doesAddressExist() == false)
-			{
-				MessageBox.Show("Address with house number and postcode not found in database", "Ordering System");
-			}
-			else
-			{
-				addressID = findAddressID();
-				if (hasAddressBeenUsedInOrder()) // exists in an order
-				{
-					MessageBox.Show("There is at least one order that uses this address. Remove them through manager functions before deleting this address", "Ordering System");
-				}
-				else
-				{
-					SqlCommand deleteAddress = new SqlCommand("DELETE FROM AddressTbl WHERE addressID = @AID", con);
-					deleteAddress.Parameters.AddWithValue("@AID", addressID);
-					deleteAddress.ExecuteNonQuery();
-					MessageBox.Show("Address deleted", "Ordering System");
-					clearAddressScreen();
-					updateDataGridView();
-				}
-			}
-			con.Close();
-		}
+		// data validation
 
 		private void customerNameTextBox_Leave(object sender, EventArgs e)
 		{
@@ -596,6 +365,241 @@ namespace ordering_system
 				MessageBox.Show("Delivery charge not a decimal", "Ordering System");
 				deliveryDeliveryChargeTextBox.Focus();
 			}
+		}
+
+		// order type
+
+		private void deliveryButton_Click(object sender, EventArgs e)
+		{
+			// this is weird to allow deliveries passed through main menu to change customer details too
+			changeToDelivery();
+		}
+
+		private void changeToDelivery()
+		{
+			deliveryButton.BackColor = Color.Yellow;
+			collectionButton.BackColor = Color.Transparent;
+			deliveryHouseNumberTextBox.Enabled = true;
+			deliveryHouseNumberLabel.Text = "*House Number:";
+			deliveryStreetNameTextBox.Enabled = true;
+			deliveryStreetNameLabel.Text = "*Street Name:";
+			deliveryVillageTextBox.Enabled = true;
+			deliveryCityTextBox.Enabled = true;
+			deliveryCityLabel.Text = "*City:";
+			deliveryPostcodeTextBox.Enabled = true;
+			deliveryPostcodeLabel.Text = "*Postcode:";
+			deliveryDeliveryChargeTextBox.Enabled = true;
+			deliveryDeliveryChargeLabel.Text = "*Delivery Charge:";
+			addressDataGridView.Enabled = true;
+			billingAsDeliveryCheckBox.Enabled = true;
+		}
+
+		private void collectionButton_Click(object sender, EventArgs e)
+		{
+			// this is weird to allow collections passed through main menu to change customer details too
+			changeToCollection();
+		}
+
+		private void changeToCollection()
+		{
+			collectionButton.BackColor = Color.Yellow;
+			deliveryButton.BackColor = Color.Transparent;
+			deliveryHouseNumberTextBox.Enabled = false;
+			deliveryHouseNumberTextBox.Text = string.Empty;
+			deliveryHouseNumberLabel.Text = "House Number:";
+			deliveryStreetNameTextBox.Enabled = false;
+			deliveryStreetNameTextBox.Text = string.Empty;
+			deliveryStreetNameLabel.Text = "Street Name:";
+			deliveryVillageTextBox.Enabled = false;
+			deliveryVillageTextBox.Text = string.Empty;
+			deliveryCityTextBox.Enabled = false;
+			deliveryCityTextBox.Text = string.Empty;
+			deliveryCityLabel.Text = "City:";
+			deliveryPostcodeTextBox.Enabled = false;
+			deliveryPostcodeTextBox.Text = string.Empty;
+			deliveryPostcodeLabel.Text = "Postcode:";
+			deliveryDeliveryChargeTextBox.Enabled = false;
+			deliveryDeliveryChargeTextBox.Text = string.Empty;
+			deliveryDeliveryChargeLabel.Text = "Delivery Charge:";
+			addressDataGridView.Enabled = false;
+			billingAsDeliveryCheckBox.Enabled = false;
+			billingAsDeliveryCheckBox.Checked = false;
+		}
+
+		// sql related functions + cancel
+
+		private void acceptAddressButton_Click(object sender, EventArgs e)
+		{
+			con.Open();
+			if (areAllCustomerFieldsFilled() == false) // cant continue w/out all fields filled in
+			{
+				MessageBox.Show("Not all required customer fields filled in", "Ordering System");
+				con.Close();
+				return;
+			}
+			else if (doesCustomerExist() == false) // if customer doesnt alr exist in database
+			{
+				// add customer details to database
+				SqlCommand addCustomerToDatabase = new SqlCommand("INSERT INTO CustomerTbl(customerName, phoneNumber, isBlacklisted, houseNumber, streetName, village, city, postcode) VALUES(@CN, @PN, @IBL, @HN, @SN, @VL, @CT, @PC)", con);
+				addCustomerToDatabase.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@PN", phoneNumberTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@IBL", blacklistedCheckBox.Checked);
+				addCustomerToDatabase.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@CT", billingCityTextBox.Text);
+				addCustomerToDatabase.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
+				addCustomerToDatabase.ExecuteNonQuery();
+				customerID = findCustomerID();
+			}
+			else // update just in case details have changed
+			{
+				customerID = findCustomerID();
+				SqlCommand updateCustomerDetails = new SqlCommand("UPDATE CustomerTbl SET customerName = @CN, isBlackListed = @IBL, houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC WHERE customerID = @CID", con);
+				updateCustomerDetails.Parameters.AddWithValue("@CN", customerNameTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@IBL", blacklistedCheckBox.Checked);
+				updateCustomerDetails.Parameters.AddWithValue("@HN", billingHouseNumberTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@SN", billingStreetNameTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@VL", billingVillageTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@CT", billingCityTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@PC", billingPostcodeTextBox.Text);
+				updateCustomerDetails.Parameters.AddWithValue("@CID", customerID);
+				updateCustomerDetails.ExecuteNonQuery();
+			}
+
+			string orderType = "Collection"; // set default ordertype to collection since theres nothing more that needs to be updated databasewise
+			if (deliveryButton.BackColor == Color.Yellow) // if its a delivery by the end
+			{
+				if (areAllAddressFieldsFilled() == false)// cant continue w/out all fields filled in
+				{
+					MessageBox.Show("Not all required address fields filled in", "Ordering System");
+					con.Close();
+					return;
+				}
+				else if (doesAddressExist() == false) // address doesnt exist in addresstbl
+				{
+					// add customer details to database
+					SqlCommand addAddressToDatabase = new SqlCommand("INSERT INTO AddressTbl(customerID, houseNumber, streetName, village, city, postcode, deliveryCharge) VALUES(@CID, @HN, @SN, @VL, @CT, @PC, @DC)", con);
+					addAddressToDatabase.Parameters.AddWithValue("@CID", customerID);
+					addAddressToDatabase.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+					addAddressToDatabase.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
+					addAddressToDatabase.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
+					addAddressToDatabase.Parameters.AddWithValue("@CT", deliveryCityTextBox.Text);
+					addAddressToDatabase.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+					addAddressToDatabase.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
+					addAddressToDatabase.ExecuteNonQuery();
+					addressID = findAddressID();
+				}
+				else // update just in case details have changed
+				{
+					addressID = findAddressID();
+					SqlCommand updateDeliveryAddress = new SqlCommand("UPDATE AddressTbl SET houseNumber = @HN, streetName = @SN, village = @VL, city = @CT, postcode = @PC, deliveryCharge = @DC WHERE addressID = @AID", con);
+					updateDeliveryAddress.Parameters.AddWithValue("@HN", deliveryHouseNumberTextBox.Text);
+					updateDeliveryAddress.Parameters.AddWithValue("@SN", deliveryStreetNameTextBox.Text);
+					updateDeliveryAddress.Parameters.AddWithValue("@VL", deliveryVillageTextBox.Text);
+					updateDeliveryAddress.Parameters.AddWithValue("@CT", deliveryCityTextBox.Text);
+					updateDeliveryAddress.Parameters.AddWithValue("@PC", deliveryPostcodeTextBox.Text);
+					updateDeliveryAddress.Parameters.AddWithValue("@DC", Convert.ToDecimal(deliveryDeliveryChargeTextBox.Text));
+					updateDeliveryAddress.Parameters.AddWithValue("@AID", addressID);
+					updateDeliveryAddress.ExecuteNonQuery();
+				}
+				orderType = "Delivery";
+			}
+			else if (collectionButton.BackColor != Color.Yellow) // if order type button isnt selected
+			{
+				MessageBox.Show("Order type not selected", "Ordering System");
+				con.Close();
+				return;
+			}
+			// send delivery details back to main menu
+			CustomerDetailsUpdateEventArgs args = new CustomerDetailsUpdateEventArgs(customerID, orderType, addressID);
+			CustomerDetailsUpdate(this, args);
+			con.Close();
+			Close();
+		}
+
+		private void cancelAddressButton_Click(object sender, EventArgs e)
+		{
+			CustomerDetailsCancel();
+			Close();
+		}
+
+		private void fillInCustomerDetails(bool phoneNumberAlreadyInputted) // fill in customer details and billing address
+		{
+			DataSet customer = getCustomer(customerID);
+			customerNameTextBox.Text = customer.Tables[0].Rows[0]["customerName"].ToString();
+			blacklistedCheckBox.Checked = Convert.ToBoolean(customer.Tables[0].Rows[0]["isBlackListed"]);
+			billingHouseNumberTextBox.Text = customer.Tables[0].Rows[0]["houseNumber"].ToString();
+			billingStreetNameTextBox.Text = customer.Tables[0].Rows[0]["streetName"].ToString();
+			billingVillageTextBox.Text = customer.Tables[0].Rows[0]["village"].ToString();
+			billingCityTextBox.Text = customer.Tables[0].Rows[0]["city"].ToString();
+			billingPostcodeTextBox.Text = customer.Tables[0].Rows[0]["postcode"].ToString();
+			if (phoneNumberAlreadyInputted == false)
+			{
+				phoneNumberTextBox.Text = customer.Tables[0].Rows[0]["phoneNumber"].ToString();
+			}
+
+			if (deliveryButton.BackColor == Color.Yellow) // deliveries need the address data grid view filling in
+			{
+				updateDataGridView();
+			}
+		}
+
+		private void deleteCustomerButton_Click(object sender, EventArgs e)
+		{
+			con.Open();
+			if (doesCustomerExist() == false) // phone# not found
+			{
+				MessageBox.Show("Customer with phone number not found in database", "Ordering System");
+			}
+			else // phone# found
+			{
+				customerID = findCustomerID();
+				if (hasCustomerBeenUsedInAddress()) // customer exists in addresstbl
+				{
+					MessageBox.Show("There is at least one address that is associated with this customer. Remove them through manager functions before deleting this customer", "Ordering System");
+				}
+				else if (hasCustomerBeenUsedInOrder()) // customer exists in an order
+				{
+					MessageBox.Show("There is at least one order that has been placed by this customer. Remove them through manager functions before deleting this customer", "Ordering System");
+				}
+				else
+				{
+					SqlCommand deleteCustomer = new SqlCommand("DELETE FROM CustomerTbl WHERE customerID = @CID", con);
+					deleteCustomer.Parameters.AddWithValue("@CID", customerID);
+					deleteCustomer.ExecuteNonQuery();
+					MessageBox.Show("Customer deleted", "Ordering System");
+					clearCustomerScreen();
+				}
+			}
+			con.Close();
+		}
+
+		private void deleteDeliveryAddressButton_Click(object sender, EventArgs e)
+		{
+			con.Open();
+			if (doesAddressExist() == false)
+			{
+				MessageBox.Show("Address with house number and postcode not found in database", "Ordering System");
+			}
+			else
+			{
+				addressID = findAddressID();
+				if (hasAddressBeenUsedInOrder()) // exists in an order
+				{
+					MessageBox.Show("There is at least one order that uses this address. Remove them through manager functions before deleting this address", "Ordering System");
+				}
+				else
+				{
+					SqlCommand deleteAddress = new SqlCommand("DELETE FROM AddressTbl WHERE addressID = @AID", con);
+					deleteAddress.Parameters.AddWithValue("@AID", addressID);
+					deleteAddress.ExecuteNonQuery();
+					MessageBox.Show("Address deleted", "Ordering System");
+					clearAddressScreen();
+					updateDataGridView();
+				}
+			}
+			con.Close();
 		}
 	}
 }

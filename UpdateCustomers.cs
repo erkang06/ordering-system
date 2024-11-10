@@ -16,6 +16,8 @@ namespace ordering_system
 			InitializeComponent();
 		}
 
+		// common use functions
+
 		private bool hasDeliveryAddresses() // checks if customer has at least 1 delivery address
 		{
 			SqlCommand hasDeliveryAddresses = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE customerID = @CID", con);
@@ -72,6 +74,8 @@ namespace ordering_system
 			return true;
 		}
 
+		// sorting the form out
+
 		private void UpdateCustomers_Load(object sender, EventArgs e)
 		{
 			con.Open();
@@ -108,9 +112,32 @@ namespace ordering_system
 			addressDataGridView.Columns["postcode"].Width = 150;
 		}
 
-		private void cancelButton_Click(object sender, EventArgs e)
+		// customer functions
+
+		private bool hasCustomerBeenUsedInAddress()
 		{
-			Close();
+			// check if customer used in addresstbl
+			SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE customerID = @CID", con);
+			checkIfAddressUsed.Parameters.AddWithValue("@CID", customerID);
+			int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
+			if (instancesOfAddressUsed > 0) // exists
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool hasCustomerBeenUsedInOrder()
+		{
+			// check if customer used in ordertbl
+			SqlCommand checkIfCustomerUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE customerID = @CID", con);
+			checkIfCustomerUsed.Parameters.AddWithValue("@CID", customerID);
+			int instancesOfCustomerUsed = (int)checkIfCustomerUsed.ExecuteScalar();
+			if (instancesOfCustomerUsed > 0) // exists
+			{
+				return true;
+			}
+			return false;
 		}
 
 		private void customerDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -145,37 +172,6 @@ namespace ordering_system
 				customerDataGridView.ClearSelection();
 			}
 			con.Close();
-		}
-
-		private void addressDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
-		{
-			con.Open();
-			// find clicked row of table in order to search through addressesdatatable to find the full deets
-			int selectedRowIndex = e.RowIndex;
-			if (selectedRowIndex > -1) // just in case u click the header
-			{
-				// get addressid
-				addressID = Convert.ToInt32(addressDataGridView.Rows[selectedRowIndex].Cells["addressID"].Value);
-				DataRow selectedRow = addressesDataTable.Select($"addressID = '{addressID}'")[0];
-				// fill in textboxes
-				deliveryHouseNumberTextBox.Text = selectedRow["houseNumber"].ToString();
-				deliveryStreetNameTextBox.Text = selectedRow["streetName"].ToString();
-				deliveryVillageTextBox.Text = selectedRow["village"].ToString();
-				deliveryCityTextBox.Text = selectedRow["city"].ToString();
-				deliveryPostcodeTextBox.Text = selectedRow["postcode"].ToString();
-				deliveryDeliveryChargeTextBox.Text = selectedRow["deliveryCharge"].ToString();
-			}
-			else // unselect flop row
-			{
-				customerDataGridView.ClearSelection();
-			}
-			con.Close();
-		}
-
-		private void goBackButton_Click(object sender, EventArgs e)
-		{
-			addressPanel.Visible = false;
-			addressPanel.SendToBack();
 		}
 
 		private void updateCustomerButton_Click(object sender, EventArgs e)
@@ -260,32 +256,6 @@ namespace ordering_system
 			con.Close();
 		}
 
-		private bool hasCustomerBeenUsedInAddress()
-		{
-			// check if customer used in addresstbl
-			SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM AddressTbl WHERE customerID = @CID", con);
-			checkIfAddressUsed.Parameters.AddWithValue("@CID", customerID);
-			int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
-			if (instancesOfAddressUsed > 0) // exists
-			{
-				return true;
-			}
-			return false;
-		}
-
-		private bool hasCustomerBeenUsedInOrder()
-		{
-			// check if customer used in ordertbl
-			SqlCommand checkIfCustomerUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE customerID = @CID", con);
-			checkIfCustomerUsed.Parameters.AddWithValue("@CID", customerID);
-			int instancesOfCustomerUsed = (int)checkIfCustomerUsed.ExecuteScalar();
-			if (instancesOfCustomerUsed > 0) // exists
-			{
-				return true;
-			}
-			return false;
-		}
-
 		private void clearCustomerScreen() // clears textboxes and customerid
 		{
 			customerID = -1;
@@ -297,6 +267,46 @@ namespace ordering_system
 			billingVillageTextBox.Text = string.Empty;
 			billingCityTextBox.Text = string.Empty;
 			billingPostcodeTextBox.Text = string.Empty;
+		}
+
+		// address functions
+
+		private bool hasAddressBeenUsedInOrder()
+		{
+			// check if address used in ordertbl
+			SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE addressID = @AID", con);
+			checkIfAddressUsed.Parameters.AddWithValue("@AID", addressID);
+			int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
+			if (instancesOfAddressUsed > 0) // exists
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private void addressDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			con.Open();
+			// find clicked row of table in order to search through addressesdatatable to find the full deets
+			int selectedRowIndex = e.RowIndex;
+			if (selectedRowIndex > -1) // just in case u click the header
+			{
+				// get addressid
+				addressID = Convert.ToInt32(addressDataGridView.Rows[selectedRowIndex].Cells["addressID"].Value);
+				DataRow selectedRow = addressesDataTable.Select($"addressID = '{addressID}'")[0];
+				// fill in textboxes
+				deliveryHouseNumberTextBox.Text = selectedRow["houseNumber"].ToString();
+				deliveryStreetNameTextBox.Text = selectedRow["streetName"].ToString();
+				deliveryVillageTextBox.Text = selectedRow["village"].ToString();
+				deliveryCityTextBox.Text = selectedRow["city"].ToString();
+				deliveryPostcodeTextBox.Text = selectedRow["postcode"].ToString();
+				deliveryDeliveryChargeTextBox.Text = selectedRow["deliveryCharge"].ToString();
+			}
+			else // unselect flop row
+			{
+				customerDataGridView.ClearSelection();
+			}
+			con.Close();
 		}
 
 		private void updateAddressButton_Click(object sender, EventArgs e)
@@ -351,19 +361,6 @@ namespace ordering_system
 			con.Close();
 		}
 
-		private bool hasAddressBeenUsedInOrder()
-		{
-			// check if address used in ordertbl
-			SqlCommand checkIfAddressUsed = new SqlCommand("SELECT COUNT(*) FROM OrderTbl WHERE addressID = @AID", con);
-			checkIfAddressUsed.Parameters.AddWithValue("@AID", addressID);
-			int instancesOfAddressUsed = (int)checkIfAddressUsed.ExecuteScalar();
-			if (instancesOfAddressUsed > 0) // exists
-			{
-				return true;
-			}
-			return false;
-		}
-
 		private void clearAddressScreen() // clears textboxes and customerid
 		{
 			addressID = -1;
@@ -373,6 +370,19 @@ namespace ordering_system
 			deliveryCityTextBox.Text = string.Empty;
 			deliveryPostcodeTextBox.Text = string.Empty;
 			deliveryDeliveryChargeTextBox.Text = string.Empty;
+		}
+
+		private void goBackButton_Click(object sender, EventArgs e)
+		{
+			addressPanel.Visible = false;
+			addressPanel.SendToBack();
+		}
+
+		// cancel
+
+		private void cancelButton_Click(object sender, EventArgs e)
+		{
+			Close();
 		}
 	}
 }
