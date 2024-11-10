@@ -11,14 +11,13 @@ namespace ordering_system
 		readonly SqlConnection con = new SqlConnection(Resources.con);
 		DataTable ordersDataTable = new DataTable(); // full datatable compared to whats shown in datagridview
 		Dictionary<int, DataTable> dailyOrderItemsDictionary = new Dictionary<int, DataTable>(); // keeps all orders by dailyordernumber
-		DataTable singleOrderDataTable = new DataTable();
 		int dailyOrderNumber = -1; // id of currently selected order in ordersdatagridview
 		public OrderSummary()
 		{
 			InitializeComponent();
 		}
 
-		// weird sql functions
+		// weird functions
 
 		private decimal getPriceOfFoodItem(string foodItemID, string size) // get price from id and size
 		{
@@ -129,6 +128,8 @@ namespace ordering_system
 			orderTypeFieldLabel.Text = string.Empty;
 			singleOrderDataGridView.DataSource = null;
 		}
+
+		// stuff on the form
 
 		private void cancelButton_Click(object sender, EventArgs e)
 		{
@@ -277,9 +278,12 @@ namespace ordering_system
 			con.Close();
 		}
 
+		// printing
+
 		private void printOrderSummaryButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
+			printDocument = new PrintDocument();
 			printPreviewDialog.Document = printDocument;
 			if (printPreviewDialog.ShowDialog() == DialogResult.OK)
 			{
@@ -362,17 +366,17 @@ namespace ordering_system
 			Button ticketButton = (Button)sender;
 			if (dailyOrderNumber != -1) // if order acc selected
 			{
-				PrintDocument printTicket = new PrintDocument();
+				printDocument = new PrintDocument();
 				if (ticketButton.Text == "Print Kitchen Ticket")
 				{
-					printTicket.PrintPage += (sender, e) => printTicket_PrintPage(sender, e, "Kitchen");
+					printDocument.PrintPage += (sender, e) => printTicket_PrintPage(sender, e, "Kitchen");
 				}
 				else // print customer ticket
 				{
-					printTicket.PrintPage += (sender, e) => printTicket_PrintPage(sender, e, "Customer");
+					printDocument.PrintPage += (sender, e) => printTicket_PrintPage(sender, e, "Customer");
 				}
-				printPreviewDialog.Document = printTicket;
-				printTicket.Print();
+				printPreviewDialog.Document = printDocument;
+				printDocument.Print();
 			}
 			else
 			{
@@ -498,6 +502,7 @@ namespace ordering_system
 			int estimatedTimeWidth = (int)e.Graphics.MeasureString(estimatedTime, ticketHeaderFont).Width;
 			e.Graphics.DrawString(estimatedTime, ticketHeaderFont, Brushes.Black, new Point(ticketPaperSizeWidth - estimatedTimeWidth, ypos));
 			ypos += (int)ticketHeaderFont.Size + 20;
+			printDocument.DefaultPageSettings.PaperSize = new PaperSize("till", ticketPaperSizeWidth, ypos);
 		}
 	}
 }

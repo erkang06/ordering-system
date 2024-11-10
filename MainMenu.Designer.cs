@@ -29,10 +29,9 @@
 		private void InitializeComponent()
 		{
 			components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
 			customerDetailsPanel = new Panel();
 			customerDetailsLabel = new Label();
-			orderNumberLabel = new Label();
+			dailyOrderNumberLabel = new Label();
 			orderTypePanel = new Panel();
 			collectionButton = new Button();
 			counterButton = new Button();
@@ -91,12 +90,11 @@
 			viewOrdersDeliveryButton = new Button();
 			viewOrdersDataGridView = new DataGridView();
 			timer = new System.Windows.Forms.Timer(components);
-			printDocument = new System.Drawing.Printing.PrintDocument();
-			printPreviewDialog = new PrintPreviewDialog();
 			viewOrdersCustomerDetailsPanel = new Panel();
 			viewOrdersOrderTypeLabel = new Label();
 			viewOrdersCustomerDetailsLabel = new Label();
 			selectedOrderOrderNumberLabel = new Label();
+			printDocument = new System.Drawing.Printing.PrintDocument();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -114,7 +112,7 @@
 			// 
 			customerDetailsPanel.BackColor = Color.Teal;
 			customerDetailsPanel.Controls.Add(customerDetailsLabel);
-			customerDetailsPanel.Controls.Add(orderNumberLabel);
+			customerDetailsPanel.Controls.Add(dailyOrderNumberLabel);
 			customerDetailsPanel.Location = new Point(0, 0);
 			customerDetailsPanel.Margin = new Padding(0);
 			customerDetailsPanel.Name = "customerDetailsPanel";
@@ -133,17 +131,17 @@
 			customerDetailsLabel.TabIndex = 1;
 			customerDetailsLabel.Click += customerDetails_Click;
 			// 
-			// orderNumberLabel
+			// dailyOrderNumberLabel
 			// 
-			orderNumberLabel.BackColor = Color.Transparent;
-			orderNumberLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			orderNumberLabel.ForeColor = Color.White;
-			orderNumberLabel.Location = new Point(9, 15);
-			orderNumberLabel.Margin = new Padding(4, 0, 4, 0);
-			orderNumberLabel.Name = "orderNumberLabel";
-			orderNumberLabel.Size = new Size(84, 45);
-			orderNumberLabel.TabIndex = 0;
-			orderNumberLabel.Text = "1";
+			dailyOrderNumberLabel.BackColor = Color.Transparent;
+			dailyOrderNumberLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+			dailyOrderNumberLabel.ForeColor = Color.White;
+			dailyOrderNumberLabel.Location = new Point(9, 15);
+			dailyOrderNumberLabel.Margin = new Padding(4, 0, 4, 0);
+			dailyOrderNumberLabel.Name = "dailyOrderNumberLabel";
+			dailyOrderNumberLabel.Size = new Size(84, 45);
+			dailyOrderNumberLabel.TabIndex = 0;
+			dailyOrderNumberLabel.Text = "1";
 			// 
 			// orderTypePanel
 			// 
@@ -900,17 +898,6 @@
 			// 
 			timer.Enabled = true;
 			timer.Interval = 200;
-			timer.Tick += timer_Tick;
-			// 
-			// printPreviewDialog
-			// 
-			printPreviewDialog.AutoScrollMargin = new Size(0, 0);
-			printPreviewDialog.AutoScrollMinSize = new Size(0, 0);
-			printPreviewDialog.ClientSize = new Size(400, 300);
-			printPreviewDialog.Enabled = true;
-			printPreviewDialog.Icon = (Icon)resources.GetObject("printPreviewDialog.Icon");
-			printPreviewDialog.Name = "printPreviewDialog1";
-			printPreviewDialog.Visible = false;
 			// 
 			// viewOrdersCustomerDetailsPanel
 			// 
@@ -964,7 +951,6 @@
 			AutoScaleMode = AutoScaleMode.Dpi;
 			BackColor = Color.White;
 			ClientSize = new Size(1920, 1080);
-			Controls.Add(viewOrdersCustomerDetailsPanel);
 			Controls.Add(viewOrdersPanel);
 			Controls.Add(runningOrderPanel);
 			Controls.Add(itemEditFunctionsPanel);
@@ -975,6 +961,7 @@
 			Controls.Add(paymentPanel);
 			Controls.Add(commonItemsPanel);
 			Controls.Add(customerDetailsPanel);
+			Controls.Add(viewOrdersCustomerDetailsPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Margin = new Padding(4, 2, 4, 2);
 			Name = "MainMenu";
@@ -1006,7 +993,7 @@
 		private Panel commonItemsPanel;
 		private Panel itemsPanel;
 		private Panel categoriesPanel;
-		private Label orderNumberLabel;
+		private Label dailyOrderNumberLabel;
 		private Label customerDetailsLabel;
 		private Label subtotalTextLabel;
 		private Label deliveryChargeTextLabel;
@@ -1051,8 +1038,6 @@
 		private Button paymentClearButton;
 		private Button paymentExactButton;
 		private Button paymentAcceptButton;
-		private System.Drawing.Printing.PrintDocument printDocument;
-		private PrintPreviewDialog printPreviewDialog;
 		private Panel viewOrdersCustomerDetailsPanel;
 		private Label viewOrdersCustomerDetailsLabel;
 		private Label selectedOrderOrderNumberLabel;
@@ -1065,5 +1050,6 @@
 		private Label viewOrdersDeliveryChargeTextLabel;
 		private Label viewOrdersSubtotalTextLabel;
 		private Label viewOrdersEstimatedTimeTimeLabel;
+		private System.Drawing.Printing.PrintDocument printDocument;
 	}
 }
