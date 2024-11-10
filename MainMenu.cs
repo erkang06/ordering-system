@@ -21,7 +21,6 @@ namespace ordering_system
 		Button[] itemButtonArray = new Button[40];
 		Button[] commonItemButtonArray = new Button[20];
 		int runningOrderItemID = 0; // datatables will collate identical rows which isnt slay
-		bool paymentPanelButtonMode = true; // true if using buttons, false if typing value in
 
 		public MainMenu()
 		{
@@ -120,8 +119,15 @@ namespace ordering_system
 		{
 			DataView runningOrderDataView = new DataView(runningOrderDataTable);
 			runningOrderDataGridView.DataSource = runningOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "size", "price", "runningOrderItemID");
-			DateTime currentTime = DateTime.Now;
-			estimatedTimePicker.Value = currentTime.AddMinutes(60); // should be editable from manager functions
+		}
+
+		private void resizeDataGridView()
+		{
+			runningOrderDataGridView.Columns["itemID"].Width = 25;
+			runningOrderDataGridView.Columns["quantity"].Width = 20;
+			runningOrderDataGridView.Columns["size"].Width = 12;
+			runningOrderDataGridView.Columns["price"].Width = 30;
+			runningOrderDataGridView.Columns["runningOrderItemID"].Visible = false;
 		}
 
 		private void updatePriceLabels()
@@ -224,6 +230,7 @@ namespace ordering_system
 		private void MainMenu_Load(object sender, EventArgs e)
 		{
 			con.Open();
+			// order panels on main menu
 			paymentPanel.SendToBack();
 			paymentPanel.Visible = false;
 			viewOrdersPanel.SendToBack();
@@ -231,6 +238,9 @@ namespace ordering_system
 			deliveryChargePriceLabel.Enabled = false;
 			viewOrdersCustomerDetailsPanel.SendToBack();
 			viewOrdersCustomerDetailsPanel.Visible = false;
+			viewOrdersPricePanel.SendToBack();
+			viewOrdersPricePanel.Visible = false;
+			// load all buttons
 			getOrderNumber();
 			getCategories();
 			loadCategoryButtons();
@@ -249,11 +259,7 @@ namespace ordering_system
 			runningOrderDataTable.Columns.Add("runningOrderItemID");
 			// resize runningorderdatagridview
 			updateDataGridView();
-			runningOrderDataGridView.Columns["itemID"].Width = 25;
-			runningOrderDataGridView.Columns["quantity"].Width = 20;
-			runningOrderDataGridView.Columns["size"].Width = 12;
-			runningOrderDataGridView.Columns["price"].Width = 30;
-			runningOrderDataGridView.Columns["runningOrderItemID"].Visible = false;
+			resizeDataGridView();
 			currentOrder.hasPaid = false;
 			con.Close();
 		}
@@ -882,10 +888,7 @@ namespace ordering_system
 			else if (currentOrder.orderType == "Counter") // bring up payment panel
 			{
 				acceptOrderButton.Text = "Cancel Order";
-				paymentPanel.BringToFront();
-				paymentPanel.Visible = true;
-				paymentPaidTextbox.Text = "0.00";
-				paymentPanelButtonMode = true;
+				showPaymentPanel();
 				// disable viewOrdersButton
 				viewOrdersButton.Enabled = false;
 			}
@@ -1097,6 +1100,17 @@ namespace ordering_system
 
 		// paying for orders
 
+		bool paymentPanelButtonMode = true; // true if using buttons, false if typing value in
+
+		private void showPaymentPanel()
+		{
+			paymentPanel.Enabled = true;
+			paymentPanel.BringToFront();
+			paymentPanel.Visible = true;
+			paymentPaidTextbox.Text = "0.00";
+			paymentPanelButtonMode = true;
+		}
+
 		private void paymentButton_Click(object sender, EventArgs e)
 		{
 			Button paymentButton = (Button)sender;
@@ -1193,10 +1207,16 @@ namespace ordering_system
 				currentOrder.hasPaid = true;
 				acceptOrder("Counter");
 			}
-			else // getting payment for a collection
+			else // getting payment for a collection/delivery
 			{
+				con.Open();
 				int orderID = getOrderID();
-				SqlCommand acceptPayment = new SqlCommand();
+				SqlCommand acceptPayment = new SqlCommand("UPDATE OrderTbl SET hasPaid = true WHERE dailyOrderNumber = @DON && orderDate = @OD");
+				acceptPayment.Parameters.AddWithValue("@DON", viewOrdersDailyOrderNumber);
+				acceptPayment.Parameters.AddWithValue("@OD", DateTime.Now.Date);
+				updateViewOrdersDataGridView();
+				paymentPanel.Enabled = false;
+				con.Close();
 			}
 		}
 
@@ -1227,15 +1247,21 @@ namespace ordering_system
 			}
 			else // exit view orders mode
 			{
-				// get rid of the panel
+				// get rid of all the panels
 				viewOrdersButton.Text = "View Orders";
 				viewOrdersPanel.SendToBack();
 				viewOrdersPanel.Visible = false;
 				viewOrdersCustomerDetailsPanel.SendToBack();
 				viewOrdersCustomerDetailsPanel.Visible = false;
+				viewOrdersPricePanel.SendToBack();
+				viewOrdersPricePanel.Visible = false;
 				// enable accept order and item edit functions panel
 				acceptOrderButton.Enabled = true;
 				itemEditFunctionsPanel.Enabled = true;
+				// show running order and resize again
+				runningOrderDataGridView.DataSource = null;
+				updateDataGridView();
+				resizeDataGridView();
 			}
 		}
 
@@ -1291,9 +1317,8 @@ namespace ordering_system
 			con.Open();
 			// get orders for the day
 			viewOrdersDataTable = new DataTable(); // clear prev
-			DateTime date = DateTime.Now.Date;
 			SqlDataAdapter getOrdersByDate = new SqlDataAdapter("SELECT * FROM OrderTbl WHERE orderDate = @OD ORDER BY orderTime", con);
-			getOrdersByDate.SelectCommand.Parameters.AddWithValue("@OD", date);
+			getOrdersByDate.SelectCommand.Parameters.AddWithValue("@OD", DateTime.Now.Date);
 			getOrdersByDate.Fill(viewOrdersDataTable);
 			// add subtotal and delivery and total into table
 			viewOrdersDataTable.Columns.Add("subTotal", typeof(decimal));
@@ -1416,8 +1441,11 @@ namespace ordering_system
 			int selectedRowIndex = e.RowIndex;
 			if (selectedRowIndex > -1) // just in case u click the header
 			{
+				// cover current customer details and prices with details of selected order
 				viewOrdersCustomerDetailsPanel.BringToFront();
 				viewOrdersCustomerDetailsPanel.Visible = true;
+				viewOrdersPricePanel.BringToFront();
+				viewOrdersPricePanel.Visible = true;
 				itemEditFunctionsPanel.Enabled = false;
 				viewOrdersDailyOrderNumber = Convert.ToInt32(viewOrdersDataGridView.Rows[selectedRowIndex].Cells["dailyOrderNumber"].Value);
 				DataRow order = viewOrdersDataTable.Select($"dailyOrderNumber = '{viewOrdersDailyOrderNumber}'")[0];
@@ -1443,30 +1471,30 @@ namespace ordering_system
 						viewOrdersCustomerDetailsLabel.Text = $"{phoneNumber} - {houseNumber} {streetName} {postcode}";
 					}
 				}
-				// fill in price fields
-				subtotalPriceLabel.Text = order["subTotal"].ToString();
+				// fill in price fields and estimated time
+				viewOrdersSubtotalPriceLabel.Text = order["subTotal"].ToString();
 				// get delivery charge else set label to 0
 				if (order["orderType"].ToString() == "Delivery")
 				{
-					deliveryChargePriceLabel.Text = order["deliveryCharge"].ToString();
-					deliveryChargePriceLabel.Enabled = true;
+					viewOrdersDeliveryChargePriceLabel.Text = order["deliveryCharge"].ToString();
+					viewOrdersDeliveryChargePriceLabel.Enabled = true;
 				}
-				else // just make total the subtotal
+				else
 				{
-					deliveryChargePriceLabel.Text = "0.00";
-					deliveryChargePriceLabel.Enabled = false;
+					viewOrdersDeliveryChargePriceLabel.Text = "0.00";
+					viewOrdersDeliveryChargePriceLabel.Enabled = false;
 				}
-				totalPriceLabel.Text = order["total"].ToString();
-				// fill in single order datagridview
-				//DataView singleOrderDataView = new DataView(dailyOrderItemsDictionary[dailyOrderNumber]);
-				// for some reason u have to clear bf refilling datagridview for the widths to work right lmao
-				//singleOrderDataGridView.DataSource = null;
-				//singleOrderDataGridView.DataSource = singleOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "size", "memo", "price", "orderItemID");
-				//singleOrderDataGridView.Columns["itemID"].Width = 50;
-				//singleOrderDataGridView.Columns["quantity"].Width = 50;
-				//singleOrderDataGridView.Columns["size"].Width = 20;
-				//singleOrderDataGridView.Columns["price"].Width = 50;
-				//singleOrderDataGridView.Columns["orderItemID"].Visible = false;
+				viewOrdersTotalPriceLabel.Text = order["total"].ToString();
+				viewOrdersEstimatedTimeTimeLabel.Text = TimeSpan.Parse(order["estimatedTime"].ToString()).ToString(@"hh\:mm");
+				// replace contents of runningorder datagridview
+				DataView singleOrderDataView = new DataView(viewOrdersOrderItemsDictionary[viewOrdersDailyOrderNumber]);
+				runningOrderDataGridView.DataSource = singleOrderDataView.ToTable(true, "itemID", "quantity", "itemName", "size", "price", "orderItemID");
+				runningOrderDataGridView.Columns["orderItemID"].Visible = false;
+				// show payment panel if havent paid for
+				if (!Convert.ToBoolean(order["hasPaid"]))
+				{
+					showPaymentPanel();
+				}
 			}
 			con.Close();
 		}
@@ -1475,7 +1503,9 @@ namespace ordering_system
 		{
 			if (viewOrdersDailyOrderNumber != -1) // if theres a selected order
 			{
-
+				printPreviewDialog.Document = printDocument;
+				printDocument.PrintPage += (sender, e) => viewOrdersPrintTicket_PrintPage(sender, e, "Customer");
+				printDocument.Print();
 			}
 			else
 			{
@@ -1488,11 +1518,19 @@ namespace ordering_system
 			if (viewOrdersDailyOrderNumber != -1) // if theres a selected order
 			{
 
+				printPreviewDialog.Document = printDocument;
+				printDocument.PrintPage += (sender, e) => viewOrdersPrintTicket_PrintPage(sender, e, "Kitchen");
+				printDocument.Print();
 			}
 			else
 			{
 				MessageBox.Show("Order hasn't been selected", "Ordering System");
 			}
+		}
+
+		private void viewOrdersPrintTicket_PrintPage(object sender, PrintPageEventArgs e, string ticketType)
+		{
+
 		}
 
 		// actual manager functions and timer_tick
