@@ -229,7 +229,7 @@ namespace ordering_system
 		private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			con.Open();
-			foodItemsDataTableByCategory.Clear(); // clear prev
+			foodItemsDataTableByCategory = new DataTable(); // clear prev
 			int categoryID = getCategoryIDFromSelectedIndex();
 			SqlDataAdapter getFoodItemsByCategory = new SqlDataAdapter("SELECT * FROM FoodItemTbl WHERE categoryID = @CID ORDER BY foodItemID", con);
 			getFoodItemsByCategory.SelectCommand.Parameters.AddWithValue("@CID", categoryID);

@@ -51,14 +51,6 @@
 			priceEditButton = new Button();
 			memoButton = new Button();
 			runningOrderPanel = new Panel();
-			viewOrdersPricePanel = new Panel();
-			viewOrdersEstimatedTimeTimeLabel = new Label();
-			viewOrdersEstimatedTimeTextLabel = new Label();
-			viewOrdersTotalPriceLabel = new Label();
-			viewOrdersDeliveryChargePriceLabel = new Label();
-			viewOrdersSubtotalPriceLabel = new Label();
-			viewOrdersDeliveryChargeTextLabel = new Label();
-			viewOrdersSubtotalTextLabel = new Label();
 			runningOrderDataGridView = new DataGridView();
 			estimatedTimeLabel = new Label();
 			estimatedTimePicker = new DateTimePicker();
@@ -67,6 +59,14 @@
 			subtotalPriceLabel = new Label();
 			deliveryChargeTextLabel = new Label();
 			subtotalTextLabel = new Label();
+			viewOrdersPricePanel = new Panel();
+			viewOrdersEstimatedTimeTimeLabel = new Label();
+			viewOrdersEstimatedTimeTextLabel = new Label();
+			viewOrdersTotalPriceLabel = new Label();
+			viewOrdersDeliveryChargePriceLabel = new Label();
+			viewOrdersSubtotalPriceLabel = new Label();
+			viewOrdersDeliveryChargeTextLabel = new Label();
+			viewOrdersSubtotalTextLabel = new Label();
 			commonItemsPanel = new Panel();
 			itemsPanel = new Panel();
 			categoriesPanel = new Panel();
@@ -100,8 +100,8 @@
 			managerFunctionsPanel.SuspendLayout();
 			itemEditFunctionsPanel.SuspendLayout();
 			runningOrderPanel.SuspendLayout();
-			viewOrdersPricePanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)runningOrderDataGridView).BeginInit();
+			viewOrdersPricePanel.SuspendLayout();
 			paymentPanel.SuspendLayout();
 			viewOrdersPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)viewOrdersDataGridView).BeginInit();
@@ -369,7 +369,6 @@
 			// runningOrderPanel
 			// 
 			runningOrderPanel.BackColor = Color.Maroon;
-			runningOrderPanel.Controls.Add(viewOrdersPricePanel);
 			runningOrderPanel.Controls.Add(runningOrderDataGridView);
 			runningOrderPanel.Controls.Add(estimatedTimeLabel);
 			runningOrderPanel.Controls.Add(estimatedTimePicker);
@@ -378,123 +377,12 @@
 			runningOrderPanel.Controls.Add(subtotalPriceLabel);
 			runningOrderPanel.Controls.Add(deliveryChargeTextLabel);
 			runningOrderPanel.Controls.Add(subtotalTextLabel);
+			runningOrderPanel.Controls.Add(viewOrdersPricePanel);
 			runningOrderPanel.Location = new Point(0, 160);
 			runningOrderPanel.Margin = new Padding(0);
 			runningOrderPanel.Name = "runningOrderPanel";
 			runningOrderPanel.Size = new Size(700, 660);
 			runningOrderPanel.TabIndex = 2;
-			// 
-			// viewOrdersPricePanel
-			// 
-			viewOrdersPricePanel.BackColor = Color.LightCoral;
-			viewOrdersPricePanel.Controls.Add(viewOrdersEstimatedTimeTimeLabel);
-			viewOrdersPricePanel.Controls.Add(viewOrdersEstimatedTimeTextLabel);
-			viewOrdersPricePanel.Controls.Add(viewOrdersTotalPriceLabel);
-			viewOrdersPricePanel.Controls.Add(viewOrdersDeliveryChargePriceLabel);
-			viewOrdersPricePanel.Controls.Add(viewOrdersSubtotalPriceLabel);
-			viewOrdersPricePanel.Controls.Add(viewOrdersDeliveryChargeTextLabel);
-			viewOrdersPricePanel.Controls.Add(viewOrdersSubtotalTextLabel);
-			viewOrdersPricePanel.Location = new Point(0, 580);
-			viewOrdersPricePanel.Name = "viewOrdersPricePanel";
-			viewOrdersPricePanel.Size = new Size(700, 80);
-			viewOrdersPricePanel.TabIndex = 10;
-			// 
-			// viewOrdersEstimatedTimeTimeLabel
-			// 
-			viewOrdersEstimatedTimeTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			viewOrdersEstimatedTimeTimeLabel.BackColor = Color.White;
-			viewOrdersEstimatedTimeTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			viewOrdersEstimatedTimeTimeLabel.ForeColor = Color.Black;
-			viewOrdersEstimatedTimeTimeLabel.Location = new Point(285, 40);
-			viewOrdersEstimatedTimeTimeLabel.Margin = new Padding(4, 0, 4, 0);
-			viewOrdersEstimatedTimeTimeLabel.Name = "viewOrdersEstimatedTimeTimeLabel";
-			viewOrdersEstimatedTimeTimeLabel.RightToLeft = RightToLeft.Yes;
-			viewOrdersEstimatedTimeTimeLabel.Size = new Size(140, 40);
-			viewOrdersEstimatedTimeTimeLabel.TabIndex = 16;
-			viewOrdersEstimatedTimeTimeLabel.Text = "00:00";
-			viewOrdersEstimatedTimeTimeLabel.TextAlign = ContentAlignment.MiddleRight;
-			// 
-			// viewOrdersEstimatedTimeTextLabel
-			// 
-			viewOrdersEstimatedTimeTextLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			viewOrdersEstimatedTimeTextLabel.BackColor = Color.Transparent;
-			viewOrdersEstimatedTimeTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			viewOrdersEstimatedTimeTextLabel.ForeColor = Color.White;
-			viewOrdersEstimatedTimeTextLabel.Location = new Point(283, -1);
-			viewOrdersEstimatedTimeTextLabel.Margin = new Padding(4, 0, 4, 0);
-			viewOrdersEstimatedTimeTextLabel.Name = "viewOrdersEstimatedTimeTextLabel";
-			viewOrdersEstimatedTimeTextLabel.Size = new Size(140, 40);
-			viewOrdersEstimatedTimeTextLabel.TabIndex = 15;
-			viewOrdersEstimatedTimeTextLabel.Text = "Est. Time:";
-			// 
-			// viewOrdersTotalPriceLabel
-			// 
-			viewOrdersTotalPriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			viewOrdersTotalPriceLabel.BackColor = Color.White;
-			viewOrdersTotalPriceLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			viewOrdersTotalPriceLabel.ForeColor = Color.DodgerBlue;
-			viewOrdersTotalPriceLabel.Location = new Point(428, 0);
-			viewOrdersTotalPriceLabel.Margin = new Padding(4, 0, 4, 0);
-			viewOrdersTotalPriceLabel.Name = "viewOrdersTotalPriceLabel";
-			viewOrdersTotalPriceLabel.RightToLeft = RightToLeft.No;
-			viewOrdersTotalPriceLabel.Size = new Size(270, 80);
-			viewOrdersTotalPriceLabel.TabIndex = 13;
-			viewOrdersTotalPriceLabel.Text = "0000.00";
-			viewOrdersTotalPriceLabel.TextAlign = ContentAlignment.MiddleRight;
-			// 
-			// viewOrdersDeliveryChargePriceLabel
-			// 
-			viewOrdersDeliveryChargePriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			viewOrdersDeliveryChargePriceLabel.BackColor = Color.White;
-			viewOrdersDeliveryChargePriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			viewOrdersDeliveryChargePriceLabel.ForeColor = Color.Black;
-			viewOrdersDeliveryChargePriceLabel.Location = new Point(148, 40);
-			viewOrdersDeliveryChargePriceLabel.Margin = new Padding(4, 0, 4, 0);
-			viewOrdersDeliveryChargePriceLabel.Name = "viewOrdersDeliveryChargePriceLabel";
-			viewOrdersDeliveryChargePriceLabel.RightToLeft = RightToLeft.Yes;
-			viewOrdersDeliveryChargePriceLabel.Size = new Size(130, 40);
-			viewOrdersDeliveryChargePriceLabel.TabIndex = 12;
-			viewOrdersDeliveryChargePriceLabel.Text = "0.00";
-			// 
-			// viewOrdersSubtotalPriceLabel
-			// 
-			viewOrdersSubtotalPriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			viewOrdersSubtotalPriceLabel.BackColor = Color.White;
-			viewOrdersSubtotalPriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			viewOrdersSubtotalPriceLabel.ForeColor = Color.Black;
-			viewOrdersSubtotalPriceLabel.Location = new Point(148, 2);
-			viewOrdersSubtotalPriceLabel.Margin = new Padding(4, 0, 4, 0);
-			viewOrdersSubtotalPriceLabel.Name = "viewOrdersSubtotalPriceLabel";
-			viewOrdersSubtotalPriceLabel.RightToLeft = RightToLeft.Yes;
-			viewOrdersSubtotalPriceLabel.Size = new Size(130, 40);
-			viewOrdersSubtotalPriceLabel.TabIndex = 11;
-			viewOrdersSubtotalPriceLabel.Text = "0000.00";
-			// 
-			// viewOrdersDeliveryChargeTextLabel
-			// 
-			viewOrdersDeliveryChargeTextLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			viewOrdersDeliveryChargeTextLabel.BackColor = Color.Transparent;
-			viewOrdersDeliveryChargeTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			viewOrdersDeliveryChargeTextLabel.ForeColor = Color.White;
-			viewOrdersDeliveryChargeTextLabel.Location = new Point(2, 37);
-			viewOrdersDeliveryChargeTextLabel.Margin = new Padding(4, 0, 4, 0);
-			viewOrdersDeliveryChargeTextLabel.Name = "viewOrdersDeliveryChargeTextLabel";
-			viewOrdersDeliveryChargeTextLabel.Size = new Size(140, 40);
-			viewOrdersDeliveryChargeTextLabel.TabIndex = 10;
-			viewOrdersDeliveryChargeTextLabel.Text = "Delivery:";
-			// 
-			// viewOrdersSubtotalTextLabel
-			// 
-			viewOrdersSubtotalTextLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			viewOrdersSubtotalTextLabel.BackColor = Color.Transparent;
-			viewOrdersSubtotalTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			viewOrdersSubtotalTextLabel.ForeColor = Color.White;
-			viewOrdersSubtotalTextLabel.Location = new Point(2, -1);
-			viewOrdersSubtotalTextLabel.Margin = new Padding(4, 0, 4, 0);
-			viewOrdersSubtotalTextLabel.Name = "viewOrdersSubtotalTextLabel";
-			viewOrdersSubtotalTextLabel.Size = new Size(140, 40);
-			viewOrdersSubtotalTextLabel.TabIndex = 9;
-			viewOrdersSubtotalTextLabel.Text = "Subtotal:";
 			// 
 			// runningOrderDataGridView
 			// 
@@ -612,6 +500,118 @@
 			subtotalTextLabel.Size = new Size(140, 40);
 			subtotalTextLabel.TabIndex = 0;
 			subtotalTextLabel.Text = "Subtotal:";
+			// 
+			// viewOrdersPricePanel
+			// 
+			viewOrdersPricePanel.BackColor = Color.LightCoral;
+			viewOrdersPricePanel.Controls.Add(viewOrdersEstimatedTimeTimeLabel);
+			viewOrdersPricePanel.Controls.Add(viewOrdersEstimatedTimeTextLabel);
+			viewOrdersPricePanel.Controls.Add(viewOrdersTotalPriceLabel);
+			viewOrdersPricePanel.Controls.Add(viewOrdersDeliveryChargePriceLabel);
+			viewOrdersPricePanel.Controls.Add(viewOrdersSubtotalPriceLabel);
+			viewOrdersPricePanel.Controls.Add(viewOrdersDeliveryChargeTextLabel);
+			viewOrdersPricePanel.Controls.Add(viewOrdersSubtotalTextLabel);
+			viewOrdersPricePanel.Location = new Point(0, 580);
+			viewOrdersPricePanel.Name = "viewOrdersPricePanel";
+			viewOrdersPricePanel.Size = new Size(700, 80);
+			viewOrdersPricePanel.TabIndex = 10;
+			// 
+			// viewOrdersEstimatedTimeTimeLabel
+			// 
+			viewOrdersEstimatedTimeTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			viewOrdersEstimatedTimeTimeLabel.BackColor = Color.White;
+			viewOrdersEstimatedTimeTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			viewOrdersEstimatedTimeTimeLabel.ForeColor = Color.Black;
+			viewOrdersEstimatedTimeTimeLabel.Location = new Point(285, 40);
+			viewOrdersEstimatedTimeTimeLabel.Margin = new Padding(4, 0, 4, 0);
+			viewOrdersEstimatedTimeTimeLabel.Name = "viewOrdersEstimatedTimeTimeLabel";
+			viewOrdersEstimatedTimeTimeLabel.RightToLeft = RightToLeft.Yes;
+			viewOrdersEstimatedTimeTimeLabel.Size = new Size(140, 40);
+			viewOrdersEstimatedTimeTimeLabel.TabIndex = 16;
+			viewOrdersEstimatedTimeTimeLabel.Text = "00:00";
+			viewOrdersEstimatedTimeTimeLabel.TextAlign = ContentAlignment.MiddleRight;
+			// 
+			// viewOrdersEstimatedTimeTextLabel
+			// 
+			viewOrdersEstimatedTimeTextLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			viewOrdersEstimatedTimeTextLabel.BackColor = Color.Transparent;
+			viewOrdersEstimatedTimeTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			viewOrdersEstimatedTimeTextLabel.ForeColor = Color.White;
+			viewOrdersEstimatedTimeTextLabel.Location = new Point(283, -1);
+			viewOrdersEstimatedTimeTextLabel.Margin = new Padding(4, 0, 4, 0);
+			viewOrdersEstimatedTimeTextLabel.Name = "viewOrdersEstimatedTimeTextLabel";
+			viewOrdersEstimatedTimeTextLabel.Size = new Size(140, 40);
+			viewOrdersEstimatedTimeTextLabel.TabIndex = 15;
+			viewOrdersEstimatedTimeTextLabel.Text = "Est. Time:";
+			// 
+			// viewOrdersTotalPriceLabel
+			// 
+			viewOrdersTotalPriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			viewOrdersTotalPriceLabel.BackColor = Color.White;
+			viewOrdersTotalPriceLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			viewOrdersTotalPriceLabel.ForeColor = Color.DodgerBlue;
+			viewOrdersTotalPriceLabel.Location = new Point(428, 0);
+			viewOrdersTotalPriceLabel.Margin = new Padding(4, 0, 4, 0);
+			viewOrdersTotalPriceLabel.Name = "viewOrdersTotalPriceLabel";
+			viewOrdersTotalPriceLabel.RightToLeft = RightToLeft.No;
+			viewOrdersTotalPriceLabel.Size = new Size(270, 80);
+			viewOrdersTotalPriceLabel.TabIndex = 13;
+			viewOrdersTotalPriceLabel.Text = "0000.00";
+			viewOrdersTotalPriceLabel.TextAlign = ContentAlignment.MiddleRight;
+			// 
+			// viewOrdersDeliveryChargePriceLabel
+			// 
+			viewOrdersDeliveryChargePriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			viewOrdersDeliveryChargePriceLabel.BackColor = Color.White;
+			viewOrdersDeliveryChargePriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			viewOrdersDeliveryChargePriceLabel.ForeColor = Color.Black;
+			viewOrdersDeliveryChargePriceLabel.Location = new Point(148, 40);
+			viewOrdersDeliveryChargePriceLabel.Margin = new Padding(4, 0, 4, 0);
+			viewOrdersDeliveryChargePriceLabel.Name = "viewOrdersDeliveryChargePriceLabel";
+			viewOrdersDeliveryChargePriceLabel.RightToLeft = RightToLeft.Yes;
+			viewOrdersDeliveryChargePriceLabel.Size = new Size(130, 40);
+			viewOrdersDeliveryChargePriceLabel.TabIndex = 12;
+			viewOrdersDeliveryChargePriceLabel.Text = "0.00";
+			// 
+			// viewOrdersSubtotalPriceLabel
+			// 
+			viewOrdersSubtotalPriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			viewOrdersSubtotalPriceLabel.BackColor = Color.White;
+			viewOrdersSubtotalPriceLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			viewOrdersSubtotalPriceLabel.ForeColor = Color.Black;
+			viewOrdersSubtotalPriceLabel.Location = new Point(148, 2);
+			viewOrdersSubtotalPriceLabel.Margin = new Padding(4, 0, 4, 0);
+			viewOrdersSubtotalPriceLabel.Name = "viewOrdersSubtotalPriceLabel";
+			viewOrdersSubtotalPriceLabel.RightToLeft = RightToLeft.Yes;
+			viewOrdersSubtotalPriceLabel.Size = new Size(130, 40);
+			viewOrdersSubtotalPriceLabel.TabIndex = 11;
+			viewOrdersSubtotalPriceLabel.Text = "0000.00";
+			// 
+			// viewOrdersDeliveryChargeTextLabel
+			// 
+			viewOrdersDeliveryChargeTextLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			viewOrdersDeliveryChargeTextLabel.BackColor = Color.Transparent;
+			viewOrdersDeliveryChargeTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			viewOrdersDeliveryChargeTextLabel.ForeColor = Color.White;
+			viewOrdersDeliveryChargeTextLabel.Location = new Point(2, 37);
+			viewOrdersDeliveryChargeTextLabel.Margin = new Padding(4, 0, 4, 0);
+			viewOrdersDeliveryChargeTextLabel.Name = "viewOrdersDeliveryChargeTextLabel";
+			viewOrdersDeliveryChargeTextLabel.Size = new Size(140, 40);
+			viewOrdersDeliveryChargeTextLabel.TabIndex = 10;
+			viewOrdersDeliveryChargeTextLabel.Text = "Delivery:";
+			// 
+			// viewOrdersSubtotalTextLabel
+			// 
+			viewOrdersSubtotalTextLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			viewOrdersSubtotalTextLabel.BackColor = Color.Transparent;
+			viewOrdersSubtotalTextLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			viewOrdersSubtotalTextLabel.ForeColor = Color.White;
+			viewOrdersSubtotalTextLabel.Location = new Point(2, -1);
+			viewOrdersSubtotalTextLabel.Margin = new Padding(4, 0, 4, 0);
+			viewOrdersSubtotalTextLabel.Name = "viewOrdersSubtotalTextLabel";
+			viewOrdersSubtotalTextLabel.Size = new Size(140, 40);
+			viewOrdersSubtotalTextLabel.TabIndex = 9;
+			viewOrdersSubtotalTextLabel.Text = "Subtotal:";
 			// 
 			// commonItemsPanel
 			// 
@@ -951,17 +951,17 @@
 			AutoScaleMode = AutoScaleMode.Dpi;
 			BackColor = Color.White;
 			ClientSize = new Size(1920, 1080);
-			Controls.Add(viewOrdersPanel);
 			Controls.Add(runningOrderPanel);
 			Controls.Add(itemEditFunctionsPanel);
 			Controls.Add(managerFunctionsPanel);
 			Controls.Add(orderTypePanel);
 			Controls.Add(itemsPanel);
 			Controls.Add(categoriesPanel);
-			Controls.Add(paymentPanel);
 			Controls.Add(commonItemsPanel);
 			Controls.Add(customerDetailsPanel);
 			Controls.Add(viewOrdersCustomerDetailsPanel);
+			Controls.Add(paymentPanel);
+			Controls.Add(viewOrdersPanel);
 			FormBorderStyle = FormBorderStyle.None;
 			Margin = new Padding(4, 2, 4, 2);
 			Name = "MainMenu";
@@ -973,8 +973,8 @@
 			managerFunctionsPanel.ResumeLayout(false);
 			itemEditFunctionsPanel.ResumeLayout(false);
 			runningOrderPanel.ResumeLayout(false);
-			viewOrdersPricePanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)runningOrderDataGridView).EndInit();
+			viewOrdersPricePanel.ResumeLayout(false);
 			paymentPanel.ResumeLayout(false);
 			paymentPanel.PerformLayout();
 			viewOrdersPanel.ResumeLayout(false);
