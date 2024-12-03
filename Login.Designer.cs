@@ -64,8 +64,10 @@
 			// 
 			passwordTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			passwordTextBox.Font = new Font("Segoe UI", 14F);
+			passwordTextBox.HideSelection = false;
 			passwordTextBox.Location = new Point(308, 200);
 			passwordTextBox.Name = "passwordTextBox";
+			passwordTextBox.PasswordChar = '●';
 			passwordTextBox.Size = new Size(300, 57);
 			passwordTextBox.TabIndex = 43;
 			passwordTextBox.KeyPress += passwordTextBox_KeyPress;

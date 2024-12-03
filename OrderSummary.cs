@@ -285,10 +285,7 @@ namespace ordering_system
 			con.Open();
 			printDocument = new PrintDocument();
 			printPreviewDialog.Document = printDocument;
-			if (printPreviewDialog.ShowDialog() == DialogResult.OK)
-			{
-				printDocument.Print();
-			}
+			printPreviewDialog.ShowDialog();
 			con.Close();
 		}
 
@@ -376,6 +373,7 @@ namespace ordering_system
 					printDocument.PrintPage += (sender, e) => printTicket_PrintPage(sender, e, "Customer");
 				}
 				printPreviewDialog.Document = printDocument;
+				printPreviewDialog.ShowDialog();
 				printDocument.Print();
 			}
 			else

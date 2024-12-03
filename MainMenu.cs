@@ -221,6 +221,7 @@ namespace ordering_system
 			collectionButton.BackColor = Color.Transparent;
 			customerDetailsLabel.Text = string.Empty;
 			runningOrderItemID = 0;
+			deliveryChargePriceLabel.Text = "0.00";
 			updateDataGridView();
 			updatePriceLabels();
 		}
@@ -865,6 +866,7 @@ namespace ordering_system
 			DialogResult cancelOrder = MessageBox.Show("Do you want to cancel this order?", "Ordering System", MessageBoxButtons.YesNo);
 			if (cancelOrder == DialogResult.Yes) // yes
 			{
+				customerDataRow.Delete();
 				clearMenu();
 			}
 		}
@@ -883,7 +885,6 @@ namespace ordering_system
 				paymentPanel.Visible = false;
 				// enable viewOrdersButton
 				viewOrdersButton.Enabled = true;
-				return;
 			}
 			else if (currentOrder.orderType == "Counter") // bring up payment panel
 			{
@@ -916,6 +917,8 @@ namespace ordering_system
 			{
 				printDocument = new PrintDocument();
 				printDocument.PrintPage += (sender, e) => printTicket_PrintPage(sender, e, ticketType);
+				printPreviewDialog.Document = printDocument;
+				printPreviewDialog.ShowDialog();
 				printDocument.Print();
 			}
 			// clear everything
@@ -1216,7 +1219,7 @@ namespace ordering_system
 		private void paymentAcceptButton_Click(object sender, EventArgs e)
 		{
 			decimal paidValue = Convert.ToDecimal(paymentPaidTextbox.Text);
-			// check if paying for counter or for collection/delivery
+			// check if paying for counter or for collection/delivery from view orders
 			decimal totalPrice = getTotalPrice();
 			if (paidValue < totalPrice) // if not paid enough
 			{
@@ -1227,7 +1230,7 @@ namespace ordering_system
 				currentOrder.hasPaid = true;
 				acceptOrder("Counter");
 			}
-			else // getting payment for a collection/delivery
+			else // getting payment for a collection/delivery from view orders
 			{
 				con.Open();
 				SqlCommand acceptPayment = new SqlCommand("UPDATE OrderTbl SET hasPaid = 'True' WHERE dailyOrderNumber = @DON AND orderDate = @OD", con);
@@ -1235,6 +1238,10 @@ namespace ordering_system
 				acceptPayment.Parameters.AddWithValue("@OD", DateTime.Now.Date);
 				acceptPayment.ExecuteNonQuery();
 				updateViewOrdersDataGridView();
+				// disable all view order buttons
+				viewOrdersDeliveryButton.BackColor = Color.Transparent;
+				viewOrdersCounterButton.BackColor = Color.Transparent;
+				viewOrdersCollectionButton.BackColor = Color.Transparent;
 				paymentPanel.Enabled = false;
 				con.Close();
 			}
@@ -1268,6 +1275,7 @@ namespace ordering_system
 			}
 			else // exit view orders mode
 			{
+				viewOrdersSelectedOrderDailyOrderNumber = -1;
 				// get rid of all the panels
 				viewOrdersButton.Text = "View Orders";
 				viewOrdersPanel.SendToBack();
@@ -1534,6 +1542,8 @@ namespace ordering_system
 				con.Open();
 				printDocument = new PrintDocument();
 				printDocument.PrintPage += (sender, e) => viewOrdersPrintTicket_PrintPage(sender, e, "Kitchen");
+				printPreviewDialog.Document = printDocument;
+				printPreviewDialog.ShowDialog();
 				printDocument.Print();
 				con.Close();
 			}
@@ -1550,6 +1560,8 @@ namespace ordering_system
 				con.Open();
 				printDocument = new PrintDocument();
 				printDocument.PrintPage += (sender, e) => viewOrdersPrintTicket_PrintPage(sender, e, "Customer");
+				printPreviewDialog.Document = printDocument;
+				printPreviewDialog.ShowDialog();
 				printDocument.Print();
 				con.Close();
 			}
@@ -1654,21 +1666,21 @@ namespace ordering_system
 			ypos += 20;
 			// subtotal
 			e.Graphics.DrawString("Subtotal:", ticketSmallFont, Brushes.Black, new Point(10, ypos));
-			int subtotalWidth = (int)e.Graphics.MeasureString(subtotalPriceLabel.Text, ticketSmallFont).Width;
-			e.Graphics.DrawString(subtotalPriceLabel.Text, ticketSmallFont, Brushes.Black, new Point(ticketPaperSizeWidth - subtotalWidth, ypos));
+			int subtotalWidth = (int)e.Graphics.MeasureString(viewOrdersSubtotalPriceLabel.Text, ticketSmallFont).Width;
+			e.Graphics.DrawString(viewOrdersSubtotalPriceLabel.Text, ticketSmallFont, Brushes.Black, new Point(ticketPaperSizeWidth - subtotalWidth, ypos));
 			ypos += (int)ticketHeaderFont.Size + 5;
 			// delivery charge if delivery
 			if (order["orderType"].ToString() == "Delivery")
 			{
 				e.Graphics.DrawString("Delivery:", ticketSmallFont, Brushes.Black, new Point(10, ypos));
-				int deliveryWidth = (int)e.Graphics.MeasureString(deliveryChargePriceLabel.Text, ticketSmallFont).Width;
-				e.Graphics.DrawString(deliveryChargePriceLabel.Text, ticketSmallFont, Brushes.Black, new Point(ticketPaperSizeWidth - deliveryWidth, ypos));
+				int deliveryWidth = (int)e.Graphics.MeasureString(viewOrdersDeliveryChargePriceLabel.Text, ticketSmallFont).Width;
+				e.Graphics.DrawString(viewOrdersDeliveryChargePriceLabel.Text, ticketSmallFont, Brushes.Black, new Point(ticketPaperSizeWidth - deliveryWidth, ypos));
 				ypos += (int)ticketHeaderFont.Size + 5;
 			}
 			// total
 			e.Graphics.DrawString("Total:", ticketHeaderFont, Brushes.Black, new Point(10, ypos));
-			int totalWidth = (int)e.Graphics.MeasureString(totalPriceLabel.Text, ticketHeaderFont).Width;
-			e.Graphics.DrawString(totalPriceLabel.Text, ticketHeaderFont, Brushes.Black, new Point(ticketPaperSizeWidth - totalWidth, ypos));
+			int totalWidth = (int)e.Graphics.MeasureString(viewOrdersTotalPriceLabel.Text, ticketHeaderFont).Width;
+			e.Graphics.DrawString(viewOrdersTotalPriceLabel.Text, ticketHeaderFont, Brushes.Black, new Point(ticketPaperSizeWidth - totalWidth, ypos));
 			ypos += (int)ticketHeaderFont.Size + 20;
 			// get estimated time
 			e.Graphics.DrawString("Estimated Time:", ticketHeaderFont, Brushes.Black, new Point(10, ypos));

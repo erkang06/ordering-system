@@ -92,7 +92,8 @@ namespace ordering_system
 			SqlDataAdapter getCustomers = new SqlDataAdapter("SELECT * FROM CustomerTbl ORDER BY customerID", con);
 			getCustomers.Fill(customersDataTable);
 			DataView customersDataView = new DataView(customersDataTable);
-			// fill in category datagridview
+			// fill in category datagridview - clear bf adding in again
+			customerDataGridView.DataSource = null;
 			customerDataGridView.DataSource = customersDataView.ToTable(true, "customerName", "phoneNumber", "houseNumber", "postcode");
 			// hide deliveryaddress panel by default
 			addressPanel.Visible = false;
@@ -106,7 +107,8 @@ namespace ordering_system
 			getAddressesForCustomer.SelectCommand.Parameters.AddWithValue("@CID", customerID);
 			getAddressesForCustomer.Fill(addressesDataTable);
 			DataView addressesDataView = new DataView(addressesDataTable);
-			// fill in address datagridview
+			// fill in address datagridview - clear bf adding in again
+			addressDataGridView.DataSource = null;
 			addressDataGridView.DataSource = addressesDataView.ToTable(true, "addressID", "houseNumber", "streetName", "postcode");
 			addressDataGridView.Columns["addressID"].Width = 50;
 			addressDataGridView.Columns["postcode"].Width = 150;

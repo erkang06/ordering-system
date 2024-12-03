@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
 			customerDetailsPanel = new Panel();
 			customerDetailsLabel = new Label();
 			dailyOrderNumberLabel = new Label();
@@ -95,6 +96,7 @@
 			viewOrdersCustomerDetailsLabel = new Label();
 			selectedOrderOrderNumberLabel = new Label();
 			printDocument = new System.Drawing.Printing.PrintDocument();
+			printPreviewDialog = new PrintPreviewDialog();
 			customerDetailsPanel.SuspendLayout();
 			orderTypePanel.SuspendLayout();
 			managerFunctionsPanel.SuspendLayout();
@@ -369,6 +371,7 @@
 			// runningOrderPanel
 			// 
 			runningOrderPanel.BackColor = Color.Maroon;
+			runningOrderPanel.Controls.Add(viewOrdersPricePanel);
 			runningOrderPanel.Controls.Add(runningOrderDataGridView);
 			runningOrderPanel.Controls.Add(estimatedTimeLabel);
 			runningOrderPanel.Controls.Add(estimatedTimePicker);
@@ -377,7 +380,6 @@
 			runningOrderPanel.Controls.Add(subtotalPriceLabel);
 			runningOrderPanel.Controls.Add(deliveryChargeTextLabel);
 			runningOrderPanel.Controls.Add(subtotalTextLabel);
-			runningOrderPanel.Controls.Add(viewOrdersPricePanel);
 			runningOrderPanel.Location = new Point(0, 160);
 			runningOrderPanel.Margin = new Padding(0);
 			runningOrderPanel.Name = "runningOrderPanel";
@@ -897,7 +899,8 @@
 			// timer
 			// 
 			timer.Enabled = true;
-			timer.Interval = 200;
+			timer.Interval = 500;
+			timer.Tick += timer_Tick;
 			// 
 			// viewOrdersCustomerDetailsPanel
 			// 
@@ -944,6 +947,16 @@
 			selectedOrderOrderNumberLabel.Size = new Size(84, 45);
 			selectedOrderOrderNumberLabel.TabIndex = 0;
 			selectedOrderOrderNumberLabel.Text = "1";
+			// 
+			// printPreviewDialog
+			// 
+			printPreviewDialog.AutoScrollMargin = new Size(0, 0);
+			printPreviewDialog.AutoScrollMinSize = new Size(0, 0);
+			printPreviewDialog.ClientSize = new Size(400, 300);
+			printPreviewDialog.Enabled = true;
+			printPreviewDialog.Icon = (Icon)resources.GetObject("printPreviewDialog.Icon");
+			printPreviewDialog.Name = "printPreviewDialog";
+			printPreviewDialog.Visible = false;
 			// 
 			// MainMenu
 			// 
@@ -1051,5 +1064,6 @@
 		private Label viewOrdersSubtotalTextLabel;
 		private Label viewOrdersEstimatedTimeTimeLabel;
 		private System.Drawing.Printing.PrintDocument printDocument;
+		private PrintPreviewDialog printPreviewDialog;
 	}
 }

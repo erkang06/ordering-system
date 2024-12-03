@@ -60,7 +60,8 @@ namespace ordering_system
 			SqlDataAdapter getCategories = new SqlDataAdapter("SELECT * FROM CategoryTbl ORDER BY categoryIndex", con);
 			getCategories.Fill(categoriesDataTable);
 			DataView categoriesDataView = new DataView(categoriesDataTable);
-			// fill in category datagridview
+			// fill in category datagridview - clear bf adding in again
+			categoryDataGridView.DataSource = null;
 			categoryDataGridView.DataSource = categoriesDataView.ToTable(true, "categoryName", "categoryIndex");
 			categoryDataGridView.Columns["categoryIndex"].Width = 300;
 			// fill in default for category index

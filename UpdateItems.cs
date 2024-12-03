@@ -100,10 +100,6 @@ namespace ordering_system
 			}
 			hasSmallPriceCheckBox_CheckedChanged(sender, e); // sorts out weird bits w/ checkboxes
 			updateDataGridView();
-			// sort out widths
-			itemDataGridView.Columns["foodItemID"].Width = 100;
-			itemDataGridView.Columns["smallItemPrice"].Width = 100;
-			itemDataGridView.Columns["largeItemPrice"].Width = 150;
 			con.Close();
 		}
 
@@ -113,9 +109,14 @@ namespace ordering_system
 			SqlDataAdapter getFoodItems = new SqlDataAdapter("SELECT FoodItemTbl.* FROM FoodItemTbl, CategoryTbl WHERE FoodItemTbl.categoryID = CategoryTbl.categoryID ORDER BY CategoryTbl.categoryIndex, FoodItemTbl.foodItemID", con);
 			getFoodItems.Fill(foodItemsDataTable);
 			DataView foodItemsDataView = new DataView(foodItemsDataTable);
-			// fill in item datagridview
+			// fill in item datagridview - clear bf adding in again
+			itemDataGridView.DataSource = null;
 			itemDataGridView.DataSource = foodItemsDataView.ToTable(true, "foodItemID", "foodName", "smallItemPrice", "largeItemPrice");
 			itemDataGridView.ClearSelection();
+			// sort out widths
+			itemDataGridView.Columns["foodItemID"].Width = 100;
+			itemDataGridView.Columns["smallItemPrice"].Width = 100;
+			itemDataGridView.Columns["largeItemPrice"].Width = 150;
 		}
 
 		// form related functions
@@ -287,7 +288,7 @@ namespace ordering_system
 		private void updateItemButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			// get if item name has been changed - for checkeing if item exists w/ same name
+			// get if item name has been changed - for checking if item exists w/ same name
 			bool hasFoodItemNameChanged = true;
 			DataRow[] selectedRow = foodItemsDataTable.Select($"foodItemID = '{foodItemID}'");
 			if (selectedRow.Length > 0) // therell only be one since its a primary key
@@ -316,7 +317,7 @@ namespace ordering_system
 				int categoryID = getCategoryIDFromSelectedIndex();
 				SqlCommand updateFoodItem = new SqlCommand();
 				updateFoodItem.Connection = con;
-				updateFoodItem.Parameters.AddWithValue("@NCID", itemIDTextBox.Text);
+				updateFoodItem.Parameters.AddWithValue("@NEWFIID", itemIDTextBox.Text);
 				updateFoodItem.Parameters.AddWithValue("@FN", itemNameTextBox.Text);
 				updateFoodItem.Parameters.AddWithValue("@DLP", defaultToLargePriceCheckBox.Checked);
 				updateFoodItem.Parameters.AddWithValue("@LIP", largePriceTextBox.Text);
@@ -325,12 +326,12 @@ namespace ordering_system
 				updateFoodItem.Parameters.AddWithValue("@FIID", foodItemID);
 				if (hasSmallPriceCheckBox.Checked) // has small price
 				{
-					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodItemID = @NCID, foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 1, smallItemPrice = @SIP, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
+					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodItemID = @NEWFIID, foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 1, smallItemPrice = @SIP, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
 					updateFoodItem.Parameters.AddWithValue("@SIP", smallPriceTextBox.Text);
 				}
 				else // no small price
 				{
-					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodItemID = @NCID, foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 0, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
+					updateFoodItem.CommandText = "UPDATE FoodItemTbl SET foodItemID = @NEWFIID, foodName = @FN, defaulttoLargePrice = @DLP, hasSmallOption = 0, largeItemPrice = @LIP, isOutOfStock = @OOS, categoryID = @CID WHERE foodItemID = @FIID";
 				}
 				updateFoodItem.ExecuteNonQuery();
 				MessageBox.Show("Item updated", "Ordering System");
@@ -343,13 +344,13 @@ namespace ordering_system
 		private void deleteItemButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (doesItemExist() == false) // item not found
-			{
-				MessageBox.Show("Item not found in database", "Ordering System");
-			}
-			else if (foodItemID == null) // no food item selected
+			if (foodItemID == null) // no food item selected
 			{
 				MessageBox.Show("Item not selected", "Ordering System");
+			}
+			else if (doesItemExist() == false) // item not found
+			{
+				MessageBox.Show("Item not found in database", "Ordering System");
 			}
 			else // item found
 			{

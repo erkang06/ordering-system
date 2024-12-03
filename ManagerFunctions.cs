@@ -53,7 +53,7 @@ namespace ordering_system
 		{
 			OrderSummary obj = new OrderSummary();
 			obj.Show();
-			obj.TopMost = true;
+			//obj.TopMost = true;
 		}
 
 		// password

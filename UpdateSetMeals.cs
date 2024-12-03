@@ -146,7 +146,8 @@ namespace ordering_system
 			SqlDataAdapter getSetMeals = new SqlDataAdapter("SELECT * FROM SetMealTbl ORDER BY SetMealID", con);
 			getSetMeals.Fill(setMealsDataTable);
 			DataView setMealsDataView = new DataView(setMealsDataTable);
-			// fill in set meals datagridview
+			// fill in set meals datagridview - clear bf adding in again 
+			setMealDataGridView.DataSource = null;
 			setMealDataGridView.DataSource = setMealsDataView.ToTable(true, "setMealID", "setMealName", "price");
 			// check if max # of set meals reached
 			if (setMealsDataTable.Rows.Count >= 24)
@@ -455,10 +456,11 @@ namespace ordering_system
 			else // if all works fine
 			{
 				// update set meal
-				SqlCommand updateSetMeal = new SqlCommand("UPDATE SetMealTbl SET setMealID = @SMID, setMealName = @SMN, price = @PR", con);
-				updateSetMeal.Parameters.AddWithValue("@SMID", setMealIDTextBox.Text);
+				SqlCommand updateSetMeal = new SqlCommand("UPDATE SetMealTbl SET setMealID = @NEWSMID, setMealName = @SMN, price = @PR WHERE setMealID = @SMID", con);
+				updateSetMeal.Parameters.AddWithValue("@NEWSMID", setMealIDTextBox.Text);
 				updateSetMeal.Parameters.AddWithValue("@SMN", setMealNameTextBox.Text);
 				updateSetMeal.Parameters.AddWithValue("@PR", setMealPriceTextBox.Text);
+				updateSetMeal.Parameters.AddWithValue("@SMID", setMealID);
 				updateSetMeal.ExecuteNonQuery();
 				// remove existing fooditems
 				deleteSetMealFoodItems();
@@ -474,13 +476,13 @@ namespace ordering_system
 		private void deleteSetMealButton_Click(object sender, EventArgs e)
 		{
 			con.Open();
-			if (doesSetMealExist() == false) // set meal not found
-			{
-				MessageBox.Show("Set meal not found in database", "Ordering System");
-			}
-			else if (setMealID == null) // no set meal selected
+			if (setMealID == null) // no set meal selected
 			{
 				MessageBox.Show("Set meal not selected", "Ordering System");
+			}
+			else if (doesSetMealExist() == false) // set meal not found
+			{
+				MessageBox.Show("Set meal not found in database", "Ordering System");
 			}
 			else // set meal found
 			{

@@ -83,9 +83,9 @@ namespace ordering_system
 					File.WriteAllBytes(entropyFile, entropy);
 					File.WriteAllBytes(cipherFile, ciphertext);
 				}
-				catch (Exception f) // if doesnt work for any reason
+				catch (Exception ex) // if doesnt work for any reason
 				{
-					Console.WriteLine(f.ToString());
+					Console.WriteLine(ex.ToString());
 				}
 				password = "password";
 				MessageBox.Show("Password not found so has been reset to 'password'", "Ordering system");
