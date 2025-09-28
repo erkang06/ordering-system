@@ -43,7 +43,7 @@ namespace ordering_system
 
 		private bool areAllFieldsFilled() // checks if all fields have been filled in
 		{
-			if (setMealIDTextBox.Text != "" && setMealNameTextBox.Text != "" && setMealPriceTextBox.Text != "" && setMealFoodItemsDataTable.Rows.Count > 1)
+			if (setMealIDTextBox.Text != "" && setMealNameTextBox.Text != "" && setMealPriceTextBox.Text != "" && setMealFoodItemsDataTable.Rows.Count > 0)
 			{
 				return true;
 			}
@@ -134,9 +134,6 @@ namespace ordering_system
 			setMealItemDataGridView.Columns["size"].Width = 50;
 			setMealItemDataGridView.Columns["quantity"].Width = 100;
 			updateDataGridView();
-			// sort out setmeal widths
-			setMealDataGridView.Columns["setMealID"].Width = 50;
-			setMealDataGridView.Columns["price"].Width = 100;
 			con.Close();
 		}
 
@@ -149,6 +146,9 @@ namespace ordering_system
 			// fill in set meals datagridview - clear bf adding in again 
 			setMealDataGridView.DataSource = null;
 			setMealDataGridView.DataSource = setMealsDataView.ToTable(true, "setMealID", "setMealName", "price");
+			// sort out setmeal widths
+			setMealDataGridView.Columns["setMealID"].Width = 50;
+			setMealDataGridView.Columns["price"].Width = 100;
 			// check if max # of set meals reached
 			if (setMealsDataTable.Rows.Count >= 24)
 			{
@@ -440,7 +440,7 @@ namespace ordering_system
 					hasSetMealNameChanged = false;
 				}
 			}
-			// acc validation
+			// validation
 			if (areAllFieldsFilled() == false) // not all textboxes filled in
 			{
 				MessageBox.Show("Not all fields filled in", "Ordering System");
@@ -451,7 +451,7 @@ namespace ordering_system
 			}
 			else if (setMealID != setMealIDTextBox.Text && hasSetMealNameChanged && doesSetMealExist()) // if new set meal name/id has already been used in tbl
 			{
-				MessageBox.Show("Set meal already exists with the same name", "Ordering System");
+				MessageBox.Show("Set meal already exists with same name or ID", "Ordering System");
 			}
 			else // if all works fine
 			{
@@ -525,7 +525,6 @@ namespace ordering_system
 
 		private void clearSetMealScreen() // clears textboxes and setmealitemdatagridview
 		{
-			setMealDataGridView.ClearSelection();
 			setMealFoodItemsDataTable.Clear();
 			setMealIDTextBox.Text = string.Empty;
 			setMealNameTextBox.Text = string.Empty;

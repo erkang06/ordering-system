@@ -181,7 +181,8 @@ namespace ordering_system
 			{
 				addressDataGridView.Columns["houseNumber"].Width = 100;
 				addressDataGridView.Columns["postcode"].Width = 200;
-			} catch { /*wont work when accessed on form creation since addressdatagridview doesnt physically exist so u cant do anything physical*/ }
+			}
+			catch { /*wont work when accessed on form creation since addressdatagridview doesnt physically exist so u cant do anything physical*/ }
 		}
 
 		// form related functions
@@ -248,6 +249,12 @@ namespace ordering_system
 				MessageBox.Show("Customer name too long", "Ordering System");
 				customerNameTextBox.Focus();
 			}
+			else if (customerNameTextBox.Text == "") // if name too long for database
+			{
+				MessageBox.Show("Customer name required", "Ordering System");
+				customerNameTextBox.Focus();
+			}
+
 		}
 
 		private void phoneNumberTextBox_Leave(object sender, EventArgs e)

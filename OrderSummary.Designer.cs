@@ -238,10 +238,6 @@
 			datePicker.Value = new DateTime(2024, 10, 18, 10, 18, 38, 0);
 			datePicker.ValueChanged += datePicker_ValueChanged;
 			// 
-			// printDocument
-			// 
-			printDocument.PrintPage += printDocument_PrintPage;
-			// 
 			// printPreviewDialog
 			// 
 			printPreviewDialog.AutoScrollMargin = new Size(0, 0);

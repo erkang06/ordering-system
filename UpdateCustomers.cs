@@ -194,7 +194,7 @@ namespace ordering_system
 			{
 				MessageBox.Show("Not all required customer fields filled in", "Ordering System");
 			}
-			else if (customerID > 0) // customer not selected
+			else if (customerID == -1) // customer not selected
 			{
 				MessageBox.Show("Customer not selected", "Ordering System");
 			}
@@ -232,10 +232,6 @@ namespace ordering_system
 			else if (customerID == -1) // no customer selected
 			{
 				MessageBox.Show("Customer not selected", "Ordering System");
-			}
-			else if (hasCustomerBeenUsedInAddress()) // customer exists in addresstbl
-			{
-				MessageBox.Show("There is at least one address that is associated with this customer. Remove them before deleting this customer", "Ordering System");
 			}
 			else if (hasCustomerBeenUsedInOrder()) // customer exists in an order
 			{
@@ -331,7 +327,7 @@ namespace ordering_system
 			}
 			else // cant continue w/out all fields filled in
 			{
-				MessageBox.Show("Not all customer fields filled in", "Ordering System");
+				MessageBox.Show("Not all address fields filled in", "Ordering System");
 			}
 			con.Close();
 		}
@@ -378,6 +374,7 @@ namespace ordering_system
 		{
 			addressPanel.Visible = false;
 			addressPanel.SendToBack();
+			clearAddressScreen(); // looks nicer when u reopen address panel
 		}
 
 		// cancel

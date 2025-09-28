@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing.Printing;
-using System.Windows.Forms.VisualStyles;
 
 namespace ordering_system
 {
@@ -284,12 +283,14 @@ namespace ordering_system
 		{
 			con.Open();
 			printDocument = new PrintDocument();
+			printDocument.PrintPage += (sender, e) => printOrderSummary_PrintPage(sender, e);
 			printPreviewDialog.Document = printDocument;
 			printPreviewDialog.ShowDialog();
+			printDocument.Print();
 			con.Close();
 		}
 
-		private void printDocument_PrintPage(object sender, PrintPageEventArgs e) // ORDER SUMMARY
+		private void printOrderSummary_PrintPage(object sender, PrintPageEventArgs e) // ORDER SUMMARY
 		{
 			int ticketPaperSizeWidth = Convert.ToInt32(Resources.ticketPaperSizeWidth);
 			string subTotal, deliveryCharge, total;

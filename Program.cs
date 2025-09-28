@@ -16,11 +16,18 @@ namespace ordering_system
 			Login obj = new Login("Login");
 			if (obj.ShowDialog() == DialogResult.OK) // if password is correct
 			{
-				MainMenu objMenu = new MainMenu();
-				objMenu.Show();
-				//objMenu.TopMost = true;
-				obj.Close();
-				Application.Run();
+				try
+				{
+					MainMenu objMenu = new MainMenu();
+					objMenu.Show();
+					//objMenu.TopMost = true;
+					obj.Close();
+					Application.Run();
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.ToString());
+				}
 			}
 			else
 			{

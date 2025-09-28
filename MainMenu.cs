@@ -3,7 +3,6 @@ using ordering_system.Properties;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing.Printing;
-using System.Windows.Forms.VisualStyles;
 
 namespace ordering_system
 {
@@ -1155,13 +1154,13 @@ namespace ordering_system
 			{
 				char lastChar = paidValueString.Last();
 				paidValueString = paidValueString.Remove(paidValueString.Length - 1); // remove last char since thats the new one we have to test
-				if (paidValueString.Length == 0) // if theres nothing be 0
-				{
-					paidValueString = "0";
-				}
-				decimal paidValue = Convert.ToDecimal(paidValueString);
 				if (char.IsNumber(lastChar) || lastChar == '.') // if chars allowed
 				{
+					if (paidValueString.Length == 0) // if theres nothing be 0
+					{
+						paidValueString = "0";
+					}
+					decimal paidValue = Convert.ToDecimal(paidValueString);
 					// if number is typed when decimal places is w/in 1 dp or a decimal point when there hasnt alr been one
 					if ((char.IsNumber(lastChar) && decimal.Round(paidValue, 1) == paidValue) || paidValueString.Contains('.') == false)
 					{
@@ -1174,8 +1173,13 @@ namespace ordering_system
 					}
 					paidValue = Convert.ToDecimal(paidValueString);
 					paymentPanelButtonMode = false;
+					changeChecker(paidValue);
 				}
-				changeChecker(paidValue);
+				else // char invalid
+				{
+					paymentPaidTextbox.Text = paidValueString;
+					paymentPaidTextbox.SelectionStart = paidValueString.Length;
+				}
 			}
 		}
 

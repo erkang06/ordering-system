@@ -39,7 +39,7 @@ namespace ordering_system
 		{
 			UpdateCommonItems obj = new UpdateCommonItems();
 			obj.Show();
-			//obj.TopMost = true;
+			obj.TopMost = true;
 		}
 
 		private void updateCustomersButton_Click(object sender, EventArgs e)

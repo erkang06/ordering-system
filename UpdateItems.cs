@@ -17,11 +17,24 @@ namespace ordering_system
 
 		// common use functions
 
-		private bool doesItemExist() // checks if item exists in database w/ same name
+		private bool doesItemExist(string parameter = "both") // checks if item exists in database w/ same name - parameters for if looking for id, name or both
 		{
-			SqlCommand checkIfItemExists = new SqlCommand("SELECT COUNT(*) FROM FoodItemTbl WHERE foodName = @FN OR foodItemID = @FIID", con);
-			checkIfItemExists.Parameters.AddWithValue("@FN", itemNameTextBox.Text);
-			checkIfItemExists.Parameters.AddWithValue("@FIID", itemIDTextBox.Text);
+			SqlCommand checkIfItemExists = new SqlCommand();
+			checkIfItemExists.Connection = con;
+			if (parameter != "id") // check for name including for both
+			{
+				checkIfItemExists.CommandText = "SELECT COUNT(*) FROM FoodItemTbl WHERE foodName = @FN";
+				checkIfItemExists.Parameters.AddWithValue("@FN", itemNameTextBox.Text);
+			}
+			if (parameter != "name") // check for id including for both
+			{
+				checkIfItemExists.CommandText = "SELECT COUNT(*) FROM FoodItemTbl WHERE foodItemID = @FIID";
+				checkIfItemExists.Parameters.AddWithValue("@FIID", itemIDTextBox.Text);
+			}
+			if (parameter == "both") // check for both
+			{
+				checkIfItemExists.CommandText = "SELECT COUNT(*) FROM FoodItemTbl WHERE foodName = @FN OR foodItemID = @FIID";
+			}
 			int itemExists = (int)checkIfItemExists.ExecuteScalar();
 			if (itemExists == 0)
 			{
@@ -308,9 +321,9 @@ namespace ordering_system
 			{
 				MessageBox.Show("Item not selected", "Ordering System");
 			}
-			else if (foodItemID != itemIDTextBox.Text && hasFoodItemNameChanged && doesItemExist()) // if both id and name have been changed but item exists in table
+			else if (foodItemID != itemIDTextBox.Text && doesItemExist("id") || hasFoodItemNameChanged && doesItemExist("name")) // if both id and name have been changed but item exists in table
 			{
-				MessageBox.Show("Item already exists with the same name", "Ordering System");
+				MessageBox.Show("Item already exists with the same name or id", "Ordering System");
 			}
 			else // if item doesnt alr exist and all textboxes filled in
 			{
